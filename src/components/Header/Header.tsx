@@ -73,9 +73,6 @@ const Language = styled.div`
   color: #3c3c3c;
   border-bottom: ${(props: Prop) => props.borderBtm};
   text-align: center;
-  &:hover {
-    cursor: default;
-  }
   & + & {
     margin-top: 16px;
   }
