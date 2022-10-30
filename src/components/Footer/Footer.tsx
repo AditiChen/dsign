@@ -1,22 +1,21 @@
-import React from "react";
+import styled from "styled-components";
+
+const Wrapper = styled.div`
+  padding: 0 30px;
+  width: 100vw;
+  height: 80px;
+  color: #c4c4c4;
+  background-color: #3c3c3c;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
 
 function Footer() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Wrapper>
+      <div>footer</div>
+    </Wrapper>
   );
 }
 

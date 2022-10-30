@@ -1,22 +1,19 @@
-import React from "react";
+import styled from "styled-components";
+
+const Wrapper = styled.div`
+  width: 100%;
+  min-width: 100vw;
+  height: 100%;
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+`;
 
 function Landing() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Wrapper>
+      <div>Landing page</div>
+    </Wrapper>
   );
 }
 

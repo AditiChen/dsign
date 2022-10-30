@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 import { Reset } from "styled-reset";
 
@@ -12,16 +12,21 @@ const GlobalStyle = createGlobalStyle`
 
   body {
     font-family: 'Montserrat';
+  }
+  #root {
+     min-height: 100vh;
   }`;
 
 function App() {
+  const location = useLocation();
   return (
     <>
       <Reset />
       <GlobalStyle />
-      <Header />
+      {location.pathname !== "/" && <Header />}
       <Outlet />
-      <Footer />
+      {location.pathname !== "/" && <Footer />}
+      {/* <Footer /> */}
     </>
   );
 }

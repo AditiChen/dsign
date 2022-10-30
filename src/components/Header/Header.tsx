@@ -1,4 +1,3 @@
-import { diffProps } from "@react-three/fiber/dist/declarations/src/core/utils";
 import styled from "styled-components";
 import language from "./language-icon.png";
 import logo from "./Logo.png";
