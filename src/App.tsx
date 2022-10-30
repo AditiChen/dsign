@@ -1,6 +1,8 @@
+import { Suspense } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 import { Reset } from "styled-reset";
+import ReactLoading from "react-loading";
 
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
@@ -17,17 +19,22 @@ const GlobalStyle = createGlobalStyle`
      min-height: 100vh;
   }`;
 
+const Loading = styled(ReactLoading)`
+  margin: 50px auto;
+`;
+
+const loadingMarkup = <Loading />;
+
 function App() {
   const location = useLocation();
   return (
-    <>
+    <Suspense fallback={loadingMarkup}>
       <Reset />
       <GlobalStyle />
       {location.pathname !== "/" && <Header />}
       <Outlet />
       {location.pathname !== "/" && <Footer />}
-      {/* <Footer /> */}
-    </>
+    </Suspense>
   );
 }
 

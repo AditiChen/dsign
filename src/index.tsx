@@ -1,3 +1,4 @@
+import "./i18n";
 import ReactDOM from "react-dom/client";
 import { Route, Routes, BrowserRouter, Navigate } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
@@ -23,7 +24,7 @@ root.render(
         <Route path="projectList" element={<ProjectList />} />
         <Route path="createNewProject" element={<CreateNewProject />} />
         <Route path="templates" element={<Templates />} />
-        <Route path="*" element={<Navigate to="/portfolio" replace />} />
+        <Route path="*" element={<Navigate to="profile" replace />} />
       </Route>
     </Routes>
   </BrowserRouter>
