@@ -1,25 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Suspense } from "react";
+import { Outlet, useLocation } from "react-router-dom";
+import styled, { createGlobalStyle } from "styled-components";
+import { Reset } from "styled-reset";
+import ReactLoading from "react-loading";
+
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
+
+const GlobalStyle = createGlobalStyle`
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Montserrat';
+  }
+  #root {
+     min-height: 100vh;
+  }`;
+
+const Loading = styled(ReactLoading)`
+  margin: 50px auto;
+`;
+
+const loadingMarkup = <Loading />;
 
 function App() {
+  const location = useLocation();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Suspense fallback={loadingMarkup}>
+      <Reset />
+      <GlobalStyle />
+      {location.pathname !== "/" && <Header />}
+      <Outlet />
+      {location.pathname !== "/" && <Footer />}
+    </Suspense>
   );
 }
 
