@@ -2,25 +2,32 @@ import styled from "styled-components";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 import ReactLoading from "react-loading";
 
+// interface Prop {
+//   lat: number;
+//   lng: number;
+// }
+
 const Wrapper = styled.div`
   width: 600px;
   height: 400px;
+  position: relative;
 `;
 
 const Loading = styled(ReactLoading)`
   margin: 50px auto;
 `;
 
-function GoogleMapAPI() {
+function GoogleMapAPI({ position }: any) {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: "AIzaSyD4FXJVjSDHR-dZz9zXR2N43ExpSVaA5tQ",
+    libraries: ["places"],
   });
-
-  const center = { lat: 48.8584, lng: 2.2945 };
+  const center = { lat: position.lat || 48.8584, lng: position.lng || 2.2945 };
 
   if (!isLoaded) {
     return <Loading />;
   }
+
   return (
     <Wrapper>
       <GoogleMap
