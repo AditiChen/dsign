@@ -1,5 +1,6 @@
 {
   "languages": "Languages",
   "login": "Login",
-  "create_new_project": "Create a new project"
+  "create_new_project": "Create a new project",
+  "add_template_or_map": "Add a template or google map"
 }

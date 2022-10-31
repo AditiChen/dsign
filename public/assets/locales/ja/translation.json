@@ -1,5 +1,6 @@
 {
   "languages": "言語",
   "login": "ログイン",
-  "create_new_project": "新規プロジェクトの作成"
+  "create_new_project": "新規プロジェクトの作成",
+  "add_template_or_map": "テンプレートやグーグルマップを追加する"
 }

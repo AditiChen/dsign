@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@firebase/auth": "^0.20.11",
+    "@react-google-maps/api": "^2.13.1",
     "@react-three/drei": "^9.34.4",
     "@react-three/fiber": "^8.8.10",
     "@testing-library/jest-dom": "^5.16.5",
