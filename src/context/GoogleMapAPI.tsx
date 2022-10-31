@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
+import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 import ReactLoading from "react-loading";
 
 const Wrapper = styled.div`
@@ -27,8 +27,14 @@ function GoogleMapAPI() {
         center={center}
         zoom={15}
         mapContainerStyle={{ width: "100%", height: "100%" }}
+        options={{
+          zoomControl: false,
+          streetViewControl: false,
+          mapTypeControl: false,
+          fullscreenControl: false,
+        }}
       >
-        create_new_project
+        <Marker position={center} />
       </GoogleMap>
     </Wrapper>
   );

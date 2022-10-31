@@ -58,23 +58,29 @@ const TemplatesContainer = styled.div`
   margin-left: 30px;
   padding: 20px;
   width: 300px;
-  height: 100%;
-  min-height: 80vh;
+  height: 80vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   border: 1px solid #3c3c3c;
+  overflow: scroll;
+  scrollbar-width: none;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const TemplatesInnerContainer = styled.div`
+  height: 100%;
 `;
 
 const Template = styled.div`
+  margin: 20px auto;
   width: 200px;
   height: 120px;
   background-image: ${(props: Prop) => props.img};
   background-size: cover;
   background-position: center;
-  & + & {
-    margin-top: 20px;
-  }
 `;
 
 function CreateNewProject() {
@@ -89,10 +95,12 @@ function CreateNewProject() {
         </EditorContainer>
 
         <TemplatesContainer>
-          <div>{t("add_template_or_map")}</div>
-          {templatesImg.map((pic) => (
-            <Template key={`${pic}`} img={`url(${pic})`} />
-          ))}
+          <TemplatesInnerContainer>
+            <div>{t("add_template_or_map")}</div>
+            {templatesImg.map((pic) => (
+              <Template key={`${pic}`} img={`url(${pic})`} />
+            ))}
+          </TemplatesInnerContainer>
         </TemplatesContainer>
       </Container>
     </Wrapper>
