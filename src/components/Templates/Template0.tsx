@@ -1,7 +1,12 @@
 import styled from "styled-components";
-import template0 from "./template0.png";
-import eiffel from "../EiffelTower.jpeg";
-import paris from "../Paris.jpeg";
+import { t } from "i18next";
+import { useState } from "react";
+import miho1 from "../miho1.jpg";
+import miho2 from "../miho2.jpg";
+
+interface Prop {
+  border?: string;
+}
 
 const Wrapper = styled.div`
   margin: 20px auto;
@@ -15,7 +20,7 @@ const Wrapper = styled.div`
 const BackgroundImg = styled.div`
   width: 1200px;
   height: 760px;
-  background-image: url(${eiffel});
+  background-image: url(${miho1});
   background-size: cover;
   background-position: center;
   opacity: 0.7;
@@ -27,17 +32,29 @@ const MiddleContainer = styled.div`
   height: 100%;
   position: absolute;
   left: 300px;
-  background-color: #7c8fab;
+  background-color: #616161;
   opacity: 0.9;
+  box-shadow: 1px 0 3px #616161, -1px 0 3px #616161;
+`;
+
+const Context = styled.textarea`
+  padding: 10px;
+  height: 100%;
+  width: 100%;
   color: #ffffff;
   font-size: 24px;
   line-height: 30px;
+  background-color: transparent;
+  border: ${(props: Prop) => props.border};
+  &::placeholder {
+    color: #b4b4b4;
+  }
 `;
 
 const RightPhoto = styled.div`
   height: 85%;
   width: 450px;
-  background-image: url(${paris});
+  background-image: url(${miho2});
   background-size: cover;
   background-position: center;
   position: absolute;
@@ -47,22 +64,20 @@ const RightPhoto = styled.div`
 `;
 
 function Template0() {
+  const [inputText, setInputText] = useState("");
   return (
-    <div>
-      <Wrapper>
-        <BackgroundImg />
-        <MiddleContainer>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita
-          consequuntur quibusdam vero illum aliquid voluptatum sunt? Sapiente
-          magni ipsa, quam non, iusto et nisi maiores unde fugiat cum
-          perspiciatis iste? Lorem, ipsum dolor sit amet consectetur adipisicing
-          elit. Expedita consequuntur quibusdam vero illum aliquid voluptatum
-          sunt? Sapiente magni ipsa, quam non, iusto et nisi maiores unde fugiat
-          cum perspiciatis iste?
-        </MiddleContainer>
-        <RightPhoto />
-      </Wrapper>
-    </div>
+    <Wrapper>
+      <BackgroundImg />
+      <MiddleContainer>
+        <Context
+          value={inputText}
+          onChange={(e) => setInputText(e.target.value)}
+          border={inputText === "" ? "1px solid #b4b4b4" : "none"}
+          placeholder={t("type_content")}
+        />
+      </MiddleContainer>
+      <RightPhoto />
+    </Wrapper>
   );
 }
 

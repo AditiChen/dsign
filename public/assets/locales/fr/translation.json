@@ -1,7 +1,11 @@
 {
+  "project_list": "Liste des projets",
+  "profile": "Profil",
+  "create": "Créer",
   "languages": "Langues",
   "login": "Connexion",
   "create_new_project": "Créer un nouveau projet",
   "add_template_or_map": "Ajouter un modèle ou une carte google",
-  "confirm_location": "Confirmer le lieu"
+  "confirm_location": "Confirmer le lieu",
+  "type_content": "Tapez le contenu ici..."
 }

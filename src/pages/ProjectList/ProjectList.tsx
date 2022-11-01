@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
-  padding: 50px 0;
+  padding: 130px 0;
   width: 100%;
   min-width: 100vw;
   height: 100%;

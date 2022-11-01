@@ -76,7 +76,13 @@ const TemplateImg = styled.div`
 
 function TemplateInsert({ templateNum }: { templateNum: number[] }) {
   const templateFilter = templateNum?.map((num) => templatesArr[num]);
-  return <>{templateFilter.map((template) => template)}</>;
+  return (
+    <>
+      {templateFilter.map((Template, index) => (
+        <Template key={`${index + 1}`} />
+      ))}
+    </>
+  );
 }
 
 function CreateNewProject() {

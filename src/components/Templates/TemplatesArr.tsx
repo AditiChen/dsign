@@ -9,14 +9,14 @@ import Template7 from "./Template7";
 import GoogleMapInsert from "./GoogleMapAPI";
 
 const templatesArr = [
-  <Template0 />,
-  <Template1 />,
-  <Template2 />,
-  <Template3 />,
-  <Template4 />,
-  <Template5 />,
-  <Template6 />,
-  <Template7 />,
-  <GoogleMapInsert />,
+  Template0,
+  Template1,
+  Template2,
+  Template3,
+  Template4,
+  Template5,
+  Template6,
+  Template7,
+  GoogleMapInsert,
 ];
 export default templatesArr;

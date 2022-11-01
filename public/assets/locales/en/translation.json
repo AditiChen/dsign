@@ -1,7 +1,11 @@
 {
+  "project_list": "Porject List",
+  "profile": "Profile",
+  "create": "Create",
   "languages": "Languages",
   "login": "Login",
   "create_new_project": "Create a new project",
   "add_template_or_map": "Add a template or google map",
-  "confirm_location": "Confirm Location"
+  "confirm_location": "Confirm Location",
+  "type_content": "Type content here..."
 }
