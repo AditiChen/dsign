@@ -1,11 +1,5 @@
 import styled from "styled-components";
-import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
-import ReactLoading from "react-loading";
-
-// interface Prop {
-//   lat: number;
-//   lng: number;
-// }
+import { GoogleMap, Marker } from "@react-google-maps/api";
 
 const Wrapper = styled.div`
   width: 600px;
@@ -13,20 +7,12 @@ const Wrapper = styled.div`
   position: relative;
 `;
 
-const Loading = styled(ReactLoading)`
-  margin: 50px auto;
-`;
-
-function GoogleMapAPI({ position }: any) {
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyD4FXJVjSDHR-dZz9zXR2N43ExpSVaA5tQ",
-    libraries: ["places"],
-  });
+function GoogleMapAPI({
+  position,
+}: {
+  position: { lat?: number; lng?: number };
+}) {
   const center = { lat: position.lat || 48.8584, lng: position.lng || 2.2945 };
-
-  if (!isLoaded) {
-    return <Loading />;
-  }
 
   return (
     <Wrapper>

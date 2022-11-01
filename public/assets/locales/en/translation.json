@@ -2,5 +2,6 @@
   "languages": "Languages",
   "login": "Login",
   "create_new_project": "Create a new project",
-  "add_template_or_map": "Add a template or google map"
+  "add_template_or_map": "Add a template or google map",
+  "confirm_location": "Confirm Location"
 }

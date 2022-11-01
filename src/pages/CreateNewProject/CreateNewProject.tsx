@@ -5,29 +5,11 @@ import { Autocomplete, useJsApiLoader } from "@react-google-maps/api";
 import ReactLoading from "react-loading";
 
 import { getLatLng, getGeocode } from "use-places-autocomplete";
-import GoogleMapAPI from "../../context/GoogleMapAPI";
+import GoogleMapAPI from "../../components/Templates/GoogleMapAPI";
+import templatesImgArr from "../../components/Templates/TemplateImg";
+import templatesArr from "../../components/Templates/TemplatesArr";
 
-import template1 from "../Templates/template1.png";
-import template2 from "../Templates/template2.png";
-import template3 from "../Templates/template3.png";
-import template4 from "../Templates/template4.png";
-import template5 from "../Templates/template5.png";
-import template6 from "../Templates/template6.png";
-import template7 from "../Templates/template7.png";
-import template8 from "../Templates/template8.png";
-import googleMapPng from "../Templates/googleMapPng.png";
-
-const templatesImg = [
-  googleMapPng,
-  template1,
-  template2,
-  template3,
-  template4,
-  template5,
-  template6,
-  template7,
-  template8,
-];
+import Template0 from "../../components/Templates/Template0";
 
 interface Prop {
   img?: string;
@@ -70,7 +52,7 @@ const GoogleInput = styled.input`
 
 const ConfirmInputBtn = styled.button`
   height: 40px;
-  width: 100px;
+  width: 110px;
   border: 1px solid #c3c3c3;
 `;
 
@@ -94,27 +76,31 @@ const TemplatesInnerContainer = styled.div`
   height: 100%;
 `;
 
-const Template = styled.div`
+const TemplateImg = styled.div`
   margin: 20px auto;
   width: 200px;
   height: 120px;
   background-image: ${(props: Prop) => props.img};
   background-size: cover;
   background-position: center;
+  &:hover {
+    cursor: pointer;
+    box-shadow: 1px 1px 5px gray;
+  }
 `;
 
 const Loading = styled(ReactLoading)`
   margin: 50px auto;
 `;
 
-function CreateNewProject() {
+function GoogleMapInsert() {
   const { t } = useTranslation();
   const locationRef = useRef<HTMLInputElement>(null);
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyD4FXJVjSDHR-dZz9zXR2N43ExpSVaA5tQ",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
     libraries: ["places"],
   });
-  const [position, setPosition] = useState({});
+  const [position, setPosition] = useState<{ lat?: number; lng?: number }>({});
 
   if (!isLoaded) {
     return (
@@ -128,30 +114,65 @@ function CreateNewProject() {
     if (locationRef.current && locationRef.current.value) {
       const address: string = locationRef.current.value;
       const result = await getGeocode({ address });
-      const { lat, lng } = await getLatLng(result[0]);
+      const { lat, lng } = getLatLng(result[0]);
       setPosition({ lat, lng });
     }
   }
+  return (
+    <>
+      <Autocomplete>
+        <GoogleInput placeholder="type the place" ref={locationRef} />
+      </Autocomplete>
+      <ConfirmInputBtn onClick={() => locationHandler()}>
+        {t("confirm_location")}
+      </ConfirmInputBtn>
+      <GoogleMapAPI position={position} />
+    </>
+  );
+}
+
+function TemplateInsert({ templateNum }: { templateNum: number[] }) {
+  console.log(templateNum, "1111");
+  const templateFilter = templateNum;
+  return (
+    <>
+      <div>add_template_or_map</div>
+      <Template0 />
+      {/* {template.map((i) => (
+        <Template img={`url(${template1})`} />
+      ))} */}
+    </>
+  );
+}
+
+function CreateNewProject() {
+  const { t } = useTranslation();
+  const [addedTemplate, setAddedTemplate] = useState<number[]>([]);
 
   return (
     <Wrapper>
       <Container>
         <EditorContainer>
           <div>{t("create_new_project")}</div>
-          <Autocomplete>
-            <GoogleInput placeholder="type the place" ref={locationRef} />
-          </Autocomplete>
-          <ConfirmInputBtn onClick={() => locationHandler()}>
-            Confirm Location
-          </ConfirmInputBtn>
-          <GoogleMapAPI position={position} />
-          <Template img={`url("../Templates/template1.png")`} />
+          {addedTemplate.length === 0 ? (
+            ""
+          ) : (
+            <TemplateInsert templateNum={addedTemplate} />
+          )}
+          <GoogleMapInsert />
+          <Template0 />
         </EditorContainer>
         <TemplatesContainer>
           <TemplatesInnerContainer>
             <div>{t("add_template_or_map")}</div>
-            {templatesImg.map((pic) => (
-              <Template key={`${pic}`} img={`url(${pic})`} />
+            {templatesImgArr.map((pic, index) => (
+              <TemplateImg
+                key={`${pic}`}
+                img={`url(${pic})`}
+                onClick={() => {
+                  setAddedTemplate((prev) => [...prev, index]);
+                }}
+              />
             ))}
           </TemplatesInnerContainer>
         </TemplatesContainer>
