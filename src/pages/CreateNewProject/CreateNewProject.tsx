@@ -1,11 +1,9 @@
 import styled from "styled-components";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Autocomplete, useJsApiLoader } from "@react-google-maps/api";
 import ReactLoading from "react-loading";
 
-import { getLatLng, getGeocode } from "use-places-autocomplete";
-import GoogleMapAPI from "../../components/Templates/GoogleMapAPI";
+import GoogleMapInsert from "../../components/Templates/GoogleMapAPI";
 import templatesImgArr from "../../components/Templates/TemplateImg";
 import templatesArr from "../../components/Templates/TemplatesArr";
 
@@ -50,12 +48,6 @@ const GoogleInput = styled.input`
   border-radius: 5px;
 `;
 
-const ConfirmInputBtn = styled.button`
-  height: 40px;
-  width: 110px;
-  border: 1px solid #c3c3c3;
-`;
-
 const TemplatesContainer = styled.div`
   margin-left: 30px;
   padding: 20px;
@@ -88,48 +80,6 @@ const TemplateImg = styled.div`
     box-shadow: 1px 1px 5px gray;
   }
 `;
-
-const Loading = styled(ReactLoading)`
-  margin: 50px auto;
-`;
-
-function GoogleMapInsert() {
-  const { t } = useTranslation();
-  const locationRef = useRef<HTMLInputElement>(null);
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
-    libraries: ["places"],
-  });
-  const [position, setPosition] = useState<{ lat?: number; lng?: number }>({});
-
-  if (!isLoaded) {
-    return (
-      <Wrapper>
-        <Loading />
-      </Wrapper>
-    );
-  }
-
-  async function locationHandler() {
-    if (locationRef.current && locationRef.current.value) {
-      const address: string = locationRef.current.value;
-      const result = await getGeocode({ address });
-      const { lat, lng } = getLatLng(result[0]);
-      setPosition({ lat, lng });
-    }
-  }
-  return (
-    <>
-      <Autocomplete>
-        <GoogleInput placeholder="type the place" ref={locationRef} />
-      </Autocomplete>
-      <ConfirmInputBtn onClick={() => locationHandler()}>
-        {t("confirm_location")}
-      </ConfirmInputBtn>
-      <GoogleMapAPI position={position} />
-    </>
-  );
-}
 
 function TemplateInsert({ templateNum }: { templateNum: number[] }) {
   console.log(templateNum, "1111");
