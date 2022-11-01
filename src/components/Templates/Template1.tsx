@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import template1 from "./template0.png";
+import template1 from "./template1.png";
 
 const Template = styled.div`
   margin: 20px auto;

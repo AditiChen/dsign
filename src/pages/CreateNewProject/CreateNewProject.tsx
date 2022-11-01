@@ -1,62 +1,55 @@
 import styled from "styled-components";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import ReactLoading from "react-loading";
 
-import GoogleMapInsert from "../../components/Templates/GoogleMapAPI";
 import templatesImgArr from "../../components/Templates/TemplateImg";
 import templatesArr from "../../components/Templates/TemplatesArr";
-
-import Template0 from "../../components/Templates/Template0";
 
 interface Prop {
   img?: string;
 }
 
 const Wrapper = styled.div`
-  padding: 50px 0;
+  padding-top: 80px;
   width: 100%;
   min-width: 100vw;
   height: 100%;
   min-height: calc(100vh - 160px);
   display: flex;
+  position: relative;
 `;
 
 const Container = styled.div`
-  margin: 0 auto;
-  width: 1200px;
+  margin: 50px auto;
+  width: 1300px;
   height: 100%;
-  position: relative;
+  min-height: calc(100vh - 260px);
   display: flex;
 `;
 
 const EditorContainer = styled.div`
-  padding: 20px;
-  width: 900px;
+  margin: 0 auto;
+  padding: 50px;
+  width: 100%;
   height: 100%;
   min-height: 80vh;
   border: 1px solid #3c3c3c;
-`;
-
-const GoogleInput = styled.input`
-  margin: 10px 0;
-  padding: 5px 10px;
-  height: 40px;
-  width: 400px;
-  color: #3c3c3c;
-  border: 1px solid #c3c3c3;
-  border-radius: 5px;
-`;
-
-const TemplatesContainer = styled.div`
-  margin-left: 30px;
-  padding: 20px;
-  width: 270px;
-  height: 80vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid #3c3c3c;
+`;
+
+const TemplatesContainer = styled.div`
+  padding: 20px;
+  width: 270px;
+  height: calc(100vh - 160px);
+  display: flex;
+  position: fixed;
+  right: 0;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 -1px 3px #3c3c3c;
+  background-color: #ffffff;
   overflow: scroll;
   scrollbar-width: none;
   ::-webkit-scrollbar {
@@ -82,17 +75,8 @@ const TemplateImg = styled.div`
 `;
 
 function TemplateInsert({ templateNum }: { templateNum: number[] }) {
-  console.log(templateNum, "1111");
-  const templateFilter = templateNum;
-  return (
-    <>
-      <div>add_template_or_map</div>
-      <Template0 />
-      {/* {template.map((i) => (
-        <Template img={`url(${template1})`} />
-      ))} */}
-    </>
-  );
+  const templateFilter = templateNum?.map((num) => templatesArr[num]);
+  return <>{templateFilter.map((template) => template)}</>;
 }
 
 function CreateNewProject() {
@@ -101,6 +85,20 @@ function CreateNewProject() {
 
   return (
     <Wrapper>
+      <TemplatesContainer>
+        <TemplatesInnerContainer>
+          <div>{t("add_template_or_map")}</div>
+          {templatesImgArr.map((pic, index) => (
+            <TemplateImg
+              key={`${pic}`}
+              img={`url(${pic})`}
+              onClick={() => {
+                setAddedTemplate((prev) => [...prev, index]);
+              }}
+            />
+          ))}
+        </TemplatesInnerContainer>
+      </TemplatesContainer>
       <Container>
         <EditorContainer>
           <div>{t("create_new_project")}</div>
@@ -109,23 +107,7 @@ function CreateNewProject() {
           ) : (
             <TemplateInsert templateNum={addedTemplate} />
           )}
-          <GoogleMapInsert />
-          <Template0 />
         </EditorContainer>
-        <TemplatesContainer>
-          <TemplatesInnerContainer>
-            <div>{t("add_template_or_map")}</div>
-            {templatesImgArr.map((pic, index) => (
-              <TemplateImg
-                key={`${pic}`}
-                img={`url(${pic})`}
-                onClick={() => {
-                  setAddedTemplate((prev) => [...prev, index]);
-                }}
-              />
-            ))}
-          </TemplatesInnerContainer>
-        </TemplatesContainer>
       </Container>
     </Wrapper>
   );
