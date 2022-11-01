@@ -1,5 +1,6 @@
 {
   "languages": "Langues",
   "login": "Connexion",
-  "create_new_project": "Créer un nouveau projet"
+  "create_new_project": "Créer un nouveau projet",
+  "add_template_or_map": "Ajouter un modèle ou une carte google"
 }

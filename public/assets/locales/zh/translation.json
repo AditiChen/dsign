@@ -1,5 +1,6 @@
 {
   "languages": "語言",
   "login": "登入",
-  "create_new_project": "建立新專案"
+  "create_new_project": "建立新專案",
+  "add_template_or_map": "新增版面或google地圖"
 }
