@@ -14,7 +14,7 @@ const Wrapper = styled.div`
   width: 100%;
   min-width: 100vw;
   height: 100%;
-  min-height: calc(100vh - 160px);
+  min-height: calc(100vh - 80px);
   display: flex;
   position: relative;
 `;

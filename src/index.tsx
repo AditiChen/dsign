@@ -8,6 +8,7 @@ import Landing from "./pages/Landing/Landing";
 import PortfolioBricks from "./pages/PortfolioBricks/PortfolioBricks";
 import Profile from "./pages/Profile/Profile";
 import ProjectList from "./pages/ProjectList/ProjectList";
+import SingleProject from "./pages/SingleProject/SingleProject";
 import CreateNewProject from "./pages/CreateNewProject/CreateNewProject";
 
 const root = ReactDOM.createRoot(
@@ -21,6 +22,7 @@ root.render(
         <Route path="portfolioBricks" element={<PortfolioBricks />} />
         <Route path="profile" element={<Profile />} />
         <Route path="projectList" element={<ProjectList />} />
+        <Route path="singleProject" element={<SingleProject />} />
         <Route path="createNewProject" element={<CreateNewProject />} />
         <Route path="*" element={<Navigate to="profile" replace />} />
       </Route>

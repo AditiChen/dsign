@@ -9,7 +9,7 @@ interface Prop {
 }
 
 const Wrapper = styled.div`
-  margin: 20px auto;
+  margin: 0 auto;
   width: 1200px;
   height: 760px;
   position: relative;

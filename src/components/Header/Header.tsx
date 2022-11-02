@@ -116,8 +116,8 @@ function Header() {
       <LeftContainer>
         <Logo to="portfolioBricks" />
         <Context to="projectList">{t("project_list")}</Context>
-        <Context to="profile">{t("profile")}</Context>
         <Context to="createNewProject">{t("create")}</Context>
+        <Context to="profile">{t("profile")}</Context>
       </LeftContainer>
       <RightContainer>
         <Icon
