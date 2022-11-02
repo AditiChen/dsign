@@ -7,6 +7,9 @@ import miho2 from "../miho2.jpg";
 interface Prop {
   border?: string;
 }
+interface InsertProp {
+  edit: boolean;
+}
 
 const Wrapper = styled.div`
   margin: 0 auto;
@@ -63,8 +66,9 @@ const RightPhoto = styled.div`
   box-shadow: 0 0 5px #3c3c3c;
 `;
 
-function Template0() {
+function Template0(props: InsertProp) {
   const [inputText, setInputText] = useState("");
+  const { edit } = props;
   return (
     <Wrapper>
       <BackgroundImg />
@@ -72,8 +76,8 @@ function Template0() {
         <Context
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
-          border={inputText === "" ? "1px solid #b4b4b4" : "none"}
-          placeholder={t("type_content")}
+          border={edit ? "1px solid #b4b4b4" : "none"}
+          placeholder={edit ? t("type_content") : ""}
         />
       </MiddleContainer>
       <RightPhoto />

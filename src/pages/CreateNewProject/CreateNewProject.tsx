@@ -79,7 +79,7 @@ function TemplateInsert({ templateNum }: { templateNum: number[] }) {
   return (
     <>
       {templateFilter.map((Template, index) => (
-        <Template key={`${index + 1}`} />
+        <Template key={`${index + 1}`} edit />
       ))}
     </>
   );

@@ -11,14 +11,24 @@ import {
 import { getLatLng, getGeocode } from "use-places-autocomplete";
 import ReactLoading from "react-loading";
 
+interface InsertProp {
+  edit: boolean;
+}
+
 const Wrapper = styled.div`
-  width: 600px;
-  height: 400px;
+  width: 1200px;
+  height: 700px;
   position: relative;
 `;
 
+const InputContainer = styled.div`
+  padding: 10px;
+  display: flex;
+  position: absolute;
+  right: 0;
+  top: 0;
+`;
 const GoogleInput = styled.input`
-  margin: 10px 0;
   padding: 5px 10px;
   height: 40px;
   width: 400px;
@@ -37,7 +47,7 @@ const Loading = styled(ReactLoading)`
   margin: 50px auto;
 `;
 
-function GoogleMapAPI({
+export function GoogleMapAPI({
   position,
 }: {
   position: { lat?: number; lng?: number };
@@ -48,7 +58,7 @@ function GoogleMapAPI({
     <Wrapper>
       <GoogleMap
         center={center}
-        zoom={15}
+        zoom={16}
         mapContainerStyle={{ width: "100%", height: "100%" }}
         options={{
           zoomControl: false,
@@ -63,7 +73,7 @@ function GoogleMapAPI({
   );
 }
 
-function GoogleMapInsert() {
+function GoogleMapInsert(props: InsertProp) {
   const { t } = useTranslation();
   const locationRef = useRef<HTMLInputElement>(null);
   const { isLoaded } = useJsApiLoader({
@@ -71,6 +81,7 @@ function GoogleMapInsert() {
     libraries: ["places"],
   });
   const [position, setPosition] = useState<{ lat?: number; lng?: number }>({});
+  const { edit } = props;
 
   if (!isLoaded) {
     return (
@@ -89,16 +100,23 @@ function GoogleMapInsert() {
     }
   }
   return (
-    <>
-      <Autocomplete>
-        <GoogleInput placeholder="type the place" ref={locationRef} />
-      </Autocomplete>
-      <ConfirmInputBtn onClick={() => locationHandler()}>
-        {t("confirm_location")}
-      </ConfirmInputBtn>
+    <Wrapper>
       <GoogleMapAPI position={position} />
-    </>
+      {edit ? (
+        <InputContainer>
+          <Autocomplete>
+            <GoogleInput placeholder="type the place" ref={locationRef} />
+          </Autocomplete>
+          <ConfirmInputBtn onClick={() => locationHandler()}>
+            {t("confirm_location")}
+          </ConfirmInputBtn>
+        </InputContainer>
+      ) : (
+        ""
+      )}
+    </Wrapper>
   );
 }
 
 export default GoogleMapInsert;
+// export { GoogleMapInsert as default, GoogleMapAPI };

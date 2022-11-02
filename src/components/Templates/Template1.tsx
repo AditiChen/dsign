@@ -11,6 +11,10 @@ interface Prop {
   border?: string;
 }
 
+interface InsertProp {
+  edit: boolean;
+}
+
 const Wrapper = styled.div`
   margin: 0 auto;
   width: 1200px;
@@ -83,8 +87,11 @@ const RightImg = styled.div`
   box-shadow: 0 0 5px #3c3c3c;
 `;
 
-function Template1() {
+// function Template1({ edit }: { edit: boolean }) {
+function Template1(props: InsertProp) {
   const [inputText, setInputText] = useState("");
+  const { edit } = props;
+
   return (
     <Wrapper>
       <BackgroundImg />
@@ -92,8 +99,8 @@ function Template1() {
       <Context
         value={inputText}
         onChange={(e) => setInputText(e.target.value)}
-        border={inputText === "" ? "1px solid #b4b4b4" : "none"}
-        placeholder={t("type_content")}
+        border={edit ? "1px solid #b4b4b4" : "none"}
+        placeholder={edit ? t("type_content") : ""}
       />
       <ImgContainer>
         <LeftImg />
