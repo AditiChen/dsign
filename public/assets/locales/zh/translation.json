@@ -1,6 +1,11 @@
 {
+  "project_list": "作品列表",
+  "profile": "自我介紹",
+  "create": "建立新專案",
   "languages": "語言",
   "login": "登入",
   "create_new_project": "建立新專案",
-  "add_template_or_map": "新增版面或google地圖"
+  "add_template_or_map": "新增版面或google地圖",
+  "confirm_location": "確認地點",
+  "type_content": "請輸入內容..."
 }

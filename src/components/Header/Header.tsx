@@ -1,4 +1,3 @@
-// import { useTranslation } from "react-i18next";
 import i18next, { t } from "i18next";
 import { useState } from "react";
 import styled from "styled-components";
@@ -26,6 +25,8 @@ const Wrapper = styled.div`
   height: 80px;
   color: #c4c4c4;
   background-color: #3c3c3c;
+  position: fixed;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -33,12 +34,20 @@ const Wrapper = styled.div`
 
 const LeftContainer = styled.div`
   display: flex;
+  align-items: center;
 `;
 
 const Logo = styled(Link)`
   width: 155px;
   height: 45px;
   background-image: url(${logo});
+`;
+
+const Context = styled(Link)`
+  margin-left: 30px;
+  font-size: 20px;
+  text-decoration: none;
+  color: #c4c4c4;
 `;
 
 const RightContainer = styled.div`
@@ -101,10 +110,14 @@ function LanguageOptions() {
 
 function Header() {
   const [showLanghages, setShowLanguages] = useState(false);
+
   return (
     <Wrapper>
       <LeftContainer>
-        <Logo to="profile" />
+        <Logo to="portfolioBricks" />
+        <Context to="projectList">{t("project_list")}</Context>
+        <Context to="createNewProject">{t("create")}</Context>
+        <Context to="profile">{t("profile")}</Context>
       </LeftContainer>
       <RightContainer>
         <Icon
