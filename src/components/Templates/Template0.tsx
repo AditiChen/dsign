@@ -52,6 +52,9 @@ const Context = styled.textarea`
   &::placeholder {
     color: #b4b4b4;
   }
+  &:focus {
+    outline: none;
+  }
 `;
 
 const RightPhoto = styled.div`
@@ -78,6 +81,7 @@ function Template0(props: InsertProp) {
           onChange={(e) => setInputText(e.target.value)}
           border={edit ? "1px solid #b4b4b4" : "none"}
           placeholder={edit ? t("type_content") : ""}
+          disabled={!edit}
         />
       </MiddleContainer>
       <RightPhoto />

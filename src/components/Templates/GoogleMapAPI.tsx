@@ -22,7 +22,7 @@ const Wrapper = styled.div`
 `;
 
 const InputContainer = styled.div`
-  padding: 10px;
+  padding: 20px;
   display: flex;
   position: absolute;
   right: 0;

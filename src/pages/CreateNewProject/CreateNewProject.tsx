@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import templatesImgArr from "../../components/Templates/TemplateImg";
 import templatesArr from "../../components/Templates/TemplatesArr";
+import closeIcon from "./close.png";
 
 interface Prop {
   img?: string;
@@ -39,7 +40,25 @@ const EditorContainer = styled.div`
   align-items: center;
 `;
 
-const TemplatesContainer = styled.div`
+const SingleEditorContainer = styled.div`
+  margin-top: 30px;
+  position: relative;
+  width: 1200px;
+  height: 760px;
+`;
+const CloseIcon = styled.div`
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  opacity: 0.8;
+  background-image: url(${closeIcon});
+  background-size: cover;
+  background-position: center;
+`;
+
+const SelectContainer = styled.div`
   padding: 20px;
   width: 270px;
   height: calc(100vh - 160px);
@@ -57,11 +76,11 @@ const TemplatesContainer = styled.div`
   }
 `;
 
-const TemplatesInnerContainer = styled.div`
+const SelectInnerContainer = styled.div`
   height: 100%;
 `;
 
-const TemplateImg = styled.div`
+const SelectImg = styled.div`
   margin: 20px auto;
   width: 200px;
   height: 120px;
@@ -74,28 +93,23 @@ const TemplateImg = styled.div`
   }
 `;
 
-function TemplateInsert({ templateNum }: { templateNum: number[] }) {
-  const templateFilter = templateNum?.map((num) => templatesArr[num]);
-  return (
-    <>
-      {templateFilter.map((Template, index) => (
-        <Template key={`${index + 1}`} edit />
-      ))}
-    </>
-  );
-}
-
 function CreateNewProject() {
   const { t } = useTranslation();
   const [addedTemplate, setAddedTemplate] = useState<number[]>([]);
+  const templateFilter = addedTemplate?.map((num) => templatesArr[num]);
+
+  function deleteHandler(index: number) {
+    const newAddedTemplate = addedTemplate.filter((data, i) => index !== i);
+    setAddedTemplate(newAddedTemplate);
+  }
 
   return (
     <Wrapper>
-      <TemplatesContainer>
-        <TemplatesInnerContainer>
+      <SelectContainer>
+        <SelectInnerContainer>
           <div>{t("add_template_or_map")}</div>
           {templatesImgArr.map((pic, index) => (
-            <TemplateImg
+            <SelectImg
               key={`${pic}`}
               img={`url(${pic})`}
               onClick={() => {
@@ -103,16 +117,19 @@ function CreateNewProject() {
               }}
             />
           ))}
-        </TemplatesInnerContainer>
-      </TemplatesContainer>
+        </SelectInnerContainer>
+      </SelectContainer>
       <Container>
         <EditorContainer>
           <div>{t("create_new_project")}</div>
-          {addedTemplate.length === 0 ? (
-            ""
-          ) : (
-            <TemplateInsert templateNum={addedTemplate} />
-          )}
+          {addedTemplate.length === 0
+            ? ""
+            : templateFilter.map((Template, index) => (
+                <SingleEditorContainer key={`${index + 1}`}>
+                  <Template edit />
+                  <CloseIcon onClick={() => deleteHandler(index)} />
+                </SingleEditorContainer>
+              ))}
         </EditorContainer>
       </Container>
     </Wrapper>
