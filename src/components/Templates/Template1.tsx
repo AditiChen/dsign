@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { t } from "i18next";
+import Overlay from "../../overlay";
 
 import trapezoid from "./template2_trapezoid.png";
 import church1 from "../church1.jpg";
@@ -93,24 +94,28 @@ const RightImg = styled.div`
 // function Template1({ edit }: { edit: boolean }) {
 function Template1(props: InsertProp) {
   const [inputText, setInputText] = useState("");
+  const [showOverlay, setShowOverlay] = useState(false);
   const { edit } = props;
 
   return (
-    <Wrapper>
-      <BackgroundImg />
-      <Trapezoid />
-      <Context
-        value={inputText}
-        onChange={(e) => setInputText(e.target.value)}
-        border={edit ? "1px solid #b4b4b4" : "none"}
-        placeholder={edit ? t("type_content") : ""}
-        disabled={!edit}
-      />
-      <ImgContainer>
-        <LeftImg />
-        <RightImg />
-      </ImgContainer>
-    </Wrapper>
+    <>
+      <Wrapper>
+        <BackgroundImg onClick={() => setShowOverlay((prev) => !prev)} />
+        <Trapezoid />
+        <Context
+          value={inputText}
+          onChange={(e) => setInputText(e.target.value)}
+          border={edit ? "1px solid #b4b4b4" : "none"}
+          placeholder={edit ? t("type_content") : ""}
+          disabled={!edit}
+        />
+        <ImgContainer>
+          <LeftImg />
+          <RightImg />
+        </ImgContainer>
+      </Wrapper>
+      {showOverlay && <Overlay setShowOverlay={setShowOverlay} />}
+    </>
   );
 }
 

@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { t } from "i18next";
 import { useState } from "react";
+import Overlay from "../../overlay";
+
 import miho1 from "../miho1.jpg";
 import miho2 from "../miho2.jpg";
 
@@ -71,21 +73,25 @@ const RightPhoto = styled.div`
 
 function Template0(props: InsertProp) {
   const [inputText, setInputText] = useState("");
+  const [showOverlay, setShowOverlay] = useState(false);
   const { edit } = props;
   return (
-    <Wrapper>
-      <BackgroundImg />
-      <MiddleContainer>
-        <Context
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-          border={edit ? "1px solid #b4b4b4" : "none"}
-          placeholder={edit ? t("type_content") : ""}
-          disabled={!edit}
-        />
-      </MiddleContainer>
-      <RightPhoto />
-    </Wrapper>
+    <>
+      <Wrapper>
+        <BackgroundImg onClick={() => setShowOverlay((prev) => !prev)} />
+        <MiddleContainer>
+          <Context
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            border={edit ? "1px solid #b4b4b4" : "none"}
+            placeholder={edit ? t("type_content") : ""}
+            disabled={!edit}
+          />
+        </MiddleContainer>
+        <RightPhoto onClick={() => setShowOverlay((prev) => !prev)} />
+      </Wrapper>
+      {showOverlay && <Overlay setShowOverlay={setShowOverlay} />}
+    </>
   );
 }
 
