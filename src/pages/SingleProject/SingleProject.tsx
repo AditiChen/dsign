@@ -53,7 +53,6 @@ const project = {
       content: ["Hello, this is apple."],
       url: [miho1, miho2],
     },
-
     {
       type: 1,
       content: ["The church of light."],

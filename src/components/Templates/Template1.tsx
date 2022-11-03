@@ -1,14 +1,10 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import styled from "styled-components";
 import { t } from "i18next";
 import Overlay from "../../overlay";
 
 import trapezoid from "./template2_trapezoid.png";
 import uploadPhotoIcon from "./uploadPhoto.png";
-
-import church1 from "../church1.jpg";
-import church2 from "../church2.jpg";
-import church3 from "../church3.jpg";
 
 interface Prop {
   border?: string;
@@ -119,11 +115,16 @@ function Template1(props: InsertProp) {
   const [photoUrl, setPhotoUrl] = useState<string[]>(["", "", ""]);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [currentAaspect, setCurrentAspect] = useState(1 / 1);
-
-  console.log("template1 photoUrl", photoUrl);
+  const inputRef = useRef<HTMLTextAreaElement>(null!);
 
   const { edit } = props;
-  const urls = [church1, church2, church3];
+  const pageData = {
+    type: 1,
+    content: [`${inputRef.current?.value}`],
+    url: photoUrl,
+    author: "Orange",
+    id: "lWRhOh8Hh7p65kOoamST",
+  };
 
   const setNewUrl = (returnedUrl: string) => {
     const newUrl = [...photoUrl];
@@ -156,6 +157,7 @@ function Template1(props: InsertProp) {
           border={edit ? "1px solid #b4b4b4" : "none"}
           placeholder={edit ? t("type_content") : ""}
           disabled={!edit}
+          ref={inputRef}
         />
         <ImgContainer>
           <LeftImg

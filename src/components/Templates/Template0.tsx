@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { t } from "i18next";
-import { useState, Dispatch, SetStateAction } from "react";
+import { useState, useRef } from "react";
 import Overlay from "../../overlay";
 import uploadPhotoIcon from "./uploadPhoto.png";
 
@@ -93,8 +93,16 @@ function Template0(props: InsertProp) {
   const [photoUrl, setPhotoUrl] = useState<string[]>(["", ""]);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [currentAaspect, setCurrentAspect] = useState(1 / 1);
+  const inputRef = useRef<HTMLTextAreaElement>(null!);
 
   const { edit } = props;
+  const pageData = {
+    type: 0,
+    content: [`${inputRef.current?.value}`],
+    url: photoUrl,
+    author: "Orange",
+    id: "lWRhOh8Hh7p65kOoamST",
+  };
 
   const setNewUrl = (returnedUrl: string) => {
     const newUrl = [...photoUrl];
@@ -127,6 +135,7 @@ function Template0(props: InsertProp) {
             border={edit ? "1px solid #b4b4b4" : "none"}
             placeholder={edit ? t("type_content") : ""}
             disabled={!edit}
+            ref={inputRef}
           />
         </MiddleContainer>
         <RightImg
