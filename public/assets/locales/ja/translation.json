@@ -5,7 +5,10 @@
   "languages": "言語",
   "login": "ログイン",
   "create_new_project": "新規プロジェクトの作成",
-  "add_template_or_map": "テンプレートやグーグルマップを追加する",
+  "add_template_or_map": "テンプレートやグーグルマップを追加",
   "confirm_location": "場所を確認する",
-  "type_content": "ここにコンテンツを入力する..."
+  "type_content": "ここにコンテンツを入力...",
+  "upload_image": "画像のアップロード",
+  "change_image": "描き替える",
+  "confirm_crop": "作付面積を確認"
 }

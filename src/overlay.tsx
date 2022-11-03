@@ -1,10 +1,5 @@
-import {
-  useState,
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-} from "react";
+import { useState, Dispatch, SetStateAction, useCallback } from "react";
+import { t } from "i18next";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 import Cropper from "react-easy-crop";
@@ -13,6 +8,7 @@ import getCroppedImg from "./utils/cropImage";
 interface OverlayProps {
   setShowOverlay: Dispatch<SetStateAction<boolean>>;
   setNewUrl: (returnUrl: string) => void;
+  currentAaspect: number;
 }
 
 const Wrapper = styled.div`
@@ -85,13 +81,12 @@ const Btn = styled.button`
 
 const portalElement = document.getElementById("overlays") as HTMLElement;
 
-function Overlay({ setShowOverlay, setNewUrl }: OverlayProps) {
+function Overlay({ setShowOverlay, setNewUrl, currentAaspect }: OverlayProps) {
   const [imgSrc, setImgSrc] = useState<string>("");
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
-  const [croppedImage, setCroppedImage] = useState<string>("");
 
   const onUploadFile = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files.length > 0) {
@@ -119,14 +114,9 @@ function Overlay({ setShowOverlay, setNewUrl }: OverlayProps) {
       rotation
     );
     const awaitCroppedImageToString = String(awaitCroppedImage);
-    setCroppedImage(awaitCroppedImageToString);
     setNewUrl(awaitCroppedImageToString);
     setShowOverlay((prev) => !prev);
-  }, [croppedAreaPixels, rotation, imgSrc]);
-
-  useEffect(() => {
-    setCroppedImage("");
-  }, []);
+  }, [croppedAreaPixels, rotation, imgSrc, setNewUrl, setShowOverlay]);
 
   return (
     <>
@@ -141,7 +131,7 @@ function Overlay({ setShowOverlay, setNewUrl }: OverlayProps) {
                   crop={crop}
                   rotation={rotation}
                   zoom={zoom}
-                  aspect={4 / 3}
+                  aspect={currentAaspect}
                   onCropChange={setCrop}
                   onRotationChange={setRotation}
                   onCropComplete={onCropComplete}
@@ -150,7 +140,7 @@ function Overlay({ setShowOverlay, setNewUrl }: OverlayProps) {
               ) : (
                 // 有any ！！！！
                 <UploadPic onChange={(e: any) => onUploadFile(e)}>
-                  upload image
+                  {t("upload_image")}
                   <input
                     type="file"
                     accept="image/*"
@@ -163,14 +153,14 @@ function Overlay({ setShowOverlay, setNewUrl }: OverlayProps) {
               // 有any ！！！！
               <ControlContainer>
                 <UploadPic onChange={(e: any) => onUploadFile(e)}>
-                  change image
+                  {t("change_image")}
                   <input
                     type="file"
                     accept="image/*"
                     style={{ display: "none" }}
                   />
                 </UploadPic>
-                <Btn onClick={showCroppedImage}>crop photo</Btn>
+                <Btn onClick={showCroppedImage}>{t("confirm_crop")}</Btn>
               </ControlContainer>
             ) : (
               ""
