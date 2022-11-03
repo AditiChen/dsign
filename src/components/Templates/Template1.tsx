@@ -10,6 +10,7 @@ import church3 from "../church3.jpg";
 
 interface Prop {
   border?: string;
+  url?: string;
 }
 
 interface InsertProp {
@@ -28,7 +29,7 @@ const Wrapper = styled.div`
 const BackgroundImg = styled.div`
   width: 1200px;
   height: 760px;
-  background-image: url(${church1});
+  background-image: ${(props: Prop) => props.url};
   background-size: cover;
   background-position: center;
   opacity: 0.9;
@@ -75,7 +76,7 @@ const ImgContainer = styled.div`
 const LeftImg = styled.div`
   height: 200px;
   width: 300px;
-  background-image: url(${church2});
+  background-image: ${(props: Prop) => props.url};
   background-size: cover;
   background-position: center;
   box-shadow: 0 0 5px #3c3c3c;
@@ -85,7 +86,7 @@ const RightImg = styled.div`
   margin-left: 30px;
   height: 200px;
   width: 200px;
-  background-image: url(${church3});
+  background-image: ${(props: Prop) => props.url};
   background-size: cover;
   background-position: center;
   box-shadow: 0 0 5px #3c3c3c;
@@ -95,12 +96,26 @@ const RightImg = styled.div`
 function Template1(props: InsertProp) {
   const [inputText, setInputText] = useState("");
   const [showOverlay, setShowOverlay] = useState(false);
+  const [photoUrl, setPhotoUrl] = useState<string[]>(["", "", ""]);
+  const [currentImgIndex, setCurrentImgIndex] = useState(0);
+
   const { edit } = props;
+
+  const urls = [church1, church2, church3];
+
+  const setNewUrl = (returnedUrl: string) => {
+    const newUrl = [...photoUrl];
+    newUrl[currentImgIndex] = returnedUrl;
+    setPhotoUrl(newUrl);
+  };
 
   return (
     <>
       <Wrapper>
-        <BackgroundImg onClick={() => setShowOverlay((prev) => !prev)} />
+        <BackgroundImg
+          onClick={() => setShowOverlay((prev) => !prev)}
+          url={`url(${urls[0]})`}
+        />
         <Trapezoid />
         <Context
           value={inputText}
@@ -110,11 +125,19 @@ function Template1(props: InsertProp) {
           disabled={!edit}
         />
         <ImgContainer>
-          <LeftImg />
-          <RightImg />
+          <LeftImg
+            onClick={() => setShowOverlay((prev) => !prev)}
+            url={`url(${urls[1]})`}
+          />
+          <RightImg
+            onClick={() => setShowOverlay((prev) => !prev)}
+            url={`url(${urls[2]})`}
+          />
         </ImgContainer>
       </Wrapper>
-      {showOverlay && <Overlay setShowOverlay={setShowOverlay} />}
+      {showOverlay && (
+        <Overlay setShowOverlay={setShowOverlay} setNewUrl={setNewUrl} />
+      )}
     </>
   );
 }

@@ -1,12 +1,18 @@
-import { useState, Dispatch, SetStateAction } from "react";
+import {
+  useState,
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+} from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
-import ReactCrop from "react-image-crop";
-
-// import ImageCropper from "./utils/crop";
+import Cropper from "react-easy-crop";
+import getCroppedImg from "./utils/cropImage";
 
 interface OverlayProps {
   setShowOverlay: Dispatch<SetStateAction<boolean>>;
+  setNewUrl: (returnUrl: string) => void;
 }
 
 const Wrapper = styled.div`
@@ -44,19 +50,15 @@ const OverlayModal = styled.div`
   background-color: white;
 `;
 
-const ImgContainer = styled.div`
+const CropperContainer = styled.div`
   width: 80%;
-  height: 80%;
-`;
-
-const ImgView = styled.img`
-  width: 100%;
-  height: 100%;
+  height: 90%;
+  position: relative;
 `;
 
 const UploadPic = styled.label`
-  padding: 10px;
-  width: 150px;
+  padding: 0 20px;
+  height: 50px;
   line-height: 50px;
   font-size: 20px;
   color: #3c3c3c;
@@ -65,9 +67,17 @@ const UploadPic = styled.label`
   background-color: #3c3c3c30;
 `;
 
+const ControlContainer = styled.div`
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+`;
+
 const Btn = styled.button`
+  margin-left: 20px;
   width: 150px;
   height: 50px;
+  color: #3c3c3c;
   font-size: 20px;
   border: 1px solid #3c3c3c;
   background-color: #3c3c3c30;
@@ -75,35 +85,48 @@ const Btn = styled.button`
 
 const portalElement = document.getElementById("overlays") as HTMLElement;
 
-function Overlay({ setShowOverlay }: OverlayProps) {
-  // const [imageToCrop, setImageToCrop] = useState<string | ArrayBuffer | null>(
-  //   ""
-  // );
-  // const [croppedImage, setCroppedImage] = useState(undefined);
-  const [imgSrc, setImgSrc] = useState<string | ArrayBuffer | null>("");
-  // const [image, setImage] = useState(undefined);
-  const [crop, setCrop] = useState({
-    unit: "px",
-    width: 30,
-    aspect: 4 / 6,
-  });
+function Overlay({ setShowOverlay, setNewUrl }: OverlayProps) {
+  const [imgSrc, setImgSrc] = useState<string>("");
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [rotation, setRotation] = useState(0);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [croppedImage, setCroppedImage] = useState<string>("");
 
   const onUploadFile = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files.length > 0) {
       const reader = new FileReader();
-      const viewImg = e.target.files[0];
-      reader.readAsDataURL(viewImg);
+      reader.readAsDataURL(e.target.files[0]);
       reader.onloadend = () => {
-        setImgSrc(reader.result);
+        const result = String(reader.result);
+        setImgSrc(result);
       };
-      // reader.addEventListener("load", () => {
-      //   const image = reader.result || "";
-      //   setImageToCrop(image);
-      // });
-      // console.log(e.target.files[0]);
-      // reader.readAsDataURL(e.target.files[0]);
     }
   };
+
+  // 有兩個 any ！！！！！！！！！！！！！！！！！
+  const onCropComplete = useCallback(
+    (croppedArea: any, croppedAreainPixel: any) => {
+      setCroppedAreaPixels(croppedAreainPixel);
+    },
+    []
+  );
+
+  const showCroppedImage = useCallback(async () => {
+    const awaitCroppedImage = await getCroppedImg(
+      imgSrc,
+      croppedAreaPixels,
+      rotation
+    );
+    const awaitCroppedImageToString = String(awaitCroppedImage);
+    setCroppedImage(awaitCroppedImageToString);
+    setNewUrl(awaitCroppedImageToString);
+    setShowOverlay((prev) => !prev);
+  }, [croppedAreaPixels, rotation, imgSrc]);
+
+  useEffect(() => {
+    setCroppedImage("");
+  }, []);
 
   return (
     <>
@@ -111,65 +134,44 @@ function Overlay({ setShowOverlay }: OverlayProps) {
         <Wrapper>
           <Backdrop onClick={() => setShowOverlay((prev) => !prev)} />
           <OverlayModal>
-            <ImgContainer>
+            <CropperContainer>
               {imgSrc ? (
-                <ImgView src={imgSrc} alt="preview" />
+                <Cropper
+                  image={imgSrc}
+                  crop={crop}
+                  rotation={rotation}
+                  zoom={zoom}
+                  aspect={4 / 3}
+                  onCropChange={setCrop}
+                  onRotationChange={setRotation}
+                  onCropComplete={onCropComplete}
+                  onZoomChange={setZoom}
+                />
               ) : (
-                <form>
-                  <UploadPic
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      onUploadFile(e)
-                    }
-                  >
-                    Choose the image
-                    <input
-                      type="file"
-                      accept="image/*"
-                      style={{ display: "none" }}
-                    />
-                  </UploadPic>
-                </form>
+                // 有any ！！！！
+                <UploadPic onChange={(e: any) => onUploadFile(e)}>
+                  upload image
+                  <input
+                    type="file"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                  />
+                </UploadPic>
               )}
-
-              <ReactCrop
-                src={imgSrc}
-                crop={crop}
-                // onImageLoaded={() => setImage(image)}
-                // onChange={() => setCrop(crop)}
-                // onComplete={imageCropComplete}
-              />
-              {/* <ImageCropper
-                imageToCrop={imageToCrop}
-                onImageCropped={(croppedImg: any) =>
-                  setCroppedImage(croppedImg)
-                }
-              /> */}
-
-              {/* {croppedImage && (
-                <div>
-                  <h2>Cropped Image</h2>
-                  <img alt="Cropped Img" src={croppedImage} />
-                </div>
-              )} */}
-            </ImgContainer>
+            </CropperContainer>
             {imgSrc ? (
-              <>
-                <form>
-                  <UploadPic
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      onUploadFile(e)
-                    }
-                  >
-                    Change the image
-                    <input
-                      type="file"
-                      accept="image/*"
-                      style={{ display: "none" }}
-                    />
-                  </UploadPic>
-                </form>
-                <Btn>crop photo</Btn>
-              </>
+              // 有any ！！！！
+              <ControlContainer>
+                <UploadPic onChange={(e: any) => onUploadFile(e)}>
+                  change image
+                  <input
+                    type="file"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                  />
+                </UploadPic>
+                <Btn onClick={showCroppedImage}>crop photo</Btn>
+              </ControlContainer>
             ) : (
               ""
             )}

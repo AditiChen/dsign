@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { t } from "i18next";
-import { useState } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import Overlay from "../../overlay";
 
 import miho1 from "../miho1.jpg";
@@ -8,6 +8,7 @@ import miho2 from "../miho2.jpg";
 
 interface Prop {
   border?: string;
+  url?: string;
 }
 interface InsertProp {
   edit: boolean;
@@ -25,7 +26,7 @@ const Wrapper = styled.div`
 const BackgroundImg = styled.div`
   width: 1200px;
   height: 760px;
-  background-image: url(${miho1});
+  background-image: ${(props: Prop) => props.url};
   background-size: cover;
   background-position: center;
   opacity: 0.7;
@@ -62,7 +63,7 @@ const Context = styled.textarea`
 const RightPhoto = styled.div`
   height: 85%;
   width: 450px;
-  background-image: url(${miho2});
+  background-image: ${(props: Prop) => props.url};
   background-size: cover;
   background-position: center;
   position: absolute;
@@ -74,11 +75,28 @@ const RightPhoto = styled.div`
 function Template0(props: InsertProp) {
   const [inputText, setInputText] = useState("");
   const [showOverlay, setShowOverlay] = useState(false);
+  const [photoUrl, setPhotoUrl] = useState<string[]>(["", ""]);
+  const [currentImgIndex, setCurrentImgIndex] = useState(0);
+
+  const urls = [miho1, miho2];
   const { edit } = props;
+
+  const setNewUrl = (returnedUrl: string) => {
+    const newUrl = [...photoUrl];
+    newUrl[currentImgIndex] = returnedUrl;
+    setPhotoUrl(newUrl);
+  };
+
   return (
     <>
       <Wrapper>
-        <BackgroundImg onClick={() => setShowOverlay((prev) => !prev)} />
+        <BackgroundImg
+          onClick={() => {
+            setShowOverlay((prev) => !prev);
+            setCurrentImgIndex(0);
+          }}
+          url={`url(${urls[0]})`}
+        />
         <MiddleContainer>
           <Context
             value={inputText}
@@ -88,9 +106,17 @@ function Template0(props: InsertProp) {
             disabled={!edit}
           />
         </MiddleContainer>
-        <RightPhoto onClick={() => setShowOverlay((prev) => !prev)} />
+        <RightPhoto
+          onClick={() => {
+            setShowOverlay((prev) => !prev);
+            setCurrentImgIndex(1);
+          }}
+          url={`url(${urls[1]})`}
+        />
       </Wrapper>
-      {showOverlay && <Overlay setShowOverlay={setShowOverlay} />}
+      {showOverlay && (
+        <Overlay setShowOverlay={setShowOverlay} setNewUrl={setNewUrl} />
+      )}
     </>
   );
 }
