@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { v4 as uuid } from "uuid";
 
 import templatesImgArr from "../../components/Templates/TemplateImg";
 import templatesArr from "../../components/Templates/TemplatesArr";
@@ -18,6 +19,9 @@ const Wrapper = styled.div`
   min-height: calc(100vh - 80px);
   display: flex;
   position: relative;
+  @media screen and (max-width: 1860px) {
+    padding-top: 200px;
+  }
 `;
 
 const Container = styled.div`
@@ -46,6 +50,7 @@ const SingleEditorContainer = styled.div`
   width: 1200px;
   height: 760px;
 `;
+
 const CloseIcon = styled.div`
   width: 40px;
   height: 40px;
@@ -74,10 +79,21 @@ const SelectContainer = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+  @media screen and (max-width: 1860px) {
+    padding-top: 100px;
+    color: #828282;
+    top: 0;
+    width: 100vw;
+    height: 200px;
+  }
 `;
 
 const SelectInnerContainer = styled.div`
   height: 100%;
+  @media screen and (max-width: 1860px) {
+    margin: 0 auto;
+    display: flex;
+  }
 `;
 
 const SelectImg = styled.div`
@@ -91,12 +107,23 @@ const SelectImg = styled.div`
     cursor: pointer;
     box-shadow: 1px 1px 5px gray;
   }
+  @media screen and (max-width: 1860px) {
+    margin: 0 10px 0 0;
+    width: 130px;
+    height: 80px;
+  }
 `;
 
 function CreateNewProject() {
   const { t } = useTranslation();
-  const [addedTemplate, setAddedTemplate] = useState<number[]>([]);
-  const templateFilter = addedTemplate?.map((num) => templatesArr[num]);
+  const [addedTemplate, setAddedTemplate] = useState<
+    { uuid: string; type: number }[]
+  >([]);
+
+  const templateFilter = addedTemplate?.map((num) => ({
+    keyUuid: [num.uuid],
+    Template: templatesArr[num.type],
+  }));
 
   function deleteHandler(index: number) {
     const newAddedTemplate = addedTemplate.filter((data, i) => index !== i);
@@ -107,13 +134,15 @@ function CreateNewProject() {
     <Wrapper>
       <SelectContainer>
         <SelectInnerContainer>
-          <div>{t("add_template_or_map")}</div>
           {templatesImgArr.map((pic, index) => (
             <SelectImg
-              key={`${pic}`}
+              key={uuid()}
               img={`url(${pic})`}
               onClick={() => {
-                setAddedTemplate((prev) => [...prev, index]);
+                setAddedTemplate((prev) => [
+                  ...prev,
+                  { uuid: uuid(), type: index },
+                ]);
               }}
             />
           ))}
@@ -121,15 +150,16 @@ function CreateNewProject() {
       </SelectContainer>
       <Container>
         <EditorContainer>
-          <div>{t("create_new_project")}</div>
-          {addedTemplate.length === 0
-            ? ""
-            : templateFilter.map((Template, index) => (
-                <SingleEditorContainer key={`${index + 1}`}>
-                  <Template edit />
-                  <CloseIcon onClick={() => deleteHandler(index)} />
-                </SingleEditorContainer>
-              ))}
+          {addedTemplate.length === 0 ? (
+            <div>{t("create_new_project")}</div>
+          ) : (
+            templateFilter.map(({ keyUuid, Template }, index) => (
+              <SingleEditorContainer key={`${keyUuid}`}>
+                <Template edit />
+                <CloseIcon onClick={() => deleteHandler(index)} />
+              </SingleEditorContainer>
+            ))
+          )}
         </EditorContainer>
       </Container>
     </Wrapper>

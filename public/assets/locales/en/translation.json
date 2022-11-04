@@ -5,7 +5,9 @@
   "languages": "Languages",
   "login": "Login",
   "create_new_project": "Create a new project",
-  "add_template_or_map": "Add a template or google map",
   "confirm_location": "Confirm Location",
-  "type_content": "Type content here..."
+  "type_content": "Type content here...",
+  "upload_image": "Upload image",
+  "change_image": "Change image",
+  "confirm_crop": "Confirm crop"
 }

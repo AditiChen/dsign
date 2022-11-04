@@ -5,7 +5,9 @@
   "languages": "Langues",
   "login": "Connexion",
   "create_new_project": "Créer un nouveau projet",
-  "add_template_or_map": "Ajouter un modèle ou une carte google",
   "confirm_location": "Confirmer le lieu",
-  "type_content": "Tapez le contenu ici..."
+  "type_content": "Tapez le contenu ici...",
+  "upload_image": "Télécharger l'image",
+  "change_image": "changer une autre image",
+  "confirm_crop": "confirmer la culture"
 }

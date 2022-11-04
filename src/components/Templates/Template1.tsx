@@ -1,14 +1,17 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import styled from "styled-components";
 import { t } from "i18next";
+import Overlay from "../../overlay";
 
 import trapezoid from "./template2_trapezoid.png";
-import church1 from "../church1.jpg";
-import church2 from "../church2.jpg";
-import church3 from "../church3.jpg";
+import uploadPhotoIcon from "./uploadPhoto.png";
 
 interface Prop {
   border?: string;
+  url?: string;
+  backgroundColor?: string;
+  top?: string;
+  left?: string;
 }
 
 interface InsertProp {
@@ -27,7 +30,8 @@ const Wrapper = styled.div`
 const BackgroundImg = styled.div`
   width: 1200px;
   height: 760px;
-  background-image: url(${church1});
+  background-image: ${(props: Prop) => props.url};
+  background-color: ${(props: Prop) => props.backgroundColor};
   background-size: cover;
   background-position: center;
   opacity: 0.9;
@@ -72,9 +76,10 @@ const ImgContainer = styled.div`
 `;
 
 const LeftImg = styled.div`
-  height: 200px;
   width: 300px;
-  background-image: url(${church2});
+  height: 200px;
+  background-image: ${(props: Prop) => props.url};
+  background-color: ${(props: Prop) => props.backgroundColor};
   background-size: cover;
   background-position: center;
   box-shadow: 0 0 5px #3c3c3c;
@@ -82,35 +87,107 @@ const LeftImg = styled.div`
 
 const RightImg = styled.div`
   margin-left: 30px;
-  height: 200px;
   width: 200px;
-  background-image: url(${church3});
+  height: 200px;
+  background-image: ${(props: Prop) => props.url};
+  background-color: ${(props: Prop) => props.backgroundColor};
   background-size: cover;
   background-position: center;
   box-shadow: 0 0 5px #3c3c3c;
 `;
 
+const UploadIcon = styled.div`
+  width: 50px;
+  height: 50px;
+  top: ${(props: Prop) => props.top};
+  left: ${(props: Prop) => props.left};
+  z-index: 2;
+  position: absolute;
+  background-image: url(${uploadPhotoIcon});
+  background-size: cover;
+  background-position: center;
+`;
+
 // function Template1({ edit }: { edit: boolean }) {
 function Template1(props: InsertProp) {
   const [inputText, setInputText] = useState("");
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [photoUrl, setPhotoUrl] = useState<string[]>(["", "", ""]);
+  const [currentImgIndex, setCurrentImgIndex] = useState(0);
+  const [currentAaspect, setCurrentAspect] = useState(1 / 1);
+  const inputRef = useRef<HTMLTextAreaElement>(null!);
+
   const { edit } = props;
+  const pageData = {
+    type: 1,
+    content: [`${inputRef.current?.value}`],
+    url: photoUrl,
+    author: "Orange",
+    id: "lWRhOh8Hh7p65kOoamST",
+  };
+
+  const setNewUrl = (returnedUrl: string) => {
+    const newUrl = [...photoUrl];
+    newUrl[currentImgIndex] = returnedUrl;
+    setPhotoUrl(newUrl);
+  };
+
+  function upLoadNewPhoto(index: number, aspect: number) {
+    setShowOverlay((prev) => !prev);
+    setCurrentImgIndex(index);
+    setCurrentAspect(aspect);
+  }
 
   return (
-    <Wrapper>
-      <BackgroundImg />
-      <Trapezoid />
-      <Context
-        value={inputText}
-        onChange={(e) => setInputText(e.target.value)}
-        border={edit ? "1px solid #b4b4b4" : "none"}
-        placeholder={edit ? t("type_content") : ""}
-        disabled={!edit}
-      />
-      <ImgContainer>
-        <LeftImg />
-        <RightImg />
-      </ImgContainer>
-    </Wrapper>
+    <>
+      <Wrapper>
+        <BackgroundImg
+          onClick={() => {
+            upLoadNewPhoto(0, 1200 / 760);
+          }}
+          backgroundColor={photoUrl[0] === "" ? "#b4b4b4" : ""}
+          url={photoUrl[0] === "" ? "" : `url(${photoUrl[0]})`}
+        >
+          {photoUrl[0] === "" ? <UploadIcon top="350px" left="400px" /> : ""}
+        </BackgroundImg>
+        <Trapezoid />
+        <Context
+          value={inputText}
+          onChange={(e) => setInputText(e.target.value)}
+          border={edit ? "1px solid #b4b4b4" : "none"}
+          placeholder={edit ? t("type_content") : ""}
+          disabled={!edit}
+          ref={inputRef}
+        />
+        <ImgContainer>
+          <LeftImg
+            onClick={() => {
+              upLoadNewPhoto(1, 300 / 200);
+            }}
+            backgroundColor={photoUrl[1] === "" ? "#b4b4b4" : ""}
+            url={photoUrl[1] === "" ? "" : `url(${photoUrl[1]})`}
+          >
+            {photoUrl[1] === "" ? <UploadIcon top="80px" left="130px" /> : ""}
+          </LeftImg>
+          <RightImg
+            onClick={() => {
+              upLoadNewPhoto(2, 200 / 200);
+            }}
+            backgroundColor={photoUrl[2] === "" ? "#b4b4b4" : ""}
+            url={photoUrl[2] === "" ? "" : `url(${photoUrl[2]})`}
+          >
+            {photoUrl[2] === "" ? <UploadIcon top="80px" left="410px" /> : ""}
+          </RightImg>
+        </ImgContainer>
+      </Wrapper>
+      {showOverlay && (
+        <Overlay
+          setShowOverlay={setShowOverlay}
+          setNewUrl={setNewUrl}
+          currentAaspect={currentAaspect}
+        />
+      )}
+    </>
   );
 }
 

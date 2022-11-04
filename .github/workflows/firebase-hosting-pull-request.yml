@@ -7,15 +7,14 @@ jobs:
   build_and_preview:
     if: "${{ github.event.pull_request.head.repo.full_name == github.repository }}"
     runs-on: ubuntu-latest
-    environment: Dev
     steps:
       - uses: actions/checkout@v2
       - run: npm install
       - run: npm run build
-          env: REACT_APP_GOOGLE_MAPS_API_KEY: "${{secrets.REACT_APP_GOOGLE_MAPS_API_KEY}}"
+        env:
+          REACT_APP_GOOGLE_MAPS_API_KEY: "${{secrets.REACT_APP_GOOGLE_MAPS_API_KEY}}"
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_D_SIG_2F338 }}"
           projectId: d-sig-2f338
-
