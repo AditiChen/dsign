@@ -3,7 +3,9 @@ import { t } from "i18next";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 import Cropper from "react-easy-crop";
+import { Slider, Typography } from "@mui/material";
 import getCroppedImg from "./utils/cropImage";
+import closeIcon from "./pages/CreateNewProject/close.png";
 
 interface OverlayProps {
   setShowOverlay: Dispatch<SetStateAction<boolean>>;
@@ -27,6 +29,18 @@ const Backdrop = styled.div`
   height: 100vh;
   background-color: #00000030;
   z-index: 801;
+`;
+
+const CloseIcon = styled.div`
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  opacity: 0.8;
+  background-image: url(${closeIcon});
+  background-size: cover;
+  background-position: center;
 `;
 
 const OverlayModal = styled.div`
@@ -69,6 +83,11 @@ const ControlContainer = styled.div`
   align-items: center;
 `;
 
+const SliderContainer = styled.div`
+  margin: 0 20px;
+  width: 150px;
+`;
+
 const Btn = styled.button`
   margin-left: 20px;
   width: 150px;
@@ -87,6 +106,8 @@ function Overlay({ setShowOverlay, setNewUrl, currentAaspect }: OverlayProps) {
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+
+  const zoomPercent = (value: number) => `${Math.round(value * 100)}%`;
 
   const onUploadFile = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files.length > 0) {
@@ -124,6 +145,7 @@ function Overlay({ setShowOverlay, setNewUrl, currentAaspect }: OverlayProps) {
         <Wrapper>
           <Backdrop onClick={() => setShowOverlay((prev) => !prev)} />
           <OverlayModal>
+            <CloseIcon onClick={() => setShowOverlay((prev) => !prev)} />
             <CropperContainer>
               {imgSrc ? (
                 <Cropper
@@ -160,6 +182,29 @@ function Overlay({ setShowOverlay, setNewUrl, currentAaspect }: OverlayProps) {
                     style={{ display: "none" }}
                   />
                 </UploadPic>
+                <SliderContainer>
+                  <Typography>Zoom: {zoomPercent(zoom)}</Typography>
+                  <Slider
+                    valueLabelDisplay="auto"
+                    valueLabelFormat={zoomPercent}
+                    min={1}
+                    max={3}
+                    step={0.1}
+                    value={zoom}
+                    onChange={(e, newZoom: any) => setZoom(newZoom)}
+                  />
+                </SliderContainer>
+                <SliderContainer>
+                  <Typography>Rotation: {`${rotation} °`}</Typography>
+                  <Slider
+                    valueLabelDisplay="auto"
+                    min={0}
+                    max={360}
+                    value={rotation}
+                    onChange={(e, newRotation: any) => setRotation(newRotation)}
+                  />
+                </SliderContainer>
+
                 <Btn onClick={showCroppedImage}>{t("confirm_crop")}</Btn>
               </ControlContainer>
             ) : (
