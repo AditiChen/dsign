@@ -1,7 +1,11 @@
 import styled from "styled-components";
 import { t } from "i18next";
+import { v4 as uuid } from "uuid";
 import { useState, useRef } from "react";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "../../context/firebaseSDK";
 import Overlay from "../../overlay";
+
 import uploadPhotoIcon from "./uploadPhoto.png";
 
 interface Prop {
@@ -91,6 +95,7 @@ function Template0(props: InsertProp) {
   const [inputText, setInputText] = useState("");
   const [showOverlay, setShowOverlay] = useState(false);
   const [photoUrl, setPhotoUrl] = useState<string[]>(["", ""]);
+  const [storageUrl, setStorageUrl] = useState<string[]>(["", ""]);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [currentAaspect, setCurrentAspect] = useState(1 / 1);
   const inputRef = useRef<HTMLTextAreaElement>(null!);
@@ -99,15 +104,31 @@ function Template0(props: InsertProp) {
   const pageData = {
     type: 0,
     content: [`${inputRef.current?.value}`],
-    url: photoUrl,
+    url: storageUrl,
     author: "Orange",
     id: "lWRhOh8Hh7p65kOoamST",
   };
 
-  const setNewUrl = (returnedUrl: string) => {
+  function upLoadImgToFirebase(file: any) {
+    if (!file) return;
+    const urlByUuid = uuid();
+
+    const imgRef = ref(storage, `images/${urlByUuid}`);
+    const uploadTask = uploadBytesResumable(imgRef, file);
+    uploadTask.on("state_changed", () => {
+      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        const newStorageUrl = [...storageUrl];
+        newStorageUrl[currentImgIndex] = downloadURL;
+        setStorageUrl(newStorageUrl);
+      });
+    });
+  }
+
+  const setNewPhotoDetail = (returnedUrl: string, returnedFile: File) => {
     const newUrl = [...photoUrl];
     newUrl[currentImgIndex] = returnedUrl;
     setPhotoUrl(newUrl);
+    upLoadImgToFirebase(returnedFile);
   };
 
   function upLoadNewPhoto(index: number, aspect: number) {
@@ -151,7 +172,7 @@ function Template0(props: InsertProp) {
       {showOverlay && (
         <Overlay
           setShowOverlay={setShowOverlay}
-          setNewUrl={setNewUrl}
+          setNewPhotoDetail={setNewPhotoDetail}
           currentAaspect={currentAaspect}
         />
       )}

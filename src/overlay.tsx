@@ -9,7 +9,7 @@ import closeIcon from "./pages/CreateNewProject/close.png";
 
 interface OverlayProps {
   setShowOverlay: Dispatch<SetStateAction<boolean>>;
-  setNewUrl: (returnUrl: string) => void;
+  setNewPhotoDetail: (returnedUrl: string, returnedFile: File) => void;
   currentAaspect: number;
 }
 
@@ -100,7 +100,11 @@ const Btn = styled.button`
 
 const portalElement = document.getElementById("overlays") as HTMLElement;
 
-function Overlay({ setShowOverlay, setNewUrl, currentAaspect }: OverlayProps) {
+function Overlay({
+  setShowOverlay,
+  setNewPhotoDetail,
+  currentAaspect,
+}: OverlayProps) {
   const [imgSrc, setImgSrc] = useState<string>("");
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
@@ -129,15 +133,15 @@ function Overlay({ setShowOverlay, setNewUrl, currentAaspect }: OverlayProps) {
   );
 
   const showCroppedImage = useCallback(async () => {
-    const awaitCroppedImage = await getCroppedImg(
+    const { file, url }: any = await getCroppedImg(
       imgSrc,
       croppedAreaPixels,
       rotation
     );
-    const awaitCroppedImageToString = String(awaitCroppedImage);
-    setNewUrl(awaitCroppedImageToString);
+    const awaitCroppedImageToString = String(url);
+    setNewPhotoDetail(awaitCroppedImageToString, file);
     setShowOverlay((prev) => !prev);
-  }, [croppedAreaPixels, rotation, imgSrc, setNewUrl, setShowOverlay]);
+  }, [croppedAreaPixels, rotation, imgSrc, setNewPhotoDetail, setShowOverlay]);
 
   return (
     <>

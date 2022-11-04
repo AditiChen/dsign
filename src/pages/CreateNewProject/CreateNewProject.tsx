@@ -76,6 +76,7 @@ const SelectContainer = styled.div`
   background-color: #ffffff;
   overflow: scroll;
   scrollbar-width: none;
+  z-index: 5;
   ::-webkit-scrollbar {
     display: none;
   }
