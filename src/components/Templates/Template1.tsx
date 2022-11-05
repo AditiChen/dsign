@@ -10,7 +10,6 @@ import trapezoid from "./template2_trapezoid.png";
 import uploadPhotoIcon from "./uploadPhoto.png";
 
 interface Prop {
-  border?: string;
   url?: string;
   backgroundColor?: string;
   top?: string;
@@ -18,8 +17,7 @@ interface Prop {
 }
 
 interface InsertProp {
-  edit: boolean;
-  setPages?: Dispatch<
+  setPages: Dispatch<
     SetStateAction<
       {
         type: number;
@@ -28,8 +26,8 @@ interface InsertProp {
       }[]
     >
   >;
-  pages?: { type: number; content: string[]; url: string[] }[];
-  currentIndex?: number;
+  pages: { type: number; content: string[]; url: string[] }[];
+  currentIndex: number;
 }
 
 const Wrapper = styled.div`
@@ -73,7 +71,7 @@ const Context = styled.textarea`
   right: 50px;
   bottom: 280px;
   background-color: transparent;
-  border: ${(props: Prop) => props.border};
+  border: 1px solid #b4b4b4;
   &::placeholder {
     color: #b4b4b4;
   }
@@ -133,15 +131,9 @@ function Template1(props: InsertProp) {
   const [currentAaspect, setCurrentAspect] = useState(1 / 1);
   const inputRef = useRef<HTMLTextAreaElement>(null!);
 
-  const { edit, setPages, currentIndex, pages } = props;
+  const { setPages, currentIndex, pages } = props;
 
   useEffect(() => {
-    if (
-      setPages === undefined ||
-      pages === undefined ||
-      currentIndex === undefined
-    )
-      return;
     const pageData = {
       type: 1,
       content: [inputText],
@@ -199,9 +191,7 @@ function Template1(props: InsertProp) {
         <Context
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
-          border={edit ? "1px solid #b4b4b4" : "none"}
-          placeholder={edit ? t("type_content") : ""}
-          disabled={!edit}
+          placeholder={t("type_content")}
           ref={inputRef}
         />
         <ImgContainer>

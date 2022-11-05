@@ -161,16 +161,18 @@ function CreateNewProject() {
   >([]);
 
   function confirmAllEdit() {
+    const projectId = uuid();
     console.log("pages", pages);
     const uploadData = {
-      author: "",
-      id: "",
+      author: "Orange",
+      id: "JeMKYuyUi7BnXxgrFlfK",
       mainUrl: "",
-      projectId: "",
+      projectId,
       title: "",
       time: new Date(),
       pages,
     };
+
     console.log("confitm all edit");
   }
   const templateFilter = addedTemplate?.map((num) => ({
@@ -221,7 +223,6 @@ function CreateNewProject() {
             templateFilter.map(({ keyUuid, Template }, index) => (
               <SingleEditorContainer key={`${keyUuid}`}>
                 <Template
-                  edit
                   pages={pages}
                   setPages={setPages}
                   currentIndex={index}

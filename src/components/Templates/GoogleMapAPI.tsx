@@ -73,7 +73,7 @@ export function GoogleMapAPI({
   );
 }
 
-function GoogleMapInsert(props: InsertProp) {
+function GoogleMapInsert() {
   const { t } = useTranslation();
   const locationRef = useRef<HTMLInputElement>(null);
   const { isLoaded } = useJsApiLoader({
@@ -81,7 +81,6 @@ function GoogleMapInsert(props: InsertProp) {
     libraries: ["places"],
   });
   const [position, setPosition] = useState<{ lat?: number; lng?: number }>({});
-  const { edit } = props;
 
   if (!isLoaded) {
     return (
@@ -102,18 +101,14 @@ function GoogleMapInsert(props: InsertProp) {
   return (
     <Wrapper>
       <GoogleMapAPI position={position} />
-      {edit ? (
-        <InputContainer>
-          <Autocomplete>
-            <GoogleInput placeholder="type the place" ref={locationRef} />
-          </Autocomplete>
-          <ConfirmInputBtn onClick={() => locationHandler()}>
-            {t("confirm_location")}
-          </ConfirmInputBtn>
-        </InputContainer>
-      ) : (
-        ""
-      )}
+      <InputContainer>
+        <Autocomplete>
+          <GoogleInput placeholder="type the place" ref={locationRef} />
+        </Autocomplete>
+        <ConfirmInputBtn onClick={() => locationHandler()}>
+          {t("confirm_location")}
+        </ConfirmInputBtn>
+      </InputContainer>
     </Wrapper>
   );
 }
