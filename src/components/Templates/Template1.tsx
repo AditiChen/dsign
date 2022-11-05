@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { t } from "i18next";
 import { v4 as uuid } from "uuid";
-import { useState, useRef } from "react";
+import { useState, useRef, Dispatch, SetStateAction, useEffect } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../../context/firebaseSDK";
 import Overlay from "../../overlay";
@@ -19,6 +19,17 @@ interface Prop {
 
 interface InsertProp {
   edit: boolean;
+  setPages?: Dispatch<
+    SetStateAction<
+      {
+        type: number;
+        content: string[];
+        url: string[];
+      }[]
+    >
+  >;
+  pages?: { type: number; content: string[]; url: string[] }[];
+  currentIndex?: number;
 }
 
 const Wrapper = styled.div`
@@ -111,29 +122,43 @@ const UploadIcon = styled.div`
   background-position: center;
 `;
 
-// function Template1({ edit }: { edit: boolean }) {
 function Template1(props: InsertProp) {
   const [inputText, setInputText] = useState("");
   const [showOverlay, setShowOverlay] = useState(false);
+  // for better user experience
   const [photoUrl, setPhotoUrl] = useState<string[]>(["", "", ""]);
+  // the actual upload url
   const [storageUrl, setStorageUrl] = useState<string[]>(["", "", ""]);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [currentAaspect, setCurrentAspect] = useState(1 / 1);
   const inputRef = useRef<HTMLTextAreaElement>(null!);
 
-  const { edit } = props;
-  const pageData = {
-    type: 1,
-    content: [`${inputRef.current?.value}`],
-    url: storageUrl,
-    author: "Orange",
-    id: "lWRhOh8Hh7p65kOoamST",
-  };
+  const { edit, setPages, currentIndex, pages } = props;
+
+  useEffect(() => {
+    if (
+      setPages === undefined ||
+      pages === undefined ||
+      currentIndex === undefined
+    )
+      return;
+    const pageData = {
+      type: 1,
+      content: [inputText],
+      url: storageUrl,
+    };
+    const contentCheck = pageData.content.every((text) => text !== "");
+    const urlCheck = storageUrl.every((url) => url !== "");
+    if (contentCheck === false || urlCheck === false) return;
+
+    const newPages = [...pages];
+    newPages[currentIndex] = pageData;
+    setPages(newPages);
+  }, [inputText, storageUrl, photoUrl]);
 
   function upLoadImgToFirebase(file: any) {
     if (!file) return;
     const urlByUuid = uuid();
-
     const imgRef = ref(storage, `images/${urlByUuid}`);
     const uploadTask = uploadBytesResumable(imgRef, file);
     uploadTask.on("state_changed", () => {

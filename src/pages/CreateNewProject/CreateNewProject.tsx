@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { v4 as uuid } from "uuid";
 
@@ -45,7 +45,7 @@ const EditorContainer = styled.div`
 `;
 
 const SingleEditorContainer = styled.div`
-  margin-top: 30px;
+  margin-top: 80px;
   position: relative;
   width: 1200px;
   height: 760px;
@@ -115,20 +115,76 @@ const SelectImg = styled.div`
   }
 `;
 
+const Btn = styled.button`
+  margin-left: 20px;
+  width: 150px;
+  height: 50px;
+  color: #3c3c3c;
+  font-size: 20px;
+  border: 1px solid #3c3c3c;
+  background-color: #3c3c3c30;
+`;
+
+const upLoadData = {
+  author: "Orange",
+  id: "lWRhOh8Hh7p65kOoamST",
+  mainUrl: "",
+  projectId: "7SNokIyJENKbHolizSDN",
+  title: "",
+  time: new Date(),
+  pages: [
+    {
+      type: 0,
+      content: [""],
+      url: [""],
+    },
+    {
+      type: 1,
+      content: [""],
+      url: [""],
+    },
+  ],
+};
+
 function CreateNewProject() {
   const { t } = useTranslation();
   const [addedTemplate, setAddedTemplate] = useState<
     { uuid: string; type: number }[]
   >([]);
+  // const [currentImgIndex, setCurrentImgIndex] = useState(0);
+  const [pages, setPages] = useState<
+    {
+      type: number;
+      content: string[];
+      url: string[];
+    }[]
+  >([]);
 
+  function confirmAllEdit() {
+    console.log("pages", pages);
+    const uploadData = {
+      author: "",
+      id: "",
+      mainUrl: "",
+      projectId: "",
+      title: "",
+      time: new Date(),
+      pages,
+    };
+    console.log("confitm all edit");
+  }
   const templateFilter = addedTemplate?.map((num) => ({
     keyUuid: [num.uuid],
     Template: templatesArr[num.type],
   }));
 
   function deleteHandler(index: number) {
-    const newAddedTemplate = addedTemplate.filter((data, i) => index !== i);
-    setAddedTemplate(newAddedTemplate);
+    const removeSelectedTemplate = addedTemplate.filter(
+      (data, i) => index !== i
+    );
+    const removeSelectedPage = pages.filter((data, i) => index !== i);
+    setAddedTemplate(removeSelectedTemplate);
+    setPages(removeSelectedPage);
   }
 
   return (
@@ -144,6 +200,14 @@ function CreateNewProject() {
                   ...prev,
                   { uuid: uuid(), type: index },
                 ]);
+                setPages((prev) => [
+                  ...prev,
+                  {
+                    type: index,
+                    content: [""],
+                    url: [""],
+                  },
+                ]);
               }}
             />
           ))}
@@ -156,11 +220,17 @@ function CreateNewProject() {
           ) : (
             templateFilter.map(({ keyUuid, Template }, index) => (
               <SingleEditorContainer key={`${keyUuid}`}>
-                <Template edit />
+                <Template
+                  edit
+                  pages={pages}
+                  setPages={setPages}
+                  currentIndex={index}
+                />
                 <CloseIcon onClick={() => deleteHandler(index)} />
               </SingleEditorContainer>
             ))
           )}
+          <Btn onClick={() => confirmAllEdit()}>{t("confirm_edit")}</Btn>
         </EditorContainer>
       </Container>
     </Wrapper>

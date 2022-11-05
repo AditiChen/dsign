@@ -51,7 +51,8 @@
     "import/no-unresolved": 0,
     "import/extensions": 0,
     // "no-console": "off",
-    "no-alert": "off"
+    "no-alert": "off",
+    "react/require-default-props": "warn"
   },
 
   "globals": {
