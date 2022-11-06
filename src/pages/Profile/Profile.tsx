@@ -244,7 +244,7 @@ function Profile() {
             <Avatar url={`url(${avatar})`} />
             <Context size="24px">{name}</Context>
             <Context size="20px">{email}</Context>
-            <SignBtn onClick={logout}>Logout</SignBtn>
+            <SignBtn onClick={logout}>{t("logout")}</SignBtn>
           </LoginContainer>
         ) : (
           <InfoContainer>

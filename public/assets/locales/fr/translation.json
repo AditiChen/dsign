@@ -6,6 +6,7 @@
 
   "login": "Connexion",
   "sign_up": "S'inscrire",
+  "logout": "Déconnexion",
   "continue_with_google": "Continuer avec Google",
   "continue_with_facebook": "Continuer avec Facebook",
   "input_name": "Nom",

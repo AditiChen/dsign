@@ -6,6 +6,7 @@
 
   "login": "登録",
   "sign_up": "新規登録",
+  "logout": "ログアウト",
   "continue_with_google": "Google 登録",
   "continue_with_facebook": "Facebook 登録",
   "input_name": "名前",

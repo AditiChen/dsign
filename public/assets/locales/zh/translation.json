@@ -6,6 +6,7 @@
 
   "login": "登入",
   "sign_up": "註冊",
+  "logout": "登出",
   "continue_with_google": "以Google帳號登入",
   "continue_with_facebook": "以Facebook帳號登入",
   "input_name": "姓名",

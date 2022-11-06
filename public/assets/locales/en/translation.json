@@ -6,6 +6,7 @@
 
   "login": "Login",
   "sign_up": "Sign up",
+  "logout": "Logout",
   "continue_with_google": "Continue with Google",
   "continue_with_facebook": "Continue with Facebook",
   "input_name": "Name",
