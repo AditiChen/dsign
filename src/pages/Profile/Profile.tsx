@@ -254,14 +254,14 @@ function Profile() {
               position="20px 0px 0px 0px"
               buttomLine={signin ? "" : "1px solid #b4b4b4"}
             >
-              Sign in
+              {t("login")}
             </SignStatus>
             <SignStatus
               onClick={() => setSignin(false)}
               color={signin ? "#f0f0f0" : ""}
               buttomLine={signin ? "1px solid #b4b4b4" : ""}
             >
-              Sign up
+              {t("sign_up")}
             </SignStatus>
             {signin ? (
               <LoginContainer>
