@@ -1,10 +1,13 @@
-import i18next, { t } from "i18next";
-import { useState } from "react";
+import i18next, { t as i18t } from "i18next";
+import { useTranslation } from "react-i18next";
+import { useState, useContext } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/authContext";
 
 import language from "./language-icon.png";
 import logo from "./Logo.png";
+import member from "./user-icon.png";
 
 interface Prop {
   img?: string;
@@ -91,7 +94,7 @@ function LanguageOptions() {
   return (
     <LanguageOptionsContainer>
       <Language size="16px" borderBtm="1px solid #3c3c3c">
-        {t("languages")}
+        {i18t("languages")}
       </Language>
       {laguages.map((lng) => (
         <Language
@@ -109,24 +112,31 @@ function LanguageOptions() {
 }
 
 function Header() {
-  const [showLanghages, setShowLanguages] = useState(false);
-
+  const { avatar } = useContext(AuthContext);
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [showLanghagesIcon, setShowLanguagesIcon] = useState(false);
   return (
     <Wrapper>
       <LeftContainer>
         <Logo to="portfolioBricks" />
         <Context to="projectList">{t("project_list")}</Context>
         <Context to="createNewProject">{t("create")}</Context>
-        <Context to="profile">{t("profile")}</Context>
       </LeftContainer>
       <RightContainer>
         <Icon
+          img={`url(${avatar})` || `url(${member})`}
+          onClick={() => {
+            navigate("/portfile");
+          }}
+        />
+        <Icon
           img={`url(${language})`}
           onClick={() => {
-            setShowLanguages((prev) => !prev);
+            setShowLanguagesIcon((prev) => !prev);
           }}
         >
-          {showLanghages ? <LanguageOptions /> : ""}
+          {showLanghagesIcon ? <LanguageOptions /> : ""}
         </Icon>
       </RightContainer>
     </Wrapper>
