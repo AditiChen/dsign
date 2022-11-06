@@ -4,6 +4,7 @@ import styled, { createGlobalStyle } from "styled-components";
 import { Reset } from "styled-reset";
 import ReactLoading from "react-loading";
 
+// import { AuthContextProvider } from "./context/authContext";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 
@@ -31,9 +32,11 @@ function App() {
     <Suspense fallback={loadingMarkup}>
       <Reset />
       <GlobalStyle />
+      {/* <AuthContextProvider> */}
       {location.pathname !== "/" && <Header />}
       <Outlet />
       {location.pathname !== "/" && <Footer />}
+      {/* </AuthContextProvider> */}
     </Suspense>
   );
 }

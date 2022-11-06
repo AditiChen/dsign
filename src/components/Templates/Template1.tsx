@@ -1,13 +1,15 @@
-import { useState, useRef } from "react";
 import styled from "styled-components";
 import { t } from "i18next";
+import { v4 as uuid } from "uuid";
+import { useState, useRef, Dispatch, SetStateAction, useEffect } from "react";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "../../context/firebaseSDK";
 import Overlay from "../../overlay";
 
 import trapezoid from "./template2_trapezoid.png";
 import uploadPhotoIcon from "./uploadPhoto.png";
 
 interface Prop {
-  border?: string;
   url?: string;
   backgroundColor?: string;
   top?: string;
@@ -15,7 +17,23 @@ interface Prop {
 }
 
 interface InsertProp {
-  edit: boolean;
+  setPages: Dispatch<
+    SetStateAction<
+      {
+        type: number;
+        content?: string[];
+        url?: string[];
+        location?: { lat?: number; lng?: number };
+      }[]
+    >
+  >;
+  pages: {
+    type: number;
+    content?: string[];
+    url?: string[];
+    location?: { lat?: number; lng?: number };
+  }[];
+  currentIndex: number;
 }
 
 const Wrapper = styled.div`
@@ -59,7 +77,7 @@ const Context = styled.textarea`
   right: 50px;
   bottom: 280px;
   background-color: transparent;
-  border: ${(props: Prop) => props.border};
+  border: 1px solid #b4b4b4;
   &::placeholder {
     color: #b4b4b4;
   }
@@ -108,28 +126,53 @@ const UploadIcon = styled.div`
   background-position: center;
 `;
 
-// function Template1({ edit }: { edit: boolean }) {
 function Template1(props: InsertProp) {
   const [inputText, setInputText] = useState("");
   const [showOverlay, setShowOverlay] = useState(false);
+  // for better user experience
   const [photoUrl, setPhotoUrl] = useState<string[]>(["", "", ""]);
+  // the actual upload url
+  const [storageUrl, setStorageUrl] = useState<string[]>(["", "", ""]);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [currentAaspect, setCurrentAspect] = useState(1 / 1);
   const inputRef = useRef<HTMLTextAreaElement>(null!);
 
-  const { edit } = props;
-  const pageData = {
-    type: 1,
-    content: [`${inputRef.current?.value}`],
-    url: photoUrl,
-    author: "Orange",
-    id: "lWRhOh8Hh7p65kOoamST",
-  };
+  const { setPages, currentIndex, pages } = props;
 
-  const setNewUrl = (returnedUrl: string) => {
+  useEffect(() => {
+    const pageData = {
+      type: 1,
+      content: [inputText],
+      url: storageUrl,
+    };
+    const contentCheck = pageData.content.every((text) => text !== "");
+    const urlCheck = storageUrl.every((url) => url !== "");
+    if (contentCheck === false || urlCheck === false) return;
+
+    const newPages = [...pages];
+    newPages[currentIndex] = pageData;
+    setPages(newPages);
+  }, [inputText, storageUrl, photoUrl]);
+
+  function upLoadImgToFirebase(file: any) {
+    if (!file) return;
+    const urlByUuid = uuid();
+    const imgRef = ref(storage, `images/${urlByUuid}`);
+    const uploadTask = uploadBytesResumable(imgRef, file);
+    uploadTask.on("state_changed", () => {
+      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        const newStorageUrl = [...storageUrl];
+        newStorageUrl[currentImgIndex] = downloadURL;
+        setStorageUrl(newStorageUrl);
+      });
+    });
+  }
+
+  const setNewPhotoDetail = (returnedUrl: string, returnedFile: File) => {
     const newUrl = [...photoUrl];
     newUrl[currentImgIndex] = returnedUrl;
     setPhotoUrl(newUrl);
+    upLoadImgToFirebase(returnedFile);
   };
 
   function upLoadNewPhoto(index: number, aspect: number) {
@@ -154,9 +197,7 @@ function Template1(props: InsertProp) {
         <Context
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
-          border={edit ? "1px solid #b4b4b4" : "none"}
-          placeholder={edit ? t("type_content") : ""}
-          disabled={!edit}
+          placeholder={t("type_content")}
           ref={inputRef}
         />
         <ImgContainer>
@@ -183,7 +224,7 @@ function Template1(props: InsertProp) {
       {showOverlay && (
         <Overlay
           setShowOverlay={setShowOverlay}
-          setNewUrl={setNewUrl}
+          setNewPhotoDetail={setNewPhotoDetail}
           currentAaspect={currentAaspect}
         />
       )}

@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { useJsApiLoader } from "@react-google-maps/api";
 import ReactLoading from "react-loading";
-import templatesArr from "../../components/Templates/TemplatesArr";
-import { GoogleMapAPI } from "../../components/Templates/GoogleMapAPI";
+import templatesArr from "../../components/singleProjectPageTemplates/TemplatesArr";
+import { GoogleMapAPI } from "../../components/singleProjectPageTemplates/GoogleMapAPI";
 
 import miho1 from "../../components/miho1.jpg";
 import miho2 from "../../components/miho2.jpg";
@@ -57,8 +57,6 @@ const project = {
       type: 1,
       content: ["The church of light."],
       url: [church1, church2, church3],
-      author: "Orange",
-      id: "lWRhOh8Hh7p65kOoamST",
     },
     {
       type: 8,
@@ -101,7 +99,13 @@ function SingleProject() {
                   </MapContainer>
                 );
               }
-              return <Template key={`${index + 1}`} edit={false} />;
+              return (
+                <Template
+                  key={`${index + 1}`}
+                  photoUrl={pages[index].url || []}
+                  content={pages[index].content || []}
+                />
+              );
             })}
           </>
         )}
