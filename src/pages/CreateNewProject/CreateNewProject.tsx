@@ -1,13 +1,15 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { v4 as uuid } from "uuid";
 import { doc, setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import ReactLoading from "react-loading";
 import { db } from "../../context/firebaseSDK";
+import { AuthContext } from "../../context/authContext";
 
 import templatesImgArr from "../../components/Templates/TemplateImg";
 import templatesArr from "../../components/Templates/TemplatesArr";
-import GoogleMapInsert from "../../components/Templates/GoogleMapAPI";
 import closeIcon from "./close.png";
 
 interface Prop {
@@ -45,6 +47,23 @@ const EditorContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+const Input = styled.input`
+  padding: 6px 10px;
+  width: 1200px;
+  height: 50px;
+  color: #3c3c3c;
+  font-size: 18px;
+  background-color: #f0f0f090;
+  border: 1px solid gray;
+  & + & {
+    margin-top: 30px;
+  }
+  &:focus {
+    outline: none;
+    background-color: #61616130;
+  }
 `;
 
 const SingleEditorContainer = styled.div`
@@ -127,8 +146,15 @@ const Btn = styled.button`
   background-color: #3c3c3c30;
 `;
 
+const Loading = styled(ReactLoading)`
+  margin: 50px auto;
+`;
+
 function CreateNewProject() {
+  const navigate = useNavigate();
   const { t } = useTranslation();
+  const { userId, name } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
   const [addedTemplate, setAddedTemplate] = useState<
     { uuid: string; type: number }[]
   >([]);
@@ -141,26 +167,32 @@ function CreateNewProject() {
     }[]
   >([]);
   const [position, setPosition] = useState<{ lat?: number; lng?: number }>({});
+  const [title, setTitle] = useState("");
   const googleMap = templatesArr[8];
 
   async function confirmAllEdit() {
+    if (!userId) {
+      alert("please login first");
+      navigate("/profile");
+      return;
+    }
     const checkPage = pages.every((type) => type.type === undefined);
     if (checkPage) {
       alert(t("upload_failed"));
       return;
     }
-
+    setIsLoading(true);
     const projectId = uuid();
-    const uid = "JeMKYuyUi7BnXxgrFlfK";
     await setDoc(doc(db, "projects", projectId), {
-      author: "Orange",
-      uid,
+      author: name,
+      uid: userId,
       mainUrl: "",
       projectId,
-      title: "update test",
+      title,
       time: new Date(),
       pages,
     });
+    setIsLoading(false);
     alert(t("upload_successfully"));
     setPages([]);
     setAddedTemplate([]);
@@ -194,6 +226,14 @@ function CreateNewProject() {
     setPages(removeSelectedPageData);
   }
 
+  if (isLoading) {
+    return (
+      <Wrapper>
+        <Loading type="cylon" color="#3c3c3c" />
+      </Wrapper>
+    );
+  }
+
   return (
     <Wrapper>
       <SelectContainer>
@@ -219,31 +259,22 @@ function CreateNewProject() {
             <div>{t("create_new_project")}</div>
           ) : (
             <>
-              {templateFilter.map(({ keyUuid, Chosetemplate }, index) => {
-                if (Chosetemplate === googleMap) {
-                  return (
-                    <SingleEditorContainer key={`${keyUuid}`}>
-                      <GoogleMapInsert
-                        position={position}
-                        setPosition={setPosition}
-                      />
-                      <CloseIcon onClick={() => deleteHandler(index)} />
-                    </SingleEditorContainer>
-                  );
-                }
-                return (
-                  <SingleEditorContainer key={`${keyUuid}`}>
-                    <Chosetemplate
-                      pages={pages}
-                      setPages={setPages}
-                      currentIndex={index}
-                      position={position}
-                      setPosition={setPosition}
-                    />
-                    <CloseIcon onClick={() => deleteHandler(index)} />
-                  </SingleEditorContainer>
-                );
-              })}
+              <Input
+                placeholder="title"
+                onChange={(e) => setTitle(e.target.value)}
+              />
+              {templateFilter.map(({ keyUuid, Chosetemplate }, index) => (
+                <SingleEditorContainer key={`${keyUuid}`}>
+                  <Chosetemplate
+                    pages={pages}
+                    setPages={setPages}
+                    currentIndex={index}
+                    position={position}
+                    setPosition={setPosition}
+                  />
+                  <CloseIcon onClick={() => deleteHandler(index)} />
+                </SingleEditorContainer>
+              ))}
               <Btn onClick={() => confirmAllEdit()}>{t("confirm_edit")}</Btn>
             </>
           )}
