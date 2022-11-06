@@ -1,7 +1,9 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { v4 as uuid } from "uuid";
+import { updateDoc, doc, setDoc } from "firebase/firestore";
+import { db } from "../../context/firebaseSDK";
 
 import templatesImgArr from "../../components/Templates/TemplateImg";
 import templatesArr from "../../components/Templates/TemplatesArr";
@@ -116,7 +118,7 @@ const SelectImg = styled.div`
 `;
 
 const Btn = styled.button`
-  margin-left: 20px;
+  margin-top: 20px;
   width: 150px;
   height: 50px;
   color: #3c3c3c;
@@ -125,33 +127,11 @@ const Btn = styled.button`
   background-color: #3c3c3c30;
 `;
 
-const upLoadData = {
-  author: "Orange",
-  id: "lWRhOh8Hh7p65kOoamST",
-  mainUrl: "",
-  projectId: "7SNokIyJENKbHolizSDN",
-  title: "",
-  time: new Date(),
-  pages: [
-    {
-      type: 0,
-      content: [""],
-      url: [""],
-    },
-    {
-      type: 1,
-      content: [""],
-      url: [""],
-    },
-  ],
-};
-
 function CreateNewProject() {
   const { t } = useTranslation();
   const [addedTemplate, setAddedTemplate] = useState<
     { uuid: string; type: number }[]
   >([]);
-  // const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [pages, setPages] = useState<
     {
       type: number;
@@ -160,21 +140,25 @@ function CreateNewProject() {
     }[]
   >([]);
 
-  function confirmAllEdit() {
+  async function confirmAllEdit() {
     const projectId = uuid();
+    const uid = "JeMKYuyUi7BnXxgrFlfK";
     console.log("pages", pages);
-    const uploadData = {
+    await setDoc(doc(db, "projects", projectId), {
       author: "Orange",
-      id: "JeMKYuyUi7BnXxgrFlfK",
+      uid,
       mainUrl: "",
       projectId,
-      title: "",
+      title: "update test",
       time: new Date(),
       pages,
-    };
-
+    });
+    // await updateDoc(doc(db, "users", uid), {
+    //   projectList: [...,projectId]
+    // });
     console.log("confitm all edit");
   }
+
   const templateFilter = addedTemplate?.map((num) => ({
     keyUuid: [num.uuid],
     Template: templatesArr[num.type],

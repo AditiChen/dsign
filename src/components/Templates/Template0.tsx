@@ -122,7 +122,6 @@ function Template0(props: InsertProp) {
     const contentCheck = pageData.content.every((text) => text !== "");
     const urlCheck = storageUrl.every((url) => url !== "");
     if (contentCheck === false || urlCheck === false) return;
-
     const newPages = [...pages];
     newPages[currentIndex] = pageData;
     setPages(newPages);
