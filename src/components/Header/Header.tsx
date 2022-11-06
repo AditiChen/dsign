@@ -1,8 +1,9 @@
 import i18next, { t as i18t } from "i18next";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/authContext";
 
 import language from "./language-icon.png";
 import logo from "./Logo.png";
@@ -111,6 +112,7 @@ function LanguageOptions() {
 }
 
 function Header() {
+  const { avatar } = useContext(AuthContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [showLanghagesIcon, setShowLanguagesIcon] = useState(false);
@@ -123,7 +125,7 @@ function Header() {
       </LeftContainer>
       <RightContainer>
         <Icon
-          img={`url(${member})`}
+          img={`url(${avatar})` || `url(${member})`}
           onClick={() => {
             navigate("/portfile");
           }}
