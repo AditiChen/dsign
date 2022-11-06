@@ -1,12 +1,13 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { v4 as uuid } from "uuid";
-import { updateDoc, doc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../context/firebaseSDK";
 
 import templatesImgArr from "../../components/Templates/TemplateImg";
 import templatesArr from "../../components/Templates/TemplatesArr";
+import GoogleMapInsert from "../../components/Templates/GoogleMapAPI";
 import closeIcon from "./close.png";
 
 interface Prop {
@@ -119,7 +120,6 @@ const SelectImg = styled.div`
 
 const Btn = styled.button`
   margin-top: 20px;
-  width: 150px;
   height: 50px;
   color: #3c3c3c;
   font-size: 20px;
@@ -135,15 +135,23 @@ function CreateNewProject() {
   const [pages, setPages] = useState<
     {
       type: number;
-      content: string[];
-      url: string[];
+      content?: string[];
+      url?: string[];
+      location?: { lat?: number; lng?: number };
     }[]
   >([]);
+  const [position, setPosition] = useState<{ lat?: number; lng?: number }>({});
+  const googleMap = templatesArr[8];
 
   async function confirmAllEdit() {
+    const checkPage = pages.every((type) => type.type === undefined);
+    if (checkPage) {
+      alert(t("upload_failed"));
+      return;
+    }
+
     const projectId = uuid();
     const uid = "JeMKYuyUi7BnXxgrFlfK";
-    console.log("pages", pages);
     await setDoc(doc(db, "projects", projectId), {
       author: "Orange",
       uid,
@@ -153,24 +161,37 @@ function CreateNewProject() {
       time: new Date(),
       pages,
     });
-    // await updateDoc(doc(db, "users", uid), {
-    //   projectList: [...,projectId]
-    // });
-    console.log("confitm all edit");
+    alert(t("upload_successfully"));
+    setPages([]);
+    setAddedTemplate([]);
   }
 
   const templateFilter = addedTemplate?.map((num) => ({
     keyUuid: [num.uuid],
-    Template: templatesArr[num.type],
+    Chosetemplate: templatesArr[num.type],
   }));
+
+  useEffect(() => {
+    if (position.lat === undefined && position.lng === undefined) return;
+
+    const mapIndex = templateFilter.findIndex(
+      (map) => map.Chosetemplate === googleMap
+    );
+    if (mapIndex === -1) return;
+
+    const googleMapData = { type: 8, location: position };
+    const newPages = [...pages];
+    newPages[mapIndex] = googleMapData;
+    setPages(newPages);
+  }, [position]);
 
   function deleteHandler(index: number) {
     const removeSelectedTemplate = addedTemplate.filter(
       (data, i) => index !== i
     );
-    const removeSelectedPage = pages.filter((data, i) => index !== i);
+    const removeSelectedPageData = pages.filter((data, i) => index !== i);
     setAddedTemplate(removeSelectedTemplate);
-    setPages(removeSelectedPage);
+    setPages(removeSelectedPageData);
   }
 
   return (
@@ -186,14 +207,7 @@ function CreateNewProject() {
                   ...prev,
                   { uuid: uuid(), type: index },
                 ]);
-                setPages((prev) => [
-                  ...prev,
-                  {
-                    type: index,
-                    content: [""],
-                    url: [""],
-                  },
-                ]);
+                setPages((prev: any) => [...prev, {}]);
               }}
             />
           ))}
@@ -204,18 +218,35 @@ function CreateNewProject() {
           {addedTemplate.length === 0 ? (
             <div>{t("create_new_project")}</div>
           ) : (
-            templateFilter.map(({ keyUuid, Template }, index) => (
-              <SingleEditorContainer key={`${keyUuid}`}>
-                <Template
-                  pages={pages}
-                  setPages={setPages}
-                  currentIndex={index}
-                />
-                <CloseIcon onClick={() => deleteHandler(index)} />
-              </SingleEditorContainer>
-            ))
+            <>
+              {templateFilter.map(({ keyUuid, Chosetemplate }, index) => {
+                if (Chosetemplate === googleMap) {
+                  return (
+                    <SingleEditorContainer key={`${keyUuid}`}>
+                      <GoogleMapInsert
+                        position={position}
+                        setPosition={setPosition}
+                      />
+                      <CloseIcon onClick={() => deleteHandler(index)} />
+                    </SingleEditorContainer>
+                  );
+                }
+                return (
+                  <SingleEditorContainer key={`${keyUuid}`}>
+                    <Chosetemplate
+                      pages={pages}
+                      setPages={setPages}
+                      currentIndex={index}
+                      position={position}
+                      setPosition={setPosition}
+                    />
+                    <CloseIcon onClick={() => deleteHandler(index)} />
+                  </SingleEditorContainer>
+                );
+              })}
+              <Btn onClick={() => confirmAllEdit()}>{t("confirm_edit")}</Btn>
+            </>
           )}
-          <Btn onClick={() => confirmAllEdit()}>{t("confirm_edit")}</Btn>
         </EditorContainer>
       </Container>
     </Wrapper>

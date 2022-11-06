@@ -90,7 +90,6 @@ const SliderContainer = styled.div`
 
 const Btn = styled.button`
   margin-left: 20px;
-  width: 150px;
   height: 50px;
   color: #3c3c3c;
   font-size: 20px;
@@ -208,7 +207,6 @@ function Overlay({
                     onChange={(e, newRotation: any) => setRotation(newRotation)}
                   />
                 </SliderContainer>
-
                 <Btn onClick={showCroppedImage}>{t("confirm_crop")}</Btn>
               </ControlContainer>
             ) : (

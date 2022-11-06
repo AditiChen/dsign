@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
-import { useRef, useState } from "react";
+import { useRef, Dispatch, SetStateAction } from "react";
 
 import {
   GoogleMap,
@@ -10,10 +10,6 @@ import {
 } from "@react-google-maps/api";
 import { getLatLng, getGeocode } from "use-places-autocomplete";
 import ReactLoading from "react-loading";
-
-interface InsertProp {
-  edit: boolean;
-}
 
 const Wrapper = styled.div`
   width: 1200px;
@@ -73,14 +69,19 @@ export function GoogleMapAPI({
   );
 }
 
-function GoogleMapInsert() {
+function GoogleMapInsert({
+  position,
+  setPosition,
+}: {
+  position: { lat?: number; lng?: number };
+  setPosition: Dispatch<SetStateAction<{ lat?: number; lng?: number }>>;
+}) {
   const { t } = useTranslation();
   const locationRef = useRef<HTMLInputElement>(null);
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
     libraries: ["places"],
   });
-  const [position, setPosition] = useState<{ lat?: number; lng?: number }>({});
 
   if (!isLoaded) {
     return (
@@ -103,7 +104,7 @@ function GoogleMapInsert() {
       <GoogleMapAPI position={position} />
       <InputContainer>
         <Autocomplete>
-          <GoogleInput placeholder="type the place" ref={locationRef} />
+          <GoogleInput placeholder={t("insert_location")} ref={locationRef} />
         </Autocomplete>
         <ConfirmInputBtn onClick={() => locationHandler()}>
           {t("confirm_location")}

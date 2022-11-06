@@ -52,7 +52,10 @@
     "import/extensions": 0,
     // "no-console": "off",
     "no-alert": "off",
-    "react/require-default-props": "warn"
+    // turn off props required default value
+    "react/require-default-props": "warn",
+    // trun off warning of suggestion dependency
+    "react-hooks/exhaustive-deps": "off"
   },
 
   "globals": {

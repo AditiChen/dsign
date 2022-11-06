@@ -1,13 +1,17 @@
 {
-  "project_list": "Porject List",
+  "project_list": "Project List",
   "profile": "Profile",
   "create": "Create",
   "languages": "Languages",
   "login": "Login",
   "create_new_project": "Create a new project",
+  "insert_location": "Enter the address",
   "confirm_location": "Confirm Location",
   "type_content": "Type content here...",
   "upload_image": "Upload image",
   "change_image": "Change image",
-  "confirm_crop": "Confirm crop"
+  "confirm_crop": "Confirm crop",
+  "confirm_edit": "Confirm edit",
+  "upload_failed": "Do you miss updating details? please check every template again.",
+  "upload_successfully": "Upload successfully!"
 }

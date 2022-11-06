@@ -12,7 +12,6 @@ interface Prop {
 }
 
 interface InsertProp {
-  key: string;
   photoUrl: string[];
   content: string[];
 }

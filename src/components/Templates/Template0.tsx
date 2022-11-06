@@ -19,12 +19,18 @@ interface InsertProp {
     SetStateAction<
       {
         type: number;
-        content: string[];
-        url: string[];
+        content?: string[];
+        url?: string[];
+        location?: { lat?: number; lng?: number };
       }[]
     >
   >;
-  pages: { type: number; content: string[]; url: string[] }[];
+  pages: {
+    type: number;
+    content?: string[];
+    url?: string[];
+    location?: { lat?: number; lng?: number };
+  }[];
   currentIndex: number;
 }
 
