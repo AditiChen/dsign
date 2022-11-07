@@ -115,4 +115,3 @@ function GoogleMapInsert({
 }
 
 export default GoogleMapInsert;
-// export { GoogleMapInsert as default, GoogleMapAPI };

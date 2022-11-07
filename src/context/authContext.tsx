@@ -1,4 +1,11 @@
-import { useState, createContext, useEffect, useMemo } from "react";
+import {
+  useState,
+  createContext,
+  useEffect,
+  useMemo,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -8,8 +15,10 @@ import {
   GoogleAuthProvider,
   FacebookAuthProvider,
 } from "firebase/auth";
+import { useTranslation } from "react-i18next";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db, auth } from "./firebaseSDK";
+import getProjects from "../utils/getProjects";
 
 type BodyProp = { children: React.ReactNode };
 interface AuthContextType {
@@ -19,11 +28,45 @@ interface AuthContextType {
   name: string;
   email: string;
   avatar: string;
+  singleProjectId: string;
+  userProjects: {
+    author: string;
+    uid: string;
+    mainUrl: string;
+    projectId: string;
+    title: string;
+    time: number;
+    pages: {
+      type: number;
+      content?: string[];
+      url?: string[];
+      location?: { lat?: number; lng?: number };
+    }[];
+  }[];
   emailSignInHandler(email: string, password: string): void;
   signUp(email: string, password: string, name: string): void;
   googleLoginHandler(): void;
   facebookLoginHandler(): void;
   logout(): void;
+  setSingleProjectId: Dispatch<SetStateAction<string>>;
+  setUserProjects: Dispatch<
+    SetStateAction<
+      {
+        author: string;
+        uid: string;
+        mainUrl: string;
+        projectId: string;
+        title: string;
+        time: number;
+        pages: {
+          type: number;
+          content?: string[];
+          url?: string[];
+          location?: { lat?: number; lng?: number };
+        }[];
+      }[]
+    >
+  >;
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -33,20 +76,42 @@ export const AuthContext = createContext<AuthContextType>({
   name: "",
   email: "",
   avatar: "",
+  userProjects: [],
+  singleProjectId: "",
   emailSignInHandler: () => {},
   signUp: () => {},
   googleLoginHandler: () => {},
   facebookLoginHandler: () => {},
   logout: () => {},
+  setUserProjects: () => {},
+  setSingleProjectId: () => {},
 });
 
 export function AuthContextProvider({ children }: BodyProp) {
+  const { t } = useTranslation();
   const [isLogin, setIsLogin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [userId, setUserId] = useState("");
   const [avatar, setAvatar] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [singleProjectId, setSingleProjectId] = useState("");
+  const [userProjects, setUserProjects] = useState<
+    {
+      author: string;
+      uid: string;
+      mainUrl: string;
+      projectId: string;
+      title: string;
+      time: number;
+      pages: {
+        type: number;
+        content?: string[];
+        url?: string[];
+        location?: { lat?: number; lng?: number };
+      }[];
+    }[]
+  >([]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -61,6 +126,8 @@ export function AuthContextProvider({ children }: BodyProp) {
         setUserId(uid);
         setEmail(userEmail);
         setIsLogin(true);
+        const userProjectsData = await getProjects(uid);
+        setUserProjects(userProjectsData);
       } else {
         setIsLogin(false);
       }
@@ -77,7 +144,7 @@ export function AuthContextProvider({ children }: BodyProp) {
         insertEmail,
         password
       );
-      alert("login successfully!");
+      alert(t("login_successfully"));
       const { user }: any = UserCredentialImpl;
       const { uid } = user;
       const userEmail = user.reloadUserInfo.email;
@@ -88,10 +155,13 @@ export function AuthContextProvider({ children }: BodyProp) {
       setUserId(uid);
       setEmail(userEmail);
       setIsLogin(true);
+      const userProjectsData = await getProjects(uid);
+      setUserProjects(userProjectsData);
     } catch (e) {
-      alert("failed to sign in,please check your information and try again!");
+      alert(t("login_failed"));
       console.log(e);
     }
+
     setIsLoading(false);
   };
 
@@ -107,7 +177,7 @@ export function AuthContextProvider({ children }: BodyProp) {
         insertEmail,
         password
       );
-      alert("sign up successfully!");
+      alert(t("sign_up_successfully"));
       const { user }: any = UserCredentialImpl;
       const { uid } = user;
       const userEmail = user.reloadUserInfo.email;
@@ -124,7 +194,7 @@ export function AuthContextProvider({ children }: BodyProp) {
       setAvatar(`https://source.boringavatars.com/marble/180/${newName}`);
       setIsLogin(true);
     } catch (e) {
-      alert("failed to sign up,please check your information and try again!");
+      alert(t("sign_up_failed"));
       console.log(e);
     }
     setIsLoading(false);
@@ -150,6 +220,8 @@ export function AuthContextProvider({ children }: BodyProp) {
     setAvatar(photoURL);
     setIsLogin(true);
     setIsLoading(false);
+    const userProjectsData = await getProjects(uid);
+    setUserProjects(userProjectsData);
   };
 
   const facebookLoginHandler = async () => {
@@ -172,6 +244,8 @@ export function AuthContextProvider({ children }: BodyProp) {
     setAvatar(photoURL);
     setIsLogin(true);
     setIsLoading(false);
+    const userProjectsData = await getProjects(uid);
+    setUserProjects(userProjectsData);
   };
 
   const logout = () => {
@@ -180,8 +254,9 @@ export function AuthContextProvider({ children }: BodyProp) {
     setUserId("");
     setEmail("");
     setAvatar("");
+    setUserProjects([]);
     setIsLogin(false);
-    alert("Logout successfully!");
+    alert(t("logout_successfully"));
   };
 
   const authProviderValue = useMemo(
@@ -197,6 +272,10 @@ export function AuthContextProvider({ children }: BodyProp) {
       googleLoginHandler,
       facebookLoginHandler,
       logout,
+      userProjects,
+      setUserProjects,
+      singleProjectId,
+      setSingleProjectId,
     }),
     [
       isLogin,
@@ -210,6 +289,10 @@ export function AuthContextProvider({ children }: BodyProp) {
       googleLoginHandler,
       facebookLoginHandler,
       logout,
+      userProjects,
+      setUserProjects,
+      singleProjectId,
+      setSingleProjectId,
     ]
   );
 

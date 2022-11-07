@@ -125,7 +125,7 @@ function Header() {
       </LeftContainer>
       <RightContainer>
         <Icon
-          img={`url(${avatar})` || `url(${member})`}
+          img={avatar ? `url(${avatar})` : `url(${member})`}
           onClick={() => {
             navigate("/portfile");
           }}

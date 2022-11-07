@@ -18,6 +18,11 @@
   "email_format_check": "Wrong email format",
   "password_letter_check": "Password should has at least 8 letters!",
   "password_confirm_failed": "Password confirm failed",
+  "login_successfully": "Login successfully!",
+  "login_failed": "Failed to login, please check your information and try again!",
+  "sign_up_successfully": "Sign up successfully!",
+  "sign_up_failed": "Failed to sign up,please check your information and try again!",
+  "logout_successfully": "Logout successfully!",
 
   "create_new_project": "Create a new project",
   "insert_location": "Enter the address",
@@ -25,8 +30,10 @@
   "type_content": "Type content here...",
   "upload_image": "Upload image",
   "change_image": "Change image",
+  "zoom_image": "Zoom",
+  "rotate_image": "Rotation",
   "confirm_crop": "Confirm crop",
   "confirm_edit": "Confirm edit",
   "upload_failed": "Do you miss updating details? please check every template again.",
-  "upload_successfully": "Upload successfully!"
+  "upload_successfully": "Upload project successfully!"
 }

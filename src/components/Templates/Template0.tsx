@@ -127,6 +127,9 @@ function Template0(props: InsertProp) {
     };
     const contentCheck = pageData.content.every((text) => text !== "");
     const urlCheck = storageUrl.every((url) => url !== "");
+    console.log("storageUrl", storageUrl);
+
+    console.log("useEffect", urlCheck);
     if (contentCheck === false || urlCheck === false) return;
     const newPages = [...pages];
     newPages[currentIndex] = pageData;
@@ -139,11 +142,15 @@ function Template0(props: InsertProp) {
     const imgRef = ref(storage, `images/${urlByUuid}`);
     const uploadTask = uploadBytesResumable(imgRef, file);
     uploadTask.on("state_changed", () => {
-      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-        const newStorageUrl = [...storageUrl];
-        newStorageUrl[currentImgIndex] = downloadURL;
-        setStorageUrl(newStorageUrl);
-      });
+      getDownloadURL(uploadTask.snapshot.ref)
+        .then((downloadURL) => {
+          const newStorageUrl = [...storageUrl];
+          newStorageUrl[currentImgIndex] = downloadURL;
+          setStorageUrl(newStorageUrl);
+        })
+        .catch((error) =>
+          console.log("Looks like there was a problem!", error)
+        );
     });
   }
 

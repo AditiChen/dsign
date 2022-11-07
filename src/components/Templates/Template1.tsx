@@ -160,11 +160,15 @@ function Template1(props: InsertProp) {
     const imgRef = ref(storage, `images/${urlByUuid}`);
     const uploadTask = uploadBytesResumable(imgRef, file);
     uploadTask.on("state_changed", () => {
-      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-        const newStorageUrl = [...storageUrl];
-        newStorageUrl[currentImgIndex] = downloadURL;
-        setStorageUrl(newStorageUrl);
-      });
+      getDownloadURL(uploadTask.snapshot.ref)
+        .then((downloadURL) => {
+          const newStorageUrl = [...storageUrl];
+          newStorageUrl[currentImgIndex] = downloadURL;
+          setStorageUrl(newStorageUrl);
+        })
+        .catch((error) =>
+          console.log("Looks like there was a problem!", error)
+        );
     });
   }
 

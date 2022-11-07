@@ -1,6 +1,12 @@
 import styled from "styled-components";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/authContext";
+
+interface Prop {
+  img?: string;
+}
 
 const Wrapper = styled.div`
   padding: 130px 0;
@@ -18,6 +24,57 @@ const Container = styled.div`
   height: 100%;
   position: relative;
   display: flex;
+  flex-direction: column;
+`;
+
+const HeaderContainer = styled.div`
+  padding-bottom: 20px;
+  display: flex;
+`;
+
+const ProjectsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const SingleProjectContainer = styled.div`
+  height: 200px;
+  width: 100%;
+  display: flex;
+  border: 1px solid black;
+  & + & {
+    margin-top: 20px;
+  }
+`;
+
+const LeftContainer = styled.div`
+  padding: 10px;
+  height: 200px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+const Text = styled.div`
+  font-size: 24px;
+`;
+
+const RightContainer = styled.div`
+  height: 200px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+`;
+
+const PhotoUrl = styled.div`
+  width: 180px;
+  height: 180px;
+  background-image: ${(props: Prop) => props.img};
+  background-position: center;
+  background-size: cover;
+  & + & {
+    margin-left: 10px;
+  }
 `;
 
 const Button = styled.button`
@@ -28,16 +85,49 @@ const Button = styled.button`
 function ProjectList() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { userProjects, setSingleProjectId } = useContext(AuthContext);
+
+  function toSingleProjectPage(projectId: string) {
+    setSingleProjectId(projectId);
+    navigate("/singleProject");
+  }
+
   return (
     <Wrapper>
       <Container>
-        <div>Project List</div>
-        <Button onClick={() => navigate("/createNewProject")}>
-          {t("create_new_project")}
-        </Button>
-        <Button onClick={() => navigate("/singleProject")}>
-          {t("single_project")}
-        </Button>
+        <HeaderContainer>
+          <div>Project List</div>
+          <Button onClick={() => navigate("/createNewProject")}>
+            {t("create_new_project")}
+          </Button>
+        </HeaderContainer>
+        {userProjects.length === 0 ? (
+          ""
+        ) : (
+          <ProjectsContainer>
+            {userProjects.map((projectData) => (
+              <SingleProjectContainer key={projectData.projectId}>
+                <LeftContainer>
+                  <Text>{projectData.title}</Text>
+                  {/* <Text>
+                      {new Date(projectData.time).toLocaleDateString("zh-TW")}
+                    </Text> */}
+                  <Button
+                    onClick={() => toSingleProjectPage(projectData.projectId)}
+                  >
+                    view project
+                  </Button>
+                </LeftContainer>
+                <RightContainer>
+                  {projectData.pages[0].url &&
+                    projectData.pages[0].url.map((singleUrl: string) => (
+                      <PhotoUrl key={singleUrl} img={`url(${singleUrl})`} />
+                    ))}
+                </RightContainer>
+              </SingleProjectContainer>
+            ))}
+          </ProjectsContainer>
+        )}
       </Container>
     </Wrapper>
   );
