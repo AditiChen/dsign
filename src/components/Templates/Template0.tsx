@@ -119,6 +119,8 @@ function Template0(props: InsertProp) {
 
   const { setPages, currentIndex, pages } = props;
 
+  console.log("storageUrl", storageUrl);
+
   useEffect(() => {
     const pageData = {
       type: 0,
@@ -133,22 +135,27 @@ function Template0(props: InsertProp) {
     setPages(newPages);
   }, [inputText, storageUrl]);
 
-  function upLoadImgToFirebase(file: any) {
+  function upLoadImgToFirebase(file: File) {
     if (!file) return;
     const urlByUuid = uuid();
     const imgRef = ref(storage, `images/${urlByUuid}`);
     const uploadTask = uploadBytesResumable(imgRef, file);
-    uploadTask.on("state_changed", () => {
-      getDownloadURL(uploadTask.snapshot.ref)
-        .then((downloadURL) => {
-          const newStorageUrl = [...storageUrl];
-          newStorageUrl[currentImgIndex] = downloadURL;
-          setStorageUrl(newStorageUrl);
-        })
-        .catch((error) =>
-          console.log("Looks like there was a problem!", error)
-        );
-    });
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      },
+      (error) => {
+        console.log("Upload err", error);
+      },
+      async () => {
+        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        const newStorageUrl = [...storageUrl];
+        newStorageUrl[currentImgIndex] = downloadURL;
+        setStorageUrl(newStorageUrl);
+      }
+    );
   }
 
   const setNewPhotoDetail = (returnedUrl: string, returnedFile: File) => {
