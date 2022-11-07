@@ -81,7 +81,7 @@ const PhotoUrl = styled.div`
 `;
 
 const Button = styled.button`
-  width: 100px;
+  width: 170px;
   height: 40px;
 `;
 
@@ -91,15 +91,15 @@ function ProjectList() {
   const { userId, userProjects, setSingleProjectId, setUserProjects } =
     useContext(AuthContext);
 
+  // console.log(userProjects[0].time.toDate());
+
   function toSingleProjectPage(projectId: string) {
     setSingleProjectId(projectId);
     navigate("/singleProject");
   }
 
   async function deleteProjectHandler(projectId: string) {
-    const ans = window.confirm(
-      "Are you sure that you want to delete this project?"
-    );
+    const ans = window.confirm(t("delete_project_warning"));
     if (ans === false) return;
     await deleteDoc(doc(db, "projects", projectId));
     const userProjectsData = await getProjects(userId);
@@ -111,9 +111,6 @@ function ProjectList() {
       <Container>
         <HeaderContainer>
           <div>Project List</div>
-          <Button onClick={() => navigate("/createNewProject")}>
-            {t("create_new_project")}
-          </Button>
         </HeaderContainer>
         {userProjects.length === 0 ? (
           ""
@@ -123,18 +120,16 @@ function ProjectList() {
               <SingleProjectContainer key={projectData.projectId}>
                 <LeftContainer>
                   <Text>{projectData.title}</Text>
-                  {/* <Text>
-                      {new Date(projectData.time).toLocaleDateString("zh-TW")}
-                    </Text> */}
+                  {/* <Text>{projectData.time.toDate()}</Text> */}
                   <Button
                     onClick={() => toSingleProjectPage(projectData.projectId)}
                   >
-                    view project
+                    {t("view_project_detail")}
                   </Button>
                   <Button
                     onClick={() => deleteProjectHandler(projectData.projectId)}
                   >
-                    delete project
+                    {t("delete_project")}
                   </Button>
                 </LeftContainer>
                 <RightContainer>

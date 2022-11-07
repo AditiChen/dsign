@@ -22,9 +22,8 @@
   "login_failed": "Échec de la connexion",
   "sign_up_successfully": "S'inscrire avec succès",
   "sign_up_failed": "Ne s'est pas inscrit",
-  "logout_successfully": "Déconnexion réussie！",
+  "logout_successfully": "Déconnexion réussie!",
 
-  "create_new_project": "Créer un nouveau projet",
   "insert_location": "Enter the address",
   "confirm_location": "Saisissez l'adresse",
   "type_content": "Tapez le contenu ici...",
@@ -35,5 +34,10 @@
   "confirm_crop": "confirmer la culture",
   "confirm_edit": "projet de téléchargement",
   "upload_failed": "Avez-vous oublié de mettre à jour les détails ? Veuillez vérifier à nouveau chaque modèle.",
-  "upLoad_successfully": "téléchargement réussi!"
+  "upLoad_successfully": "téléchargement réussi!",
+
+  "create_new_project": "Créer un nouveau projet",
+  "view_project_detail": "Voir le détail",
+  "delete_project": "Supprimer le projet",
+  "delete_project_warning": "Êtes-vous sûr de vouloir supprimer ce projet ?"
 }
