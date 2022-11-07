@@ -1,5 +1,5 @@
 import { useState, Dispatch, SetStateAction, useCallback } from "react";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 import Cropper from "react-easy-crop";
@@ -104,6 +104,7 @@ function Overlay({
   setNewPhotoDetail,
   currentAaspect,
 }: OverlayProps) {
+  const { t } = useTranslation();
   const [imgSrc, setImgSrc] = useState<string>("");
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
@@ -186,7 +187,9 @@ function Overlay({
                   />
                 </UploadPic>
                 <SliderContainer>
-                  <Typography>Zoom: {zoomPercent(zoom)}</Typography>
+                  <Typography>
+                    {t("zoom_image")}: {zoomPercent(zoom)}
+                  </Typography>
                   <Slider
                     valueLabelDisplay="auto"
                     valueLabelFormat={zoomPercent}
@@ -198,7 +201,9 @@ function Overlay({
                   />
                 </SliderContainer>
                 <SliderContainer>
-                  <Typography>Rotation: {`${rotation} °`}</Typography>
+                  <Typography>
+                    {t("rotate_image")}: {`${rotation} °`}
+                  </Typography>
                   <Slider
                     valueLabelDisplay="auto"
                     min={0}

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import ReactLoading from "react-loading";
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
+import getProjects from "../../utils/getProjects";
 
 import templatesImgArr from "../../components/Templates/TemplateImg";
 import templatesArr from "../../components/Templates/TemplatesArr";
@@ -153,7 +154,7 @@ const Loading = styled(ReactLoading)`
 function CreateNewProject() {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { userId, name } = useContext(AuthContext);
+  const { userId, name, setUserProjects } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [addedTemplate, setAddedTemplate] = useState<
     { uuid: string; type: number }[]
@@ -192,10 +193,13 @@ function CreateNewProject() {
       time: new Date(),
       pages,
     });
-    setIsLoading(false);
-    alert(t("upload_successfully"));
+
+    const newProjects = await getProjects(userId);
+    setUserProjects(newProjects);
     setPages([]);
     setAddedTemplate([]);
+    alert(t("upload_successfully"));
+    setIsLoading(false);
   }
 
   const templateFilter = addedTemplate?.map((num) => ({

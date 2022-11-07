@@ -18,6 +18,11 @@
   "email_format_check": "メールアドレスの形式が違います",
   "password_letter_check": "最低8文字必要です",
   "password_confirm_failed": "パスワードの認証に失敗",
+  "login_successfully": "登録成功",
+  "login_failed": "登録に失敗しました。お客様の情報をご確認の上、再度ログインしてください",
+  "sign_up_successfully": "登録成功",
+  "sign_up_failed": "登録に失敗しました。お客様の情報をご確認の上、再度ログインしてください",
+  "logout_successfully": "ログアウト成功！",
 
   "create_new_project": "新規プロジェクトの作成",
   "insert_location": "アドレスを入力",
@@ -25,7 +30,9 @@
   "type_content": "ここにコンテンツを入力...",
   "upload_image": "画像のアップロード",
   "change_image": "描き替える",
-  "confirm_crop": "作付面積を確認",
+  "zoom_image": "ズーム",
+  "rotate_image": "ローテーション",
+  "confirm_crop": "トリミングする",
   "confirm_edit": "アップロードプロジェクト",
   "upload_failed": "更新漏れがないか、もう一度すべてのテンプレートを確認してください",
   "upLoad_successfully": "アップロード成功!"

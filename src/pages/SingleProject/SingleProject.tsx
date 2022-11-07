@@ -1,8 +1,10 @@
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useJsApiLoader } from "@react-google-maps/api";
 import ReactLoading from "react-loading";
 import templatesArr from "../../components/singleProjectPageTemplates/TemplatesArr";
 import { GoogleMapAPI } from "../../components/singleProjectPageTemplates/GoogleMapAPI";
+import { AuthContext } from "../../context/authContext";
 
 import miho1 from "../../components/miho1.jpg";
 import miho2 from "../../components/miho2.jpg";
@@ -70,8 +72,13 @@ function SingleProject() {
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
     libraries: ["places"],
   });
-  const { pages } = project;
-  const types = pages.map((data) => data.type);
+  const { userProjects, singleProjectId } = useContext(AuthContext);
+
+  const singleProjectData = userProjects.filter(
+    (findProject) => findProject.projectId === singleProjectId
+  );
+
+  const types = singleProjectData[0].pages.map((data) => data.type);
   const templateFilter = types?.map((num) => templatesArr[num]);
   const googleMap = templatesArr[8];
 
@@ -86,8 +93,8 @@ function SingleProject() {
   return (
     <Wrapper>
       <Container>
-        <Title>Title</Title>
-        {pages.length === 0 ? (
+        <Title>{singleProjectData[0].title}</Title>
+        {singleProjectData.length === 0 ? (
           ""
         ) : (
           <>
@@ -95,15 +102,19 @@ function SingleProject() {
               if (Template === googleMap) {
                 return (
                   <MapContainer key={`${index + 1}`}>
-                    <GoogleMapAPI position={pages[index].location || {}} />
+                    <GoogleMapAPI
+                      position={
+                        singleProjectData[0].pages[index].location || {}
+                      }
+                    />
                   </MapContainer>
                 );
               }
               return (
                 <Template
                   key={`${index + 1}`}
-                  photoUrl={pages[index].url || []}
-                  content={pages[index].content || []}
+                  photoUrl={singleProjectData[0].pages[index].url || []}
+                  content={singleProjectData[0].pages[index].content || []}
                 />
               );
             })}
