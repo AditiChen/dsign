@@ -24,7 +24,6 @@
   "sign_up_failed": "登録に失敗しました。お客様の情報をご確認の上、再度ログインしてください",
   "logout_successfully": "ログアウト成功！",
 
-  "create_new_project": "新規プロジェクトの作成",
   "insert_location": "アドレスを入力",
   "confirm_location": "場所を確認する",
   "type_content": "ここにコンテンツを入力...",
@@ -35,5 +34,10 @@
   "confirm_crop": "トリミングする",
   "confirm_edit": "アップロードプロジェクト",
   "upload_failed": "更新漏れがないか、もう一度すべてのテンプレートを確認してください",
-  "upLoad_successfully": "アップロード成功!"
+  "upLoad_successfully": "アップロード成功!",
+
+  "create_new_project": "新規プロジェクトの作成",
+  "view_project_detail": "プロジェクト詳細を見る",
+  "delete_project": "削除プロジェクト",
+  "delete_project_warning": "本当にこのプロジェクトを削除しますか？"
 }

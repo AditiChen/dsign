@@ -1,8 +1,11 @@
 import styled from "styled-components";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
+import { doc, deleteDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
+import { db } from "../../context/firebaseSDK";
+import getProjects from "../../utils/getProjects";
 
 interface Prop {
   img?: string;
@@ -78,18 +81,29 @@ const PhotoUrl = styled.div`
 `;
 
 const Button = styled.button`
-  width: 100px;
+  width: 170px;
   height: 40px;
 `;
 
 function ProjectList() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { userProjects, setSingleProjectId } = useContext(AuthContext);
+  const { userId, userProjects, setSingleProjectId, setUserProjects } =
+    useContext(AuthContext);
+
+  // console.log(userProjects[0].time.toDate());
 
   function toSingleProjectPage(projectId: string) {
     setSingleProjectId(projectId);
     navigate("/singleProject");
+  }
+
+  async function deleteProjectHandler(projectId: string) {
+    const ans = window.confirm(t("delete_project_warning"));
+    if (ans === false) return;
+    await deleteDoc(doc(db, "projects", projectId));
+    const userProjectsData = await getProjects(userId);
+    setUserProjects(userProjectsData);
   }
 
   return (
@@ -97,9 +111,6 @@ function ProjectList() {
       <Container>
         <HeaderContainer>
           <div>Project List</div>
-          <Button onClick={() => navigate("/createNewProject")}>
-            {t("create_new_project")}
-          </Button>
         </HeaderContainer>
         {userProjects.length === 0 ? (
           ""
@@ -109,13 +120,16 @@ function ProjectList() {
               <SingleProjectContainer key={projectData.projectId}>
                 <LeftContainer>
                   <Text>{projectData.title}</Text>
-                  {/* <Text>
-                      {new Date(projectData.time).toLocaleDateString("zh-TW")}
-                    </Text> */}
+                  {/* <Text>{projectData.time.toDate()}</Text> */}
                   <Button
                     onClick={() => toSingleProjectPage(projectData.projectId)}
                   >
-                    view project
+                    {t("view_project_detail")}
+                  </Button>
+                  <Button
+                    onClick={() => deleteProjectHandler(projectData.projectId)}
+                  >
+                    {t("delete_project")}
                   </Button>
                 </LeftContainer>
                 <RightContainer>

@@ -24,7 +24,6 @@
   "sign_up_failed": "Failed to sign up,please check your information and try again!",
   "logout_successfully": "Logout successfully!",
 
-  "create_new_project": "Create a new project",
   "insert_location": "Enter the address",
   "confirm_location": "Confirm Location",
   "type_content": "Type content here...",
@@ -35,5 +34,10 @@
   "confirm_crop": "Confirm crop",
   "confirm_edit": "Confirm edit",
   "upload_failed": "Do you miss updating details? please check every template again.",
-  "upload_successfully": "Upload project successfully!"
+  "upload_successfully": "Upload project successfully!",
+
+  "create_new_project": "Create a new project",
+  "view_project_detail": "View detail",
+  "delete_project": "Delete project",
+  "delete_project_warning": "Are you sure that you want to delete this project?"
 }

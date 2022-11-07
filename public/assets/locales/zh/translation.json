@@ -24,7 +24,6 @@
   "sign_up_failed": "註冊失敗，請再檢查一次輸入的資訊～）",
   "logout_successfully": "登出成功！",
 
-  "create_new_project": "建立新專案",
   "insert_location": "輸入地點",
   "confirm_location": "確認地點",
   "type_content": "請輸入內容...",
@@ -35,5 +34,10 @@
   "confirm_crop": "確認裁切範圍",
   "confirm_edit": "上傳專案",
   "upload_failed": "有圖片或文字沒有上傳喔，請再檢查一下每一個版面：）",
-  "upLoad_successfully": "專案建立成功!"
+  "upLoad_successfully": "專案建立成功!",
+
+  "create_new_project": "建立新專案",
+  "view_project_detail": "詳細內容",
+  "delete_project": "刪除專案",
+  "delete_project_warning": "你確定要刪除這個專案嗎?"
 }
