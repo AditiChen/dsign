@@ -127,14 +127,11 @@ function Template0(props: InsertProp) {
     };
     const contentCheck = pageData.content.every((text) => text !== "");
     const urlCheck = storageUrl.every((url) => url !== "");
-    console.log("storageUrl", storageUrl);
-
-    console.log("useEffect", urlCheck);
     if (contentCheck === false || urlCheck === false) return;
     const newPages = [...pages];
     newPages[currentIndex] = pageData;
     setPages(newPages);
-  }, [inputText, storageUrl, photoUrl]);
+  }, [inputText, storageUrl]);
 
   function upLoadImgToFirebase(file: any) {
     if (!file) return;

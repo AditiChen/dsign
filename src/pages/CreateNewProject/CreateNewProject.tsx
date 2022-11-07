@@ -193,12 +193,13 @@ function CreateNewProject() {
       time: new Date(),
       pages,
     });
-    setIsLoading(false);
+
     const newProjects = await getProjects(userId);
     setUserProjects(newProjects);
-    alert(t("upload_successfully"));
     setPages([]);
     setAddedTemplate([]);
+    alert(t("upload_successfully"));
+    setIsLoading(false);
   }
 
   const templateFilter = addedTemplate?.map((num) => ({
