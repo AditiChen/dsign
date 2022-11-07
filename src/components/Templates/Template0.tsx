@@ -119,8 +119,6 @@ function Template0(props: InsertProp) {
 
   const { setPages, currentIndex, pages } = props;
 
-  console.log("storageUrl", storageUrl);
-
   useEffect(() => {
     const pageData = {
       type: 0,

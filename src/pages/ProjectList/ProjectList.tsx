@@ -1,8 +1,11 @@
 import styled from "styled-components";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
+import { doc, deleteDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
+import { db } from "../../context/firebaseSDK";
+import getProjects from "../../utils/getProjects";
 
 interface Prop {
   img?: string;
@@ -85,11 +88,22 @@ const Button = styled.button`
 function ProjectList() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { userProjects, setSingleProjectId } = useContext(AuthContext);
+  const { userId, userProjects, setSingleProjectId, setUserProjects } =
+    useContext(AuthContext);
 
   function toSingleProjectPage(projectId: string) {
     setSingleProjectId(projectId);
     navigate("/singleProject");
+  }
+
+  async function deleteProjectHandler(projectId: string) {
+    const ans = window.confirm(
+      "Are you sure that you want to delete this project?"
+    );
+    if (ans === false) return;
+    await deleteDoc(doc(db, "projects", projectId));
+    const userProjectsData = await getProjects(userId);
+    setUserProjects(userProjectsData);
   }
 
   return (
@@ -116,6 +130,11 @@ function ProjectList() {
                     onClick={() => toSingleProjectPage(projectData.projectId)}
                   >
                     view project
+                  </Button>
+                  <Button
+                    onClick={() => deleteProjectHandler(projectData.projectId)}
+                  >
+                    delete project
                   </Button>
                 </LeftContainer>
                 <RightContainer>
