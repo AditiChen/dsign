@@ -17,6 +17,7 @@ import {
 } from "firebase/auth";
 import { useTranslation } from "react-i18next";
 import { doc, setDoc, getDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 import { db, auth } from "./firebaseSDK";
 import getProjects from "../utils/getProjects";
 
@@ -89,6 +90,7 @@ export const AuthContext = createContext<AuthContextType>({
 
 export function AuthContextProvider({ children }: BodyProp) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [userId, setUserId] = useState("");
@@ -161,8 +163,8 @@ export function AuthContextProvider({ children }: BodyProp) {
       alert(t("login_failed"));
       console.log(e);
     }
-
     setIsLoading(false);
+    navigate("/profile");
   };
 
   const signUp = async (
@@ -198,6 +200,7 @@ export function AuthContextProvider({ children }: BodyProp) {
       console.log(e);
     }
     setIsLoading(false);
+    navigate("/profile");
   };
 
   const googleLoginHandler = async () => {
@@ -222,6 +225,7 @@ export function AuthContextProvider({ children }: BodyProp) {
     setIsLoading(false);
     const userProjectsData = await getProjects(uid);
     setUserProjects(userProjectsData);
+    navigate("/profile");
   };
 
   const facebookLoginHandler = async () => {
@@ -246,6 +250,7 @@ export function AuthContextProvider({ children }: BodyProp) {
     setIsLoading(false);
     const userProjectsData = await getProjects(uid);
     setUserProjects(userProjectsData);
+    navigate("/profile");
   };
 
   const logout = () => {

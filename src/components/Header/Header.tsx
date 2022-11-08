@@ -8,6 +8,7 @@ import { AuthContext } from "../../context/authContext";
 import language from "./language-icon.png";
 import logo from "./Logo.png";
 import member from "./user-icon.png";
+import friends from "./friends-icon.png";
 
 interface Prop {
   img?: string;
@@ -44,6 +45,9 @@ const Logo = styled(Link)`
   width: 155px;
   height: 45px;
   background-image: url(${logo});
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const Context = styled(Link)`
@@ -67,6 +71,9 @@ const Icon = styled.div`
   & + & {
     margin-left: 20px;
   }
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const LanguageOptionsContainer = styled.div`
@@ -87,6 +94,21 @@ const Language = styled.div`
   text-align: center;
   & + & {
     margin-top: 16px;
+  }
+`;
+
+const SignBtn = styled.button`
+  margin-left: 20px;
+  padding: 0 20px;
+  height: 35px;
+  color: #ffffff;
+  font-size: 18px;
+  background-color: transparent;
+  border: 1px solid #616161;
+  border-radius: 5px;
+  &:hover {
+    box-shadow: 1px 1px 5px #616161;
+    cursor: pointer;
   }
 `;
 
@@ -112,7 +134,7 @@ function LanguageOptions() {
 }
 
 function Header() {
-  const { avatar } = useContext(AuthContext);
+  const { avatar, isLogin, logout } = useContext(AuthContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [showLanghagesIcon, setShowLanguagesIcon] = useState(false);
@@ -120,16 +142,29 @@ function Header() {
     <Wrapper>
       <LeftContainer>
         <Logo to="portfolioBricks" />
-        <Context to="projectList">{t("project_list")}</Context>
         <Context to="createNewProject">{t("create")}</Context>
+        <Context to="favoriteList">{t("favorite_list")}</Context>
       </LeftContainer>
       <RightContainer>
-        <Icon
-          img={avatar ? `url(${avatar})` : `url(${member})`}
-          onClick={() => {
-            navigate("/portfile");
-          }}
-        />
+        {isLogin ? (
+          <>
+            <Icon
+              img={`url(${friends})`}
+              onClick={() => {
+                navigate("/friendList");
+              }}
+            />
+            <Icon
+              img={avatar ? `url(${avatar})` : `url(${member})`}
+              onClick={() => {
+                navigate("/portfile");
+              }}
+            />
+          </>
+        ) : (
+          ""
+        )}
+
         <Icon
           img={`url(${language})`}
           onClick={() => {
@@ -138,6 +173,24 @@ function Header() {
         >
           {showLanghagesIcon ? <LanguageOptions /> : ""}
         </Icon>
+        {isLogin ? (
+          <SignBtn
+            onClick={() => {
+              logout();
+              navigate("/login");
+            }}
+          >
+            {t("logout")}
+          </SignBtn>
+        ) : (
+          <SignBtn
+            onClick={() => {
+              navigate("/login");
+            }}
+          >
+            {t("login")}
+          </SignBtn>
+        )}
       </RightContainer>
     </Wrapper>
   );

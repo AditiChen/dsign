@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { v4 as uuid } from "uuid";
 import { doc, setDoc } from "firebase/firestore";
 import ReactLoading from "react-loading";
+import { useNavigate } from "react-router-dom";
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
 import getSingleProject from "../../utils/getSingleProject";
@@ -153,6 +154,7 @@ const Loading = styled(ReactLoading)`
 
 function EditExistProject() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { userId, name, setUserProjects, singleProjectId, setSingleProjectId } =
     useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
@@ -298,6 +300,7 @@ function EditExistProject() {
                 )
               )}
               <Btn onClick={() => confirmAllEdit()}>{t("confirm_edit")}</Btn>
+              <Btn onClick={() => navigate("/profile")}>{t("drop_edit")}</Btn>
             </>
           )}
         </EditorContainer>

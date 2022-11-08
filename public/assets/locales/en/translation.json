@@ -1,6 +1,5 @@
 {
-  "project_list": "Project List",
-  "profile": "Profile",
+  "favorite_list": "Favorite List",
   "create": "Create",
   "languages": "Languages",
 
@@ -33,6 +32,7 @@
   "rotate_image": "Rotation",
   "confirm_crop": "Confirm crop",
   "confirm_edit": "Confirm edit",
+  "drop_edit": "Drop edit",
   "upload_failed": "Do you miss updating details? please check every template again.",
   "upload_successfully": "Upload project successfully!",
 
