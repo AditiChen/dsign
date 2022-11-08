@@ -3,10 +3,10 @@ import { useEffect, useState, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { v4 as uuid } from "uuid";
 import { doc, setDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
 import ReactLoading from "react-loading";
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
+import getSingleProject from "../../utils/getSingleProject";
 import getProjects from "../../utils/getProjects";
 
 import templatesImgArr from "../../components/Templates/TemplateImg";
@@ -151,10 +151,10 @@ const Loading = styled(ReactLoading)`
   margin: 50px auto;
 `;
 
-function CreateNewProject() {
-  const navigate = useNavigate();
+function EditExistProject() {
   const { t } = useTranslation();
-  const { userId, name, setUserProjects } = useContext(AuthContext);
+  const { userId, name, setUserProjects, singleProjectId, setSingleProjectId } =
+    useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [addedTemplate, setAddedTemplate] = useState<
     { uuid: string; type: number }[]
@@ -171,24 +171,38 @@ function CreateNewProject() {
   const [title, setTitle] = useState("");
   const googleMap = templatesArr[8];
 
-  async function confirmAllEdit() {
-    if (!userId) {
-      alert("please login first");
-      navigate("/profile");
-      return;
+  useEffect(() => {
+    if (singleProjectId === "") return;
+    async function fetchData() {
+      const projectDetail = await getSingleProject(singleProjectId);
+      const types = projectDetail[0].pages.map((type) => ({
+        uuid: uuid(),
+        type: type.type,
+      }));
+      setAddedTemplate(types);
+      setPages(projectDetail[0].pages);
+      setTitle(projectDetail[0].title);
+      const mapIndex = projectDetail[0].pages.findIndex(
+        (page) => page.location !== undefined
+      );
+      const originalPosition = projectDetail[0].pages[mapIndex].location;
+      setPosition(originalPosition || {});
     }
+    fetchData();
+  }, []);
+
+  async function confirmAllEdit() {
     const checkPage = pages.every((type) => type.type === undefined);
     if (checkPage) {
       alert(t("upload_failed"));
       return;
     }
     setIsLoading(true);
-    const projectId = uuid();
-    await setDoc(doc(db, "projects", projectId), {
+    await setDoc(doc(db, "projects", singleProjectId), {
       author: name,
       uid: userId,
       mainUrl: "",
-      projectId,
+      projectId: singleProjectId,
       title,
       time: new Date(),
       pages,
@@ -198,20 +212,21 @@ function CreateNewProject() {
     setUserProjects(newProjects);
     setPages([]);
     setAddedTemplate([]);
+    setSingleProjectId("");
     alert(t("upload_successfully"));
     setIsLoading(false);
   }
 
   const templateFilter = addedTemplate?.map((num) => ({
     keyUuid: [num.uuid],
-    ChoseTemplate: templatesArr[num.type],
+    Chosetemplate: templatesArr[num.type],
   }));
 
   useEffect(() => {
     if (position.lat === undefined && position.lng === undefined) return;
 
     const mapIndex = templateFilter.findIndex(
-      (map) => map.ChoseTemplate === googleMap
+      (map) => map.Chosetemplate === googleMap
     );
     if (mapIndex === -1) return;
 
@@ -265,20 +280,23 @@ function CreateNewProject() {
             <>
               <Input
                 placeholder="title"
+                value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
-              {templateFilter.map(({ keyUuid, ChoseTemplate }, index) => (
-                <SingleEditorContainer key={`${keyUuid}`}>
-                  <ChoseTemplate
-                    pages={pages}
-                    setPages={setPages}
-                    currentIndex={index}
-                    position={position}
-                    setPosition={setPosition}
-                  />
-                  <CloseIcon onClick={() => deleteHandler(index)} />
-                </SingleEditorContainer>
-              ))}
+              {templateFilter.map(
+                ({ keyUuid, Chosetemplate }, templateIndex) => (
+                  <SingleEditorContainer key={`${keyUuid}`}>
+                    <Chosetemplate
+                      pages={pages}
+                      setPages={setPages}
+                      currentIndex={templateIndex}
+                      position={position}
+                      setPosition={setPosition}
+                    />
+                    <CloseIcon onClick={() => deleteHandler(templateIndex)} />
+                  </SingleEditorContainer>
+                )
+              )}
               <Btn onClick={() => confirmAllEdit()}>{t("confirm_edit")}</Btn>
             </>
           )}
@@ -288,4 +306,4 @@ function CreateNewProject() {
   );
 }
 
-export default CreateNewProject;
+export default EditExistProject;

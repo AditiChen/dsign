@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { doc, deleteDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
@@ -81,6 +81,7 @@ const PhotoUrl = styled.div`
 `;
 
 const Button = styled.button`
+  margin-top: 10px;
   width: 170px;
   height: 40px;
 `;
@@ -91,11 +92,14 @@ function ProjectList() {
   const { userId, userProjects, setSingleProjectId, setUserProjects } =
     useContext(AuthContext);
 
-  // console.log(userProjects[0].time.toDate());
-
   function toSingleProjectPage(projectId: string) {
     setSingleProjectId(projectId);
     navigate("/singleProject");
+  }
+
+  function toEditExistProjectPage(projectId: string) {
+    setSingleProjectId(projectId);
+    navigate("/editExistProject");
   }
 
   async function deleteProjectHandler(projectId: string) {
@@ -125,6 +129,13 @@ function ProjectList() {
                     onClick={() => toSingleProjectPage(projectData.projectId)}
                   >
                     {t("view_project_detail")}
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      toEditExistProjectPage(projectData.projectId)
+                    }
+                  >
+                    {t("edit_again")}
                   </Button>
                   <Button
                     onClick={() => deleteProjectHandler(projectData.projectId)}

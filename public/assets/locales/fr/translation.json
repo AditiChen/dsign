@@ -36,8 +36,8 @@
   "upload_failed": "Avez-vous oublié de mettre à jour les détails ? Veuillez vérifier à nouveau chaque modèle.",
   "upLoad_successfully": "téléchargement réussi!",
 
-  "create_new_project": "Créer un nouveau projet",
   "view_project_detail": "Voir le détail",
+  "edit_again": "Modifier",
   "delete_project": "Supprimer le projet",
   "delete_project_warning": "Êtes-vous sûr de vouloir supprimer ce projet ?"
 }

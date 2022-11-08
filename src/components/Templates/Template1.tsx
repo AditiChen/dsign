@@ -127,7 +127,7 @@ const UploadIcon = styled.div`
 `;
 
 function Template1(props: InsertProp) {
-  const [inputText, setInputText] = useState("");
+  const [inputText, setInputText] = useState<string[]>([""]);
   const [showOverlay, setShowOverlay] = useState(false);
   // for better user experience
   const [photoUrl, setPhotoUrl] = useState<string[]>(["", "", ""]);
@@ -140,9 +140,15 @@ function Template1(props: InsertProp) {
   const { setPages, currentIndex, pages } = props;
 
   useEffect(() => {
+    setPhotoUrl(pages[currentIndex].url || ["", "", ""]);
+    setInputText(pages[currentIndex].content || [""]);
+    setStorageUrl(pages[currentIndex].url || ["", "", ""]);
+  }, []);
+
+  useEffect(() => {
     const pageData = {
       type: 1,
-      content: [inputText],
+      content: inputText,
       url: storageUrl,
     };
     const contentCheck = pageData.content.every((text) => text !== "");
@@ -205,7 +211,7 @@ function Template1(props: InsertProp) {
         <Trapezoid />
         <Context
           value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
+          onChange={(e) => setInputText([e.target.value])}
           placeholder={t("type_content")}
           ref={inputRef}
         />

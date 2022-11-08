@@ -10,6 +10,7 @@ import Profile from "./pages/Profile/Profile";
 import ProjectList from "./pages/ProjectList/ProjectList";
 import SingleProject from "./pages/SingleProject/SingleProject";
 import CreateNewProject from "./pages/CreateNewProject/CreateNewProject";
+import EditExistProject from "./pages/EditExistProject/EditExistProject";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -24,6 +25,7 @@ root.render(
         <Route path="projectList" element={<ProjectList />} />
         <Route path="singleProject" element={<SingleProject />} />
         <Route path="createNewProject" element={<CreateNewProject />} />
+        <Route path="editExistProject" element={<EditExistProject />} />
         <Route path="*" element={<Navigate to="profile" replace />} />
       </Route>
     </Routes>
