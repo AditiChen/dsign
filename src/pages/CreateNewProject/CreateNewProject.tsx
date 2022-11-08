@@ -174,7 +174,7 @@ function CreateNewProject() {
   async function confirmAllEdit() {
     if (!userId) {
       alert("please login first");
-      navigate("/profile");
+      navigate("/login");
       return;
     }
     const checkPage = pages.every((type) => type.type === undefined);
@@ -200,6 +200,7 @@ function CreateNewProject() {
     setAddedTemplate([]);
     alert(t("upload_successfully"));
     setIsLoading(false);
+    navigate("/profile");
   }
 
   const templateFilter = addedTemplate?.map((num) => ({

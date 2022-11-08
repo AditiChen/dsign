@@ -1,6 +1,5 @@
 {
-  "project_list": "プロジェクト一覧",
-  "profile": "プロファイル",
+  "favorite_list": "コレクション",
   "create": "新規プロジェクト",
   "languages": "言語",
 
@@ -33,6 +32,7 @@
   "rotate_image": "ローテーション",
   "confirm_crop": "トリミングする",
   "confirm_edit": "アップロードプロジェクト",
+  "give_up_edit": "編集をキャンセル",
   "upload_failed": "更新漏れがないか、もう一度すべてのテンプレートを確認してください",
   "upLoad_successfully": "アップロード成功!",
 

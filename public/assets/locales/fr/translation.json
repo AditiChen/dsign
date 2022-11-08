@@ -1,6 +1,5 @@
 {
-  "project_list": "Liste des projets",
-  "profile": "Profil",
+  "favorite_list": "Liste des favoris",
   "create": "Créer",
   "languages": "Langues",
 
@@ -33,6 +32,7 @@
   "rotate_image": "Rotation",
   "confirm_crop": "confirmer la culture",
   "confirm_edit": "projet de téléchargement",
+  "drop_edit": "Contrôle à la baisse",
   "upload_failed": "Avez-vous oublié de mettre à jour les détails ? Veuillez vérifier à nouveau chaque modèle.",
   "upLoad_successfully": "téléchargement réussi!",
 

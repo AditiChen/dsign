@@ -1,6 +1,5 @@
 {
-  "project_list": "作品列表",
-  "profile": "自我介紹",
+  "favorite_list": "收藏列表",
   "create": "建立新專案",
   "languages": "語言",
 
@@ -33,6 +32,7 @@
   "rotate_image": "旋轉",
   "confirm_crop": "確認裁切範圍",
   "confirm_edit": "上傳專案",
+  "drop_edit": "取消編輯",
   "upload_failed": "有圖片或文字沒有上傳喔，請再檢查一下每一個版面：）",
   "upLoad_successfully": "專案建立成功!",
 
