@@ -140,9 +140,9 @@ function Template1(props: InsertProp) {
   const { setPages, currentIndex, pages } = props;
 
   useEffect(() => {
-    setPhotoUrl(pages[currentIndex].url || ["", ""]);
+    setPhotoUrl(pages[currentIndex].url || ["", "", ""]);
     setInputText(pages[currentIndex].content || [""]);
-    setStorageUrl(pages[currentIndex].url || ["", ""]);
+    setStorageUrl(pages[currentIndex].url || ["", "", ""]);
   }, []);
 
   useEffect(() => {

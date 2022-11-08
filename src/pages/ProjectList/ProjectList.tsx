@@ -135,7 +135,7 @@ function ProjectList() {
                       toEditExistProjectPage(projectData.projectId)
                     }
                   >
-                    edit again
+                    {t("edit_again")}
                   </Button>
                   <Button
                     onClick={() => deleteProjectHandler(projectData.projectId)}

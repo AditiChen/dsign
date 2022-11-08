@@ -169,25 +169,6 @@ function EditExistProject() {
   >([]);
   const [position, setPosition] = useState<{ lat?: number; lng?: number }>({});
   const [title, setTitle] = useState("");
-  // const [projectData, setProjectData] = useState<
-  //   {
-  //     author: string;
-  //     uid: string;
-  //     mainUrl: string;
-  //     projectId: string;
-  //     title: string;
-  //     time: number;
-  //     pages: {
-  //       type: number;
-  //       content?: string[];
-  //       url?: string[];
-  //       location?: {
-  //         lat?: number;
-  //         lng?: number;
-  //       };
-  //     }[];
-  //   }[]
-  // >([]);
   const googleMap = templatesArr[8];
 
   useEffect(() => {
@@ -199,9 +180,13 @@ function EditExistProject() {
         type: type.type,
       }));
       setAddedTemplate(types);
-      // setProjectData(projectDetail);
       setPages(projectDetail[0].pages);
       setTitle(projectDetail[0].title);
+      const mapIndex = projectDetail[0].pages.findIndex(
+        (page) => page.location !== undefined
+      );
+      const originalPosition = projectDetail[0].pages[mapIndex].location;
+      setPosition(originalPosition || {});
     }
     fetchData();
   }, []);

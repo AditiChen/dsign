@@ -36,8 +36,8 @@
   "upload_failed": "有圖片或文字沒有上傳喔，請再檢查一下每一個版面：）",
   "upLoad_successfully": "專案建立成功!",
 
-  "create_new_project": "建立新專案",
   "view_project_detail": "詳細內容",
+  "edit_again": "編輯專案",
   "delete_project": "刪除專案",
   "delete_project_warning": "你確定要刪除這個專案嗎?"
 }

@@ -36,8 +36,8 @@
   "upload_failed": "更新漏れがないか、もう一度すべてのテンプレートを確認してください",
   "upLoad_successfully": "アップロード成功!",
 
-  "create_new_project": "新規プロジェクトの作成",
   "view_project_detail": "プロジェクト詳細を見る",
+  "edit_again": "編集プロジェクト",
   "delete_project": "削除プロジェクト",
   "delete_project_warning": "本当にこのプロジェクトを削除しますか？"
 }
