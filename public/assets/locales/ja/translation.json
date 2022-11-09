@@ -36,8 +36,17 @@
   "upload_failed": "更新漏れがないか、もう一度すべてのテンプレートを確認してください",
   "upLoad_successfully": "アップロード成功!",
 
+  "please_login": "ログインしてください",
   "view_project_detail": "プロジェクト詳細を見る",
   "edit_again": "編集プロジェクト",
   "delete_project": "削除プロジェクト",
-  "delete_project_warning": "本当にこのプロジェクトを削除しますか？"
+  "delete_project_warning": "本当にこのプロジェクトを削除しますか？",
+
+  "request_list": "友達申請",
+  "search_friend": "検索",
+  "send_friend_request": "友達追加",
+  "user_not_found": "友達が見つからない",
+  "sen_request_successfully": "友達申請を送信成功",
+  "accept_friend_request": "同意",
+  "reject_friend_request": "拒否"
 }

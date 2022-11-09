@@ -136,7 +136,7 @@ const Loading = styled(ReactLoading)`
   margin: 50px auto;
 `;
 
-function Profile() {
+function FriendProfile() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const {
@@ -247,4 +247,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default FriendProfile;

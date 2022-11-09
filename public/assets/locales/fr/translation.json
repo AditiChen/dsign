@@ -36,8 +36,17 @@
   "upload_failed": "Avez-vous oublié de mettre à jour les détails ? Veuillez vérifier à nouveau chaque modèle.",
   "upLoad_successfully": "téléchargement réussi!",
 
+  "please_login": "Veuillez loger",
   "view_project_detail": "Voir le détail",
   "edit_again": "Modifier",
   "delete_project": "Supprimer le projet",
-  "delete_project_warning": "Êtes-vous sûr de vouloir supprimer ce projet ?"
+  "delete_project_warning": "Êtes-vous sûr de vouloir supprimer ce projet ?",
+
+  "request_list": "Demandes d'amis",
+  "search_friend": "Recherche utilisateur",
+  "send_friend_request": "Ajouter un ami",
+  "user_not_found": "L'utilisateur n'est pas trouvé",
+  "sen_request_successfully": "Envoyer une demande d'ami avec succès!",
+  "accept_friend_request": "Accepter",
+  "reject_friend_request": "Rejeter"
 }

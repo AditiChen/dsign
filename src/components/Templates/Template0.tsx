@@ -115,7 +115,6 @@ function Template0(props: InsertProp) {
   const [storageUrl, setStorageUrl] = useState<string[]>(["", ""]);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [currentAaspect, setCurrentAspect] = useState(1 / 1);
-  const inputRef = useRef<HTMLTextAreaElement>(null!);
 
   const { setPages, currentIndex, pages } = props;
 
@@ -192,7 +191,6 @@ function Template0(props: InsertProp) {
             value={inputText}
             onChange={(e) => setInputText([e.target.value])}
             placeholder={t("type_content")}
-            ref={inputRef}
           />
         </MiddleContainer>
         <RightImg

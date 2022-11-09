@@ -146,7 +146,6 @@ export function AuthContextProvider({ children }: BodyProp) {
         insertEmail,
         password
       );
-      alert(t("login_successfully"));
       const { user }: any = UserCredentialImpl;
       const { uid } = user;
       const userEmail = user.reloadUserInfo.email;
@@ -158,13 +157,14 @@ export function AuthContextProvider({ children }: BodyProp) {
       setEmail(userEmail);
       setIsLogin(true);
       const userProjectsData = await getProjects(uid);
+      alert(t("login_successfully"));
       setUserProjects(userProjectsData);
+      navigate("/profile");
     } catch (e) {
       alert(t("login_failed"));
       console.log(e);
     }
     setIsLoading(false);
-    navigate("/profile");
   };
 
   const signUp = async (
@@ -179,28 +179,28 @@ export function AuthContextProvider({ children }: BodyProp) {
         insertEmail,
         password
       );
-      alert(t("sign_up_successfully"));
       const { user }: any = UserCredentialImpl;
       const { uid } = user;
       const userEmail = user.reloadUserInfo.email;
-      const newName = name.replace(/\s/g, "");
+      const newName = insertName.replace(/\s/g, "");
       await setDoc(doc(db, "users", uid), {
         uid,
         name: insertName,
         email: insertEmail,
         avatar: `https://source.boringavatars.com/marble/180/${newName}`,
       });
+      alert(t("sign_up_successfully"));
       setUserId(uid);
       setEmail(userEmail);
       setName(insertName);
       setAvatar(`https://source.boringavatars.com/marble/180/${newName}`);
       setIsLogin(true);
+      navigate("/profile");
     } catch (e) {
       alert(t("sign_up_failed"));
       console.log(e);
     }
     setIsLoading(false);
-    navigate("/profile");
   };
 
   const googleLoginHandler = async () => {
