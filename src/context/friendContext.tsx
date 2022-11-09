@@ -7,18 +7,14 @@ import {
   SetStateAction,
   useContext,
 } from "react";
-import { useTranslation } from "react-i18next";
 import {
   collection,
   onSnapshot,
   query,
   where,
   getDoc,
-  setDoc,
   doc,
-  deleteDoc,
 } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
 import { db, auth } from "./firebaseSDK";
 import { AuthContext } from "./authContext";
 
@@ -32,8 +28,8 @@ interface FriendData {
 }
 
 interface FriendContextType {
-  clickedFriendId: string;
-  setClickedFriendId: Dispatch<SetStateAction<string>>;
+  clickedUserId: string;
+  setClickedUserId: Dispatch<SetStateAction<string>>;
   friendDataList: FriendData[];
   setFriendDataList: Dispatch<SetStateAction<FriendData[]>>;
   friendRequests: FriendData[];
@@ -41,8 +37,8 @@ interface FriendContextType {
 }
 
 export const FriendContext = createContext<FriendContextType>({
-  clickedFriendId: "",
-  setClickedFriendId: () => {},
+  clickedUserId: "",
+  setClickedUserId: () => {},
   friendDataList: [],
   setFriendDataList: () => {},
   friendRequests: [],
@@ -50,12 +46,13 @@ export const FriendContext = createContext<FriendContextType>({
 });
 
 export function FriendContextProvider({ children }: BodyProp) {
-  const { userId, friendList } = useContext(AuthContext);
-  const [clickedFriendId, setClickedFriendId] = useState("");
+  const { userId } = useContext(AuthContext);
+  const [clickedUserId, setClickedUserId] = useState("");
   const [friendRequests, setFriendRequests] = useState<FriendData[]>([]);
   const [friendDataList, setFriendDataList] = useState<FriendData[]>([]);
-  console.log("friendDataList", friendDataList);
+
   useEffect(() => {
+    if (userId === "") return undefined;
     setFriendRequests([]);
     const q = query(collection(db, "friendRequest"), where("to", "==", userId));
     const unsubscribe = onSnapshot(q, async (querySnapshot) => {
@@ -71,17 +68,15 @@ export function FriendContextProvider({ children }: BodyProp) {
       const newResult = await Promise.all(result);
       setFriendRequests(newResult);
     });
-    return () => {
-      unsubscribe();
-    };
+    return () => unsubscribe();
   }, [userId]);
 
   useEffect(() => {
-    if (friendList.length === 0) return;
+    if (userId === "") return undefined;
     setFriendDataList([]);
-    const q = query(collection(db, "friendRequest"), where("to", "==", userId));
-    const unsubscribe = onSnapshot(q, async (querySnapshot) => {
-      const result = friendList.map(async (id) => {
+    const unsub = onSnapshot(doc(db, "users", userId), async (returnedDoc) => {
+      const { friendList } = returnedDoc.data() as any;
+      const result = friendList.map(async (id: string) => {
         const docSnap = await getDoc(doc(db, "users", id));
         const data = docSnap.data() as FriendData;
         return data;
@@ -89,22 +84,25 @@ export function FriendContextProvider({ children }: BodyProp) {
       const newResult = await Promise.all(result);
       setFriendDataList(newResult);
     });
-  }, [friendList]);
+    return () => {
+      unsub();
+    };
+  }, [userId]);
 
   const authProviderValue = useMemo(
     () => ({
       friendDataList,
-      clickedFriendId,
-      setClickedFriendId,
       setFriendDataList,
+      clickedUserId,
+      setClickedUserId,
       friendRequests,
       setFriendRequests,
     }),
     [
       friendDataList,
-      clickedFriendId,
-      setClickedFriendId,
       setFriendDataList,
+      clickedUserId,
+      setClickedUserId,
       friendRequests,
       setFriendRequests,
     ]

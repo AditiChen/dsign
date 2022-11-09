@@ -48,5 +48,6 @@
   "user_not_found": "User is not found",
   "sen_request_successfully": "Send friend request successfully!",
   "accept_friend_request": "Accept",
-  "reject_friend_request": "Reject"
+  "reject_friend_request": "Reject",
+  "friend_list": "Friend List"
 }

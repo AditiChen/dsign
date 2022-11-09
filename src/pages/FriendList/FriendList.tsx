@@ -1,11 +1,10 @@
 import styled from "styled-components";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { v4 as uuid } from "uuid";
 import ReactLoading from "react-loading";
 import {
   collection,
-  onSnapshot,
   query,
   where,
   getDocs,
@@ -14,6 +13,7 @@ import {
   deleteDoc,
   updateDoc,
   arrayUnion,
+  arrayRemove,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
@@ -21,6 +21,8 @@ import { FriendContext } from "../../context/friendContext";
 import { db } from "../../context/firebaseSDK";
 
 import searchIcon from "./search-icon.png";
+import deleteIcon from "./delete-friend-icon.png";
+import deleteIconHover from "./delete-friend-icon-hover.png";
 
 interface Prop {
   size?: string;
@@ -81,7 +83,7 @@ const SearchInput = styled.input`
   }
 `;
 
-const Icon = styled.div`
+const SearchIcon = styled.div`
   height: 30px;
   width: 30px;
   position: absolute;
@@ -119,6 +121,14 @@ const TextContainer = styled.div`
   flex-direction: column;
 `;
 
+const Avatar = styled.div`
+  height: 100px;
+  width: 100px;
+  background-image: ${(props: Prop) => props.url};
+  background-size: cover;
+  background-position: center;
+`;
+
 const Text = styled.div`
   color: ${(props: Prop) => props.color};
   font-size: ${(props: Prop) => props.size};
@@ -149,12 +159,16 @@ const SendRequestBtn = styled.button`
   }
 `;
 
-const Avatar = styled.div`
-  height: 100px;
-  width: 100px;
-  background-image: ${(props: Prop) => props.url};
+const DeleteIcon = styled.div`
+  height: 30px;
+  width: 30px;
+  background-image: url(${deleteIcon});
   background-size: cover;
   background-position: center;
+  &:hover {
+    cursor: pointer;
+    background-image: url(${deleteIconHover});
+  }
 `;
 
 const Loading = styled(ReactLoading)`
@@ -165,7 +179,7 @@ function FriendList() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { userId } = useContext(AuthContext);
-  const { friendRequests, friendDataList, setFriendDataList } =
+  const { friendRequests, friendDataList, setClickedUserId } =
     useContext(FriendContext);
   const [inputValue, setInputValue] = useState("");
   const [hasSearchValue, setHasSearchValue] = useState(false);
@@ -252,8 +266,15 @@ function FriendList() {
       "are you sure that you want to remove this friend?"
     );
     if (ans === false) return;
-    console.log("friendDataList", friendDataList);
-    console.log("friendId", friendId);
+    const idRef = doc(db, "users", userId);
+    await updateDoc(idRef, {
+      friendList: arrayRemove(friendId),
+    });
+    const friendIdRef = doc(db, "users", friendId);
+    await updateDoc(friendIdRef, {
+      friendList: arrayRemove(userId),
+    });
+    alert("delete successfully");
   }
 
   return (
@@ -272,7 +293,7 @@ function FriendList() {
             placeholder={t("search_friend")}
             value={inputValue}
           />
-          <Icon onClick={() => searchHandler()} />
+          <SearchIcon onClick={() => searchHandler()} />
         </SearchContainer>
         {hasSearchValue ? (
           <Separator>
@@ -333,18 +354,14 @@ function FriendList() {
             </Separator>
             {friendDataList.map((user) => (
               <Separator key={user.uid}>
-                <FriendListContainer>
+                <FriendListContainer onClick={() => setClickedUserId(user.uid)}>
                   <Avatar url={`url(${user.avatar})`} />
                   <TextContainer>
                     <Text size="20px">{user.name}</Text>
                     <Text color="#616161">{user.email}</Text>
                   </TextContainer>
                   <BtnContainer>
-                    <SendRequestBtn
-                      onClick={() => deleteFriendHandler(user.uid)}
-                    >
-                      {t("delete_friend")}
-                    </SendRequestBtn>
+                    <DeleteIcon onClick={() => deleteFriendHandler(user.uid)} />
                   </BtnContainer>
                 </FriendListContainer>
               </Separator>

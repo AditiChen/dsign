@@ -44,7 +44,6 @@ interface AuthContextType {
   name: string;
   email: string;
   avatar: string;
-  friendList: string[];
   singleProjectId: string;
   userProjects: UserProjectsType[];
   emailSignInHandler(email: string, password: string): void;
@@ -63,7 +62,6 @@ export const AuthContext = createContext<AuthContextType>({
   name: "",
   email: "",
   avatar: "",
-  friendList: [],
   userProjects: [],
   singleProjectId: "",
   emailSignInHandler: () => {},
@@ -84,7 +82,6 @@ export function AuthContextProvider({ children }: BodyProp) {
   const [avatar, setAvatar] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [friendList, setFriendList] = useState<string[]>([]);
   const [singleProjectId, setSingleProjectId] = useState("");
   const [userProjects, setUserProjects] = useState<UserProjectsType[]>([]);
 
@@ -100,7 +97,6 @@ export function AuthContextProvider({ children }: BodyProp) {
         setName(data.name);
         setUserId(uid);
         setEmail(userEmail);
-        setFriendList(data.friendList);
         setIsLogin(true);
         const userProjectsData = await getProjects(uid);
         setUserProjects(userProjectsData);
@@ -129,7 +125,6 @@ export function AuthContextProvider({ children }: BodyProp) {
       setName(data.name);
       setUserId(uid);
       setEmail(userEmail);
-      setFriendList(data.friendList);
       setIsLogin(true);
       const userProjectsData = await getProjects(uid);
       alert(t("login_successfully"));
@@ -253,7 +248,6 @@ export function AuthContextProvider({ children }: BodyProp) {
       name,
       email,
       avatar,
-      friendList,
       signUp,
       emailSignInHandler,
       googleLoginHandler,
@@ -271,7 +265,6 @@ export function AuthContextProvider({ children }: BodyProp) {
       name,
       email,
       avatar,
-      friendList,
       signUp,
       emailSignInHandler,
       googleLoginHandler,
