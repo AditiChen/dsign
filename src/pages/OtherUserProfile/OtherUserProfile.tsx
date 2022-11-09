@@ -1,12 +1,13 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import { doc, deleteDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import ReactLoading from "react-loading";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { db } from "../../context/firebaseSDK";
 import getProjects from "../../utils/getProjects";
 import { AuthContext } from "../../context/authContext";
+import { FriendContext } from "../../context/friendContext";
 
 interface Prop {
   url?: string;
@@ -17,6 +18,21 @@ interface Prop {
   position?: string;
   buttomLine?: string;
   img?: string;
+}
+
+interface UserProjectsType {
+  author: string;
+  uid: string;
+  mainUrl: string;
+  projectId: string;
+  title: string;
+  time: number;
+  pages: {
+    type: number;
+    content?: string[];
+    url?: string[];
+    location?: { lat?: number; lng?: number };
+  }[];
 }
 
 const Wrapper = styled.div`
@@ -136,43 +152,50 @@ const Loading = styled(ReactLoading)`
   margin: 50px auto;
 `;
 
-function Profile() {
+function OtherUserProfile() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const {
-    isLogin,
-    isLoading,
-    name,
-    email,
-    avatar,
-    userId,
-    userProjects,
-    setSingleProjectId,
-    setUserProjects,
-  } = useContext(AuthContext);
+  const { isLogin, setSingleProjectId } = useContext(AuthContext);
+  const { clickedUserId } = useContext(FriendContext);
+  const [isLoading, setIsloading] = useState(false);
+  const [userProjects, setUserProjects] = useState<UserProjectsType[]>([]);
+  const [userData, setUserData] = useState<{
+    uid: string;
+    name: string;
+    avatar: string;
+    email: string;
+    friendList: string[];
+  }>();
+
+  useEffect(() => {
+    setIsloading(true);
+    async function getData() {
+      const docSnap = await getDoc(doc(db, "users", clickedUserId));
+      const returnedData = docSnap.data() as {
+        uid: string;
+        name: string;
+        avatar: string;
+        email: string;
+        friendList: string[];
+      };
+      setUserData(returnedData);
+      const userProjectsData = await getProjects(returnedData.uid);
+      setUserProjects(userProjectsData);
+    }
+    getData();
+
+    setIsloading(false);
+  }, []);
 
   function toSingleProjectPage(projectId: string) {
     setSingleProjectId(projectId);
     navigate("/singleProject");
   }
 
-  function toEditExistProjectPage(projectId: string) {
-    setSingleProjectId(projectId);
-    navigate("/editExistProject");
-  }
-
-  async function deleteProjectHandler(projectId: string) {
-    const ans = window.confirm(t("delete_project_warning"));
-    if (ans === false) return;
-    await deleteDoc(doc(db, "projects", projectId));
-    const userProjectsData = await getProjects(userId);
-    setUserProjects(userProjectsData);
-  }
-
   if (isLoading) {
     return (
       <Wrapper>
-        <Loading type="spinningBubbles" color="#3c3c3c" />
+        <Loading type="cylon" color="#3c3c3c" />
       </Wrapper>
     );
   }
@@ -192,11 +215,11 @@ function Profile() {
     <Wrapper>
       <Container>
         <UserInfoContainer>
-          <Avatar url={`url(${avatar})`} />
-          <UserInfo size="24px">{name}</UserInfo>
-          <UserInfo size="20px">{email}</UserInfo>
+          <Avatar url={userData && `url(${userData.avatar})`} />
+          <UserInfo size="24px">{userData && userData.name}</UserInfo>
+          <UserInfo size="20px">{userData && userData.email}</UserInfo>
           <UserInfo size="20px">Introduction</UserInfo>
-          <UserInfo size="18px">Hello, I am orange!</UserInfo>
+          <UserInfo size="18px">Hello, I am apple!</UserInfo>
         </UserInfoContainer>
         <ProjectListContainer>
           <ProjectHeaderContainer>
@@ -216,20 +239,6 @@ function Profile() {
                     >
                       {t("view_project_detail")}
                     </Button>
-                    <Button
-                      onClick={() =>
-                        toEditExistProjectPage(projectData.projectId)
-                      }
-                    >
-                      {t("edit_again")}
-                    </Button>
-                    <Button
-                      onClick={() =>
-                        deleteProjectHandler(projectData.projectId)
-                      }
-                    >
-                      {t("delete_project")}
-                    </Button>
                   </ProjectLeftContainer>
                   <ProjectRightContainer>
                     {projectData.pages[0].url &&
@@ -247,4 +256,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default OtherUserProfile;

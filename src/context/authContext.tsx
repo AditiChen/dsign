@@ -22,6 +22,21 @@ import { db, auth } from "./firebaseSDK";
 import getProjects from "../utils/getProjects";
 
 type BodyProp = { children: React.ReactNode };
+
+interface UserProjectsType {
+  author: string;
+  uid: string;
+  mainUrl: string;
+  projectId: string;
+  title: string;
+  time: number;
+  pages: {
+    type: number;
+    content?: string[];
+    url?: string[];
+    location?: { lat?: number; lng?: number };
+  }[];
+}
 interface AuthContextType {
   isLogin: boolean;
   isLoading: boolean;
@@ -30,44 +45,14 @@ interface AuthContextType {
   email: string;
   avatar: string;
   singleProjectId: string;
-  userProjects: {
-    author: string;
-    uid: string;
-    mainUrl: string;
-    projectId: string;
-    title: string;
-    time: number;
-    pages: {
-      type: number;
-      content?: string[];
-      url?: string[];
-      location?: { lat?: number; lng?: number };
-    }[];
-  }[];
+  userProjects: UserProjectsType[];
   emailSignInHandler(email: string, password: string): void;
   signUp(email: string, password: string, name: string): void;
   googleLoginHandler(): void;
   facebookLoginHandler(): void;
   logout(): void;
   setSingleProjectId: Dispatch<SetStateAction<string>>;
-  setUserProjects: Dispatch<
-    SetStateAction<
-      {
-        author: string;
-        uid: string;
-        mainUrl: string;
-        projectId: string;
-        title: string;
-        time: number;
-        pages: {
-          type: number;
-          content?: string[];
-          url?: string[];
-          location?: { lat?: number; lng?: number };
-        }[];
-      }[]
-    >
-  >;
+  setUserProjects: Dispatch<SetStateAction<UserProjectsType[]>>;
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -98,22 +83,7 @@ export function AuthContextProvider({ children }: BodyProp) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [singleProjectId, setSingleProjectId] = useState("");
-  const [userProjects, setUserProjects] = useState<
-    {
-      author: string;
-      uid: string;
-      mainUrl: string;
-      projectId: string;
-      title: string;
-      time: number;
-      pages: {
-        type: number;
-        content?: string[];
-        url?: string[];
-        location?: { lat?: number; lng?: number };
-      }[];
-    }[]
-  >([]);
+  const [userProjects, setUserProjects] = useState<UserProjectsType[]>([]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -122,7 +92,13 @@ export function AuthContextProvider({ children }: BodyProp) {
         const { uid } = user;
         const userEmail = user.email;
         const docSnap = await getDoc(doc(db, "users", uid));
-        const data: any = docSnap.data();
+        const data = docSnap.data() as {
+          uid: string;
+          name: string;
+          avatar: string;
+          email: string;
+          friendList: string[];
+        };
         setAvatar(data.avatar);
         setName(data.name);
         setUserId(uid);
@@ -146,25 +122,31 @@ export function AuthContextProvider({ children }: BodyProp) {
         insertEmail,
         password
       );
-      alert(t("login_successfully"));
       const { user }: any = UserCredentialImpl;
       const { uid } = user;
       const userEmail = user.reloadUserInfo.email;
       const docSnap = await getDoc(doc(db, "users", uid));
-      const data: any = docSnap.data();
+      const data = docSnap.data() as {
+        uid: string;
+        name: string;
+        avatar: string;
+        email: string;
+        friendList: string[];
+      };
       setAvatar(data.avatar);
       setName(data.name);
       setUserId(uid);
       setEmail(userEmail);
       setIsLogin(true);
       const userProjectsData = await getProjects(uid);
+      alert(t("login_successfully"));
       setUserProjects(userProjectsData);
+      navigate("/profile");
     } catch (e) {
       alert(t("login_failed"));
       console.log(e);
     }
     setIsLoading(false);
-    navigate("/profile");
   };
 
   const signUp = async (
@@ -179,28 +161,30 @@ export function AuthContextProvider({ children }: BodyProp) {
         insertEmail,
         password
       );
-      alert(t("sign_up_successfully"));
       const { user }: any = UserCredentialImpl;
       const { uid } = user;
       const userEmail = user.reloadUserInfo.email;
-      const newName = name.replace(/\s/g, "");
+      const newName = insertName.replace(/\s/g, "");
       await setDoc(doc(db, "users", uid), {
         uid,
         name: insertName,
         email: insertEmail,
         avatar: `https://source.boringavatars.com/marble/180/${newName}`,
+        friendList: [],
+        favoriteList: [],
       });
+      alert(t("sign_up_successfully"));
       setUserId(uid);
       setEmail(userEmail);
       setName(insertName);
       setAvatar(`https://source.boringavatars.com/marble/180/${newName}`);
       setIsLogin(true);
+      navigate("/profile");
     } catch (e) {
       alert(t("sign_up_failed"));
       console.log(e);
     }
     setIsLoading(false);
-    navigate("/profile");
   };
 
   const googleLoginHandler = async () => {
@@ -215,6 +199,8 @@ export function AuthContextProvider({ children }: BodyProp) {
       name: displayName,
       email: gmail,
       avatar: photoURL,
+      friendList: [],
+      favoriteList: [],
     });
     if (!gmail || !photoURL || !displayName) return;
     setUserId(uid);
@@ -240,6 +226,8 @@ export function AuthContextProvider({ children }: BodyProp) {
       name: displayName,
       email: fbMmail,
       avatar: photoURL,
+      friendList: [],
+      favoriteList: [],
     });
     if (!fbMmail || !photoURL || !displayName) return;
     setUserId(uid);

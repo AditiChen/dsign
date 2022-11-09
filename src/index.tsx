@@ -8,6 +8,7 @@ import Landing from "./pages/Landing/Landing";
 import PortfolioBricks from "./pages/PortfolioBricks/PortfolioBricks";
 import Profile from "./pages/Profile/Profile";
 import FriendList from "./pages/FriendList/FriendList";
+import OtherUserProfile from "./pages/OtherUserProfile/OtherUserProfile";
 import FavoriteList from "./pages/FavoriteList/FavoriteList";
 import SingleProject from "./pages/SingleProject/SingleProject";
 import CreateNewProject from "./pages/CreateNewProject/CreateNewProject";
@@ -28,6 +29,7 @@ root.render(
         <Route path="createNewProject" element={<CreateNewProject />} />
         <Route path="editExistProject" element={<EditExistProject />} />
         <Route path="friendList" element={<FriendList />} />
+        <Route path="userProfile" element={<OtherUserProfile />} />
         <Route path="favoriteList" element={<FavoriteList />} />
         <Route path="login" element={<Login />} />
         <Route path="*" element={<Navigate to="profile" replace />} />

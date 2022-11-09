@@ -1,5 +1,4 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { useContext } from "react";
 import { db } from "../context/firebaseSDK";
 
 export default async function getSingleProject(projectId: string) {

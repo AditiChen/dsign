@@ -5,10 +5,10 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
 
-import language from "./language-icon.png";
-import logo from "./Logo.png";
-import member from "./user-icon.png";
-import friends from "./friends-icon.png";
+import languageIcon from "./language-icon.png";
+import logoIcon from "./Logo.png";
+import memberIcon from "./user-icon.png";
+import friendsIcon from "./friends-icon.png";
 
 interface Prop {
   img?: string;
@@ -44,7 +44,7 @@ const LeftContainer = styled.div`
 const Logo = styled(Link)`
   width: 155px;
   height: 45px;
-  background-image: url(${logo});
+  background-image: url(${logoIcon});
   &:hover {
     cursor: pointer;
   }
@@ -142,20 +142,26 @@ function Header() {
     <Wrapper>
       <LeftContainer>
         <Logo to="portfolioBricks" />
-        <Context to="createNewProject">{t("create")}</Context>
-        <Context to="favoriteList">{t("favorite_list")}</Context>
+        {isLogin ? (
+          <>
+            <Context to="createNewProject">{t("create")}</Context>
+            <Context to="favoriteList">{t("favorite_list")}</Context>
+          </>
+        ) : (
+          ""
+        )}
       </LeftContainer>
       <RightContainer>
         {isLogin ? (
           <>
             <Icon
-              img={`url(${friends})`}
+              img={`url(${friendsIcon})`}
               onClick={() => {
                 navigate("/friendList");
               }}
             />
             <Icon
-              img={avatar ? `url(${avatar})` : `url(${member})`}
+              img={avatar ? `url(${avatar})` : `url(${memberIcon})`}
               onClick={() => {
                 navigate("/portfile");
               }}
@@ -166,7 +172,7 @@ function Header() {
         )}
 
         <Icon
-          img={`url(${language})`}
+          img={`url(${languageIcon})`}
           onClick={() => {
             setShowLanguagesIcon((prev) => !prev);
           }}

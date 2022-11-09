@@ -237,10 +237,12 @@ function SignIn() {
             <LoginContainer>
               <Input
                 placeholder={t("input_email")}
+                key="email"
                 onChange={(e) => setInputEmail(e.target.value)}
               />
               <Input
                 placeholder={t("input_password")}
+                key="password"
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -252,14 +254,17 @@ function SignIn() {
             <LoginContainer>
               <Input
                 placeholder={t("input_name")}
+                key="name"
                 onChange={(e) => setInputName(e.target.value)}
               />
               <Input
                 placeholder={t("input_email")}
+                key="email"
                 onChange={(e) => setInputEmail(e.target.value)}
               />
               <Input
                 placeholder={t("input_password")}
+                key="password"
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
               />

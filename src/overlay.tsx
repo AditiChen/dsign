@@ -124,7 +124,6 @@ function Overlay({
     }
   };
 
-  // 有兩個 any ！！！！！！！！！！！！！！！！！
   const onCropComplete = useCallback(
     (croppedArea: any, croppedAreainPixel: any) => {
       setCroppedAreaPixels(croppedAreainPixel);
@@ -164,7 +163,6 @@ function Overlay({
                   onZoomChange={setZoom}
                 />
               ) : (
-                // 有any ！！！！
                 <UploadPic onChange={(e: any) => onUploadFile(e)}>
                   {t("upload_image")}
                   <input
@@ -176,7 +174,6 @@ function Overlay({
               )}
             </CropperContainer>
             {imgSrc ? (
-              // 有any ！！！！
               <ControlContainer>
                 <UploadPic onChange={(e: any) => onUploadFile(e)}>
                   {t("change_image")}

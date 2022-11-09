@@ -5,6 +5,7 @@ import { Reset } from "styled-reset";
 import ReactLoading from "react-loading";
 
 import { AuthContextProvider } from "./context/authContext";
+import { FriendContextProvider } from "./context/friendContext";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 
@@ -33,9 +34,11 @@ function App() {
       <Reset />
       <GlobalStyle />
       <AuthContextProvider>
-        {location.pathname !== "/" && <Header />}
-        <Outlet />
-        {location.pathname !== "/" && <Footer />}
+        <FriendContextProvider>
+          {location.pathname !== "/" && <Header />}
+          <Outlet />
+          {location.pathname !== "/" && <Footer />}
+        </FriendContextProvider>
       </AuthContextProvider>
     </Suspense>
   );

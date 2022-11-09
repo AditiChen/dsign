@@ -36,8 +36,18 @@
   "upload_failed": "有圖片或文字沒有上傳喔，請再檢查一下每一個版面：）",
   "upLoad_successfully": "專案建立成功!",
 
+  "please_login": "請先登入",
+  "project_list": "作品列表",
   "view_project_detail": "詳細內容",
   "edit_again": "編輯專案",
   "delete_project": "刪除專案",
-  "delete_project_warning": "你確定要刪除這個專案嗎?"
+  "delete_project_warning": "你確定要刪除這個專案嗎?",
+
+  "request_list": "好友申請",
+  "search_friend": "搜尋",
+  "send_friend_request": "加好友",
+  "user_not_found": "找不到使用者",
+  "sen_request_successfully": "已送出好友申請～",
+  "accept_friend_request": "同意",
+  "reject_friend_request": "拒絕"
 }

@@ -5,12 +5,22 @@ import ReactLoading from "react-loading";
 import templatesArr from "../../components/singleProjectPageTemplates/TemplatesArr";
 import { GoogleMapAPI } from "../../components/singleProjectPageTemplates/GoogleMapAPI";
 import { AuthContext } from "../../context/authContext";
+import getSingleProject from "../../utils/getSingleProject";
 
-import miho1 from "../../components/miho1.jpg";
-import miho2 from "../../components/miho2.jpg";
-import church1 from "../../components/church1.jpg";
-import church2 from "../../components/church2.jpg";
-import church3 from "../../components/church3.jpg";
+interface UserProjectType {
+  author: string;
+  uid: string;
+  mainUrl: string;
+  projectId: string;
+  title: string;
+  time: number;
+  pages: {
+    type: number;
+    content?: string[];
+    url?: string[];
+    location?: { lat?: number; lng?: number };
+  }[];
+}
 
 const Wrapper = styled.div`
   padding-top: 80px;
@@ -45,40 +55,25 @@ const Loading = styled(ReactLoading)`
   margin: 50px auto;
 `;
 
-const project = {
-  author: "Orange",
-  id: "lWRhOh8Hh7p65kOoamST",
-  mainImg: church1,
-  pages: [
-    {
-      type: 0,
-      content: ["Hello, this is apple."],
-      url: [miho1, miho2],
-    },
-    {
-      type: 1,
-      content: ["The church of light."],
-      url: [church1, church2, church3],
-    },
-    {
-      type: 8,
-      location: { lat: 34.818529, lng: 135.53703 },
-    },
-  ],
-};
-
 function SingleProject() {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
     libraries: ["places"],
   });
-  const { userProjects, singleProjectId } = useContext(AuthContext);
-
-  const singleProjectData = userProjects.filter(
-    (findProject) => findProject.projectId === singleProjectId
+  const { singleProjectId } = useContext(AuthContext);
+  const [singleProjectData, setSingleProjectData] = useState<UserProjectType[]>(
+    []
   );
 
-  const types = singleProjectData[0].pages.map((data) => data.type);
+  useEffect(() => {
+    async function getData() {
+      const result = await getSingleProject(singleProjectId);
+      setSingleProjectData(result);
+    }
+    getData();
+  }, []);
+
+  const types = singleProjectData[0]?.pages?.map((data) => data.type);
   const templateFilter = types?.map((num) => templatesArr[num]);
   const googleMap = templatesArr[8];
 
@@ -93,7 +88,7 @@ function SingleProject() {
   return (
     <Wrapper>
       <Container>
-        <Title>{singleProjectData[0].title}</Title>
+        <Title>{singleProjectData && singleProjectData[0]?.title}</Title>
         {singleProjectData.length === 0 ? (
           ""
         ) : (
@@ -104,7 +99,9 @@ function SingleProject() {
                   <MapContainer key={`${index + 1}`}>
                     <GoogleMapAPI
                       position={
-                        singleProjectData[0].pages[index].location || {}
+                        (singleProjectData &&
+                          singleProjectData[0]?.pages[index].location) ||
+                        {}
                       }
                     />
                   </MapContainer>
@@ -113,8 +110,16 @@ function SingleProject() {
               return (
                 <Template
                   key={`${index + 1}`}
-                  photoUrl={singleProjectData[0].pages[index].url || []}
-                  content={singleProjectData[0].pages[index].content || []}
+                  photoUrl={
+                    (singleProjectData &&
+                      singleProjectData[0]?.pages[index].url) ||
+                    []
+                  }
+                  content={
+                    (singleProjectData &&
+                      singleProjectData[0]?.pages[index].content) ||
+                    []
+                  }
                 />
               );
             })}
