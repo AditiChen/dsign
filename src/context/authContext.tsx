@@ -22,6 +22,21 @@ import { db, auth } from "./firebaseSDK";
 import getProjects from "../utils/getProjects";
 
 type BodyProp = { children: React.ReactNode };
+
+interface UserProjectsType {
+  author: string;
+  uid: string;
+  mainUrl: string;
+  projectId: string;
+  title: string;
+  time: number;
+  pages: {
+    type: number;
+    content?: string[];
+    url?: string[];
+    location?: { lat?: number; lng?: number };
+  }[];
+}
 interface AuthContextType {
   isLogin: boolean;
   isLoading: boolean;
@@ -29,45 +44,16 @@ interface AuthContextType {
   name: string;
   email: string;
   avatar: string;
+  friendList: string[];
   singleProjectId: string;
-  userProjects: {
-    author: string;
-    uid: string;
-    mainUrl: string;
-    projectId: string;
-    title: string;
-    time: number;
-    pages: {
-      type: number;
-      content?: string[];
-      url?: string[];
-      location?: { lat?: number; lng?: number };
-    }[];
-  }[];
+  userProjects: UserProjectsType[];
   emailSignInHandler(email: string, password: string): void;
   signUp(email: string, password: string, name: string): void;
   googleLoginHandler(): void;
   facebookLoginHandler(): void;
   logout(): void;
   setSingleProjectId: Dispatch<SetStateAction<string>>;
-  setUserProjects: Dispatch<
-    SetStateAction<
-      {
-        author: string;
-        uid: string;
-        mainUrl: string;
-        projectId: string;
-        title: string;
-        time: number;
-        pages: {
-          type: number;
-          content?: string[];
-          url?: string[];
-          location?: { lat?: number; lng?: number };
-        }[];
-      }[]
-    >
-  >;
+  setUserProjects: Dispatch<SetStateAction<UserProjectsType[]>>;
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -77,6 +63,7 @@ export const AuthContext = createContext<AuthContextType>({
   name: "",
   email: "",
   avatar: "",
+  friendList: [],
   userProjects: [],
   singleProjectId: "",
   emailSignInHandler: () => {},
@@ -97,23 +84,9 @@ export function AuthContextProvider({ children }: BodyProp) {
   const [avatar, setAvatar] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [friendList, setFriendList] = useState<string[]>([]);
   const [singleProjectId, setSingleProjectId] = useState("");
-  const [userProjects, setUserProjects] = useState<
-    {
-      author: string;
-      uid: string;
-      mainUrl: string;
-      projectId: string;
-      title: string;
-      time: number;
-      pages: {
-        type: number;
-        content?: string[];
-        url?: string[];
-        location?: { lat?: number; lng?: number };
-      }[];
-    }[]
-  >([]);
+  const [userProjects, setUserProjects] = useState<UserProjectsType[]>([]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -127,6 +100,7 @@ export function AuthContextProvider({ children }: BodyProp) {
         setName(data.name);
         setUserId(uid);
         setEmail(userEmail);
+        setFriendList(data.friendList);
         setIsLogin(true);
         const userProjectsData = await getProjects(uid);
         setUserProjects(userProjectsData);
@@ -155,6 +129,7 @@ export function AuthContextProvider({ children }: BodyProp) {
       setName(data.name);
       setUserId(uid);
       setEmail(userEmail);
+      setFriendList(data.friendList);
       setIsLogin(true);
       const userProjectsData = await getProjects(uid);
       alert(t("login_successfully"));
@@ -188,6 +163,8 @@ export function AuthContextProvider({ children }: BodyProp) {
         name: insertName,
         email: insertEmail,
         avatar: `https://source.boringavatars.com/marble/180/${newName}`,
+        friendList: [],
+        favoriteList: [],
       });
       alert(t("sign_up_successfully"));
       setUserId(uid);
@@ -215,6 +192,8 @@ export function AuthContextProvider({ children }: BodyProp) {
       name: displayName,
       email: gmail,
       avatar: photoURL,
+      friendList: [],
+      favoriteList: [],
     });
     if (!gmail || !photoURL || !displayName) return;
     setUserId(uid);
@@ -240,6 +219,8 @@ export function AuthContextProvider({ children }: BodyProp) {
       name: displayName,
       email: fbMmail,
       avatar: photoURL,
+      friendList: [],
+      favoriteList: [],
     });
     if (!fbMmail || !photoURL || !displayName) return;
     setUserId(uid);
@@ -272,6 +253,7 @@ export function AuthContextProvider({ children }: BodyProp) {
       name,
       email,
       avatar,
+      friendList,
       signUp,
       emailSignInHandler,
       googleLoginHandler,
@@ -289,6 +271,7 @@ export function AuthContextProvider({ children }: BodyProp) {
       name,
       email,
       avatar,
+      friendList,
       signUp,
       emailSignInHandler,
       googleLoginHandler,

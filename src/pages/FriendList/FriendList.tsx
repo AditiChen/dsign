@@ -12,6 +12,8 @@ import {
   setDoc,
   doc,
   deleteDoc,
+  updateDoc,
+  arrayUnion,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
@@ -163,8 +165,8 @@ function FriendList() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { userId } = useContext(AuthContext);
-  const { friendRequests } = useContext(FriendContext);
-
+  const { friendRequests, friendDataList, setFriendDataList } =
+    useContext(FriendContext);
   const [inputValue, setInputValue] = useState("");
   const [hasSearchValue, setHasSearchValue] = useState(false);
   const [searchData, setSearchData] = useState<{
@@ -196,15 +198,63 @@ function FriendList() {
     setSearchData(returnedData);
   }
 
-  const sendRequest = async () => {
-    await setDoc(doc(db, "friendRequest", uuid()), {
+  async function sendRequest() {
+    const requestId = uuid();
+    await setDoc(doc(db, "friendRequest", requestId), {
       from: userId,
       to: searchData.requestUid,
     });
     alert(t("sen_request_successfully"));
     setSearchData({});
     setHasSearchValue(false);
-  };
+  }
+
+  async function acceptRequestHandler(requestId: string) {
+    const requestRef = collection(db, "friendRequest");
+    const q = query(
+      requestRef,
+      where("from", "==", requestId),
+      where("to", "==", userId)
+    );
+    const querySnapshot = await getDocs(q);
+    let docId = "";
+    querySnapshot.forEach((responseDoc) => {
+      docId = responseDoc.id;
+    });
+    await deleteDoc(doc(db, "friendRequest", docId));
+    await updateDoc(doc(db, "users", userId), {
+      friendList: arrayUnion(requestId),
+    });
+    await updateDoc(doc(db, "users", requestId), {
+      friendList: arrayUnion(userId),
+    });
+    alert("you are friend now!");
+  }
+  async function rejectRequestHandler(requestId: string) {
+    const ans = window.confirm("are you sure that you want to refuse?");
+    if (ans === false) return;
+    const requestRef = collection(db, "friendRequest");
+    const q = query(
+      requestRef,
+      where("from", "==", requestId),
+      where("to", "==", userId)
+    );
+    const querySnapshot = await getDocs(q);
+    let docId = "";
+    querySnapshot.forEach((responseDoc) => {
+      docId = responseDoc.id;
+    });
+    await deleteDoc(doc(db, "friendRequest", docId));
+  }
+
+  async function deleteFriendHandler(friendId: string) {
+    const ans = window.confirm(
+      "are you sure that you want to remove this friend?"
+    );
+    if (ans === false) return;
+    console.log("friendDataList", friendDataList);
+    console.log("friendId", friendId);
+  }
 
   return (
     <Wrapper>
@@ -233,7 +283,7 @@ function FriendList() {
                 <Text color="#616161">{searchData.email}</Text>
               </TextContainer>
               <BtnContainer>
-                <SendRequestBtn onClick={sendRequest}>
+                <SendRequestBtn onClick={() => sendRequest()}>
                   {t("send_friend_request")}
                 </SendRequestBtn>
               </BtnContainer>
@@ -258,11 +308,42 @@ function FriendList() {
                     <Text color="#616161">{request.email}</Text>
                   </TextContainer>
                   <BtnContainer>
-                    <SendRequestBtn onClick={sendRequest}>
+                    <SendRequestBtn
+                      onClick={() => acceptRequestHandler(request.uid)}
+                    >
                       {t("accept_friend_request")}
                     </SendRequestBtn>
-                    <SendRequestBtn onClick={sendRequest}>
+                    <SendRequestBtn
+                      onClick={() => rejectRequestHandler(request.uid)}
+                    >
                       {t("reject_friend_request")}
+                    </SendRequestBtn>
+                  </BtnContainer>
+                </FriendListContainer>
+              </Separator>
+            ))}
+          </>
+        )}
+        {friendDataList.length === 0 ? (
+          ""
+        ) : (
+          <>
+            <Separator>
+              <Text size="20px">{t("friend_list")}</Text>
+            </Separator>
+            {friendDataList.map((user) => (
+              <Separator key={user.uid}>
+                <FriendListContainer>
+                  <Avatar url={`url(${user.avatar})`} />
+                  <TextContainer>
+                    <Text size="20px">{user.name}</Text>
+                    <Text color="#616161">{user.email}</Text>
+                  </TextContainer>
+                  <BtnContainer>
+                    <SendRequestBtn
+                      onClick={() => deleteFriendHandler(user.uid)}
+                    >
+                      {t("delete_friend")}
                     </SendRequestBtn>
                   </BtnContainer>
                 </FriendListContainer>

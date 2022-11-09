@@ -50,11 +50,11 @@ export const FriendContext = createContext<FriendContextType>({
 });
 
 export function FriendContextProvider({ children }: BodyProp) {
-  const { userId } = useContext(AuthContext);
+  const { userId, friendList } = useContext(AuthContext);
   const [clickedFriendId, setClickedFriendId] = useState("");
   const [friendRequests, setFriendRequests] = useState<FriendData[]>([]);
   const [friendDataList, setFriendDataList] = useState<FriendData[]>([]);
-
+  console.log("friendDataList", friendDataList);
   useEffect(() => {
     setFriendRequests([]);
     const q = query(collection(db, "friendRequest"), where("to", "==", userId));
@@ -75,6 +75,21 @@ export function FriendContextProvider({ children }: BodyProp) {
       unsubscribe();
     };
   }, [userId]);
+
+  useEffect(() => {
+    if (friendList.length === 0) return;
+    setFriendDataList([]);
+    const q = query(collection(db, "friendRequest"), where("to", "==", userId));
+    const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+      const result = friendList.map(async (id) => {
+        const docSnap = await getDoc(doc(db, "users", id));
+        const data = docSnap.data() as FriendData;
+        return data;
+      });
+      const newResult = await Promise.all(result);
+      setFriendDataList(newResult);
+    });
+  }, [friendList]);
 
   const authProviderValue = useMemo(
     () => ({
