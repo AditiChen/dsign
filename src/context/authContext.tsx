@@ -92,7 +92,13 @@ export function AuthContextProvider({ children }: BodyProp) {
         const { uid } = user;
         const userEmail = user.email;
         const docSnap = await getDoc(doc(db, "users", uid));
-        const data: any = docSnap.data();
+        const data = docSnap.data() as {
+          uid: string;
+          name: string;
+          avatar: string;
+          email: string;
+          friendList: string[];
+        };
         setAvatar(data.avatar);
         setName(data.name);
         setUserId(uid);
@@ -120,7 +126,13 @@ export function AuthContextProvider({ children }: BodyProp) {
       const { uid } = user;
       const userEmail = user.reloadUserInfo.email;
       const docSnap = await getDoc(doc(db, "users", uid));
-      const data: any = docSnap.data();
+      const data = docSnap.data() as {
+        uid: string;
+        name: string;
+        avatar: string;
+        email: string;
+        friendList: string[];
+      };
       setAvatar(data.avatar);
       setName(data.name);
       setUserId(uid);

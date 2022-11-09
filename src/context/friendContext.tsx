@@ -15,7 +15,7 @@ import {
   getDoc,
   doc,
 } from "firebase/firestore";
-import { db, auth } from "./firebaseSDK";
+import { db } from "./firebaseSDK";
 import { AuthContext } from "./authContext";
 
 type BodyProp = { children: React.ReactNode };

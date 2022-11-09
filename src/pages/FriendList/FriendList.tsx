@@ -354,7 +354,12 @@ function FriendList() {
             </Separator>
             {friendDataList.map((user) => (
               <Separator key={user.uid}>
-                <FriendListContainer onClick={() => setClickedUserId(user.uid)}>
+                <FriendListContainer
+                  onClick={() => {
+                    setClickedUserId(user.uid);
+                    navigate("/userProfile");
+                  }}
+                >
                   <Avatar url={`url(${user.avatar})`} />
                   <TextContainer>
                     <Text size="20px">{user.name}</Text>
