@@ -38,6 +38,7 @@
 
   "please_login": "請先登入",
   "project_list": "作品列表",
+  "go_to_create_project": "作品列表是空的喔，快去新增作品吧 :)",
   "view_project_detail": "詳細內容",
   "edit_again": "編輯專案",
   "delete_project": "刪除專案",

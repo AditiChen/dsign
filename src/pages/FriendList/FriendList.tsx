@@ -191,6 +191,14 @@ function FriendList() {
   }>({});
 
   async function searchHandler() {
+    const inputCheck = friendDataList.findIndex(
+      (email) => email.email === inputValue
+    );
+
+    if (inputCheck !== -1) {
+      alert("you are friend already");
+      return;
+    }
     const usersRef = collection(db, "users");
     const q = query(usersRef, where("email", "==", inputValue));
     const querySnapshot = await getDocs(q);

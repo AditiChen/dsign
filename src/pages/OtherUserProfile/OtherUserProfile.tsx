@@ -155,7 +155,7 @@ const Loading = styled(ReactLoading)`
 function OtherUserProfile() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { isLogin, setSingleProjectId } = useContext(AuthContext);
+  const { setSingleProjectId } = useContext(AuthContext);
   const { clickedUserId } = useContext(FriendContext);
   const [isLoading, setIsloading] = useState(false);
   const [userProjects, setUserProjects] = useState<UserProjectsType[]>([]);
@@ -196,17 +196,6 @@ function OtherUserProfile() {
     return (
       <Wrapper>
         <Loading type="cylon" color="#3c3c3c" />
-      </Wrapper>
-    );
-  }
-
-  if (!isLogin) {
-    navigate("/login");
-    return (
-      <Wrapper>
-        <Container>
-          <ProjectTitle>{t("please_login")}</ProjectTitle>
-        </Container>
       </Wrapper>
     );
   }
