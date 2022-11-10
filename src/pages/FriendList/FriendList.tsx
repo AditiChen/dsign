@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { useContext, useState } from "react";
+import styled from "@emotion/styled";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { v4 as uuid } from "uuid";
 import ReactLoading from "react-loading";
@@ -20,7 +20,9 @@ import { AuthContext } from "../../context/authContext";
 import { FriendContext } from "../../context/friendContext";
 import { db } from "../../context/firebaseSDK";
 
+import Message from "../../components/Message/Message";
 import searchIcon from "./search-icon.png";
+import messageIcon from "./chat-icon.png";
 import deleteIcon from "./delete-friend-icon.png";
 import deleteIconHover from "./delete-friend-icon-hover.png";
 
@@ -58,7 +60,6 @@ const Separator = styled.div`
 `;
 
 const SearchContainer = styled.div`
-  width: 800px;
   position: relative;
   display: flex;
   align-items: center;
@@ -91,9 +92,6 @@ const SearchIcon = styled.div`
   background-image: url(${searchIcon});
   background-size: cover;
   background-position: center;
-  & + & {
-    margin-left: 20px;
-  }
   &:hover {
     cursor: pointer;
   }
@@ -106,10 +104,20 @@ const FriendListContainer = styled.div`
   display: flex;
   align-items: center;
   background-color: #f0f0f090;
-  & + & {
-    margin-top: 30px;
-  }
   &:hover {
+    box-shadow: 1px 1px 3px #3c3c3c50;
+  }
+`;
+
+const Avatar = styled.div`
+  height: 100px;
+  width: 100px;
+  border-radius: 50px;
+  background-image: ${(props: Prop) => props.url};
+  background-size: cover;
+  background-position: center;
+  &:hover {
+    cursor: pointer;
     border: 1px solid #d4d4d4;
     box-shadow: 1px 1px 3px #3c3c3c50;
   }
@@ -121,20 +129,22 @@ const TextContainer = styled.div`
   flex-direction: column;
 `;
 
-const Avatar = styled.div`
-  height: 100px;
-  width: 100px;
-  background-image: ${(props: Prop) => props.url};
-  background-size: cover;
-  background-position: center;
-`;
-
 const Text = styled.div`
+  margin-bottom: 5px;
   color: ${(props: Prop) => props.color};
   font-size: ${(props: Prop) => props.size};
   background-color: #f0f0f000;
-  & + & {
-    margin-top: 5px;
+`;
+
+const MessageIcon = styled.div`
+  margin-top: 5px;
+  width: 30px;
+  height: 30px;
+  background-image: url(${messageIcon});
+  background-size: cover;
+  background-position: center;
+  &:hover {
+    cursor: pointer;
   }
 `;
 
@@ -144,6 +154,7 @@ const BtnContainer = styled.div`
 `;
 
 const SendRequestBtn = styled.button`
+  margin-left: 10px;
   padding: 0 10px;
   height: 40px;
   font-size: 16px;
@@ -153,9 +164,6 @@ const SendRequestBtn = styled.button`
   &:hover {
     cursor: pointer;
     box-shadow: 1px 1px 3px #3c3c3c50;
-  }
-  & + & {
-    margin-left: 10px;
   }
 `;
 
@@ -179,8 +187,12 @@ function FriendList() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { userId } = useContext(AuthContext);
-  const { friendRequests, friendDataList, setClickedUserId } =
-    useContext(FriendContext);
+  const {
+    friendRequests,
+    friendDataList,
+    setClickedUserId,
+    setShowMessageFrame,
+  } = useContext(FriendContext);
   const [inputValue, setInputValue] = useState("");
   const [hasSearchValue, setHasSearchValue] = useState(false);
   const [searchData, setSearchData] = useState<{
@@ -189,16 +201,22 @@ function FriendList() {
     email?: string;
     avatar?: string;
   }>({});
+  const [messageFriendDtl, setMessageFriendDtl] = useState<{
+    friendUid: string;
+    name: string;
+    avatar: string;
+  }>({ friendUid: "", name: "", avatar: "" });
 
   async function searchHandler() {
     const inputCheck = friendDataList.findIndex(
       (email) => email.email === inputValue
     );
-
     if (inputCheck !== -1) {
       alert("you are friend already");
+      setHasSearchValue(false);
       return;
     }
+
     const usersRef = collection(db, "users");
     const q = query(usersRef, where("email", "==", inputValue));
     const querySnapshot = await getDocs(q);
@@ -222,7 +240,7 @@ function FriendList() {
 
   async function sendRequest() {
     const requestId = uuid();
-    await setDoc(doc(db, "friendRequest", requestId), {
+    await setDoc(doc(db, "friendRequests", requestId), {
       from: userId,
       to: searchData.requestUid,
     });
@@ -232,7 +250,7 @@ function FriendList() {
   }
 
   async function acceptRequestHandler(requestId: string) {
-    const requestRef = collection(db, "friendRequest");
+    const requestRef = collection(db, "friendRequests");
     const q = query(
       requestRef,
       where("from", "==", requestId),
@@ -243,7 +261,7 @@ function FriendList() {
     querySnapshot.forEach((responseDoc) => {
       docId = responseDoc.id;
     });
-    await deleteDoc(doc(db, "friendRequest", docId));
+    await deleteDoc(doc(db, "friendRequests", docId));
     await updateDoc(doc(db, "users", userId), {
       friendList: arrayUnion(requestId),
     });
@@ -253,9 +271,9 @@ function FriendList() {
     alert("you are friend now!");
   }
   async function rejectRequestHandler(requestId: string) {
-    const ans = window.confirm("are you sure that you want to refuse?");
+    const ans = window.confirm("Are you sure that you want to refuse?");
     if (ans === false) return;
-    const requestRef = collection(db, "friendRequest");
+    const requestRef = collection(db, "friendRequests");
     const q = query(
       requestRef,
       where("from", "==", requestId),
@@ -266,12 +284,12 @@ function FriendList() {
     querySnapshot.forEach((responseDoc) => {
       docId = responseDoc.id;
     });
-    await deleteDoc(doc(db, "friendRequest", docId));
+    await deleteDoc(doc(db, "friendRequests", docId));
   }
 
   async function deleteFriendHandler(friendId: string) {
     const ans = window.confirm(
-      "are you sure that you want to remove this friend?"
+      "Are you sure that you want to remove this friend?"
     );
     if (ans === false) return;
     const idRef = doc(db, "users", userId);
@@ -285,24 +303,36 @@ function FriendList() {
     alert("delete successfully");
   }
 
+  async function messageHandler(
+    friendUid: string,
+    name: string,
+    avatar: string
+  ) {
+    const friendData = { friendUid, name, avatar };
+    setMessageFriendDtl(friendData);
+    setShowMessageFrame(true);
+  }
+
   return (
     <Wrapper>
       <Container>
-        <SearchContainer>
-          <SearchInput
-            onKeyPress={(e) => {
-              if (e.key === "Enter") {
-                searchHandler();
-              }
-            }}
-            onChange={(e) => {
-              setInputValue(e.target.value);
-            }}
-            placeholder={t("search_friend")}
-            value={inputValue}
-          />
-          <SearchIcon onClick={() => searchHandler()} />
-        </SearchContainer>
+        <Separator>
+          <SearchContainer>
+            <SearchInput
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  searchHandler();
+                }
+              }}
+              onChange={(e) => {
+                setInputValue(e.target.value);
+              }}
+              placeholder={t("search_friend")}
+              value={inputValue}
+            />
+            <SearchIcon onClick={() => searchHandler()} />
+          </SearchContainer>
+        </Separator>
         {hasSearchValue ? (
           <Separator>
             <FriendListContainer>
@@ -362,16 +392,22 @@ function FriendList() {
             </Separator>
             {friendDataList.map((user) => (
               <Separator key={user.uid}>
-                <FriendListContainer
-                  onClick={() => {
-                    setClickedUserId(user.uid);
-                    navigate("/userProfile");
-                  }}
-                >
-                  <Avatar url={`url(${user.avatar})`} />
+                <FriendListContainer>
+                  <Avatar
+                    url={`url(${user.avatar})`}
+                    onClick={() => {
+                      setClickedUserId(user.uid);
+                      navigate("/userProfile");
+                    }}
+                  />
                   <TextContainer>
                     <Text size="20px">{user.name}</Text>
                     <Text color="#616161">{user.email}</Text>
+                    <MessageIcon
+                      onClick={() => {
+                        messageHandler(user.uid, user.name, user.avatar);
+                      }}
+                    />
                   </TextContainer>
                   <BtnContainer>
                     <DeleteIcon onClick={() => deleteFriendHandler(user.uid)} />
@@ -381,6 +417,7 @@ function FriendList() {
             ))}
           </>
         )}
+        <Message messageFriendDtl={messageFriendDtl} />
       </Container>
     </Wrapper>
   );

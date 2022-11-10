@@ -92,7 +92,7 @@ const SelectContainer = styled.div`
   height: calc(100vh - 160px);
   display: flex;
   position: fixed;
-  right: 0;
+  left: 0;
   flex-direction: column;
   align-items: center;
   box-shadow: 0 -1px 3px #3c3c3c;
