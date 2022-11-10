@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { v4 as uuid } from "uuid";
 import ReactLoading from "react-loading";
@@ -23,6 +23,7 @@ import { db } from "../../context/firebaseSDK";
 import Message from "../../components/Message/Message";
 import searchIcon from "./search-icon.png";
 import messageIcon from "./chat-icon.png";
+import messageIconHover from "./chat-icon-hover.png";
 import deleteIcon from "./delete-friend-icon.png";
 import deleteIconHover from "./delete-friend-icon-hover.png";
 
@@ -145,6 +146,7 @@ const MessageIcon = styled.div`
   background-position: center;
   &:hover {
     cursor: pointer;
+    background-image: url(${messageIconHover});
   }
 `;
 
@@ -186,7 +188,7 @@ const Loading = styled(ReactLoading)`
 function FriendList() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { userId } = useContext(AuthContext);
+  const { userId, isLoading } = useContext(AuthContext);
   const {
     friendRequests,
     friendDataList,
@@ -302,6 +304,16 @@ function FriendList() {
       friendList: arrayRemove(userId),
     });
     alert("delete successfully");
+  }
+
+  if (isLoading) {
+    return (
+      <Wrapper>
+        <Container>
+          <Loading />
+        </Container>
+      </Wrapper>
+    );
   }
 
   return (

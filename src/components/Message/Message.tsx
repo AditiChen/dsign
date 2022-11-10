@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { useContext, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
+import ReactLoading from "react-loading";
 import {
   collection,
   query,
@@ -8,13 +9,16 @@ import {
   getDocs,
   setDoc,
   doc,
+  onSnapshot,
+  Timestamp,
 } from "firebase/firestore";
-import { AuthContext } from "../../context/authContext";
 import { FriendContext } from "../../context/friendContext";
 import { db } from "../../context/firebaseSDK";
 
 import closeIcon from "./close-icon.png";
+import closeIconHover from "./close-icon-hover.png";
 import sendIcon from "./send-icon.png";
+import sendIconHover from "./send-icon-hover.png";
 
 interface Prop {
   img?: string;
@@ -27,7 +31,7 @@ const Wrapper = styled.div`
   right: 5vw;
   bottom: 8vh;
   background-color: #ffffff;
-  border: 1px solid #3c3c3c80;
+  border: 1px solid #3c3c3c60;
   border-radius: 10px;
   z-index: 20;
 `;
@@ -44,6 +48,7 @@ const CloseIcon = styled.div`
   z-index: 20;
   &:hover {
     cursor: pointer;
+    background-image: url(${closeIconHover});
   }
 `;
 
@@ -62,7 +67,7 @@ const AvatarContainer = styled.div`
   padding: 5px 5px;
   display: flex;
   align-items: center;
-  box-shadow: 1px 0 3px #3c3c3c80;
+  box-shadow: 0 1px 3px #3c3c3c80;
 `;
 
 const Atatar = styled.div`
@@ -75,12 +80,40 @@ const Atatar = styled.div`
   background-size: cover;
 `;
 
+const Name = styled.div`
+  margin-left: 10px;
+  font-size: 20px;
+`;
+
 const MessageContainer = styled.div`
-  padding: 10px;
+  padding: 10px 10px 0;
   height: 400px;
+  background-color: #f0f0f090;
+  overflow: scroll;
+  scrollbar-width: none;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const MessageInnerContainer = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: #f0f0f090;
+`;
+
+const SingleMessageLeft = styled.div`
+  margin-bottom: 10px;
+  padding: 0 10px;
+  width: 250px;
+  font-size: 18px;
+  line-height: 30px;
+  border: 1px solid #3c3c3c;
+  border-radius: 5px;
+  background-color: #ffffff90;
+`;
+
+const SingleMessageRight = styled(SingleMessageLeft)`
+  margin-left: auto;
 `;
 
 const SendMessageContainer = styled.div`
@@ -89,13 +122,14 @@ const SendMessageContainer = styled.div`
   position: relative;
   display: flex;
   align-items: center;
+  box-shadow: 0 -1px 3px #3c3c3c60;
 `;
 
 const MessageInput = styled.input`
   height: 40px;
   width: 290px;
   border-radius: 20px;
-  padding: 5px 45px 5px 10px;
+  padding: 5px 45px 5px 15px;
   border: solid 1px #d4d4d4;
   font-size: 18px;
   line-height: 30px;
@@ -119,7 +153,12 @@ const SendMessageIcon = styled.div`
   background-position: center;
   &:hover {
     cursor: pointer;
+    background-image: url(${sendIconHover});
   }
+`;
+
+const Loading = styled(ReactLoading)`
+  margin: auto;
 `;
 
 function Message({
@@ -134,10 +173,20 @@ function Message({
   userId: string;
 }) {
   const { setShowMessageFrame } = useContext(FriendContext);
+  const [isLoading, setIsLoading] = useState(false);
   const [chatroomId, setChatroomId] = useState("");
   const [inputValue, setInputValue] = useState("");
+  const [historyMessages, setHistoryMessages] = useState<
+    {
+      from?: string;
+      message?: string;
+      time?: Timestamp;
+    }[]
+  >([]);
 
   useEffect(() => {
+    setIsLoading(true);
+    setHistoryMessages([]);
     async function checkRoomExist() {
       const messageRef = collection(db, "chatrooms");
       const q1 = query(
@@ -166,7 +215,11 @@ function Message({
       if (docId2) {
         setChatroomId(docId2);
       }
-      if (docId1 === undefined && docId2 === undefined) {
+      if (
+        docId1 === undefined &&
+        docId2 === undefined &&
+        messageFriendDtl.friendUid !== ""
+      ) {
         const roomId = uuid();
         await setDoc(doc(db, "chatrooms", roomId), {
           owners: [userId, messageFriendDtl.friendUid],
@@ -175,7 +228,28 @@ function Message({
       }
     }
     checkRoomExist();
-  }, []);
+    setIsLoading(false);
+  }, [messageFriendDtl]);
+
+  useEffect(() => {
+    if (chatroomId === "") return undefined;
+    setIsLoading(true);
+    const q = query(collection(db, `chatrooms/${chatroomId}/messages`));
+    const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+      const messages: { from: string; message: string; time: Timestamp }[] = [];
+      querySnapshot.forEach((returnedDoc) => {
+        const data = {
+          from: returnedDoc.data().from,
+          message: returnedDoc.data().message,
+          time: returnedDoc.data().time.toDate(),
+        };
+        messages.push(data);
+      });
+      setHistoryMessages(messages || {});
+    });
+    setIsLoading(false);
+    return () => unsubscribe();
+  }, [chatroomId]);
 
   async function sendMesssageHandler() {
     if (inputValue === "") return;
@@ -194,10 +268,30 @@ function Message({
       <Container>
         <AvatarContainer>
           <Atatar img={`url(${messageFriendDtl.avatar})`} />
-          <div>{messageFriendDtl.name}</div>
+          <Name>{messageFriendDtl.name}</Name>
         </AvatarContainer>
         <MessageContainer>
-          <div>message</div>
+          {isLoading ? (
+            <Loading type="cylon" color="#3c3c3c" />
+          ) : (
+            <MessageInnerContainer>
+              {historyMessages &&
+                historyMessages.map((message) => {
+                  if (message.from === userId) {
+                    return (
+                      <SingleMessageRight key={`${message.time}`}>
+                        {message.message}
+                      </SingleMessageRight>
+                    );
+                  }
+                  return (
+                    <SingleMessageLeft key={`${message.time}`}>
+                      {message.message}
+                    </SingleMessageLeft>
+                  );
+                })}
+            </MessageInnerContainer>
+          )}
         </MessageContainer>
         <SendMessageContainer>
           <MessageInput

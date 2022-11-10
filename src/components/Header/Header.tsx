@@ -4,6 +4,7 @@ import { useState, useContext } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
+import { FriendContext } from "../../context/friendContext";
 
 import languageIcon from "./language-icon.png";
 import logoIcon from "./Logo.png";
@@ -135,17 +136,36 @@ function LanguageOptions() {
 
 function Header() {
   const { avatar, isLogin, logout } = useContext(AuthContext);
+  const { setShowMessageFrame } = useContext(FriendContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [showLanghagesIcon, setShowLanguagesIcon] = useState(false);
+
+  function logoutHandler() {
+    const ans = window.confirm("Are you sure that you want to logout?");
+    if (ans === false) return;
+    logout();
+    navigate("/login");
+  }
+
   return (
     <Wrapper>
       <LeftContainer>
-        <Logo to="portfolioBricks" />
+        <Logo to="portfolioBricks" onClick={() => setShowMessageFrame(false)} />
         {isLogin ? (
           <>
-            <Context to="createNewProject">{t("create")}</Context>
-            <Context to="favoriteList">{t("favorite_list")}</Context>
+            <Context
+              to="createNewProject"
+              onClick={() => setShowMessageFrame(false)}
+            >
+              {t("create")}
+            </Context>
+            <Context
+              to="favoriteList"
+              onClick={() => setShowMessageFrame(false)}
+            >
+              {t("favorite_list")}
+            </Context>
           </>
         ) : (
           ""
@@ -163,6 +183,7 @@ function Header() {
             <Icon
               img={avatar ? `url(${avatar})` : `url(${memberIcon})`}
               onClick={() => {
+                setShowMessageFrame(false);
                 navigate("/portfile");
               }}
             />
@@ -182,8 +203,7 @@ function Header() {
         {isLogin ? (
           <SignBtn
             onClick={() => {
-              logout();
-              navigate("/login");
+              logoutHandler();
             }}
           >
             {t("logout")}
