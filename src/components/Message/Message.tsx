@@ -124,20 +124,18 @@ const SendMessageIcon = styled.div`
 
 function Message({
   messageFriendDtl,
+  userId,
 }: {
   messageFriendDtl: {
     friendUid: string;
     name: string;
     avatar: string;
   };
+  userId: string;
 }) {
-  const { userId } = useContext(AuthContext);
-  const { showMessageFrame, setShowMessageFrame } = useContext(FriendContext);
+  const { setShowMessageFrame } = useContext(FriendContext);
   const [chatroomId, setChatroomId] = useState("");
   const [inputValue, setInputValue] = useState("");
-
-  console.log("chatroomId", chatroomId);
-  console.log("user", messageFriendDtl);
 
   useEffect(() => {
     async function checkRoomExist() {
@@ -150,6 +148,7 @@ function Message({
         messageRef,
         where("owners", "in", [[userId, messageFriendDtl.friendUid]])
       );
+
       const querySnapshot1 = await getDocs(q1);
       let docId1;
       querySnapshot1.forEach((responseDoc) => {
@@ -170,7 +169,7 @@ function Message({
       if (docId1 === undefined && docId2 === undefined) {
         const roomId = uuid();
         await setDoc(doc(db, "chatrooms", roomId), {
-          ownders: [userId, messageFriendDtl.friendUid],
+          owners: [userId, messageFriendDtl.friendUid],
         });
         setChatroomId(roomId);
       }
@@ -179,39 +178,44 @@ function Message({
   }, []);
 
   async function sendMesssageHandler() {
-    console.log("send messge");
+    if (inputValue === "") return;
+    setInputValue("");
+    const messageId = `${+new Date()}`;
+    await setDoc(doc(db, `chatrooms/${chatroomId}/messages/${messageId}/`), {
+      from: userId,
+      message: `${inputValue}`,
+      time: new Date(),
+    });
   }
 
-  if (showMessageFrame)
-    return (
-      <Wrapper>
-        <CloseIcon onClick={() => setShowMessageFrame((prev) => !prev)} />
-        <Container>
-          <AvatarContainer>
-            <Atatar img={`url(${messageFriendDtl.avatar})`} />
-            <div>{messageFriendDtl.name}</div>
-          </AvatarContainer>
-          <MessageContainer>
-            <div>message</div>
-          </MessageContainer>
-          <SendMessageContainer>
-            <MessageInput
-              onKeyPress={(e) => {
-                if (e.key === "Enter") {
-                  sendMesssageHandler();
-                }
-              }}
-              onChange={(e) => {
-                setInputValue(e.target.value);
-              }}
-              value={inputValue}
-            />
-            <SendMessageIcon onClick={() => sendMesssageHandler()} />
-          </SendMessageContainer>
-        </Container>
-      </Wrapper>
-    );
-  return <div />;
+  return (
+    <Wrapper>
+      <CloseIcon onClick={() => setShowMessageFrame((prev) => !prev)} />
+      <Container>
+        <AvatarContainer>
+          <Atatar img={`url(${messageFriendDtl.avatar})`} />
+          <div>{messageFriendDtl.name}</div>
+        </AvatarContainer>
+        <MessageContainer>
+          <div>message</div>
+        </MessageContainer>
+        <SendMessageContainer>
+          <MessageInput
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                sendMesssageHandler();
+              }
+            }}
+            onChange={(e) => {
+              setInputValue(e.target.value);
+            }}
+            value={inputValue}
+          />
+          <SendMessageIcon onClick={() => sendMesssageHandler()} />
+        </SendMessageContainer>
+      </Container>
+    </Wrapper>
+  );
 }
 
 export default Message;

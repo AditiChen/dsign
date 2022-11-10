@@ -191,6 +191,7 @@ function FriendList() {
     friendRequests,
     friendDataList,
     setClickedUserId,
+    showMessageFrame,
     setShowMessageFrame,
   } = useContext(FriendContext);
   const [inputValue, setInputValue] = useState("");
@@ -303,16 +304,6 @@ function FriendList() {
     alert("delete successfully");
   }
 
-  async function messageHandler(
-    friendUid: string,
-    name: string,
-    avatar: string
-  ) {
-    const friendData = { friendUid, name, avatar };
-    setMessageFriendDtl(friendData);
-    setShowMessageFrame(true);
-  }
-
   return (
     <Wrapper>
       <Container>
@@ -405,7 +396,12 @@ function FriendList() {
                     <Text color="#616161">{user.email}</Text>
                     <MessageIcon
                       onClick={() => {
-                        messageHandler(user.uid, user.name, user.avatar);
+                        setMessageFriendDtl({
+                          friendUid: user.uid,
+                          name: user.name,
+                          avatar: user.avatar,
+                        });
+                        setShowMessageFrame(true);
                       }}
                     />
                   </TextContainer>
@@ -417,7 +413,9 @@ function FriendList() {
             ))}
           </>
         )}
-        <Message messageFriendDtl={messageFriendDtl} />
+        {showMessageFrame && (
+          <Message messageFriendDtl={messageFriendDtl} userId={userId} />
+        )}
       </Container>
     </Wrapper>
   );
