@@ -224,9 +224,8 @@ function FriendList() {
     const usersRef = collection(db, "users");
     const q = query(usersRef, where("email", "==", inputValue));
     const querySnapshot = await getDocs(q);
-    const returnedData = querySnapshot.docs[0].data();
-
-    if (!returnedData) {
+    const returnedData = querySnapshot.docs[0]?.data();
+    if (returnedData === undefined) {
       alert(t("user_not_found"));
       setHasSearchValue(false);
       setInputValue("");
@@ -235,17 +234,18 @@ function FriendList() {
 
     const returnId = returnedData.uid;
     const requestRef = collection(db, "friendRequests");
-    const qFriendRequests = query(
+    const q2 = query(
       requestRef,
       where("from", "==", userId),
       where("to", "==", returnId)
     );
-    const queryFriendRequestsSnapshot = await getDocs(qFriendRequests);
+    const querySnapshot2 = await getDocs(q2);
     let docId = "";
-    queryFriendRequestsSnapshot.forEach((responseDoc) => {
+    querySnapshot2.forEach((responseDoc) => {
       docId = responseDoc.id;
     });
-    if (docId !== undefined) {
+
+    if (docId !== "") {
       alert(t("already_sent_request"));
       setHasSearchValue(false);
       setInputValue("");
@@ -280,6 +280,7 @@ function FriendList() {
     querySnapshot.forEach((responseDoc) => {
       docId = responseDoc.id;
     });
+
     await deleteDoc(doc(db, "friendRequests", docId));
     await updateDoc(doc(db, "users", userId), {
       friendList: arrayUnion(requestId),
