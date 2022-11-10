@@ -45,14 +45,14 @@ interface AuthContextType {
   email: string;
   avatar: string;
   singleProjectId: string;
+  setSingleProjectId: Dispatch<SetStateAction<string>>;
   userProjects: UserProjectsType[];
+  setUserProjects: Dispatch<SetStateAction<UserProjectsType[]>>;
   emailSignInHandler(email: string, password: string): void;
   signUp(email: string, password: string, name: string): void;
   googleLoginHandler(): void;
   facebookLoginHandler(): void;
   logout(): void;
-  setSingleProjectId: Dispatch<SetStateAction<string>>;
-  setUserProjects: Dispatch<SetStateAction<UserProjectsType[]>>;
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -63,14 +63,14 @@ export const AuthContext = createContext<AuthContextType>({
   email: "",
   avatar: "",
   userProjects: [],
+  setUserProjects: () => {},
   singleProjectId: "",
+  setSingleProjectId: () => {},
   emailSignInHandler: () => {},
   signUp: () => {},
   googleLoginHandler: () => {},
   facebookLoginHandler: () => {},
   logout: () => {},
-  setUserProjects: () => {},
-  setSingleProjectId: () => {},
 });
 
 export function AuthContextProvider({ children }: BodyProp) {

@@ -38,6 +38,7 @@
 
   "please_login": "Veuillez loger",
   "project_list": "Liste des projets",
+  "go_to_create_project": "C'est vide",
   "view_project_detail": "Voir le détail",
   "edit_again": "Modifier",
   "delete_project": "Supprimer le projet",
@@ -46,8 +47,15 @@
   "request_list": "Demandes d'amis",
   "search_friend": "Recherche utilisateur",
   "send_friend_request": "Ajouter un ami",
+  "already_friend": "Vous êtes déjà un ami.",
   "user_not_found": "L'utilisateur n'est pas trouvé",
+  "already_sent_request": "Vous avez déjà envoyé la demande, veuillez attendre",
   "sen_request_successfully": "Envoyer une demande d'ami avec succès!",
   "accept_friend_request": "Accepter",
-  "reject_friend_request": "Rejeter"
+  "reject_friend_request": "Rejeter",
+  "be_friend": "Tu es un ami maintenant",
+  "confirm_reject": "Vous êtes sûr de vouloir refuser ?",
+  "friend_list": "Liste d'amis",
+  "confirm_remove": "Êtes-vous sûr de vouloir supprimer cet ami ?",
+  "delete_successfully": "Supprimer avec succès"
 }

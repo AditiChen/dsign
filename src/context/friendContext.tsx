@@ -34,6 +34,8 @@ interface FriendContextType {
   setFriendDataList: Dispatch<SetStateAction<FriendData[]>>;
   friendRequests: FriendData[];
   setFriendRequests: Dispatch<SetStateAction<FriendData[]>>;
+  showMessageFrame: boolean;
+  setShowMessageFrame: Dispatch<SetStateAction<boolean>>;
 }
 
 export const FriendContext = createContext<FriendContextType>({
@@ -43,6 +45,8 @@ export const FriendContext = createContext<FriendContextType>({
   setFriendDataList: () => {},
   friendRequests: [],
   setFriendRequests: () => {},
+  showMessageFrame: false,
+  setShowMessageFrame: () => {},
 });
 
 export function FriendContextProvider({ children }: BodyProp) {
@@ -50,11 +54,15 @@ export function FriendContextProvider({ children }: BodyProp) {
   const [clickedUserId, setClickedUserId] = useState("");
   const [friendRequests, setFriendRequests] = useState<FriendData[]>([]);
   const [friendDataList, setFriendDataList] = useState<FriendData[]>([]);
+  const [showMessageFrame, setShowMessageFrame] = useState(false);
 
   useEffect(() => {
     if (userId === "") return undefined;
     setFriendRequests([]);
-    const q = query(collection(db, "friendRequest"), where("to", "==", userId));
+    const q = query(
+      collection(db, "friendRequests"),
+      where("to", "==", userId)
+    );
     const unsubscribe = onSnapshot(q, async (querySnapshot) => {
       const userIds: string[] = [];
       querySnapshot.forEach((returnedDoc) => {
@@ -97,6 +105,8 @@ export function FriendContextProvider({ children }: BodyProp) {
       setClickedUserId,
       friendRequests,
       setFriendRequests,
+      showMessageFrame,
+      setShowMessageFrame,
     }),
     [
       friendDataList,
@@ -105,6 +115,8 @@ export function FriendContextProvider({ children }: BodyProp) {
       setClickedUserId,
       friendRequests,
       setFriendRequests,
+      showMessageFrame,
+      setShowMessageFrame,
     ]
   );
 

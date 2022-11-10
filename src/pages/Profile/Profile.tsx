@@ -203,7 +203,7 @@ function Profile() {
             <ProjectTitle>{t("project_list")}</ProjectTitle>
           </ProjectHeaderContainer>
           {userProjects.length === 0 ? (
-            ""
+            <ProjectTitle>{t("go_to_create_project")}</ProjectTitle>
           ) : (
             <ProjectsContainer>
               {userProjects.map((projectData) => (
