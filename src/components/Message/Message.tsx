@@ -29,7 +29,7 @@ const Wrapper = styled.div`
   height: 500px;
   position: fixed;
   right: 5vw;
-  bottom: 8vh;
+  bottom: 90px;
   background-color: #ffffff;
   border: 1px solid #3c3c3c60;
   border-radius: 10px;
@@ -40,8 +40,8 @@ const CloseIcon = styled.div`
   width: 30px;
   height: 30px;
   position: fixed;
-  right: calc(5vw - 15px);
-  bottom: calc(8vh + 485px);
+  right: calc(5vw - 10px);
+  bottom: 572px;
   background-image: url(${closeIcon});
   background-size: cover;
   background-position: center;
@@ -107,7 +107,7 @@ const SingleMessageLeft = styled.div`
   width: 250px;
   font-size: 18px;
   line-height: 30px;
-  border: 1px solid #3c3c3c;
+  border: 1px solid #3c3c3c60;
   border-radius: 5px;
   background-color: #ffffff90;
 `;

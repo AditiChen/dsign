@@ -47,8 +47,15 @@
   "request_list": "友達申請",
   "search_friend": "検索",
   "send_friend_request": "友達追加",
+  "already_friend": "あなたはもう友達です",
   "user_not_found": "友達が見つからない",
+  "already_sent_request": "すでにリクエストを送信しましたので、お待ちください",
   "sen_request_successfully": "友達申請を送信成功",
   "accept_friend_request": "同意",
-  "reject_friend_request": "拒否"
+  "reject_friend_request": "拒否",
+  "confirm_reject": "本当にフレンド申請を拒否していいのでしょうか？",
+  "be_friend": "あなたは友達です",
+  "friend_list": "友人一覧",
+  "confirm_remove": "本当にこの友人を削除してもいいのでしょうか？",
+  "delete_successfully": "あぼん"
 }

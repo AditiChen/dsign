@@ -199,7 +199,7 @@ function FriendList() {
   const [inputValue, setInputValue] = useState("");
   const [hasSearchValue, setHasSearchValue] = useState(false);
   const [searchData, setSearchData] = useState<{
-    requestUid?: string;
+    uid?: string;
     name?: string;
     email?: string;
     avatar?: string;
@@ -215,29 +215,45 @@ function FriendList() {
       (email) => email.email === inputValue
     );
     if (inputCheck !== -1) {
-      alert("you are friend already");
+      alert(t("already_friend"));
       setHasSearchValue(false);
+      setInputValue("");
       return;
     }
 
     const usersRef = collection(db, "users");
     const q = query(usersRef, where("email", "==", inputValue));
     const querySnapshot = await getDocs(q);
-    let returnedData;
-    querySnapshot.forEach((returnDoc) => {
-      returnedData = {
-        avatar: returnDoc.data().avatar,
-        email: returnDoc.data().email,
-        name: returnDoc.data().name,
-        requestUid: returnDoc.data().uid,
-      };
-    });
+    const returnedData = querySnapshot.docs[0].data();
+
     if (!returnedData) {
       alert(t("user_not_found"));
       setHasSearchValue(false);
+      setInputValue("");
       return;
     }
+
+    const returnId = returnedData.uid;
+    const requestRef = collection(db, "friendRequests");
+    const qFriendRequests = query(
+      requestRef,
+      where("from", "==", userId),
+      where("to", "==", returnId)
+    );
+    const queryFriendRequestsSnapshot = await getDocs(qFriendRequests);
+    let docId = "";
+    queryFriendRequestsSnapshot.forEach((responseDoc) => {
+      docId = responseDoc.id;
+    });
+    if (docId !== undefined) {
+      alert(t("already_sent_request"));
+      setHasSearchValue(false);
+      setInputValue("");
+      return;
+    }
+
     setHasSearchValue(true);
+    setInputValue("");
     setSearchData(returnedData);
   }
 
@@ -245,7 +261,7 @@ function FriendList() {
     const requestId = uuid();
     await setDoc(doc(db, "friendRequests", requestId), {
       from: userId,
-      to: searchData.requestUid,
+      to: searchData.uid,
     });
     alert(t("sen_request_successfully"));
     setSearchData({});
@@ -271,10 +287,10 @@ function FriendList() {
     await updateDoc(doc(db, "users", requestId), {
       friendList: arrayUnion(userId),
     });
-    alert("you are friend now!");
+    alert(t("be_friend"));
   }
   async function rejectRequestHandler(requestId: string) {
-    const ans = window.confirm("Are you sure that you want to refuse?");
+    const ans = window.confirm(t("confirm_reject"));
     if (ans === false) return;
     const requestRef = collection(db, "friendRequests");
     const q = query(
@@ -291,9 +307,7 @@ function FriendList() {
   }
 
   async function deleteFriendHandler(friendId: string) {
-    const ans = window.confirm(
-      "Are you sure that you want to remove this friend?"
-    );
+    const ans = window.confirm(t("confirm_remove"));
     if (ans === false) return;
     const idRef = doc(db, "users", userId);
     await updateDoc(idRef, {
@@ -303,7 +317,7 @@ function FriendList() {
     await updateDoc(friendIdRef, {
       friendList: arrayRemove(userId),
     });
-    alert("delete successfully");
+    alert(t("delete_successfully"));
   }
 
   if (isLoading) {
