@@ -21,6 +21,7 @@
   "login_failed": "登録に失敗しました。お客様の情報をご確認の上、再度ログインしてください",
   "sign_up_successfully": "登録成功",
   "sign_up_failed": "登録に失敗しました。お客様の情報をご確認の上、再度ログインしてください",
+  "logout_confirm": "ログアウトしますか？",
   "logout_successfully": "ログアウト成功！",
 
   "insert_location": "アドレスを入力",

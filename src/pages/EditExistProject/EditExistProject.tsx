@@ -93,7 +93,7 @@ const SelectContainer = styled.div`
   height: calc(100vh - 160px);
   display: flex;
   position: fixed;
-  right: 0;
+  left: 0;
   flex-direction: column;
   align-items: center;
   box-shadow: 0 -1px 3px #3c3c3c;
@@ -187,8 +187,10 @@ function EditExistProject() {
       const mapIndex = projectDetail[0].pages.findIndex(
         (page) => page.location !== undefined
       );
-      const originalPosition = projectDetail[0].pages[mapIndex].location;
-      setPosition(originalPosition || {});
+      if (mapIndex !== -1) {
+        const originalPosition = projectDetail[0].pages[mapIndex].location;
+        setPosition(originalPosition || {});
+      }
     }
     fetchData();
   }, []);
@@ -216,6 +218,7 @@ function EditExistProject() {
     setAddedTemplate([]);
     setSingleProjectId("");
     alert(t("upload_successfully"));
+    navigate("/profile");
     setIsLoading(false);
   }
 

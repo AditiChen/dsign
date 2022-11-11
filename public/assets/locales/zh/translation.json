@@ -21,6 +21,7 @@
   "login_failed": "登入失敗，請再檢查一次輸入的帳號密碼：）",
   "sign_up_successfully": "註冊成功！",
   "sign_up_failed": "註冊失敗，請再檢查一次輸入的資訊～）",
+  "logout_confirm": "確定要登出嗎？",
   "logout_successfully": "登出成功！",
 
   "insert_location": "輸入地點",

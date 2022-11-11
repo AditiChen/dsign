@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { v4 as uuid } from "uuid";

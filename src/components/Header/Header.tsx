@@ -1,7 +1,7 @@
 import i18next, { t as i18t } from "i18next";
+import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { useState, useContext } from "react";
-import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
 import { FriendContext } from "../../context/friendContext";
@@ -69,11 +69,11 @@ const Icon = styled.div`
   background-image: ${(props: Prop) => props.img};
   background-size: cover;
   background-position: center;
-  & + & {
-    margin-left: 20px;
-  }
   &:hover {
     cursor: pointer;
+  }
+  & + & {
+    margin-left: 20px;
   }
 `;
 
@@ -142,7 +142,7 @@ function Header() {
   const [showLanghagesIcon, setShowLanguagesIcon] = useState(false);
 
   function logoutHandler() {
-    const ans = window.confirm("Are you sure that you want to logout?");
+    const ans = window.confirm(t("logout_confirm"));
     if (ans === false) return;
     logout();
     navigate("/login");

@@ -21,6 +21,7 @@
   "login_failed": "Failed to login, please check your information and try again!",
   "sign_up_successfully": "Sign up successfully!",
   "sign_up_failed": "Failed to sign up,please check your information and try again!",
+  "logout_confirm": "Are you sure that you want to logout?",
   "logout_successfully": "Logout successfully!",
 
   "insert_location": "Enter the address",
