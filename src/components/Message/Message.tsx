@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import { useContext, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import ReactLoading from "react-loading";

@@ -21,6 +21,7 @@
   "login_failed": "Échec de la connexion",
   "sign_up_successfully": "S'inscrire avec succès",
   "sign_up_failed": "Ne s'est pas inscrit",
+  "logout_confirm": "Êtes-vous sûr de vouloir vous déconnecter ?",
   "logout_successfully": "Déconnexion réussie!",
 
   "insert_location": "Enter the address",

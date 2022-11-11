@@ -1,4 +1,10 @@
-import { useState, Dispatch, SetStateAction, useCallback } from "react";
+import {
+  useState,
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
@@ -11,6 +17,7 @@ interface OverlayProps {
   setShowOverlay: Dispatch<SetStateAction<boolean>>;
   setNewPhotoDetail: (returnedUrl: string, returnedFile: File) => void;
   currentAaspect: number;
+  currentImgUrl: string;
 }
 
 const Wrapper = styled.div`
@@ -103,6 +110,7 @@ function Overlay({
   setShowOverlay,
   setNewPhotoDetail,
   currentAaspect,
+  currentImgUrl,
 }: OverlayProps) {
   const { t } = useTranslation();
   const [imgSrc, setImgSrc] = useState<string>("");
@@ -110,6 +118,12 @@ function Overlay({
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+
+  useEffect(() => {
+    if (currentImgUrl) {
+      setImgSrc(currentImgUrl);
+    }
+  }, []);
 
   const zoomPercent = (value: number) => `${Math.round(value * 100)}%`;
 
@@ -132,11 +146,11 @@ function Overlay({
   );
 
   const showCroppedImage = useCallback(async () => {
-    const { file, url }: any = await getCroppedImg(
+    const { file, url } = (await getCroppedImg(
       imgSrc,
       croppedAreaPixels,
       rotation
-    );
+    )) as { file: File; url: string };
     const awaitCroppedImageToString = String(url);
     setNewPhotoDetail(awaitCroppedImageToString, file);
     setShowOverlay((prev) => !prev);

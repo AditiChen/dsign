@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { t } from "i18next";
 import { v4 as uuid } from "uuid";
-import { useState, useRef, Dispatch, SetStateAction, useEffect } from "react";
+import { useState, Dispatch, SetStateAction, useEffect } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../../context/firebaseSDK";
 import Overlay from "../../overlay";
@@ -78,6 +78,7 @@ const Context = styled.textarea`
   bottom: 280px;
   background-color: transparent;
   border: 1px solid #b4b4b4;
+  resize: none;
   &::placeholder {
     color: #b4b4b4;
   }
@@ -134,6 +135,7 @@ function Template1(props: InsertProp) {
   // the actual upload url
   const [storageUrl, setStorageUrl] = useState<string[]>(["", "", ""]);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
+  const [currentImgUrl, setCurrentImgUrl] = useState("");
   const [currentAaspect, setCurrentAspect] = useState(1 / 1);
 
   const { setPages, currentIndex, pages } = props;
@@ -190,6 +192,7 @@ function Template1(props: InsertProp) {
   };
 
   function upLoadNewPhoto(index: number, aspect: number) {
+    setCurrentImgUrl(photoUrl[index]);
     setShowOverlay((prev) => !prev);
     setCurrentImgIndex(index);
     setCurrentAspect(aspect);
@@ -239,6 +242,7 @@ function Template1(props: InsertProp) {
           setShowOverlay={setShowOverlay}
           setNewPhotoDetail={setNewPhotoDetail}
           currentAaspect={currentAaspect}
+          currentImgUrl={currentImgUrl}
         />
       )}
     </>
