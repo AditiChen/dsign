@@ -12,13 +12,14 @@ import {
   onSnapshot,
   Timestamp,
 } from "firebase/firestore";
+
 import { FriendContext } from "../../context/friendContext";
 import { db } from "../../context/firebaseSDK";
 
-import closeIcon from "./close-icon.png";
-import closeIconHover from "./close-icon-hover.png";
-import sendIcon from "./send-icon.png";
-import sendIconHover from "./send-icon-hover.png";
+import closeIcon from "../../icons/close-icon.png";
+import closeIconHover from "../../icons/close-icon-hover.png";
+import sendIcon from "../../icons/send-icon.png";
+import sendIconHover from "../../icons/send-icon-hover.png";
 
 interface Prop {
   img?: string;

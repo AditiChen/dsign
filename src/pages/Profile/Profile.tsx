@@ -4,6 +4,7 @@ import { doc, deleteDoc } from "firebase/firestore";
 import ReactLoading from "react-loading";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+
 import { db } from "../../context/firebaseSDK";
 import getProjects from "../../utils/getProjects";
 import { AuthContext } from "../../context/authContext";
@@ -111,6 +112,15 @@ const ProjectTitle = styled.div`
 const ProjectRightContainer = styled.div`
   height: 200px;
   width: 60%;
+  overflow: scroll;
+  scrollbar-width: none;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const ProjectRightInnerContainer = styled.div`
+  height: 200px;
   display: flex;
   align-items: center;
 `;
@@ -232,10 +242,12 @@ function Profile() {
                     </Button>
                   </ProjectLeftContainer>
                   <ProjectRightContainer>
-                    {projectData.pages[0].url &&
-                      projectData.pages[0].url.map((singleUrl: string) => (
-                        <PhotoUrl key={singleUrl} img={`url(${singleUrl})`} />
-                      ))}
+                    <ProjectRightInnerContainer>
+                      {projectData.pages[0].url &&
+                        projectData.pages[0].url.map((singleUrl: string) => (
+                          <PhotoUrl key={singleUrl} img={`url(${singleUrl})`} />
+                        ))}
+                    </ProjectRightInnerContainer>
                   </ProjectRightContainer>
                 </SingleProjectContainer>
               ))}

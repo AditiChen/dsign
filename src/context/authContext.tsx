@@ -24,7 +24,6 @@ import getProjects from "../utils/getProjects";
 type BodyProp = { children: React.ReactNode };
 
 interface UserProjectsType {
-  author: string;
   uid: string;
   mainUrl: string;
   projectId: string;

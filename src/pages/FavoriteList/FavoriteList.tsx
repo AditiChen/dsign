@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { doc, deleteDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+
 import { AuthContext } from "../../context/authContext";
 import { db } from "../../context/firebaseSDK";
 

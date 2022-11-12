@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { useRef, Dispatch, SetStateAction } from "react";
-
 import {
   GoogleMap,
   Marker,

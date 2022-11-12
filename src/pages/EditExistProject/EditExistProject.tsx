@@ -5,14 +5,16 @@ import { v4 as uuid } from "uuid";
 import { doc, setDoc } from "firebase/firestore";
 import ReactLoading from "react-loading";
 import { useNavigate } from "react-router-dom";
+
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
 import getSingleProject from "../../utils/getSingleProject";
 import getProjects from "../../utils/getProjects";
-
 import templatesImgArr from "../../components/Templates/TemplateImg";
 import templatesArr from "../../components/Templates/TemplatesArr";
-import closeIcon from "./close.png";
+
+import closeIcon from "../../icons/close-icon.png";
+import closeIconHover from "../../icons/close-icon-hover.png";
 
 interface Prop {
   img?: string;
@@ -85,6 +87,9 @@ const CloseIcon = styled.div`
   background-image: url(${closeIcon});
   background-size: cover;
   background-position: center;
+  &:hover {
+    background-image: url(${closeIconHover});
+  }
 `;
 
 const SelectContainer = styled.div`

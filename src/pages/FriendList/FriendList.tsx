@@ -21,11 +21,11 @@ import { FriendContext } from "../../context/friendContext";
 import { db } from "../../context/firebaseSDK";
 
 import Message from "../../components/Message/Message";
-import searchIcon from "./search-icon.png";
-import messageIcon from "./chat-icon.png";
-import messageIconHover from "./chat-icon-hover.png";
-import deleteIcon from "./delete-friend-icon.png";
-import deleteIconHover from "./delete-friend-icon-hover.png";
+import searchIcon from "../../icons/search-icon.png";
+import messageIcon from "../../icons/chat-icon.png";
+import messageIconHover from "../../icons/chat-icon-hover.png";
+import deleteIcon from "../../icons/delete-friend-icon.png";
+import deleteIconHover from "../../icons/delete-friend-icon-hover.png";
 
 interface Prop {
   size?: string;
