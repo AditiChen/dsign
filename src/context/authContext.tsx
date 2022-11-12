@@ -43,6 +43,8 @@ interface AuthContextType {
   name: string;
   email: string;
   avatar: string;
+  friendList: string[];
+  setFriendList: Dispatch<SetStateAction<string[]>>;
   singleProjectId: string;
   setSingleProjectId: Dispatch<SetStateAction<string>>;
   userProjects: UserProjectsType[];
@@ -61,6 +63,8 @@ export const AuthContext = createContext<AuthContextType>({
   name: "",
   email: "",
   avatar: "",
+  friendList: [],
+  setFriendList: () => {},
   userProjects: [],
   setUserProjects: () => {},
   singleProjectId: "",
@@ -81,6 +85,7 @@ export function AuthContextProvider({ children }: BodyProp) {
   const [avatar, setAvatar] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [friendList, setFriendList] = useState<string[]>([]);
   const [singleProjectId, setSingleProjectId] = useState("");
   const [userProjects, setUserProjects] = useState<UserProjectsType[]>([]);
 
@@ -103,6 +108,7 @@ export function AuthContextProvider({ children }: BodyProp) {
         setUserId(uid);
         setEmail(userEmail);
         setIsLogin(true);
+        setFriendList(data.friendList);
         const userProjectsData = await getProjects(uid);
         setUserProjects(userProjectsData);
       } else {
@@ -136,6 +142,7 @@ export function AuthContextProvider({ children }: BodyProp) {
       setName(data.name);
       setUserId(uid);
       setEmail(userEmail);
+      setFriendList(data.friendList);
       setIsLogin(true);
       const userProjectsData = await getProjects(uid);
       alert(t("login_successfully"));
@@ -259,6 +266,8 @@ export function AuthContextProvider({ children }: BodyProp) {
       name,
       email,
       avatar,
+      friendList,
+      setFriendList,
       signUp,
       emailSignInHandler,
       googleLoginHandler,
@@ -276,6 +285,8 @@ export function AuthContextProvider({ children }: BodyProp) {
       name,
       email,
       avatar,
+      friendList,
+      setFriendList,
       signUp,
       emailSignInHandler,
       googleLoginHandler,

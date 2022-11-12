@@ -1,19 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import { v4 as uuid } from "uuid";
-import {
-  collection,
-  getDocs,
-  query,
-  where,
-  orderBy,
-  limit,
-  startAfter,
-} from "firebase/firestore";
-import { db } from "../../context/firebaseSDK";
 
 import { AuthContext } from "../../context/authContext";
-import { FriendContext } from "../../context/friendContext";
+import getFriendsProjects from "../../utils/getFriendsProjects";
+import getOtherUsersProject from "../../utils/getOtherUsersProject";
 
 import likeIcon from "../../icons/like-icon.png";
 import likedIcon from "../../icons/liked-icon.png";
@@ -26,6 +16,8 @@ interface Prop {
 
 interface FetchedProjectsType {
   uid: string;
+  name?: string;
+  avatar?: string;
   mainUrl: string;
   projectId: string;
   title: string;
@@ -86,7 +78,7 @@ const SingleProjectContainer = styled.div`
 const ImgContainer = styled.div`
   width: 100%;
   height: 300px;
-  background-color: lightblue;
+  background-color: lightgray;
   background-image: ${(props: Prop) => props.img};
   background-size: cover;
   background-position: center;
@@ -105,6 +97,9 @@ const Avatar = styled.div`
   height: 36px;
   border-radius: 20px;
   border: 1px solid black;
+  background-image: ${(props: Prop) => props.img};
+  background-size: cover;
+  background-position: center;
 `;
 
 const Author = styled.div`
@@ -129,52 +124,31 @@ const LikeIcon = styled(LikedIcon)`
 `;
 
 function PortfolioBricks() {
-  const { userId } = useContext(AuthContext);
+  const { userId, friendList } = useContext(AuthContext);
   const [isLike, setIsLike] = useState(false);
-  const [prokects, setProjects] = useState<FetchedProjectsType[]>([]);
+  const [projects, setProjects] = useState<FetchedProjectsType[]>([]);
+  console.log("projects1111", projects);
 
   useEffect(() => {
+    setProjects([]);
     async function getProjects() {
-      const usersRef = collection(db, "projects");
-      const firstQuery = query(usersRef, orderBy("time"), limit(5));
-      const querySnapshot = await getDocs(firstQuery);
-      const fetchedProjects: FetchedProjectsType[] = [];
-      querySnapshot.forEach((doc) => {
-        fetchedProjects.push({
-          projectId: doc.id,
-          uid: doc.data().uid,
-          mainUrl: doc.data().mainUrl,
-          title: doc.data().title,
-          time: doc.data().time,
-          pages: doc.data().pages,
-        });
-      });
-      setProjects(fetchedProjects);
-      console.log("fetchedProjects", fetchedProjects);
-      const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
-      const nextQuery = query(
-        collection(db, "projects"),
-        orderBy("time"),
-        startAfter(lastVisible),
-        limit(5)
-      );
-      const nextQuerySnapshot = await getDocs(nextQuery);
-      const nextFetchedProjects: FetchedProjectsType[] = [];
-      nextQuerySnapshot.forEach((doc) => {
-        nextFetchedProjects.push({
-          projectId: doc.id,
-          uid: doc.data().uid,
-          mainUrl: doc.data().mainUrl,
-          title: doc.data().title,
-          time: doc.data().time,
-          pages: doc.data().pages,
-        });
-      });
-
-      console.log("next", nextFetchedProjects);
+      const friendProjectsData = await getFriendsProjects(userId, friendList);
+      console.log("friendProjectsData", friendProjectsData);
+      setProjects(friendProjectsData);
+      if (friendProjectsData.length < 50) {
+        const otherUsersProjectsData = await getOtherUsersProject(
+          userId,
+          friendList
+        );
+        setProjects([...friendProjectsData, ...otherUsersProjectsData]);
+      }
     }
     getProjects();
-  }, []);
+  }, [userId]);
+
+  // const getInfo = projects.map((project) =>
+  //   friendDataList.findIndex((user) => user.uid === project.uid)
+  // );
 
   function likeProjectHandler() {
     console.log("like");
@@ -186,12 +160,12 @@ function PortfolioBricks() {
         <Text>Banner</Text>
       </BannerContainer>
       <BricksContainer>
-        {prokects.map((project) => (
-          <SingleProjectContainer key={uuid()}>
+        {projects.map((project) => (
+          <SingleProjectContainer key={project.projectId}>
             <ImgContainer img={`url(${project.mainUrl})`} />
             <InfoContainer>
-              <Avatar />
-              <Author>Orange</Author>
+              <Avatar img={`url(${project.avatar})`} />
+              <Author>{project.name}</Author>
               {isLike ? (
                 <LikedIcon />
               ) : (
