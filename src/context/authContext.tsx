@@ -108,10 +108,15 @@ export function AuthContextProvider({ children }: BodyProp) {
     const unsubscribe = onAuthStateChanged(auth, async (user: any) => {
       if (user) {
         const { uid } = user;
-        const userEmail = user.email;
         const docSnap = await getDoc(doc(db, "users", uid));
         const data = docSnap.data() as UserDataType;
-
+        setUserId(uid);
+        setAvatar(data.avatar);
+        setName(data.name);
+        setEmail(data.email);
+        setIsLogin(true);
+        setFriendList(data.friendList);
+        setFavoriteList(data.favoriteList);
         const userProjectsData = await getProjects(uid);
         setUserProjects(userProjectsData);
       } else {

@@ -25,19 +25,16 @@ interface FetchedProjectsType {
   }[];
 }
 
-export default async function getFriendsProjects(
-  userId: string,
-  friendList: string[]
-) {
+export default async function getFavoriteProjects(favoriteList: string[]) {
   const usersRef = collection(db, "projects");
   const firstFriendQuery = query(
     usersRef,
-    where("uid", "in", [userId, ...friendList])
+    where("projectId", "in", favoriteList)
   );
-  const firstFriendquerySnapshot = await getDocs(firstFriendQuery);
-  const firstFriendFetchedProjects: FetchedProjectsType[] = [];
-  firstFriendquerySnapshot.forEach((project) => {
-    firstFriendFetchedProjects.unshift({
+  const querySnapshot = await getDocs(firstFriendQuery);
+  const fetchedProjects: FetchedProjectsType[] = [];
+  querySnapshot.forEach((project) => {
+    fetchedProjects.unshift({
       name: "",
       avatar: "",
       projectId: project.id,
@@ -48,15 +45,14 @@ export default async function getFriendsProjects(
       pages: project.data().pages,
     });
   });
-  firstFriendFetchedProjects.map(async (project, index) => {
+  fetchedProjects.map(async (project, index) => {
     const docSnap = await getDoc(doc(db, "users", project.uid));
     const { name, avatar } = docSnap.data() as {
       name: string;
       avatar: string;
     };
-    firstFriendFetchedProjects[index].name = name;
-    firstFriendFetchedProjects[index].avatar = avatar;
+    fetchedProjects[index].name = name;
+    fetchedProjects[index].avatar = avatar;
   });
-
-  return firstFriendFetchedProjects;
+  return fetchedProjects;
 }

@@ -1,12 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import { db } from "../../context/firebaseSDK";
 
 import { AuthContext } from "../../context/authContext";
-import getFriendsProjects from "../../utils/getFriendsProjects";
-import getOtherUsersProject from "../../utils/getOtherUsersProject";
+import getFavoriteProjects from "../../utils/getFavoriteProjects";
 
 import likeIcon from "../../icons/like-icon.png";
 import likedIcon from "../../icons/liked-icon.png";
@@ -46,7 +45,6 @@ const Wrapper = styled.div`
 
 const Text = styled.div`
   padding: 50px;
-  color: white;
   font-size: 50px;
   text-align: center;
 `;
@@ -119,22 +117,15 @@ const LikeIcon = styled(LikedIcon)`
 
 function FavoriteList() {
   const navigate = useNavigate();
-  const { userId, friendList, setSingleProjectId } = useContext(AuthContext);
-  const [isLike, setIsLike] = useState(false);
+  const { userId, setSingleProjectId, favoriteList } = useContext(AuthContext);
   const [projects, setProjects] = useState<FetchedProjectsType[]>([]);
   console.log("projects", projects);
+
   useEffect(() => {
     setProjects([]);
     async function getProjects() {
-      const friendProjectsData = await getFriendsProjects(userId, friendList);
-      setProjects(friendProjectsData);
-      if (friendProjectsData.length < 50) {
-        const otherUsersProjectsData = await getOtherUsersProject(
-          userId,
-          friendList
-        );
-        setProjects([...friendProjectsData, ...otherUsersProjectsData]);
-      }
+      const favoriteProjectsData = await getFavoriteProjects(favoriteList);
+      setProjects(favoriteProjectsData);
     }
     getProjects();
   }, [userId]);
@@ -143,7 +134,12 @@ function FavoriteList() {
     await updateDoc(doc(db, "users", userId), {
       favoriteList: arrayUnion(projectId),
     });
-    console.log("like");
+  }
+
+  async function dislikeProjectHandler(projectId: string) {
+    await updateDoc(doc(db, "users", userId), {
+      favoriteList: arrayRemove(projectId),
+    });
   }
 
   function toSingleProjectPage(projectId: string) {
@@ -154,7 +150,6 @@ function FavoriteList() {
   return (
     <Wrapper>
       <Text>Favorite List</Text>
-
       <BricksContainer>
         {projects.map((project) => (
           <SingleProjectContainer key={project.projectId}>
@@ -165,11 +160,13 @@ function FavoriteList() {
             <InfoContainer>
               <Avatar img={`url(${project.avatar})`} />
               <Author>{project.name}</Author>
-              {isLike ? (
-                <LikedIcon />
-              ) : (
+              {favoriteList.indexOf(project.projectId) === -1 ? (
                 <LikeIcon
                   onClick={() => likeProjectHandler(project.projectId)}
+                />
+              ) : (
+                <LikedIcon
+                  onClick={() => dislikeProjectHandler(project.projectId)}
                 />
               )}
             </InfoContainer>

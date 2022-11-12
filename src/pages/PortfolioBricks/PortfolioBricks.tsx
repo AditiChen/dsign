@@ -149,14 +149,12 @@ function PortfolioBricks() {
     await updateDoc(doc(db, "users", userId), {
       favoriteList: arrayUnion(projectId),
     });
-    console.log("like");
   }
 
   async function dislikeProjectHandler(projectId: string) {
     await updateDoc(doc(db, "users", userId), {
       favoriteList: arrayRemove(projectId),
     });
-    console.log("dislike");
   }
 
   function toSingleProjectPage(projectId: string) {
