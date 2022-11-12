@@ -52,6 +52,7 @@ const Context = styled.textarea`
   line-height: 30px;
   background-color: transparent;
   border: none;
+  resize: none;
   &::placeholder {
     color: #b4b4b4;
   }

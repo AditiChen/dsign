@@ -39,7 +39,7 @@ export default async function getOtherUsersProject(
   const otherUserQuerySnapshot = await getDocs(otherUserQuery);
   const otherUserFetchedProjects: FetchedProjectsType[] = [];
   otherUserQuerySnapshot.forEach((project) => {
-    otherUserFetchedProjects.push({
+    otherUserFetchedProjects.unshift({
       name: "",
       avatar: "",
       projectId: project.id,

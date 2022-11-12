@@ -38,7 +38,7 @@ export default async function getFriendsProjects(
   const firstFriendquerySnapshot = await getDocs(firstFriendQuery);
   const firstFriendFetchedProjects: FetchedProjectsType[] = [];
   firstFriendquerySnapshot.forEach((project) => {
-    firstFriendFetchedProjects.push({
+    firstFriendFetchedProjects.unshift({
       name: "",
       avatar: "",
       projectId: project.id,

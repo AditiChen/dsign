@@ -1,5 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+import { db } from "../../context/firebaseSDK";
 
 import { AuthContext } from "../../context/authContext";
 import getFriendsProjects from "../../utils/getFriendsProjects";
@@ -65,14 +68,13 @@ const BricksContainer = styled.div`
   grid-gap: 20px;
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: minmax(4, auto);
-  border: 1px solid black;
 `;
 
 const SingleProjectContainer = styled.div`
   margin: 0 auto 5px auto;
   width: 300px;
   height: 350px;
-  border: 1px solid black;
+  border: 1px solid #787878;
 `;
 
 const ImgContainer = styled.div`
@@ -96,7 +98,6 @@ const Avatar = styled.div`
   width: 36px;
   height: 36px;
   border-radius: 20px;
-  border: 1px solid black;
   background-image: ${(props: Prop) => props.img};
   background-size: cover;
   background-position: center;
@@ -124,16 +125,14 @@ const LikeIcon = styled(LikedIcon)`
 `;
 
 function PortfolioBricks() {
-  const { userId, friendList } = useContext(AuthContext);
-  const [isLike, setIsLike] = useState(false);
+  const navigate = useNavigate();
+  const { userId, friendList, setSingleProjectId, favoriteList } =
+    useContext(AuthContext);
   const [projects, setProjects] = useState<FetchedProjectsType[]>([]);
-  console.log("projects1111", projects);
-
   useEffect(() => {
     setProjects([]);
     async function getProjects() {
       const friendProjectsData = await getFriendsProjects(userId, friendList);
-      console.log("friendProjectsData", friendProjectsData);
       setProjects(friendProjectsData);
       if (friendProjectsData.length < 50) {
         const otherUsersProjectsData = await getOtherUsersProject(
@@ -146,12 +145,23 @@ function PortfolioBricks() {
     getProjects();
   }, [userId]);
 
-  // const getInfo = projects.map((project) =>
-  //   friendDataList.findIndex((user) => user.uid === project.uid)
-  // );
-
-  function likeProjectHandler() {
+  async function likeProjectHandler(projectId: string) {
+    await updateDoc(doc(db, "users", userId), {
+      favoriteList: arrayUnion(projectId),
+    });
     console.log("like");
+  }
+
+  async function dislikeProjectHandler(projectId: string) {
+    await updateDoc(doc(db, "users", userId), {
+      favoriteList: arrayRemove(projectId),
+    });
+    console.log("dislike");
+  }
+
+  function toSingleProjectPage(projectId: string) {
+    setSingleProjectId(projectId);
+    navigate("/singleProject");
   }
 
   return (
@@ -162,14 +172,21 @@ function PortfolioBricks() {
       <BricksContainer>
         {projects.map((project) => (
           <SingleProjectContainer key={project.projectId}>
-            <ImgContainer img={`url(${project.mainUrl})`} />
+            <ImgContainer
+              img={`url(${project.mainUrl})`}
+              onClick={() => toSingleProjectPage(project.projectId)}
+            />
             <InfoContainer>
               <Avatar img={`url(${project.avatar})`} />
               <Author>{project.name}</Author>
-              {isLike ? (
-                <LikedIcon />
+              {favoriteList.indexOf(project.projectId) === -1 ? (
+                <LikeIcon
+                  onClick={() => likeProjectHandler(project.projectId)}
+                />
               ) : (
-                <LikeIcon onClick={() => likeProjectHandler()} />
+                <LikedIcon
+                  onClick={() => dislikeProjectHandler(project.projectId)}
+                />
               )}
             </InfoContainer>
           </SingleProjectContainer>

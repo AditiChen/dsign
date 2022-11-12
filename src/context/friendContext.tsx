@@ -50,7 +50,7 @@ export const FriendContext = createContext<FriendContextType>({
 });
 
 export function FriendContextProvider({ children }: BodyProp) {
-  const { userId, avatar, name } = useContext(AuthContext);
+  const { userId, friendList } = useContext(AuthContext);
   const [clickedUserId, setClickedUserId] = useState("");
   const [friendRequests, setFriendRequests] = useState<FriendData[]>([]);
   const [friendDataList, setFriendDataList] = useState<FriendData[]>([]);
@@ -83,7 +83,6 @@ export function FriendContextProvider({ children }: BodyProp) {
     if (userId === "") return undefined;
     setFriendDataList([]);
     const unsub = onSnapshot(doc(db, "users", userId), async (returnedDoc) => {
-      const { friendList } = returnedDoc.data() as { friendList: string[] };
       const result = friendList?.map(async (id: string) => {
         const docSnap = await getDoc(doc(db, "users", id));
         const data = docSnap.data() as FriendData;
