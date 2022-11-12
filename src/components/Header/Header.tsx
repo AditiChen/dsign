@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
 import { AuthContext } from "../../context/authContext";
 import { FriendContext } from "../../context/friendContext";
 

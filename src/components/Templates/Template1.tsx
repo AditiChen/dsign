@@ -3,11 +3,12 @@ import { t } from "i18next";
 import { v4 as uuid } from "uuid";
 import { useState, Dispatch, SetStateAction, useEffect } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+
 import { storage } from "../../context/firebaseSDK";
 import Overlay from "../../overlay";
 
 import trapezoid from "./template2_trapezoid.png";
-import uploadPhotoIcon from "./uploadPhoto.png";
+import uploadPhotoIcon from "../../icons/uploadPhoto-icon.png";
 
 interface Prop {
   url?: string;

@@ -4,6 +4,7 @@ import { doc, getDoc } from "firebase/firestore";
 import ReactLoading from "react-loading";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+
 import { db } from "../../context/firebaseSDK";
 import getProjects from "../../utils/getProjects";
 import { AuthContext } from "../../context/authContext";

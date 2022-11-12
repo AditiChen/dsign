@@ -16,15 +16,22 @@ import {
   FacebookAuthProvider,
 } from "firebase/auth";
 import { useTranslation } from "react-i18next";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, onSnapshot } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { db, auth } from "./firebaseSDK";
 import getProjects from "../utils/getProjects";
 
 type BodyProp = { children: React.ReactNode };
 
+interface UserDataType {
+  uid: string;
+  name: string;
+  email: string;
+  avatar: string;
+  friendList: string[];
+  favoriteList: string[];
+}
 interface UserProjectsType {
-  author: string;
   uid: string;
   mainUrl: string;
   projectId: string;
@@ -37,6 +44,7 @@ interface UserProjectsType {
     location?: { lat?: number; lng?: number };
   }[];
 }
+
 interface AuthContextType {
   isLogin: boolean;
   isLoading: boolean;
@@ -44,6 +52,10 @@ interface AuthContextType {
   name: string;
   email: string;
   avatar: string;
+  friendList: string[];
+  setFriendList: Dispatch<SetStateAction<string[]>>;
+  favoriteList: string[];
+  setFavoriteList: Dispatch<SetStateAction<string[]>>;
   singleProjectId: string;
   setSingleProjectId: Dispatch<SetStateAction<string>>;
   userProjects: UserProjectsType[];
@@ -62,6 +74,10 @@ export const AuthContext = createContext<AuthContextType>({
   name: "",
   email: "",
   avatar: "",
+  friendList: [],
+  setFriendList: () => {},
+  favoriteList: [],
+  setFavoriteList: () => {},
   userProjects: [],
   setUserProjects: () => {},
   singleProjectId: "",
@@ -82,6 +98,8 @@ export function AuthContextProvider({ children }: BodyProp) {
   const [avatar, setAvatar] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [friendList, setFriendList] = useState<string[]>([]);
+  const [favoriteList, setFavoriteList] = useState<string[]>([]);
   const [singleProjectId, setSingleProjectId] = useState("");
   const [userProjects, setUserProjects] = useState<UserProjectsType[]>([]);
 
@@ -90,20 +108,15 @@ export function AuthContextProvider({ children }: BodyProp) {
     const unsubscribe = onAuthStateChanged(auth, async (user: any) => {
       if (user) {
         const { uid } = user;
-        const userEmail = user.email;
         const docSnap = await getDoc(doc(db, "users", uid));
-        const data = docSnap.data() as {
-          uid: string;
-          name: string;
-          avatar: string;
-          email: string;
-          friendList: string[];
-        };
+        const data = docSnap.data() as UserDataType;
+        setUserId(uid);
         setAvatar(data.avatar);
         setName(data.name);
-        setUserId(uid);
-        setEmail(userEmail);
+        setEmail(data.email);
         setIsLogin(true);
+        setFriendList(data.friendList);
+        setFavoriteList(data.favoriteList);
         const userProjectsData = await getProjects(uid);
         setUserProjects(userProjectsData);
       } else {
@@ -113,6 +126,22 @@ export function AuthContextProvider({ children }: BodyProp) {
     setIsLoading(false);
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (userId === "") return undefined;
+    const unsub = onSnapshot(doc(db, "users", userId), async (returnedDoc) => {
+      const data = returnedDoc.data() as UserDataType;
+      setAvatar(data.avatar);
+      setName(data.name);
+      setEmail(data.email);
+      setIsLogin(true);
+      setFriendList(data.friendList);
+      setFavoriteList(data.favoriteList);
+    });
+    return () => {
+      unsub();
+    };
+  }, [userId]);
 
   const emailSignInHandler = async (insertEmail: string, password: string) => {
     setIsLoading(true);
@@ -132,12 +161,11 @@ export function AuthContextProvider({ children }: BodyProp) {
         avatar: string;
         email: string;
         friendList: string[];
+        favoriteList: string[];
       };
-      setAvatar(data.avatar);
-      setName(data.name);
+
       setUserId(uid);
-      setEmail(userEmail);
-      setIsLogin(true);
+
       const userProjectsData = await getProjects(uid);
       alert(t("login_successfully"));
       setUserProjects(userProjectsData);
@@ -163,7 +191,6 @@ export function AuthContextProvider({ children }: BodyProp) {
       );
       const { user }: any = UserCredentialImpl;
       const { uid } = user;
-      const userEmail = user.reloadUserInfo.email;
       const newName = insertName.replace(/\s/g, "");
       await setDoc(doc(db, "users", uid), {
         uid,
@@ -173,12 +200,9 @@ export function AuthContextProvider({ children }: BodyProp) {
         friendList: [],
         favoriteList: [],
       });
-      alert(t("sign_up_successfully"));
       setUserId(uid);
-      setEmail(userEmail);
-      setName(insertName);
-      setAvatar(`https://source.boringavatars.com/marble/180/${newName}`);
       setIsLogin(true);
+      alert(t("sign_up_successfully"));
       navigate("/profile");
     } catch (e) {
       alert(t("sign_up_failed"));
@@ -204,9 +228,6 @@ export function AuthContextProvider({ children }: BodyProp) {
     });
     if (!gmail || !photoURL || !displayName) return;
     setUserId(uid);
-    setEmail(gmail);
-    setName(displayName);
-    setAvatar(photoURL);
     setIsLogin(true);
     setIsLoading(false);
     const userProjectsData = await getProjects(uid);
@@ -231,9 +252,6 @@ export function AuthContextProvider({ children }: BodyProp) {
     });
     if (!fbMmail || !photoURL || !displayName) return;
     setUserId(uid);
-    setName(displayName);
-    setEmail(fbMmail);
-    setAvatar(photoURL);
     setIsLogin(true);
     setIsLoading(false);
     const userProjectsData = await getProjects(uid);
@@ -260,6 +278,10 @@ export function AuthContextProvider({ children }: BodyProp) {
       name,
       email,
       avatar,
+      friendList,
+      setFriendList,
+      favoriteList,
+      setFavoriteList,
       signUp,
       emailSignInHandler,
       googleLoginHandler,
@@ -277,6 +299,10 @@ export function AuthContextProvider({ children }: BodyProp) {
       name,
       email,
       avatar,
+      friendList,
+      setFriendList,
+      favoriteList,
+      setFavoriteList,
       signUp,
       emailSignInHandler,
       googleLoginHandler,

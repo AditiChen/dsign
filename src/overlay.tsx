@@ -10,8 +10,10 @@ import { createPortal } from "react-dom";
 import styled from "styled-components";
 import Cropper from "react-easy-crop";
 import { Slider, Typography } from "@mui/material";
+
 import getCroppedImg from "./utils/cropImage";
-import closeIcon from "./pages/CreateNewProject/close.png";
+import closeIcon from "./icons/close-icon.png";
+import closeIconHover from "./icons/close-icon-hover.png";
 
 interface OverlayProps {
   setShowOverlay: Dispatch<SetStateAction<boolean>>;
@@ -48,6 +50,9 @@ const CloseIcon = styled.div`
   background-image: url(${closeIcon});
   background-size: cover;
   background-position: center;
+  &:hover {
+    background-image: url(${closeIconHover});
+  }
 `;
 
 const OverlayModal = styled.div`
