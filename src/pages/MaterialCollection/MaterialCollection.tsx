@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import ReactLoading from "react-loading";
 import { v4 as uuid } from "uuid";
 import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -84,6 +85,10 @@ const ImgContainer = styled.div`
   position: relative;
 `;
 
+const Loading = styled(ReactLoading)`
+  margin: 100px;
+`;
+
 const Img = styled.div`
   width: 240px;
   height: 240px;
@@ -114,6 +119,8 @@ function MaterialCollection() {
   const { userId, collection } = useContext(AuthContext);
   const [showOverlay, setShowOverlay] = useState(false);
   const [currentUrl, setCurrentUrl] = useState("");
+  const [isuploading, setIsuploading] = useState(false);
+  const [progressing, setProgressing] = useState(100);
 
   const onUploadImgFiles = (files: File[]) => {
     const newFiles = [...files];
@@ -127,6 +134,7 @@ function MaterialCollection() {
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setProgressing(progress);
         },
         (error) => {},
         async () => {
@@ -182,6 +190,13 @@ function MaterialCollection() {
                 <TrashIcon onClick={() => deleteHandler(url)} />
               </ImgContainer>
             ))}
+          {progressing === 100 ? (
+            ""
+          ) : (
+            <ImgContainer>
+              <Loading type="spin" color="#3c3c3c" height="40px" width="40px" />
+            </ImgContainer>
+          )}
         </BricksContainer>
       </Wrapper>
       {showOverlay && (
