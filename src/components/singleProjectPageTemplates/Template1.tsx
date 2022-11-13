@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import { t } from "i18next";
 
-import trapezoid from "./template2_trapezoid.png";
+import trapezoid from "./template1_trapezoid.png";
 
 interface Prop {
   border?: string;
@@ -50,8 +49,8 @@ const Context = styled.textarea`
   height: 180px;
   width: 270px;
   color: #ffffff;
-  font-size: 24px;
-  line-height: 30px;
+  font-size: 20px;
+  line-height: 24px;
   position: absolute;
   right: 50px;
   bottom: 280px;
