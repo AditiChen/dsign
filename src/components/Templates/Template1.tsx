@@ -9,13 +9,13 @@ import {
   useContext,
 } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 
 import { AuthContext } from "../../context/authContext";
 import { db, storage } from "../../context/firebaseSDK";
 import Overlay from "../../overlay";
 
-import trapezoid from "./template2_trapezoid.png";
+import trapezoid from "./template1_trapezoid.png";
 import uploadPhotoIcon from "../../icons/uploadPhoto-icon.png";
 
 interface Prop {
@@ -80,8 +80,8 @@ const Context = styled.textarea`
   height: 180px;
   width: 270px;
   color: #ffffff;
-  font-size: 24px;
-  line-height: 30px;
+  font-size: 20px;
+  line-height: 24px;
   position: absolute;
   right: 50px;
   bottom: 280px;

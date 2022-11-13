@@ -9,11 +9,10 @@ import {
   useContext,
 } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 
 import { AuthContext } from "../../context/authContext";
 import { db, storage } from "../../context/firebaseSDK";
-// import upLoadImgToCloudStorage from "../../utils/upLoadImgToCloudStorage";
 import Overlay from "../../overlay";
 
 import uploadPhotoIcon from "../../icons/uploadPhoto-icon.png";
@@ -79,8 +78,8 @@ const Context = styled.textarea`
   width: 100%;
   height: 100%;
   color: #ffffff;
-  font-size: 24px;
-  line-height: 30px;
+  font-size: 20px;
+  line-height: 24px;
   background-color: transparent;
   border: 1px solid #b4b4b4;
   resize: none;
