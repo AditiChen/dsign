@@ -1,5 +1,6 @@
 {
   "favorite_list": "コレクション",
+  "collection_list": "収集",
   "create": "新規プロジェクト",
   "languages": "言語",
 
@@ -24,6 +25,7 @@
   "logout_confirm": "ログアウトしますか？",
   "logout_successfully": "ログアウト成功！",
 
+  "upload_main_photo": "表紙写真のアップロード",
   "insert_location": "アドレスを入力",
   "confirm_location": "場所を確認する",
   "type_content": "ここにコンテンツを入力...",

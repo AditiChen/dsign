@@ -13,6 +13,7 @@ import FavoriteList from "./pages/FavoriteList/FavoriteList";
 import SingleProject from "./pages/SingleProject/SingleProject";
 import CreateNewProject from "./pages/CreateNewProject/CreateNewProject";
 import EditExistProject from "./pages/EditExistProject/EditExistProject";
+import MaterialCollection from "./pages/MaterialCollection/MaterialCollection";
 import Login from "./pages/Login/Login";
 
 const root = ReactDOM.createRoot(
@@ -31,6 +32,7 @@ root.render(
         <Route path="friendList" element={<FriendList />} />
         <Route path="userProfile" element={<OtherUserProfile />} />
         <Route path="favoriteList" element={<FavoriteList />} />
+        <Route path="collection" element={<MaterialCollection />} />
         <Route path="login" element={<Login />} />
         <Route path="*" element={<Navigate to="profile" replace />} />
       </Route>

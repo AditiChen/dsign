@@ -1,5 +1,6 @@
 {
   "favorite_list": "Liste des favoris",
+  "collection_list": "Collection",
   "create": "Créer",
   "languages": "Langues",
 
@@ -24,6 +25,7 @@
   "logout_confirm": "Êtes-vous sûr de vouloir vous déconnecter ?",
   "logout_successfully": "Déconnexion réussie!",
 
+  "upload_main_photo": "Télécharger la photo de couverture",
   "insert_location": "Enter the address",
   "confirm_location": "Saisissez l'adresse",
   "type_content": "Tapez le contenu ici...",

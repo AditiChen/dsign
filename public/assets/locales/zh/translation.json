@@ -1,5 +1,6 @@
 {
   "favorite_list": "收藏列表",
+  "collection_list": "素材庫",
   "create": "建立新專案",
   "languages": "語言",
 
@@ -24,6 +25,7 @@
   "logout_confirm": "確定要登出嗎？",
   "logout_successfully": "登出成功！",
 
+  "upload_main_photo": "上傳封面照片",
   "insert_location": "輸入地點",
   "confirm_location": "確認地點",
   "type_content": "請輸入內容...",

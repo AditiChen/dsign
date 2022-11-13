@@ -255,8 +255,8 @@ function CreateNewProject() {
   ): void => {
     if (e.target.files && e.target.files.length > 0) {
       const file: File = e.target.files[0];
-      const urlByUuid = uuid();
-      const imgRef = ref(storage, `images/${urlByUuid}`);
+      const urlByTime = `${+new Date()}`;
+      const imgRef = ref(storage, `images/${userId}/${urlByTime}`);
       const uploadTask = uploadBytesResumable(imgRef, file);
       uploadTask.on(
         "state_changed",
@@ -333,7 +333,7 @@ function CreateNewProject() {
                 onChange={(e) => setTitle(e.target.value)}
               />
               <UploadPic onChange={(e: any) => onUploadMainImgFile(e)}>
-                upload main photo
+                {t("upload_main_photo")}
                 <input
                   type="file"
                   accept="image/*"

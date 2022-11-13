@@ -119,7 +119,6 @@ function FavoriteList() {
   const navigate = useNavigate();
   const { userId, setSingleProjectId, favoriteList } = useContext(AuthContext);
   const [projects, setProjects] = useState<FetchedProjectsType[]>([]);
-  console.log("projects", projects);
 
   useEffect(() => {
     setProjects([]);
@@ -128,7 +127,7 @@ function FavoriteList() {
       setProjects(favoriteProjectsData);
     }
     getProjects();
-  }, [userId]);
+  }, [userId, favoriteList]);
 
   async function likeProjectHandler(projectId: string) {
     await updateDoc(doc(db, "users", userId), {

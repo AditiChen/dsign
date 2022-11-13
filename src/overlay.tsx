@@ -29,7 +29,7 @@ const Wrapper = styled.div`
   position: fixed;
   display: flex;
   align-items: center;
-  z-index: 800;
+  z-index: 100;
 `;
 
 const Backdrop = styled.div`
@@ -37,7 +37,7 @@ const Backdrop = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: #00000030;
-  z-index: 801;
+  z-index: 101;
 `;
 
 const CloseIcon = styled.div`
@@ -68,7 +68,7 @@ const OverlayModal = styled.div`
   flex-direction: column;
   align-items: center;
   transform: translate(-50%, -50%);
-  z-index: 802;
+  z-index: 102;
   background-color: white;
 `;
 

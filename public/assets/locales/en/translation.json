@@ -1,5 +1,6 @@
 {
   "favorite_list": "Favorite List",
+  "collection_list": "Collection",
   "create": "Create",
   "languages": "Languages",
 
@@ -24,6 +25,7 @@
   "logout_confirm": "Are you sure that you want to logout?",
   "logout_successfully": "Logout successfully!",
 
+  "upload_main_photo": "Upload cover photo",
   "insert_location": "Enter the address",
   "confirm_location": "Confirm Location",
   "type_content": "Type content here...",
