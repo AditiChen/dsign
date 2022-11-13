@@ -167,6 +167,9 @@ function Header() {
             >
               {t("favorite_list")}
             </Context>
+            <Context to="collection" onClick={() => setShowMessageFrame(false)}>
+              {t("collection_list")}
+            </Context>
           </>
         ) : (
           ""

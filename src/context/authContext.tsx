@@ -30,6 +30,7 @@ interface UserDataType {
   avatar: string;
   friendList: string[];
   favoriteList: string[];
+  collection: string[];
 }
 interface UserProjectsType {
   uid: string;
@@ -56,6 +57,8 @@ interface AuthContextType {
   setFriendList: Dispatch<SetStateAction<string[]>>;
   favoriteList: string[];
   setFavoriteList: Dispatch<SetStateAction<string[]>>;
+  collection: string[];
+  setCollection: Dispatch<SetStateAction<string[]>>;
   singleProjectId: string;
   setSingleProjectId: Dispatch<SetStateAction<string>>;
   userProjects: UserProjectsType[];
@@ -80,6 +83,8 @@ export const AuthContext = createContext<AuthContextType>({
   setFavoriteList: () => {},
   userProjects: [],
   setUserProjects: () => {},
+  collection: [],
+  setCollection: () => {},
   singleProjectId: "",
   setSingleProjectId: () => {},
   emailSignInHandler: () => {},
@@ -100,6 +105,7 @@ export function AuthContextProvider({ children }: BodyProp) {
   const [email, setEmail] = useState("");
   const [friendList, setFriendList] = useState<string[]>([]);
   const [favoriteList, setFavoriteList] = useState<string[]>([]);
+  const [collection, setCollection] = useState<string[]>([]);
   const [singleProjectId, setSingleProjectId] = useState("");
   const [userProjects, setUserProjects] = useState<UserProjectsType[]>([]);
 
@@ -117,6 +123,7 @@ export function AuthContextProvider({ children }: BodyProp) {
         setIsLogin(true);
         setFriendList(data.friendList);
         setFavoriteList(data.favoriteList);
+        setCollection(data.collection);
         const userProjectsData = await getProjects(uid);
         setUserProjects(userProjectsData);
       } else {
@@ -137,6 +144,7 @@ export function AuthContextProvider({ children }: BodyProp) {
       setIsLogin(true);
       setFriendList(data.friendList);
       setFavoriteList(data.favoriteList);
+      setCollection(data.collection);
     });
     return () => {
       unsub();
@@ -162,10 +170,10 @@ export function AuthContextProvider({ children }: BodyProp) {
         email: string;
         friendList: string[];
         favoriteList: string[];
+        collection: string[];
       };
 
       setUserId(uid);
-
       const userProjectsData = await getProjects(uid);
       alert(t("login_successfully"));
       setUserProjects(userProjectsData);
@@ -199,6 +207,7 @@ export function AuthContextProvider({ children }: BodyProp) {
         avatar: `https://source.boringavatars.com/marble/180/${newName}`,
         friendList: [],
         favoriteList: [],
+        collection: [],
       });
       setUserId(uid);
       setIsLogin(true);
@@ -225,6 +234,7 @@ export function AuthContextProvider({ children }: BodyProp) {
       avatar: photoURL,
       friendList: [],
       favoriteList: [],
+      collection: [],
     });
     if (!gmail || !photoURL || !displayName) return;
     setUserId(uid);
@@ -249,6 +259,7 @@ export function AuthContextProvider({ children }: BodyProp) {
       avatar: photoURL,
       friendList: [],
       favoriteList: [],
+      collection: [],
     });
     if (!fbMmail || !photoURL || !displayName) return;
     setUserId(uid);
@@ -282,6 +293,8 @@ export function AuthContextProvider({ children }: BodyProp) {
       setFriendList,
       favoriteList,
       setFavoriteList,
+      collection,
+      setCollection,
       signUp,
       emailSignInHandler,
       googleLoginHandler,
@@ -303,6 +316,8 @@ export function AuthContextProvider({ children }: BodyProp) {
       setFriendList,
       favoriteList,
       setFavoriteList,
+      collection,
+      setCollection,
       signUp,
       emailSignInHandler,
       googleLoginHandler,

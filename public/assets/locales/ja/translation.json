@@ -1,5 +1,6 @@
 {
   "favorite_list": "コレクション",
+  "collection_list": "収集",
   "create": "新規プロジェクト",
   "languages": "言語",
 
@@ -24,9 +25,11 @@
   "logout_confirm": "ログアウトしますか？",
   "logout_successfully": "ログアウト成功！",
 
+  "upload_main_photo": "表紙写真のアップロード",
   "insert_location": "アドレスを入力",
   "confirm_location": "場所を確認する",
   "type_content": "ここにコンテンツを入力...",
+  "choose_photo": "コレクションから写真を選ぶか",
   "upload_image": "画像のアップロード",
   "change_image": "描き替える",
   "zoom_image": "ズーム",
@@ -58,5 +61,8 @@
   "be_friend": "あなたは友達です",
   "friend_list": "友人一覧",
   "confirm_remove": "本当にこの友人を削除してもいいのでしょうか？",
-  "delete_successfully": "あぼん"
+  "delete_successfully": "あぼん",
+
+  "your_collection": "あなたの収集",
+  "delete_photo_warning": "本当にこの写真を削除してもいいのでしょうか？"
 }

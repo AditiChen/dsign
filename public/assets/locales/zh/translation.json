@@ -1,5 +1,6 @@
 {
   "favorite_list": "收藏列表",
+  "collection_list": "素材庫",
   "create": "建立新專案",
   "languages": "語言",
 
@@ -24,9 +25,11 @@
   "logout_confirm": "確定要登出嗎？",
   "logout_successfully": "登出成功！",
 
+  "upload_main_photo": "上傳封面照片",
   "insert_location": "輸入地點",
   "confirm_location": "確認地點",
   "type_content": "請輸入內容...",
+  "choose_photo": "從收藏庫挑選圖片或",
   "upload_image": "上傳圖片",
   "change_image": "重新選擇圖片",
   "zoom_image": "放大",
@@ -43,20 +46,23 @@
   "view_project_detail": "詳細內容",
   "edit_again": "編輯專案",
   "delete_project": "刪除專案",
-  "delete_project_warning": "你確定要刪除這個專案嗎?",
+  "delete_project_warning": "確定要刪除這個專案嗎?",
 
   "request_list": "好友申請",
   "search_friend": "搜尋",
   "send_friend_request": "加好友",
   "already_friend": "你們已經是好友了！",
   "user_not_found": "找不到使用者",
-  "already_sent_request": "你已經送過申請了，請耐心等候～",
+  "already_sent_request": "已經送過申請了，請耐心等候～",
   "sen_request_successfully": "已送出好友申請～",
   "accept_friend_request": "同意",
   "reject_friend_request": "拒絕",
   "confirm_reject": "你確定要拒絕嗎？",
   "be_friend": "你們現在是好友了！",
   "friend_list": "好友列表",
-  "confirm_remove": "你確定要刪除這個好友嗎？",
-  "delete_successfully": "刪除成功！"
+  "confirm_remove": "確定要刪除這個好友嗎？",
+  "delete_successfully": "刪除成功！",
+
+  "your_collection": "你的素材庫",
+  "delete_photo_warning": "確定要刪除這張照片嗎？"
 }
