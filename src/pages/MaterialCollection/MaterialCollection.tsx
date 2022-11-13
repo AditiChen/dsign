@@ -16,7 +16,6 @@ import trashIcon from "../../icons/trash-icon.png";
 import trashIconHover from "../../icons/trash-icon-hover.png";
 
 interface Prop {
-  img?: string;
   url?: string;
 }
 
@@ -93,7 +92,7 @@ const Img = styled.div`
   width: 240px;
   height: 240px;
   border: 1px solid #3c3c3c;
-  background-image: ${(props: Prop) => props.img};
+  background-image: ${(props: Prop) => props.url};
   background-size: cover;
   background-position: center;
 `;
@@ -181,7 +180,7 @@ function MaterialCollection() {
             collection.map((url) => (
               <ImgContainer key={url}>
                 <Img
-                  img={`url(${url})`}
+                  url={`url(${url})`}
                   onClick={() => {
                     setCurrentUrl(url);
                     setShowOverlay(true);
