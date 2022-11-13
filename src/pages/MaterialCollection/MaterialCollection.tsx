@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -8,10 +8,11 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../../context/firebaseSDK";
 
 import { AuthContext } from "../../context/authContext";
-import getFavoriteProjects from "../../utils/getFavoriteProjects";
 import SinglePhotoOverlay from "../../singlePhotoOverlay";
 
 import uploadPhotoIcon from "../../icons/uploadPhoto-icon.png";
+import trashIcon from "../../icons/trash-icon.png";
+import trashIconHover from "../../icons/trash-icon-hover.png";
 
 interface Prop {
   img?: string;
@@ -53,7 +54,7 @@ const HeaderContainer = styled.div`
 
 const Text = styled.div`
   padding: 50px;
-  font-size: 50px;
+  font-size: 30px;
   text-align: center;
 `;
 
@@ -79,6 +80,10 @@ const BricksContainer = styled.div`
   grid-auto-rows: minmax(4, auto);
 `;
 
+const ImgContainer = styled.div`
+  position: relative;
+`;
+
 const Img = styled.div`
   width: 240px;
   height: 240px;
@@ -88,11 +93,25 @@ const Img = styled.div`
   background-position: center;
 `;
 
+const TrashIcon = styled.div`
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  opacity: 0.8;
+  background-image: url(${trashIcon});
+  background-size: cover;
+  background-position: center;
+  &:hover {
+    background-image: url(${trashIconHover});
+  }
+`;
+
 function MaterialCollection() {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { userId, setSingleProjectId, favoriteList, collection } =
-    useContext(AuthContext);
+  const { userId, collection } = useContext(AuthContext);
   const [showOverlay, setShowOverlay] = useState(false);
   const [currentUrl, setCurrentUrl] = useState("");
 
@@ -122,6 +141,14 @@ function MaterialCollection() {
     });
   };
 
+  async function deleteHandler(url: string) {
+    const ans = window.confirm(t("delete_photo_warning"));
+    if (ans === false) return;
+    await updateDoc(doc(db, "users", userId), {
+      collection: arrayRemove(url),
+    });
+  }
+
   return (
     <>
       <Wrapper>
@@ -144,14 +171,16 @@ function MaterialCollection() {
         <BricksContainer>
           {collection.length !== 0 &&
             collection.map((url) => (
-              <Img
-                key={url}
-                img={`url(${url})`}
-                onClick={() => {
-                  setCurrentUrl(url);
-                  setShowOverlay(true);
-                }}
-              />
+              <ImgContainer key={url}>
+                <Img
+                  img={`url(${url})`}
+                  onClick={() => {
+                    setCurrentUrl(url);
+                    setShowOverlay(true);
+                  }}
+                />
+                <TrashIcon onClick={() => deleteHandler(url)} />
+              </ImgContainer>
             ))}
         </BricksContainer>
       </Wrapper>

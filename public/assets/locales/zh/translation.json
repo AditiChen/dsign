@@ -45,20 +45,22 @@
   "view_project_detail": "詳細內容",
   "edit_again": "編輯專案",
   "delete_project": "刪除專案",
-  "delete_project_warning": "你確定要刪除這個專案嗎?",
+  "delete_project_warning": "確定要刪除這個專案嗎?",
 
   "request_list": "好友申請",
   "search_friend": "搜尋",
   "send_friend_request": "加好友",
   "already_friend": "你們已經是好友了！",
   "user_not_found": "找不到使用者",
-  "already_sent_request": "你已經送過申請了，請耐心等候～",
+  "already_sent_request": "已經送過申請了，請耐心等候～",
   "sen_request_successfully": "已送出好友申請～",
   "accept_friend_request": "同意",
   "reject_friend_request": "拒絕",
   "confirm_reject": "你確定要拒絕嗎？",
   "be_friend": "你們現在是好友了！",
   "friend_list": "好友列表",
-  "confirm_remove": "你確定要刪除這個好友嗎？",
-  "delete_successfully": "刪除成功！"
+  "confirm_remove": "確定要刪除這個好友嗎？",
+  "delete_successfully": "刪除成功！",
+
+  "delete_photo_warning": "確定要刪除這張照片嗎？"
 }

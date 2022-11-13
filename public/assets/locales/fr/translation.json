@@ -60,5 +60,7 @@
   "confirm_reject": "Vous êtes sûr de vouloir refuser ?",
   "friend_list": "Liste d'amis",
   "confirm_remove": "Êtes-vous sûr de vouloir supprimer cet ami ?",
-  "delete_successfully": "Supprimer avec succès"
+  "delete_successfully": "Supprimer avec succès",
+
+  "delete_photo_warning": "Êtes-vous sûr de vouloir supprimer cette photo ?"
 }

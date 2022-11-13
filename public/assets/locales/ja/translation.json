@@ -60,5 +60,7 @@
   "be_friend": "あなたは友達です",
   "friend_list": "友人一覧",
   "confirm_remove": "本当にこの友人を削除してもいいのでしょうか？",
-  "delete_successfully": "あぼん"
+  "delete_successfully": "あぼん",
+
+  "delete_photo_warning": "本当にこの写真を削除してもいいのでしょうか？"
 }

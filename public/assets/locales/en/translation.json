@@ -60,5 +60,7 @@
   "be_friend": "You are friend now!",
   "friend_list": "Friend List",
   "confirm_remove": "Are you sure that you want to remove this friend?",
-  "delete_successfully": "Delete successfully"
+  "delete_successfully": "Delete successfully",
+
+  "delete_photo_warning": "Are you sure that you want to remove this photo?"
 }
