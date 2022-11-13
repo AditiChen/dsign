@@ -29,6 +29,7 @@
   "insert_location": "アドレスを入力",
   "confirm_location": "場所を確認する",
   "type_content": "ここにコンテンツを入力...",
+  "choose_photo": "コレクションから写真を選ぶか",
   "upload_image": "画像のアップロード",
   "change_image": "描き替える",
   "zoom_image": "ズーム",
@@ -62,5 +63,6 @@
   "confirm_remove": "本当にこの友人を削除してもいいのでしょうか？",
   "delete_successfully": "あぼん",
 
+  "your_collection": "あなたの収集",
   "delete_photo_warning": "本当にこの写真を削除してもいいのでしょうか？"
 }

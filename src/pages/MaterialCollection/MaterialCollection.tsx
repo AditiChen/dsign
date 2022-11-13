@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import ReactLoading from "react-loading";
 import { v4 as uuid } from "uuid";
@@ -19,22 +18,6 @@ interface Prop {
   url?: string;
 }
 
-interface FetchedProjectsType {
-  uid: string;
-  name?: string;
-  avatar?: string;
-  mainUrl: string;
-  projectId: string;
-  title: string;
-  time: number;
-  pages: {
-    type: number;
-    content?: string[];
-    url?: string[];
-    location?: { lat?: number; lng?: number };
-  }[];
-}
-
 const Wrapper = styled.div`
   padding-top: 80px;
   width: 100%;
@@ -48,12 +31,13 @@ const Wrapper = styled.div`
 
 const HeaderContainer = styled.div`
   margin: 0 auto;
+  height: 120px;
   display: flex;
   align-items: center;
 `;
 
 const Text = styled.div`
-  padding: 50px;
+  padding: 0 50px;
   font-size: 30px;
   text-align: center;
 `;
@@ -70,7 +54,7 @@ const AddFolderIcon = styled.label`
 
 const BricksContainer = styled.div`
   margin: 0 auto;
-  padding: 50px 0;
+  padding-bottom: 50px;
   width: 1300px;
   height: 100%;
   position: relative;
@@ -91,10 +75,14 @@ const Loading = styled(ReactLoading)`
 const Img = styled.div`
   width: 240px;
   height: 240px;
-  border: 1px solid #3c3c3c;
   background-image: ${(props: Prop) => props.url};
   background-size: cover;
   background-position: center;
+  border-radius: 10px;
+  &:hover {
+    border: 1px solid #3c3c3c;
+    box-shadow: 1px 1px 5px #3c3c3c90;
+  }
 `;
 
 const TrashIcon = styled.div`
@@ -113,12 +101,10 @@ const TrashIcon = styled.div`
 `;
 
 function MaterialCollection() {
-  const navigate = useNavigate();
   const { t } = useTranslation();
   const { userId, collection } = useContext(AuthContext);
   const [showOverlay, setShowOverlay] = useState(false);
   const [currentUrl, setCurrentUrl] = useState("");
-  const [isuploading, setIsuploading] = useState(false);
   const [progressing, setProgressing] = useState(100);
 
   const onUploadImgFiles = (files: File[]) => {
@@ -160,7 +146,7 @@ function MaterialCollection() {
     <>
       <Wrapper>
         <HeaderContainer>
-          <Text>Collection</Text>
+          <Text>{t("your_collection")}</Text>
           <AddFolderIcon
             onChange={(e: any) => {
               onUploadImgFiles(e.target.files);
@@ -174,7 +160,6 @@ function MaterialCollection() {
             />
           </AddFolderIcon>
         </HeaderContainer>
-
         <BricksContainer>
           {collection.length !== 0 &&
             collection.map((url) => (

@@ -1,10 +1,18 @@
 import styled from "styled-components";
 import { t } from "i18next";
 import { v4 as uuid } from "uuid";
-import { useState, Dispatch, SetStateAction, useEffect } from "react";
+import {
+  useState,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useContext,
+} from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 
-import { storage } from "../../context/firebaseSDK";
+import { AuthContext } from "../../context/authContext";
+import { db, storage } from "../../context/firebaseSDK";
 // import upLoadImgToCloudStorage from "../../utils/upLoadImgToCloudStorage";
 import Overlay from "../../overlay";
 
@@ -110,6 +118,7 @@ const UploadIcon = styled.div`
 `;
 
 function Template0(props: InsertProp) {
+  const { userId } = useContext(AuthContext);
   const [inputText, setInputText] = useState<string[]>([""]);
   const [showOverlay, setShowOverlay] = useState(false);
   // for better user experience
@@ -119,6 +128,7 @@ function Template0(props: InsertProp) {
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [currentImgUrl, setCurrentImgUrl] = useState("");
   const [currentAaspect, setCurrentAspect] = useState(1 / 1);
+  const [isAddToCollection, setIsAddToCollection] = useState(false);
   const { setPages, currentIndex, pages } = props;
 
   useEffect(() => {
@@ -159,6 +169,11 @@ function Template0(props: InsertProp) {
         const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
         const newStorageUrl = [...storageUrl];
         newStorageUrl[currentImgIndex] = downloadURL;
+        if (isAddToCollection) {
+          await updateDoc(doc(db, "users", userId), {
+            collection: arrayUnion(downloadURL),
+          });
+        }
         setStorageUrl(newStorageUrl);
       }
     );
@@ -213,6 +228,8 @@ function Template0(props: InsertProp) {
           setNewPhotoDetail={setNewPhotoDetail}
           currentAaspect={currentAaspect}
           currentImgUrl={currentImgUrl}
+          isAddToCollection={isAddToCollection}
+          setIsAddToCollection={setIsAddToCollection}
         />
       )}
     </>

@@ -17,6 +17,8 @@ import { AuthContext } from "./context/authContext";
 import getCroppedImg from "./utils/cropImage";
 import closeIcon from "./icons/close-icon.png";
 import closeIconHover from "./icons/close-icon-hover.png";
+import confirmIcon from "./icons/confirm-icon.png";
+import confirmedIcon from "./icons/confirmed-icon.png";
 
 interface Prop {
   url?: string;
@@ -26,6 +28,8 @@ interface OverlayProps {
   setNewPhotoDetail: (returnedUrl: string, returnedFile: File) => void;
   currentAaspect: number;
   currentImgUrl: string;
+  isAddToCollection: boolean;
+  setIsAddToCollection: Dispatch<SetStateAction<boolean>>;
 }
 
 const Wrapper = styled.div`
@@ -47,8 +51,8 @@ const Backdrop = styled.div`
 `;
 
 const CloseIcon = styled.div`
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   position: absolute;
   top: -15px;
   right: -15px;
@@ -172,6 +176,23 @@ const Btn = styled.button`
   }
 `;
 
+const ConfirmIcon = styled.div`
+  width: 25px;
+  height: 25px;
+  background-image: url(${confirmIcon});
+  background-size: cover;
+  background-position: center;
+`;
+
+const ConfirmedIcon = styled(ConfirmIcon)`
+  background-image: url(${confirmedIcon});
+`;
+
+const Text = styled.div`
+  margin-left: 10px;
+  font-size: 18px;
+`;
+
 const portalElement = document.getElementById("overlays") as HTMLElement;
 
 function Overlay({
@@ -179,6 +200,8 @@ function Overlay({
   setNewPhotoDetail,
   currentAaspect,
   currentImgUrl,
+  isAddToCollection,
+  setIsAddToCollection,
 }: OverlayProps) {
   const { t } = useTranslation();
   const { collection } = useContext(AuthContext);
@@ -248,7 +271,7 @@ function Overlay({
               ) : (
                 <NewPhotoContainer>
                   <NewPhotoHeaderContainer>
-                    Choose photo from collection or
+                    {t("choose_photo")}
                     <UploadPic onChange={(e: any) => onUploadFile(e)}>
                       {t("upload_image")}
                       <input
@@ -300,6 +323,12 @@ function Overlay({
                     onChange={(e, newRotation: any) => setRotation(newRotation)}
                   />
                 </SliderContainer>
+                {isAddToCollection ? (
+                  <ConfirmedIcon onClick={() => setIsAddToCollection(false)} />
+                ) : (
+                  <ConfirmIcon onClick={() => setIsAddToCollection(true)} />
+                )}
+                <Text>Add to collection?</Text>
                 <Btn onClick={showCroppedImage}>{t("confirm_crop")}</Btn>
               </ControlContainer>
             ) : (

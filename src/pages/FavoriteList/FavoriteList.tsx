@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
-import { db } from "../../context/firebaseSDK";
 
+import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
 import getFavoriteProjects from "../../utils/getFavoriteProjects";
 
@@ -43,15 +44,22 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
+const HeaderContainer = styled.div`
+  margin: 0 auto;
+  height: 120px;
+  display: flex;
+  align-items: center;
+`;
+
 const Text = styled.div`
-  padding: 50px;
-  font-size: 50px;
+  padding: 0 50px;
+  font-size: 30px;
   text-align: center;
 `;
 
 const BricksContainer = styled.div`
   margin: 0 auto;
-  padding: 50px 0;
+  padding-bottom: 50px;
   width: 1300px;
   height: 100%;
   position: relative;
@@ -116,6 +124,7 @@ const LikeIcon = styled(LikedIcon)`
 `;
 
 function FavoriteList() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { userId, setSingleProjectId, favoriteList } = useContext(AuthContext);
   const [projects, setProjects] = useState<FetchedProjectsType[]>([]);
@@ -148,7 +157,10 @@ function FavoriteList() {
 
   return (
     <Wrapper>
-      <Text>Favorite List</Text>
+      <HeaderContainer>
+        <Text>{t("favorite_list")}</Text>
+      </HeaderContainer>
+
       <BricksContainer>
         {projects.map((project) => (
           <SingleProjectContainer key={project.projectId}>

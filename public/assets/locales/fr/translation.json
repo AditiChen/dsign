@@ -29,6 +29,7 @@
   "insert_location": "Enter the address",
   "confirm_location": "Saisissez l'adresse",
   "type_content": "Tapez le contenu ici...",
+  "choose_photo": "Choisissez une photo dans la collection ou",
   "upload_image": "Télécharger l'image",
   "change_image": "changer une autre image",
   "zoom_image": "Zoom",
@@ -62,5 +63,6 @@
   "confirm_remove": "Êtes-vous sûr de vouloir supprimer cet ami ?",
   "delete_successfully": "Supprimer avec succès",
 
+  "your_collection": "votre collection",
   "delete_photo_warning": "Êtes-vous sûr de vouloir supprimer cette photo ?"
 }
