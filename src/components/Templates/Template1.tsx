@@ -8,11 +8,11 @@ import {
   useEffect,
   useContext,
 } from "react";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 
 import { AuthContext } from "../../context/authContext";
-import { db, storage } from "../../context/firebaseSDK";
+import { db } from "../../context/firebaseSDK";
+import upLoadImgToCloudStorage from "../../utils/upLoadImgToCloudStorage";
 import Overlay from "../Overlays/overlay";
 
 import trapezoid from "./template1_trapezoid.png";
@@ -165,39 +165,27 @@ function Template1(props: InsertProp) {
     const contentCheck = pageData.content.every((text) => text !== "");
     const urlCheck = storageUrl.every((url) => url !== "");
     if (contentCheck === false || urlCheck === false) return;
-
     const newPages = [...pages];
     newPages[currentIndex] = pageData;
     setPages(newPages);
   }, [inputText, storageUrl, photoUrl]);
 
-  function upLoadImgToFirebase(file: File) {
+  async function upLoadImgToFirebase(file: File) {
     if (!file) return;
     const urlByUuid = uuid();
-    const imgRef = ref(storage, `images/${urlByUuid}`);
-    const uploadTask = uploadBytesResumable(imgRef, file);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      },
-      (error) => {
-        console.log("Upload err", error);
-      },
-      async () => {
-        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-        const newStorageUrl = [...storageUrl];
-        newStorageUrl[currentImgIndex] = downloadURL;
-        if (isAddToCollection) {
-          await updateDoc(doc(db, "users", userId), {
-            collection: arrayUnion(downloadURL),
-          });
-          console.log("added to collection");
-        }
-        setStorageUrl(newStorageUrl);
-      }
-    );
+    const downloadURL = (await upLoadImgToCloudStorage(
+      file,
+      userId,
+      urlByUuid
+    )) as string;
+    const newStorageUrl = [...storageUrl];
+    newStorageUrl[currentImgIndex] = downloadURL;
+    if (isAddToCollection) {
+      await updateDoc(doc(db, "users", userId), {
+        collection: arrayUnion(downloadURL),
+      });
+    }
+    setStorageUrl(newStorageUrl);
   }
 
   const setNewPhotoDetail = (returnedUrl: string, returnedFile: File) => {
