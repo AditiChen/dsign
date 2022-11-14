@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { db } from "../../context/firebaseSDK";
-import getProjects from "../../utils/getUserProjects";
+import getUserProjects from "../../utils/getUserProjects";
 import { AuthContext } from "../../context/authContext";
 import { FriendContext } from "../../context/friendContext";
 
@@ -180,7 +180,7 @@ function OtherUserProfile() {
         friendList: string[];
       };
       setUserData(returnedData);
-      const userProjectsData = await getProjects(returnedData.uid);
+      const userProjectsData = await getUserProjects(returnedData.uid);
       setUserProjects(userProjectsData);
     }
     getData();
@@ -223,7 +223,6 @@ function OtherUserProfile() {
                 <SingleProjectContainer key={projectData.projectId}>
                   <ProjectLeftContainer>
                     <ProjectTitle>{projectData.title}</ProjectTitle>
-                    {/* <Text>{projectData.time.toDate()}</Text> */}
                     <Button
                       onClick={() => toSingleProjectPage(projectData.projectId)}
                     >

@@ -1,7 +1,7 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../context/firebaseSDK";
 
-export default async function getProjects(userId: string) {
+export default async function getUserProjects(userId: string) {
   const usersRef = collection(db, "projects");
   const q = query(usersRef, where("uid", "==", userId));
   const querySnapshot = await getDocs(q);

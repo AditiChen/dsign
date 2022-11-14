@@ -1,12 +1,20 @@
 import { useContext } from "react";
 import styled from "styled-components";
-import { doc, deleteDoc } from "firebase/firestore";
+import {
+  doc,
+  deleteDoc,
+  updateDoc,
+  arrayRemove,
+  query,
+  collection,
+  where,
+} from "firebase/firestore";
 import ReactLoading from "react-loading";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { db } from "../../context/firebaseSDK";
-import getProjects from "../../utils/getUserProjects";
+import getUserProjects from "../../utils/getUserProjects";
 import { AuthContext } from "../../context/authContext";
 
 interface Prop {
@@ -175,8 +183,15 @@ function Profile() {
     const ans = window.confirm(t("delete_project_warning"));
     if (ans === false) return;
     await deleteDoc(doc(db, "projects", projectId));
-    const userProjectsData = await getProjects(userId);
-    setUserProjects(userProjectsData);
+    // const q = query(
+    //   collection(db, "users"),
+    //   where("favoriteList", "array-contains-any", projectId)
+    // );
+    // await updateDoc(q, {
+    //   favoriteList: arrayRemove(projectId),
+    // });
+    // const userProjectsData = await getUserProjects(userId);
+    // setUserProjects(userProjectsData);
   }
 
   if (isLoading) {
