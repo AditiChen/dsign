@@ -19,7 +19,7 @@ import { useTranslation } from "react-i18next";
 import { doc, setDoc, getDoc, onSnapshot } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { db, auth } from "./firebaseSDK";
-import getProjects from "../utils/getUserProjects";
+import getUserProjects from "../utils/getUserProjects";
 
 type BodyProp = { children: React.ReactNode };
 
@@ -124,7 +124,7 @@ export function AuthContextProvider({ children }: BodyProp) {
         setFriendList(data.friendList);
         setFavoriteList(data.favoriteList);
         setCollection(data.collection);
-        const userProjectsData = await getProjects(uid);
+        const userProjectsData = await getUserProjects(uid);
         setUserProjects(userProjectsData);
       } else {
         setIsLogin(false);
@@ -174,7 +174,7 @@ export function AuthContextProvider({ children }: BodyProp) {
       };
 
       setUserId(uid);
-      const userProjectsData = await getProjects(uid);
+      const userProjectsData = await getUserProjects(uid);
       alert(t("login_successfully"));
       setUserProjects(userProjectsData);
       navigate("/profile");
@@ -240,7 +240,7 @@ export function AuthContextProvider({ children }: BodyProp) {
     setUserId(uid);
     setIsLogin(true);
     setIsLoading(false);
-    const userProjectsData = await getProjects(uid);
+    const userProjectsData = await getUserProjects(uid);
     setUserProjects(userProjectsData);
     navigate("/profile");
   };
@@ -265,7 +265,7 @@ export function AuthContextProvider({ children }: BodyProp) {
     setUserId(uid);
     setIsLogin(true);
     setIsLoading(false);
-    const userProjectsData = await getProjects(uid);
+    const userProjectsData = await getUserProjects(uid);
     setUserProjects(userProjectsData);
     navigate("/profile");
   };

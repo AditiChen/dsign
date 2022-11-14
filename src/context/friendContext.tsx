@@ -94,7 +94,7 @@ export function FriendContextProvider({ children }: BodyProp) {
     return () => {
       unsub();
     };
-  }, [userId]);
+  }, [userId, friendList]);
 
   const authProviderValue = useMemo(
     () => ({
