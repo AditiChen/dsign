@@ -9,7 +9,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 import { db, storage } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
-import getProjects from "../../utils/getProjects";
+import getProjects from "../../utils/getUserProjects";
 import upLoadImgToCloudStorage from "../../utils/upLoadImgToCloudStorage";
 import templatesImgArr from "../../components/Templates/TemplateImg";
 import templatesArr from "../../components/Templates/TemplatesArr";
@@ -195,6 +195,7 @@ function CreateNewProject() {
   const [position, setPosition] = useState<{ lat?: number; lng?: number }>({});
   const [title, setTitle] = useState("");
   const [mainImgSrc, setMainImgSrc] = useState("");
+  const [progressing, setProgressing] = useState(100);
   const googleMap = templatesArr[8];
 
   async function confirmAllEdit() {
@@ -263,6 +264,7 @@ function CreateNewProject() {
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setProgressing(progress);
         },
         (error) => {
           console.log("Upload err", error);
@@ -341,7 +343,17 @@ function CreateNewProject() {
                   multiple
                 />
               </UploadPic>
-              <MainImg img={`url(${mainImgSrc})`} />
+              {progressing === 100 ? (
+                <MainImg img={`url(${mainImgSrc})`} />
+              ) : (
+                <Loading
+                  type="spin"
+                  color="#3c3c3c"
+                  height="40px"
+                  width="40px"
+                />
+              )}
+
               {templateFilter.map(({ keyUuid, ChoseTemplate }, index) => (
                 <SingleEditorContainer key={`${keyUuid}`}>
                   <ChoseTemplate

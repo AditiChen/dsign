@@ -50,15 +50,17 @@ export default async function getOtherUsersProject(
       pages: project.data().pages,
     });
   });
-  otherUserFetchedProjects.map(async (project, index) => {
-    const docSnap = await getDoc(doc(db, "users", project.uid));
-    const { name, avatar } = docSnap.data() as {
-      name: string;
-      avatar: string;
-    };
-    otherUserFetchedProjects[index].name = name;
-    otherUserFetchedProjects[index].avatar = avatar;
-  });
+  await Promise.all(
+    otherUserFetchedProjects.map(async (project, index) => {
+      const docSnap = await getDoc(doc(db, "users", project.uid));
+      const { name, avatar } = docSnap.data() as {
+        name: string;
+        avatar: string;
+      };
+      otherUserFetchedProjects[index].name = name;
+      otherUserFetchedProjects[index].avatar = avatar;
+    })
+  );
 
   // get next 50 datas
   // const lastFriendVisible =

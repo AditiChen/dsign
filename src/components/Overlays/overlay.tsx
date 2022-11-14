@@ -12,13 +12,13 @@ import styled from "styled-components";
 import Cropper from "react-easy-crop";
 import { Slider, Typography } from "@mui/material";
 
-import { AuthContext } from "./context/authContext";
+import { AuthContext } from "../../context/authContext";
 
-import getCroppedImg from "./utils/cropImage";
-import closeIcon from "./icons/close-icon.png";
-import closeIconHover from "./icons/close-icon-hover.png";
-import confirmIcon from "./icons/confirm-icon.png";
-import confirmedIcon from "./icons/confirmed-icon.png";
+import getCroppedImg from "../../utils/cropImage";
+import closeIcon from "../../icons/close-icon.png";
+import closeIconHover from "../../icons/close-icon-hover.png";
+import confirmIcon from "../../icons/confirm-icon.png";
+import confirmedIcon from "../../icons/confirmed-icon.png";
 
 interface Prop {
   url?: string;

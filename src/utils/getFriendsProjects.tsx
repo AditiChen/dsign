@@ -34,10 +34,10 @@ export default async function getFriendsProjects(
     usersRef,
     where("uid", "in", [userId, ...friendList])
   );
-  const firstFriendquerySnapshot = await getDocs(firstFriendQuery);
-  const firstFriendFetchedProjects: FetchedProjectsType[] = [];
-  firstFriendquerySnapshot.forEach((project) => {
-    firstFriendFetchedProjects.unshift({
+  const friendQuerySnapshot = await getDocs(firstFriendQuery);
+  const fetchedFriendProjects: FetchedProjectsType[] = [];
+  friendQuerySnapshot.forEach((project) => {
+    fetchedFriendProjects.unshift({
       name: "",
       avatar: "",
       projectId: project.id,
@@ -48,15 +48,17 @@ export default async function getFriendsProjects(
       pages: project.data().pages,
     });
   });
-  firstFriendFetchedProjects.map(async (project, index) => {
-    const docSnap = await getDoc(doc(db, "users", project.uid));
-    const { name, avatar } = docSnap.data() as {
-      name: string;
-      avatar: string;
-    };
-    firstFriendFetchedProjects[index].name = name;
-    firstFriendFetchedProjects[index].avatar = avatar;
-  });
+  await Promise.all(
+    fetchedFriendProjects.map(async (project, index) => {
+      const docSnap = await getDoc(doc(db, "users", project.uid));
+      const { name, avatar } = docSnap.data() as {
+        name: string;
+        avatar: string;
+      };
+      fetchedFriendProjects[index].name = name;
+      fetchedFriendProjects[index].avatar = avatar;
+    })
+  );
 
-  return firstFriendFetchedProjects;
+  return fetchedFriendProjects;
 }

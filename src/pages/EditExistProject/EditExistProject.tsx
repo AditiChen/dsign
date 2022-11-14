@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
 import getSingleProject from "../../utils/getSingleProject";
-import getProjects from "../../utils/getProjects";
+import getProjects from "../../utils/getUserProjects";
 import templatesImgArr from "../../components/Templates/TemplateImg";
 import templatesArr from "../../components/Templates/TemplatesArr";
 

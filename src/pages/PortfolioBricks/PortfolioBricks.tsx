@@ -50,6 +50,7 @@ const BannerContainer = styled.div`
   margin: 0 auto;
   width: 100%;
   height: 700px;
+  max-height: calc(100vh - 80px);
   background-color: #00000090;
 `;
 
@@ -135,7 +136,6 @@ function PortfolioBricks() {
 
   useEffect(() => {
     if (userId === "") return;
-    setProjects([]);
     async function getProjects() {
       const friendProjectsData = await getFriendsProjects(userId, friendList);
       setProjects(friendProjectsData);

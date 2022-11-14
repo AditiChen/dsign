@@ -8,7 +8,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../../context/firebaseSDK";
 
 import { AuthContext } from "../../context/authContext";
-import SinglePhotoOverlay from "../../singlePhotoOverlay";
+import SinglePhotoOverlay from "../../components/Overlays/singlePhotoOverlay";
 
 import uploadPhotoIcon from "../../icons/uploadPhoto-icon.png";
 import trashIcon from "../../icons/trash-icon.png";

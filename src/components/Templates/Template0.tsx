@@ -13,7 +13,7 @@ import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 
 import { AuthContext } from "../../context/authContext";
 import { db, storage } from "../../context/firebaseSDK";
-import Overlay from "../../overlay";
+import Overlay from "../Overlays/overlay";
 
 import uploadPhotoIcon from "../../icons/uploadPhoto-icon.png";
 
