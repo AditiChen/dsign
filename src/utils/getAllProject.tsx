@@ -43,15 +43,17 @@ export default async function getAllProject() {
       pages: project.data().pages,
     });
   });
-  allFetchedProjects.map(async (project, index) => {
-    const docSnap = await getDoc(doc(db, "users", project.uid));
-    const { name, avatar } = docSnap.data() as {
-      name: string;
-      avatar: string;
-    };
-    allFetchedProjects[index].name = name;
-    allFetchedProjects[index].avatar = avatar;
-  });
+  await Promise.all(
+    allFetchedProjects.map(async (project, index) => {
+      const docSnap = await getDoc(doc(db, "users", project.uid));
+      const { name, avatar } = docSnap.data() as {
+        name: string;
+        avatar: string;
+      };
+      allFetchedProjects[index].name = name;
+      allFetchedProjects[index].avatar = avatar;
+    })
+  );
 
   return allFetchedProjects;
 }

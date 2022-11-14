@@ -48,15 +48,17 @@ export default async function getFriendsProjects(
       pages: project.data().pages,
     });
   });
-  firstFriendFetchedProjects.map(async (project, index) => {
-    const docSnap = await getDoc(doc(db, "users", project.uid));
-    const { name, avatar } = docSnap.data() as {
-      name: string;
-      avatar: string;
-    };
-    firstFriendFetchedProjects[index].name = name;
-    firstFriendFetchedProjects[index].avatar = avatar;
-  });
+  await Promise.all(
+    firstFriendFetchedProjects.map(async (project, index) => {
+      const docSnap = await getDoc(doc(db, "users", project.uid));
+      const { name, avatar } = docSnap.data() as {
+        name: string;
+        avatar: string;
+      };
+      firstFriendFetchedProjects[index].name = name;
+      firstFriendFetchedProjects[index].avatar = avatar;
+    })
+  );
 
   return firstFriendFetchedProjects;
 }

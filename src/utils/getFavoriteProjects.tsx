@@ -45,14 +45,16 @@ export default async function getFavoriteProjects(favoriteList: string[]) {
       pages: project.data().pages,
     });
   });
-  fetchedProjects.map(async (project, index) => {
-    const docSnap = await getDoc(doc(db, "users", project.uid));
-    const { name, avatar } = docSnap.data() as {
-      name: string;
-      avatar: string;
-    };
-    fetchedProjects[index].name = name;
-    fetchedProjects[index].avatar = avatar;
-  });
+  await Promise.all(
+    fetchedProjects.map(async (project, index) => {
+      const docSnap = await getDoc(doc(db, "users", project.uid));
+      const { name, avatar } = docSnap.data() as {
+        name: string;
+        avatar: string;
+      };
+      fetchedProjects[index].name = name;
+      fetchedProjects[index].avatar = avatar;
+    })
+  );
   return fetchedProjects;
 }
