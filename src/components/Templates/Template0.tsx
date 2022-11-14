@@ -8,11 +8,11 @@ import {
   useEffect,
   useContext,
 } from "react";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 
 import { AuthContext } from "../../context/authContext";
-import { db, storage } from "../../context/firebaseSDK";
+import { db } from "../../context/firebaseSDK";
+import upLoadImgToCloudStorage from "../../utils/upLoadImgToCloudStorage";
 import Overlay from "../Overlays/overlay";
 
 import uploadPhotoIcon from "../../icons/uploadPhoto-icon.png";
@@ -150,32 +150,22 @@ function Template0(props: InsertProp) {
     setPages(newPages);
   }, [inputText, storageUrl]);
 
-  function upLoadImgToFirebase(file: File) {
+  async function upLoadImgToFirebase(file: File) {
     if (!file) return;
     const urlByUuid = uuid();
-    const imgRef = ref(storage, `images/${urlByUuid}`);
-    const uploadTask = uploadBytesResumable(imgRef, file);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      },
-      (error) => {
-        console.log("Upload err", error);
-      },
-      async () => {
-        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-        const newStorageUrl = [...storageUrl];
-        newStorageUrl[currentImgIndex] = downloadURL;
-        if (isAddToCollection) {
-          await updateDoc(doc(db, "users", userId), {
-            collection: arrayUnion(downloadURL),
-          });
-        }
-        setStorageUrl(newStorageUrl);
-      }
-    );
+    const downloadURL = (await upLoadImgToCloudStorage(
+      file,
+      userId,
+      urlByUuid
+    )) as string;
+    const newStorageUrl = [...storageUrl];
+    newStorageUrl[currentImgIndex] = downloadURL;
+    if (isAddToCollection) {
+      await updateDoc(doc(db, "users", userId), {
+        collection: arrayUnion(downloadURL),
+      });
+    }
+    setStorageUrl(newStorageUrl);
   }
 
   const setNewPhotoDetail = (returnedUrl: string, returnedFile: File) => {

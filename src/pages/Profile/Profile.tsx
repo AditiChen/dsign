@@ -7,6 +7,7 @@ import {
   arrayRemove,
   query,
   collection,
+  getDocs,
   where,
 } from "firebase/firestore";
 import ReactLoading from "react-loading";
@@ -183,15 +184,23 @@ function Profile() {
     const ans = window.confirm(t("delete_project_warning"));
     if (ans === false) return;
     await deleteDoc(doc(db, "projects", projectId));
+
     // const q = query(
     //   collection(db, "users"),
     //   where("favoriteList", "array-contains-any", projectId)
     // );
-    // await updateDoc(q, {
-    //   favoriteList: arrayRemove(projectId),
+    // console.log({ q });
+    // const querySnapshot = await getDocs(q);
+    // console.log("querySnapshot", querySnapshot);
+    // querySnapshot.forEach(async (userDoc) => {
+    //   console.log("user", userDoc);
+    //   await updateDoc(doc(db, "users", userDoc.uid), {
+    //     favoriteList: arrayRemove(projectId),
+    //   });
     // });
-    // const userProjectsData = await getUserProjects(userId);
-    // setUserProjects(userProjectsData);
+
+    const userProjectsData = await getUserProjects(userId);
+    setUserProjects(userProjectsData);
   }
 
   if (isLoading) {
