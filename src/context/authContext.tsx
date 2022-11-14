@@ -19,7 +19,7 @@ import { useTranslation } from "react-i18next";
 import { doc, setDoc, getDoc, onSnapshot } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { db, auth } from "./firebaseSDK";
-import getProjects from "../utils/getProjects";
+import getProjects from "../utils/getUserProjects";
 
 type BodyProp = { children: React.ReactNode };
 

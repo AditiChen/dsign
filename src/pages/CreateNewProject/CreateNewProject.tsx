@@ -9,7 +9,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 import { db, storage } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
-import getProjects from "../../utils/getProjects";
+import getProjects from "../../utils/getUserProjects";
 import upLoadImgToCloudStorage from "../../utils/upLoadImgToCloudStorage";
 import templatesImgArr from "../../components/Templates/TemplateImg";
 import templatesArr from "../../components/Templates/TemplatesArr";
