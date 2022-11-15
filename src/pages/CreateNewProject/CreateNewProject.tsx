@@ -331,7 +331,7 @@ function CreateNewProject() {
           ) : (
             <>
               <Input
-                placeholder="title"
+                placeholder={t("project_title")}
                 onChange={(e) => setTitle(e.target.value)}
               />
               <UploadPic onChange={(e: any) => onUploadMainImgFile(e)}>

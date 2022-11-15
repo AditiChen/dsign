@@ -20,7 +20,7 @@ export default async function getUserProjects(userId: string) {
     }[];
   }[] = [];
   querySnapshot.forEach((doc) => {
-    fetchedProjects.push({
+    fetchedProjects.unshift({
       projectId: doc.id,
       uid: doc.data().uid,
       author: doc.data().author,

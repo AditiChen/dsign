@@ -11,7 +11,7 @@
   "continue_with_facebook": "Continuer avec Facebook",
   "input_name": "Nom",
   "input_email": "Courriel",
-  "input_password": "Mot de passe",
+  "input_password": "Le mot de passe doit contenir 8 lettres",
   "check_input_password": "Entrez à nouveau le mot de passe",
   "name_input_check": "Veuillez entrer votre nom d'utilisateur",
   "email_and_password_input_check": "Veuillez entrer l'email et le mot de passe",
@@ -26,6 +26,8 @@
   "logout_successfully": "Déconnexion réussie!",
 
   "upload_main_photo": "Télécharger la photo de couverture",
+  "project_title": "titre",
+  "create_new_project": "créer un nouveau projet",
   "insert_location": "Enter the address",
   "confirm_location": "Saisissez l'adresse",
   "type_content": "Tapez le contenu ici...",
