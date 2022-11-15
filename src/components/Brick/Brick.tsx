@@ -74,12 +74,14 @@ const LikedIcon = styled.div`
   background-image: url(${likedIcon});
   background-size: cover;
   background-position: center;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const LikeIcon = styled(LikedIcon)`
   background-image: url(${likeIcon});
   &:hover {
-    cursor: pointer;
     background-image: url(${likeIconHover});
   }
 `;

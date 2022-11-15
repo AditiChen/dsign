@@ -1,15 +1,6 @@
 import { useContext } from "react";
 import styled from "styled-components";
-import {
-  doc,
-  deleteDoc,
-  updateDoc,
-  arrayRemove,
-  query,
-  collection,
-  getDocs,
-  where,
-} from "firebase/firestore";
+import { doc, deleteDoc } from "firebase/firestore";
 import ReactLoading from "react-loading";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -184,21 +175,6 @@ function Profile() {
     const ans = window.confirm(t("delete_project_warning"));
     if (ans === false) return;
     await deleteDoc(doc(db, "projects", projectId));
-
-    // const q = query(
-    //   collection(db, "users"),
-    //   where("favoriteList", "array-contains-any", projectId)
-    // );
-    // console.log({ q });
-    // const querySnapshot = await getDocs(q);
-    // console.log("querySnapshot", querySnapshot);
-    // querySnapshot.forEach(async (userDoc) => {
-    //   console.log("user", userDoc);
-    //   await updateDoc(doc(db, "users", userDoc.uid), {
-    //     favoriteList: arrayRemove(projectId),
-    //   });
-    // });
-
     const userProjectsData = await getUserProjects(userId);
     setUserProjects(userProjectsData);
   }
