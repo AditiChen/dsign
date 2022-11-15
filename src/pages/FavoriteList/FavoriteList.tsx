@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
+import ReactLoading from "react-loading";
 
 import { AuthContext } from "../../context/authContext";
 import getFavoriteProjects from "../../utils/getFavoriteProjects";
@@ -49,41 +50,43 @@ const Text = styled.div`
 const BricksContainer = styled.div`
   margin: 0 auto;
   padding: 50px 0;
-  width: 1300px;
+  width: 1620px;
   height: 100%;
   position: relative;
   display: grid;
   grid-gap: 10px;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: minmax(4, auto);
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  @media screen and (min-width: 1400px) and (max-width: 1699px) {
+    width: 1300px;
+  }
   @media screen and (min-width: 1100px) and (max-width: 1399px) {
     width: 960px;
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: minmax(4, auto);
   }
   @media screen and (min-width: 800px) and (max-width: 1099px) {
     width: 630px;
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: minmax(2, auto);
   }
   @media screen and (max-width: 799px) {
     padding: 20px 0;
     width: 330px;
-    grid-template-columns: repeat(1, 1fr);
-    grid-auto-rows: minmax(1, auto);
   }
+`;
+
+const Loading = styled(ReactLoading)`
+  margin: 50px auto;
 `;
 
 function FavoriteList() {
   const { t } = useTranslation();
   const { userId, favoriteList } = useContext(AuthContext);
   const [projects, setProjects] = useState<FetchedProjectsType[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setProjects([]);
     async function getProjects() {
+      setIsLoading(true);
       const favoriteProjectsData = await getFavoriteProjects(favoriteList);
       setProjects(favoriteProjectsData);
+      setIsLoading(false);
     }
     getProjects();
   }, [userId, favoriteList]);
@@ -93,7 +96,7 @@ function FavoriteList() {
       <HeaderContainer>
         <Text>{t("favorite_list")}</Text>
       </HeaderContainer>
-
+      {isLoading ? <Loading type="cylon" color="#3c3c3c" /> : ""}
       <BricksContainer>
         {projects.map((project) => (
           <Brick

@@ -61,28 +61,19 @@ const BricksContainer = styled.div`
   position: relative;
   display: grid;
   grid-gap: 10px;
-  grid-template-columns: repeat(5, 1fr);
-  grid-auto-rows: minmax(4, auto);
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   @media screen and (min-width: 1400px) and (max-width: 1699px) {
     width: 1300px;
-    grid-template-columns: repeat(4, 1fr);
-    grid-auto-rows: minmax(4, auto);
   }
   @media screen and (min-width: 1100px) and (max-width: 1399px) {
     width: 960px;
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: minmax(4, auto);
   }
   @media screen and (min-width: 800px) and (max-width: 1099px) {
     width: 630px;
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: minmax(2, auto);
   }
   @media screen and (max-width: 799px) {
     padding: 20px 0;
     width: 330px;
-    grid-template-columns: repeat(1, 1fr);
-    grid-auto-rows: minmax(1, auto);
   }
 `;
 

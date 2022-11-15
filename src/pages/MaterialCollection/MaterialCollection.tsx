@@ -11,6 +11,7 @@ import { AuthContext } from "../../context/authContext";
 import SinglePhotoOverlay from "../../components/Overlays/singlePhotoOverlay";
 
 import uploadPhotoIcon from "../../icons/uploadPhoto-icon.png";
+import uploadPhotoIconHover from "../../icons/uploadPhoto-icon-hover.png";
 import trashIcon from "../../icons/trash-icon.png";
 import trashIconHover from "../../icons/trash-icon-hover.png";
 
@@ -50,26 +51,36 @@ const AddFolderIcon = styled.label`
   background-image: url(${uploadPhotoIcon});
   background-size: cover;
   background-position: center;
+  &:hover {
+    cursor: pointer;
+    background-image: url(${uploadPhotoIconHover});
+  }
 `;
 
 const BricksContainer = styled.div`
   margin: 0 auto;
   padding-bottom: 50px;
-  width: 1300px;
+  width: 1560px;
   height: 100%;
   position: relative;
   display: grid;
-  grid-gap: 20px;
-  grid-template-columns: repeat(5, 1fr);
-  grid-auto-rows: minmax(4, auto);
-`;
-
-const ImgContainer = styled.div`
-  position: relative;
-`;
-
-const Loading = styled(ReactLoading)`
-  margin: 100px;
+  grid-gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  @media screen and (min-width: 1400px) and (max-width: 1699px) {
+    width: 1300px;
+  }
+  @media screen and (min-width: 1100px) and (max-width: 1399px) {
+    width: 1050px;
+  }
+  @media screen and (min-width: 820px) and (max-width: 1099px) {
+    width: 780px;
+  }
+  @media screen and (min-width: 570px) and (max-width: 819px) {
+    width: 520px;
+  }
+  @media screen and (max-width: 569px) {
+    width: 300px;
+  }
 `;
 
 const Img = styled.div`
@@ -78,10 +89,24 @@ const Img = styled.div`
   background-image: ${(props: Prop) => props.url};
   background-size: cover;
   background-position: center;
+`;
+
+const ImgContainer = styled.div`
+  margin: 5px auto;
+  width: 240px;
+  height: 240px;
+  position: relative;
   border-radius: 10px;
+  overflow: hidden;
   &:hover {
-    border: 1px solid #3c3c3c;
-    box-shadow: 1px 1px 5px #3c3c3c90;
+    margin: 0;
+    width: 250px;
+    height: 250px;
+    box-shadow: 0 0 10px #3c3c3c;
+  }
+  &:hover > ${Img} {
+    width: 250px;
+    height: 250px;
   }
 `;
 
@@ -98,6 +123,10 @@ const TrashIcon = styled.div`
   &:hover {
     background-image: url(${trashIconHover});
   }
+`;
+
+const Loading = styled(ReactLoading)`
+  margin: 100px;
 `;
 
 function MaterialCollection() {
