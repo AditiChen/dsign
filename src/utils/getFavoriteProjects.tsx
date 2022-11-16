@@ -15,6 +15,7 @@ interface FetchedProjectsType {
   avatar?: string;
   mainUrl: string;
   projectId: string;
+  introduction: string;
   title: string;
   time: number;
   pages: {
@@ -37,6 +38,7 @@ export default async function getFavoriteProjects(favoriteList: string[]) {
     fetchedProjects.unshift({
       name: "",
       avatar: "",
+      introduction: "",
       projectId: project.id,
       uid: project.data().uid,
       mainUrl: project.data().mainUrl,
@@ -48,12 +50,14 @@ export default async function getFavoriteProjects(favoriteList: string[]) {
   await Promise.all(
     fetchedProjects.map(async (project, index) => {
       const docSnap = await getDoc(doc(db, "users", project.uid));
-      const { name, avatar } = docSnap.data() as {
+      const { name, avatar, introduction } = docSnap.data() as {
         name: string;
         avatar: string;
+        introduction: string;
       };
       fetchedProjects[index].name = name;
       fetchedProjects[index].avatar = avatar;
+      fetchedProjects[index].introduction = introduction;
     })
   );
   return fetchedProjects;

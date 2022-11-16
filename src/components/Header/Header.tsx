@@ -1,7 +1,7 @@
 import i18next, { t as i18t } from "i18next";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
-import { useState, useContext } from "react";
+import { useState, useContext, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../../context/authContext";
@@ -13,9 +13,12 @@ import memberIcon from "./user-icon.png";
 import friendsIcon from "./friends-icon.png";
 
 interface Prop {
+  height?: string;
   img?: string;
   size?: string;
   borderBtm?: string;
+  paddingBtm?: string;
+  borderRadious?: string;
 }
 
 const laguages = [
@@ -52,15 +55,43 @@ const Logo = styled(Link)`
   }
 `;
 
-const Context = styled(Link)`
-  margin-left: 30px;
+const Context = styled(Link)<{ $color?: string }>`
+  padding: 10px 10px;
+  margin-left: 20px;
   font-size: 20px;
   text-decoration: none;
-  color: #c4c4c4;
+  color: ${(props) => props.$color || "#c4c4c4"};
+  & + & {
+    margin-left: 12px;
+  }
+  &:hover {
+    text-shadow: 0 0 2px #787878;
+    font-size: 22px;
+    cursor: pointer;
+  }
 `;
 
 const RightContainer = styled.div`
+  padding-right: 20px;
   display: flex;
+`;
+
+const LanguageOptionsContainer = styled.div`
+  width: 110px;
+  max-height: 0;
+  position: absolute;
+  top: 45px;
+  right: -38px;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 3px #3c3c3c;
+  z-index: 1;
+`;
+
+const LanguageOptionsInnerContainer = styled.div`
+  padding: 10px;
 `;
 
 const Icon = styled.div`
@@ -70,26 +101,20 @@ const Icon = styled.div`
   background-image: ${(props: Prop) => props.img};
   background-size: cover;
   background-position: center;
+
   &:hover {
     cursor: pointer;
   }
   & + & {
-    margin-left: 20px;
+    margin-left: 30px;
+  }
+  &:hover > ${LanguageOptionsContainer} {
+    max-height: 170px;
   }
 `;
 
-const LanguageOptionsContainer = styled.div`
-  width: 110px;
-  padding: 10px;
-  position: absolute;
-  top: 37px;
-  right: 0;
-  border: 1px solid #787878;
-  background-color: white;
-  z-index: 1;
-`;
-
 const Language = styled.div`
+  padding-bottom: ${(props: Prop) => props.paddingBtm || "0"};
   font-size: ${(props: Prop) => props.size};
   color: #3c3c3c;
   border-bottom: ${(props: Prop) => props.borderBtm};
@@ -99,13 +124,13 @@ const Language = styled.div`
   }
 `;
 
-const SignBtn = styled.button`
-  margin-left: 20px;
+const SignBtn = styled.button<{ $color?: string; backgroundColor?: string }>`
+  margin-left: 30px;
   padding: 0 20px;
   height: 35px;
-  color: #ffffff;
+  color: ${(props) => props.$color || "#ffffff"};
   font-size: 18px;
-  background-color: transparent;
+  background-color: ${(props) => props.backgroundColor || "transparent"};
   border: 1px solid #616161;
   border-radius: 5px;
   &:hover {
@@ -117,20 +142,22 @@ const SignBtn = styled.button`
 function LanguageOptions() {
   return (
     <LanguageOptionsContainer>
-      <Language size="16px" borderBtm="1px solid #3c3c3c">
-        {i18t("languages")}
-      </Language>
-      {laguages.map((lng) => (
-        <Language
-          key={`${lng.code}`}
-          size="14px"
-          onClick={() => {
-            i18next.changeLanguage(lng.code);
-          }}
-        >
-          {lng.name}
+      <LanguageOptionsInnerContainer>
+        <Language size="16px" borderBtm="1px solid #3c3c3c" paddingBtm="10px">
+          {i18t("languages")}
         </Language>
-      ))}
+        {laguages.map((lng) => (
+          <Language
+            key={`${lng.code}`}
+            size="14px"
+            onClick={() => {
+              i18next.changeLanguage(lng.code);
+            }}
+          >
+            {lng.name}
+          </Language>
+        ))}
+      </LanguageOptionsInnerContainer>
     </LanguageOptionsContainer>
   );
 }
@@ -140,7 +167,6 @@ function Header() {
   const { setShowMessageFrame } = useContext(FriendContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [showLanghagesIcon, setShowLanguagesIcon] = useState(false);
 
   function logoutHandler() {
     const ans = window.confirm(t("logout_confirm"));
@@ -156,6 +182,7 @@ function Header() {
         {isLogin ? (
           <>
             <Context
+              $color="#f5dfa9"
               to="createNewProject"
               onClick={() => setShowMessageFrame(false)}
             >
@@ -195,14 +222,8 @@ function Header() {
         ) : (
           ""
         )}
-
-        <Icon
-          img={`url(${languageIcon})`}
-          onClick={() => {
-            setShowLanguagesIcon((prev) => !prev);
-          }}
-        >
-          {showLanghagesIcon ? <LanguageOptions /> : ""}
+        <Icon img={`url(${languageIcon})`}>
+          <LanguageOptions />
         </Icon>
         {isLogin ? (
           <SignBtn
@@ -214,6 +235,8 @@ function Header() {
           </SignBtn>
         ) : (
           <SignBtn
+            $color="#3c3c3c"
+            backgroundColor="#f5dfa9"
             onClick={() => {
               navigate("/login");
             }}

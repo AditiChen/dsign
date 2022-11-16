@@ -10,7 +10,6 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
 import getUserProjects from "../../utils/getUserProjects";
-import upLoadImgToCloudStorage from "../../utils/upLoadImgToCloudStorage";
 import templatesImgArr from "../../components/Templates/TemplateImg";
 import templatesArr from "../../components/Templates/TemplatesArr";
 
@@ -29,6 +28,7 @@ const Wrapper = styled.div`
   min-height: calc(100vh - 80px);
   display: flex;
   position: relative;
+  background-color: #787878;
   @media screen and (max-width: 1860px) {
     padding-top: 200px;
   }
@@ -48,23 +48,28 @@ const EditorContainer = styled.div`
   width: 100%;
   height: 100%;
   min-height: 80vh;
-  border: 1px solid #3c3c3c;
+  background-color: #f0f0f0;
+  border-radius: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
+const Text = styled.div`
+  font-size: 24px;
+  color: #3c3c3c;
+`;
+
 const Input = styled.input`
+  margin-bottom: 40px;
   padding: 6px 10px;
   width: 1200px;
   height: 50px;
   color: #3c3c3c;
-  font-size: 18px;
+  font-size: 20px;
   background-color: #f0f0f090;
   border: 1px solid gray;
-  & + & {
-    margin-top: 30px;
-  }
+  border-radius: 10px;
   &:focus {
     outline: none;
     background-color: #61616130;
@@ -81,6 +86,7 @@ const UploadPic = styled.label`
   border: 1px solid #3c3c3c;
   background-color: #3c3c3c30;
 `;
+
 const MainImg = styled.div`
   width: 100px;
   height: 100px;
@@ -90,17 +96,19 @@ const MainImg = styled.div`
 `;
 
 const SingleEditorContainer = styled.div`
-  margin-top: 80px;
   position: relative;
   width: 1200px;
   height: 760px;
+  & + & {
+    margin-top: 80px;
+  }
 `;
 
 const CloseIcon = styled.div`
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   position: absolute;
-  top: -15px;
+  top: -18px;
   right: -15px;
   opacity: 0.8;
   background-image: url(${closeIcon});
@@ -120,8 +128,8 @@ const SelectContainer = styled.div`
   left: 0;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 -1px 3px #3c3c3c;
   background-color: #ffffff;
+  box-shadow: 0 -1px 3px black;
   overflow: scroll;
   scrollbar-width: none;
   z-index: 5;
@@ -130,10 +138,10 @@ const SelectContainer = styled.div`
   }
   @media screen and (max-width: 1860px) {
     padding-top: 100px;
-    color: #828282;
     top: 0;
     width: 100vw;
     height: 200px;
+    box-shadow: 1px 0 5px black;
   }
 `;
 
@@ -157,9 +165,12 @@ const SelectImg = styled.div`
     box-shadow: 1px 1px 5px gray;
   }
   @media screen and (max-width: 1860px) {
-    margin: 0 10px 0 0;
+    margin: 0;
     width: 130px;
     height: 80px;
+    & + & {
+      margin-left: 10px;
+    }
   }
 `;
 
@@ -277,17 +288,6 @@ function CreateNewProject() {
     }
   };
 
-  // const onUploadMainImgFile = (
-  //   e: React.ChangeEvent<HTMLInputElement>
-  // ): void => {
-  //   if (e.target.files && e.target.files.length > 0) {
-  //     const file: File = e.target.files[0];
-  //     const result = upLoadImgToCloudStorage(file);
-  //     console.log("result", result);
-  //     setMainImgSrc(result || "");
-  //   }
-  // };
-
   function deleteHandler(index: number) {
     const removeSelectedTemplate = addedTemplate.filter(
       (data, i) => index !== i
@@ -327,13 +327,26 @@ function CreateNewProject() {
       <Container>
         <EditorContainer>
           {addedTemplate.length === 0 ? (
-            <div>{t("create_new_project")}</div>
+            <Text>{t("create_new_project")}</Text>
           ) : (
             <>
               <Input
-                placeholder="title"
+                placeholder={t("project_title")}
                 onChange={(e) => setTitle(e.target.value)}
               />
+              {templateFilter.map(({ keyUuid, ChoseTemplate }, index) => (
+                <SingleEditorContainer key={`${keyUuid}`}>
+                  <ChoseTemplate
+                    pages={pages}
+                    setPages={setPages}
+                    currentIndex={index}
+                    position={position}
+                    setPosition={setPosition}
+                  />
+                  <CloseIcon onClick={() => deleteHandler(index)} />
+                </SingleEditorContainer>
+              ))}
+
               <UploadPic onChange={(e: any) => onUploadMainImgFile(e)}>
                 {t("upload_main_photo")}
                 <input
@@ -353,19 +366,6 @@ function CreateNewProject() {
                   width="40px"
                 />
               )}
-
-              {templateFilter.map(({ keyUuid, ChoseTemplate }, index) => (
-                <SingleEditorContainer key={`${keyUuid}`}>
-                  <ChoseTemplate
-                    pages={pages}
-                    setPages={setPages}
-                    currentIndex={index}
-                    position={position}
-                    setPosition={setPosition}
-                  />
-                  <CloseIcon onClick={() => deleteHandler(index)} />
-                </SingleEditorContainer>
-              ))}
               <Btn onClick={() => confirmAllEdit()}>{t("confirm_edit")}</Btn>
             </>
           )}

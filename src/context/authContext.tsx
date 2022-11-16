@@ -171,6 +171,7 @@ export function AuthContextProvider({ children }: BodyProp) {
         friendList: string[];
         favoriteList: string[];
         collection: string[];
+        introduction: string;
       };
 
       setUserId(uid);
@@ -208,6 +209,7 @@ export function AuthContextProvider({ children }: BodyProp) {
         friendList: [],
         favoriteList: [],
         collection: [],
+        introduction: "",
       });
       setUserId(uid);
       setIsLogin(true);
@@ -235,6 +237,7 @@ export function AuthContextProvider({ children }: BodyProp) {
       friendList: [],
       favoriteList: [],
       collection: [],
+      introduction: "",
     });
     if (!gmail || !photoURL || !displayName) return;
     setUserId(uid);
@@ -260,6 +263,7 @@ export function AuthContextProvider({ children }: BodyProp) {
       friendList: [],
       favoriteList: [],
       collection: [],
+      introduction: "",
     });
     if (!fbMmail || !photoURL || !displayName) return;
     setUserId(uid);
@@ -277,6 +281,8 @@ export function AuthContextProvider({ children }: BodyProp) {
     setEmail("");
     setAvatar("");
     setUserProjects([]);
+    setFriendList([]);
+    setFavoriteList([]);
     setIsLogin(false);
     alert(t("logout_successfully"));
   };

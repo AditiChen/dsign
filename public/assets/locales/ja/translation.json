@@ -11,7 +11,7 @@
   "continue_with_facebook": "Facebook 登録",
   "input_name": "名前",
   "input_email": "Eメール",
-  "input_password": "パスワード",
+  "input_password": "パスワードは8文字でお願いします",
   "check_input_password": "パスワード（確認）",
   "name_input_check": "ユーザー名を入力してください",
   "email_and_password_input_check": "Eメールアドレスとパスワードを入力してください",
@@ -26,6 +26,8 @@
   "logout_successfully": "ログアウト成功！",
 
   "upload_main_photo": "表紙写真のアップロード",
+  "project_title": "表題",
+  "create_new_project": "新規作成",
   "insert_location": "アドレスを入力",
   "confirm_location": "場所を確認する",
   "type_content": "ここにコンテンツを入力...",
@@ -43,9 +45,6 @@
   "please_login": "ログインしてください",
   "project_list": "プロジェクト一覧",
   "go_to_create_project": "空っぽ",
-  "view_project_detail": "プロジェクト詳細を見る",
-  "edit_again": "編集プロジェクト",
-  "delete_project": "削除プロジェクト",
   "delete_project_warning": "本当にこのプロジェクトを削除しますか？",
 
   "request_list": "友達申請",

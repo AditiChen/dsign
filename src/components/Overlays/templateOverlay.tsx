@@ -19,6 +19,8 @@ import closeIcon from "../../icons/close-icon.png";
 import closeIconHover from "../../icons/close-icon-hover.png";
 import confirmIcon from "../../icons/confirm-icon.png";
 import confirmedIcon from "../../icons/confirmed-icon.png";
+import arrowIcon from "../../icons/arrow-icon.png";
+import arrowIconHover from "../../icons/arrow-icon-hover.png";
 
 interface Prop {
   url?: string;
@@ -62,6 +64,21 @@ const CloseIcon = styled.div`
   background-position: center;
   &:hover {
     background-image: url(${closeIconHover});
+  }
+`;
+
+const ArrowIcon = styled.div`
+  height: 35px;
+  width: 35px;
+  position: absolute;
+  top: 30px;
+  left: 50px;
+  background-image: url(${arrowIcon});
+  background-size: cover;
+  background-position: center;
+  &:hover {
+    cursor: pointer;
+    background-image: url(${arrowIconHover});
   }
 `;
 
@@ -109,7 +126,7 @@ const CollectionContainer = styled.div`
   max-height: 650px;
   display: grid;
   grid-gap: 10px;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   grid-auto-rows: minmax(4, auto);
   overflow: scroll;
   scrollbar-width: none;
@@ -120,15 +137,19 @@ const CollectionContainer = styled.div`
 `;
 
 const CollectionImg = styled.div`
-  width: 135px;
-  height: 135px;
+  margin: 10px auto;
+  width: 150px;
+  height: 150px;
   background-image: ${(props: Prop) => props.url};
   background-size: cover;
   background-position: center;
+  border-radius: 10px;
   &:hover {
+    margin: auto;
     cursor: pointer;
-    border: 1px solid #3c3c3c;
-    box-shadow: 1px 1px 5px #3c3c3c30;
+    width: 155px;
+    height: 155px;
+    box-shadow: 0 0 5px #3c3c3c;
   }
 `;
 
@@ -146,12 +167,13 @@ const UploadPic = styled.label`
   &:hover {
     cursor: pointer;
     color: #ffffff;
-    background-color: #3c3c3c80;
+    background-color: #616161;
   }
 `;
 
 const ControlContainer = styled.div`
   margin-top: 20px;
+  width: 80%;
   display: flex;
   align-items: center;
 `;
@@ -172,16 +194,20 @@ const Btn = styled.button`
   &:hover {
     cursor: pointer;
     color: #ffffff;
-    background-color: #3c3c3c80;
+    background-color: #616161;
   }
 `;
 
 const ConfirmIcon = styled.div`
+  margin-left: auto;
   width: 25px;
   height: 25px;
   background-image: url(${confirmIcon});
   background-size: cover;
   background-position: center;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const ConfirmedIcon = styled(ConfirmIcon)`
@@ -209,7 +235,12 @@ function Overlay({
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<{
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+  }>(null!);
 
   useEffect(() => {
     if (currentImgUrl) {
@@ -231,7 +262,15 @@ function Overlay({
   };
 
   const onCropComplete = useCallback(
-    (croppedArea: any, croppedAreainPixel: any) => {
+    (
+      croppedArea: { width: number; height: number; x: number; y: number },
+      croppedAreainPixel: {
+        width: number;
+        height: number;
+        x: number;
+        y: number;
+      }
+    ) => {
       setCroppedAreaPixels(croppedAreainPixel);
     },
     []
@@ -244,6 +283,7 @@ function Overlay({
       rotation
     )) as { file: File; url: string };
     const awaitCroppedImageToString = String(url);
+    setIsAddToCollection(false);
     setNewPhotoDetail(awaitCroppedImageToString, file);
     setShowOverlay((prev) => !prev);
   }, [croppedAreaPixels, rotation, imgSrc, setNewPhotoDetail, setShowOverlay]);
@@ -255,20 +295,64 @@ function Overlay({
           <Backdrop onClick={() => setShowOverlay((prev) => !prev)} />
           <OverlayModal>
             <CloseIcon onClick={() => setShowOverlay((prev) => !prev)} />
-            <CropperContainer>
-              {imgSrc ? (
-                <Cropper
-                  image={imgSrc}
-                  crop={crop}
-                  rotation={rotation}
-                  zoom={zoom}
-                  aspect={currentAaspect}
-                  onCropChange={setCrop}
-                  onRotationChange={setRotation}
-                  onCropComplete={onCropComplete}
-                  onZoomChange={setZoom}
-                />
-              ) : (
+            {imgSrc ? (
+              <>
+                <ArrowIcon onClick={() => setImgSrc("")} />
+                <CropperContainer>
+                  <Cropper
+                    image={imgSrc}
+                    crop={crop}
+                    rotation={rotation}
+                    zoom={zoom}
+                    aspect={currentAaspect}
+                    onCropChange={setCrop}
+                    onRotationChange={setRotation}
+                    onCropComplete={onCropComplete}
+                    onZoomChange={setZoom}
+                  />
+                </CropperContainer>
+                <ControlContainer>
+                  <SliderContainer>
+                    <Typography>
+                      {t("zoom_image")}: {zoomPercent(zoom)}
+                    </Typography>
+                    <Slider
+                      valueLabelDisplay="auto"
+                      valueLabelFormat={zoomPercent}
+                      min={1}
+                      max={3}
+                      step={0.1}
+                      value={zoom}
+                      onChange={(e, newZoom: any) => setZoom(newZoom)}
+                    />
+                  </SliderContainer>
+                  <SliderContainer>
+                    <Typography>
+                      {t("rotate_image")}: {`${rotation} °`}
+                    </Typography>
+                    <Slider
+                      valueLabelDisplay="auto"
+                      min={0}
+                      max={360}
+                      value={rotation}
+                      onChange={(e, newRotation: any) =>
+                        setRotation(newRotation)
+                      }
+                    />
+                  </SliderContainer>
+                  {isAddToCollection ? (
+                    <ConfirmedIcon
+                      onClick={() => setIsAddToCollection(false)}
+                    />
+                  ) : (
+                    <ConfirmIcon onClick={() => setIsAddToCollection(true)} />
+                  )}
+                  <Text>Add to collection?</Text>
+                  <Btn onClick={showCroppedImage}>{t("confirm_crop")}</Btn>
+                </ControlContainer>
+              </>
+            ) : (
+              <CropperContainer>
                 <NewPhotoContainer>
                   <NewPhotoHeaderContainer>
                     {t("choose_photo")}
@@ -292,47 +376,7 @@ function Overlay({
                       ))}
                   </CollectionContainer>
                 </NewPhotoContainer>
-              )}
-            </CropperContainer>
-            {imgSrc ? (
-              <ControlContainer>
-                <Btn onClick={() => setImgSrc("")}> {t("change_image")}</Btn>
-                <SliderContainer>
-                  <Typography>
-                    {t("zoom_image")}: {zoomPercent(zoom)}
-                  </Typography>
-                  <Slider
-                    valueLabelDisplay="auto"
-                    valueLabelFormat={zoomPercent}
-                    min={1}
-                    max={3}
-                    step={0.1}
-                    value={zoom}
-                    onChange={(e, newZoom: any) => setZoom(newZoom)}
-                  />
-                </SliderContainer>
-                <SliderContainer>
-                  <Typography>
-                    {t("rotate_image")}: {`${rotation} °`}
-                  </Typography>
-                  <Slider
-                    valueLabelDisplay="auto"
-                    min={0}
-                    max={360}
-                    value={rotation}
-                    onChange={(e, newRotation: any) => setRotation(newRotation)}
-                  />
-                </SliderContainer>
-                {isAddToCollection ? (
-                  <ConfirmedIcon onClick={() => setIsAddToCollection(false)} />
-                ) : (
-                  <ConfirmIcon onClick={() => setIsAddToCollection(true)} />
-                )}
-                <Text>Add to collection?</Text>
-                <Btn onClick={showCroppedImage}>{t("confirm_crop")}</Btn>
-              </ControlContainer>
-            ) : (
-              ""
+              </CropperContainer>
             )}
           </OverlayModal>
         </Wrapper>,

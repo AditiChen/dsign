@@ -2,7 +2,6 @@ import {
   collection,
   getDocs,
   query,
-  where,
   getDoc,
   doc,
   limit,
@@ -16,6 +15,7 @@ interface FetchedProjectsType {
   avatar?: string;
   mainUrl: string;
   projectId: string;
+  introduction: string;
   title: string;
   time: number;
   pages: {
@@ -35,6 +35,7 @@ export default async function getAllProject() {
     allFetchedProjects.unshift({
       name: "",
       avatar: "",
+      introduction: "",
       projectId: project.id,
       uid: project.data().uid,
       mainUrl: project.data().mainUrl,
@@ -46,12 +47,14 @@ export default async function getAllProject() {
   await Promise.all(
     allFetchedProjects.map(async (project, index) => {
       const docSnap = await getDoc(doc(db, "users", project.uid));
-      const { name, avatar } = docSnap.data() as {
+      const { name, avatar, introduction } = docSnap.data() as {
         name: string;
         avatar: string;
+        introduction: string;
       };
       allFetchedProjects[index].name = name;
       allFetchedProjects[index].avatar = avatar;
+      allFetchedProjects[index].introduction = introduction;
     })
   );
 

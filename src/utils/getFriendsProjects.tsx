@@ -15,6 +15,7 @@ interface FetchedProjectsType {
   avatar?: string;
   mainUrl: string;
   projectId: string;
+  introduction: string;
   title: string;
   time: number;
   pages: {
@@ -40,6 +41,7 @@ export default async function getFriendsProjects(
     fetchedFriendProjects.unshift({
       name: "",
       avatar: "",
+      introduction: "",
       projectId: project.id,
       uid: project.data().uid,
       mainUrl: project.data().mainUrl,
@@ -51,12 +53,14 @@ export default async function getFriendsProjects(
   await Promise.all(
     fetchedFriendProjects.map(async (project, index) => {
       const docSnap = await getDoc(doc(db, "users", project.uid));
-      const { name, avatar } = docSnap.data() as {
+      const { name, avatar, introduction } = docSnap.data() as {
         name: string;
         avatar: string;
+        introduction: string;
       };
       fetchedFriendProjects[index].name = name;
       fetchedFriendProjects[index].avatar = avatar;
+      fetchedFriendProjects[index].introduction = introduction;
     })
   );
 

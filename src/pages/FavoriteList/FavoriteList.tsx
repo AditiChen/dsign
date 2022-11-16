@@ -1,21 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+import ReactLoading from "react-loading";
 
-import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
 import getFavoriteProjects from "../../utils/getFavoriteProjects";
-
-import likeIcon from "../../icons/like-icon.png";
-import likedIcon from "../../icons/liked-icon.png";
-import likeIconHover from "../../icons/like-icon-hover.png";
-
-interface Prop {
-  img?: string;
-  url?: string;
-}
+import Brick from "../../components/Brick/Brick";
 
 interface FetchedProjectsType {
   uid: string;
@@ -23,6 +13,7 @@ interface FetchedProjectsType {
   avatar?: string;
   mainUrl: string;
   projectId: string;
+  introduction: string;
   title: string;
   time: number;
   pages: {
@@ -60,130 +51,69 @@ const Text = styled.div`
 const BricksContainer = styled.div`
   margin: 0 auto;
   padding-bottom: 50px;
-  width: 1300px;
+  width: 1620px;
   height: 100%;
   position: relative;
   display: grid;
-  grid-gap: 20px;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: minmax(4, auto);
-`;
-
-const SingleProjectContainer = styled.div`
-  margin: 0 auto 5px auto;
-  width: 300px;
-  height: 350px;
-  border: 1px solid #787878;
-`;
-
-const ImgContainer = styled.div`
-  width: 100%;
-  height: 300px;
-  background-color: lightgray;
-  background-image: ${(props: Prop) => props.img};
-  background-size: cover;
-  background-position: center;
-`;
-
-const InfoContainer = styled.div`
-  padding: 0 15px;
-  width: 300px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-`;
-
-const Avatar = styled.div`
-  width: 36px;
-  height: 36px;
-  border-radius: 20px;
-  background-image: ${(props: Prop) => props.img};
-  background-size: cover;
-  background-position: center;
-`;
-
-const Author = styled.div`
-  margin-left: 10px;
-  font-size: 18px;
-`;
-
-const LikedIcon = styled.div`
-  margin-left: auto;
-  width: 30px;
-  height: 30px;
-  background-image: url(${likedIcon});
-  background-size: cover;
-  background-position: center;
-`;
-
-const LikeIcon = styled(LikedIcon)`
-  background-image: url(${likeIcon});
-  &:hover {
-    background-image: url(${likeIconHover});
+  grid-gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  @media screen and (min-width: 1400px) and (max-width: 1699px) {
+    width: 1300px;
   }
+  @media screen and (min-width: 1100px) and (max-width: 1399px) {
+    width: 960px;
+  }
+  @media screen and (min-width: 800px) and (max-width: 1099px) {
+    width: 630px;
+  }
+  @media screen and (max-width: 799px) {
+    padding: 20px 0;
+    width: 330px;
+  }
+`;
+
+const Loading = styled(ReactLoading)`
+  margin: 50px auto;
 `;
 
 function FavoriteList() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const { userId, setSingleProjectId, favoriteList } = useContext(AuthContext);
+  const { userId, favoriteList } = useContext(AuthContext);
   const [projects, setProjects] = useState<FetchedProjectsType[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setProjects([]);
     async function getProjects() {
+      setIsLoading(true);
       const favoriteProjectsData = await getFavoriteProjects(favoriteList);
       setProjects(favoriteProjectsData);
+      setIsLoading(false);
     }
     getProjects();
   }, [userId, favoriteList]);
-
-  async function likeProjectHandler(projectId: string) {
-    await updateDoc(doc(db, "users", userId), {
-      favoriteList: arrayUnion(projectId),
-    });
-  }
-
-  async function dislikeProjectHandler(projectId: string) {
-    await updateDoc(doc(db, "users", userId), {
-      favoriteList: arrayRemove(projectId),
-    });
-  }
-
-  function toSingleProjectPage(projectId: string) {
-    setSingleProjectId(projectId);
-    navigate("/singleProject");
-  }
 
   return (
     <Wrapper>
       <HeaderContainer>
         <Text>{t("favorite_list")}</Text>
       </HeaderContainer>
-
-      <BricksContainer>
-        {projects.map((project) => (
-          <SingleProjectContainer key={project.projectId}>
-            <ImgContainer
-              img={`url(${project.mainUrl})`}
-              onClick={() => toSingleProjectPage(project.projectId)}
+      {isLoading ? (
+        <Loading type="cylon" color="#3c3c3c" />
+      ) : (
+        <BricksContainer>
+          {projects.map((project) => (
+            <Brick
+              key={project.projectId}
+              uid={project.uid}
+              projectId={project.projectId}
+              mainUrl={project.mainUrl}
+              avatar={project.avatar || ""}
+              name={project.name || ""}
+              introduction={project.introduction || ""}
             />
-            <InfoContainer>
-              <Avatar img={`url(${project.avatar})`} />
-              <Author>{project.name}</Author>
-              {favoriteList.indexOf(project.projectId) === -1 ? (
-                <LikeIcon
-                  onClick={() => likeProjectHandler(project.projectId)}
-                />
-              ) : (
-                <LikedIcon
-                  onClick={() => dislikeProjectHandler(project.projectId)}
-                />
-              )}
-            </InfoContainer>
-          </SingleProjectContainer>
-        ))}
-      </BricksContainer>
+          ))}
+        </BricksContainer>
+      )}
     </Wrapper>
   );
 }
