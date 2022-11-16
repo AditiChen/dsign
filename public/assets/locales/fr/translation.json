@@ -45,9 +45,6 @@
   "please_login": "Veuillez loger",
   "project_list": "Liste des projets",
   "go_to_create_project": "C'est vide",
-  "view_project_detail": "Voir le détail",
-  "edit_again": "Modifier",
-  "delete_project": "Supprimer le projet",
   "delete_project_warning": "Êtes-vous sûr de vouloir supprimer ce projet ?",
 
   "request_list": "Demandes d'amis",

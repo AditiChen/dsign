@@ -66,7 +66,7 @@ const Input = styled.input`
   width: 1200px;
   height: 50px;
   color: #3c3c3c;
-  font-size: 18px;
+  font-size: 20px;
   background-color: #f0f0f090;
   border: 1px solid gray;
   border-radius: 10px;
@@ -100,7 +100,7 @@ const SingleEditorContainer = styled.div`
   width: 1200px;
   height: 760px;
   & + & {
-    margin-top: 60px;
+    margin-top: 80px;
   }
 `;
 

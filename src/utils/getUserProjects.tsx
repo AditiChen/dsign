@@ -10,6 +10,7 @@ export default async function getUserProjects(userId: string) {
     uid: string;
     mainUrl: string;
     projectId: string;
+    introduction: string;
     title: string;
     time: number;
     pages: {
@@ -28,6 +29,7 @@ export default async function getUserProjects(userId: string) {
       title: doc.data().title,
       time: doc.data().time,
       pages: doc.data().pages,
+      introduction: doc.data().introduction,
     });
   });
   return fetchedProjects;

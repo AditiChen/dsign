@@ -98,6 +98,7 @@ const ImgContainer = styled.div`
   position: relative;
   border-radius: 10px;
   overflow: hidden;
+  box-shadow: 0 0 5px #616161;
   &:hover {
     margin: 0;
     width: 250px;

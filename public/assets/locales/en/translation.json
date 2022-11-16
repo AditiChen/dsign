@@ -45,9 +45,6 @@
   "please_login": "please login first",
   "project_list": "Project list",
   "go_to_create_project": "It's empty here, go to create your first project :)",
-  "view_project_detail": "View detail",
-  "edit_again": "Edit",
-  "delete_project": "Delete project",
   "delete_project_warning": "Are you sure that you want to delete this project?",
 
   "request_list": "Friend requests",

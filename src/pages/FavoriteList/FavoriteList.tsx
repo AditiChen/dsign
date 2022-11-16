@@ -13,6 +13,7 @@ interface FetchedProjectsType {
   avatar?: string;
   mainUrl: string;
   projectId: string;
+  introduction: string;
   title: string;
   time: number;
   pages: {
@@ -49,7 +50,7 @@ const Text = styled.div`
 
 const BricksContainer = styled.div`
   margin: 0 auto;
-  padding: 50px 0;
+  padding-bottom: 50px;
   width: 1620px;
   height: 100%;
   position: relative;
@@ -96,18 +97,23 @@ function FavoriteList() {
       <HeaderContainer>
         <Text>{t("favorite_list")}</Text>
       </HeaderContainer>
-      {isLoading ? <Loading type="cylon" color="#3c3c3c" /> : ""}
-      <BricksContainer>
-        {projects.map((project) => (
-          <Brick
-            key={project.projectId}
-            projectId={project.projectId}
-            mainUrl={project.mainUrl}
-            avatar={project.avatar || ""}
-            name={project.name || ""}
-          />
-        ))}
-      </BricksContainer>
+      {isLoading ? (
+        <Loading type="cylon" color="#3c3c3c" />
+      ) : (
+        <BricksContainer>
+          {projects.map((project) => (
+            <Brick
+              key={project.projectId}
+              uid={project.uid}
+              projectId={project.projectId}
+              mainUrl={project.mainUrl}
+              avatar={project.avatar || ""}
+              name={project.name || ""}
+              introduction={project.introduction || ""}
+            />
+          ))}
+        </BricksContainer>
+      )}
     </Wrapper>
   );
 }

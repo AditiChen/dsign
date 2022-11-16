@@ -2,18 +2,29 @@ import { useContext } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+} from "firebase/firestore";
+import { v4 as uuid } from "uuid";
 import { db } from "../../context/firebaseSDK";
 
 import { AuthContext } from "../../context/authContext";
+import { FriendContext } from "../../context/friendContext";
 
 import likeIcon from "../../icons/like-icon.png";
-import likedIcon from "../../icons/liked-icon.png";
 import likeIconHover from "../../icons/like-icon-hover.png";
+import likedIcon from "../../icons/liked-icon.png";
+import addFriendIcon from "../../icons/add-friend-icon.png";
+import addFriendIconHover from "../../icons/add-friend-icon-hover.png";
 
 interface Prop {
   img?: string;
   url?: string;
+  fontSize?: string;
 }
 
 const ImgContainer = styled.div`
@@ -43,6 +54,9 @@ const SingleProjectContainer = styled.div`
     height: 310px;
     cursor: pointer;
   }
+  &:hover > ${ImgContainer} {
+    background-color: #3c3c3c90;
+  }
 `;
 
 const InfoContainer = styled.div`
@@ -53,18 +67,65 @@ const InfoContainer = styled.div`
   align-items: center;
 `;
 
-const Avatar = styled.div`
-  width: 36px;
-  height: 36px;
-  border-radius: 20px;
+const UserInfoContainer = styled.div`
+  max-height: 0px;
+  background: linear-gradient(to bottom, #ffffff90, #ffffff);
+  transform-origin: bottom;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in;
+  border-radius: 10px 10px 0 0;
+  position: absolute;
+  bottom: calc(-100% + 71px);
+  left: -14px;
+`;
+
+const UserInfoInnerContainer = styled.div`
+  padding: 20px 15px;
+  max-height: 150px;
+  width: 310px;
+`;
+
+const UserInfoHeaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const InfoAvatar = styled.div`
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
   background-image: ${(props: Prop) => props.img};
   background-size: cover;
   background-position: center;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const Intor = styled.div`
+  margin: 10px 0;
+  font-size: 18px;
+  line-height: 22px;
+  color: #616161;
+`;
+
+const Avatar = styled.div`
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  background-image: ${(props: Prop) => props.img};
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  &:hover > ${UserInfoContainer} {
+    max-height: 150px;
+  }
 `;
 
 const Author = styled.div`
   margin-left: 10px;
-  font-size: 18px;
+  color: #3c3c3c;
+  font-size: ${(props: Prop) => props.fontSize};
 `;
 
 const LikedIcon = styled.div`
@@ -86,55 +147,98 @@ const LikeIcon = styled(LikedIcon)`
   }
 `;
 
+const AddFriendIcon = styled(LikedIcon)`
+  background-image: url(${addFriendIcon});
+  &:hover {
+    background-image: url(${addFriendIconHover});
+  }
+`;
+
 export default function Brick({
+  uid,
   projectId,
   mainUrl,
   avatar,
   name,
+  introduction,
 }: {
+  uid: string;
   projectId: string;
   mainUrl: string;
   avatar: string;
   name: string;
+  introduction: string;
 }) {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { userId, setSingleProjectId, favoriteList } = useContext(AuthContext);
+  const { userId, setSingleProjectId, favoriteList, friendList } =
+    useContext(AuthContext);
+  const { setClickedUserId } = useContext(FriendContext);
 
-  async function likeProjectHandler(clickProjectId: string) {
+  async function likeProjectHandler() {
     if (userId === "") {
       alert(t("please_login"));
       return;
     }
     await updateDoc(doc(db, "users", userId), {
-      favoriteList: arrayUnion(clickProjectId),
+      favoriteList: arrayUnion(projectId),
     });
   }
 
-  async function dislikeProjectHandler(clickProjectId: string) {
+  async function dislikeProjectHandler() {
     await updateDoc(doc(db, "users", userId), {
-      favoriteList: arrayRemove(clickProjectId),
+      favoriteList: arrayRemove(projectId),
     });
   }
 
-  function toSingleProjectPage(clickProjectId: string) {
-    setSingleProjectId(clickProjectId);
+  function toSingleProjectPage() {
+    setSingleProjectId(projectId);
     navigate("/singleProject");
+  }
+
+  async function addFriendHandler() {
+    const requestId = uuid();
+    await setDoc(doc(db, "friendRequests", requestId), {
+      from: userId,
+      to: uid,
+    });
+    alert(t("sen_request_successfully"));
   }
 
   return (
     <SingleProjectContainer key={projectId}>
       <ImgContainer
         img={`url(${mainUrl})`}
-        onClick={() => toSingleProjectPage(projectId)}
+        onClick={() => toSingleProjectPage()}
       />
       <InfoContainer>
-        <Avatar img={`url(${avatar})`} />
-        <Author>{name}</Author>
+        <Avatar img={`url(${avatar})`}>
+          <UserInfoContainer>
+            <UserInfoInnerContainer>
+              <UserInfoHeaderContainer>
+                <InfoAvatar
+                  img={`url(${avatar})`}
+                  onClick={() => {
+                    setClickedUserId(uid);
+                    navigate("/userProfile");
+                  }}
+                />
+                <Author fontSize="24px">{name}</Author>
+                {friendList.indexOf(uid) === -1 && uid !== userId ? (
+                  <AddFriendIcon onClick={() => addFriendHandler()} />
+                ) : (
+                  ""
+                )}
+              </UserInfoHeaderContainer>
+              <Intor>{introduction}</Intor>
+            </UserInfoInnerContainer>
+          </UserInfoContainer>
+        </Avatar>
+        <Author fontSize="18px">{name}</Author>
         {favoriteList.indexOf(projectId) === -1 ? (
-          <LikeIcon onClick={() => likeProjectHandler(projectId)} />
+          <LikeIcon onClick={() => likeProjectHandler()} />
         ) : (
-          <LikedIcon onClick={() => dislikeProjectHandler(projectId)} />
+          <LikedIcon onClick={() => dislikeProjectHandler()} />
         )}
       </InfoContainer>
     </SingleProjectContainer>

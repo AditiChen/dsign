@@ -61,6 +61,9 @@ const Context = styled(Link)`
   font-size: 20px;
   text-decoration: none;
   color: #c4c4c4;
+  & + & {
+    margin-left: 12px;
+  }
   &:hover {
     text-shadow: 0 0 2px #787878;
     font-size: 22px;
@@ -121,7 +124,7 @@ const Language = styled.div`
 `;
 
 const SignBtn = styled.button`
-  margin-left: 20px;
+  margin-left: 30px;
   padding: 0 20px;
   height: 35px;
   color: #ffffff;
@@ -163,7 +166,6 @@ function Header() {
   const { setShowMessageFrame } = useContext(FriendContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [showLanghagesIcon, setShowLanguagesIcon] = useState(false);
 
   function logoutHandler() {
     const ans = window.confirm(t("logout_confirm"));
@@ -218,15 +220,8 @@ function Header() {
         ) : (
           ""
         )}
-        <Icon
-          img={`url(${languageIcon})`}
-          onClick={() => {
-            setShowLanguagesIcon((prev) => !prev);
-          }}
-        >
-          {/* {showLanghagesIcon && ( */}
+        <Icon img={`url(${languageIcon})`}>
           <LanguageOptions />
-          {/* )} */}
         </Icon>
         {isLogin ? (
           <SignBtn

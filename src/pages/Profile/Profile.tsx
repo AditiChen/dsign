@@ -9,6 +9,13 @@ import { db } from "../../context/firebaseSDK";
 import getUserProjects from "../../utils/getUserProjects";
 import { AuthContext } from "../../context/authContext";
 
+import viewIcon from "../../icons/view-icon.png";
+import viewIconHover from "../../icons/view-icon-hover.png";
+import editIcon from "../../icons/edit-icon.png";
+import editIconHover from "../../icons/edit-icon-hover.png";
+import trashIcon from "../../icons/trash-icon.png";
+import trashIconHover from "../../icons/trash-icon-hover.png";
+
 interface Prop {
   url?: string;
   size?: string;
@@ -18,16 +25,19 @@ interface Prop {
   position?: string;
   buttomLine?: string;
   img?: string;
+  hoverImg?: string;
+  marginLift?: string;
 }
 
 const Wrapper = styled.div`
-  padding: 130px 0;
+  padding: 130px 0 50px;
   width: 100%;
   min-width: 100vw;
   height: 100%;
   min-height: calc(100vh - 80px);
   position: relative;
   display: flex;
+  background-color: #b4b4b4;
 `;
 
 const Container = styled.div`
@@ -35,7 +45,6 @@ const Container = styled.div`
   width: 80%;
   max-width: 1500px;
   height: 100%;
-  position: relative;
   display: flex;
   @media screen and (max-width: 1300px) {
     width: 1200px;
@@ -43,8 +52,10 @@ const Container = styled.div`
 `;
 
 const UserInfoContainer = styled.div`
-  width: 400px;
+  width: 300px;
   padding: 20px;
+  position: absolute;
+  left: 5vw;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -53,7 +64,7 @@ const UserInfoContainer = styled.div`
 const Avatar = styled.div`
   height: 180px;
   width: 180px;
-  background-image: ${(props: Prop) => props.url};
+  background-image: ${(props: Prop) => props.url || "none"};
   background-size: cover;
   background-position: center;
 `;
@@ -70,7 +81,7 @@ const UserInfo = styled.div`
 
 const ProjectListContainer = styled.div`
   margin: 0 auto;
-  width: 1200px;
+  width: 800px;
   height: 100%;
   position: relative;
   display: flex;
@@ -91,22 +102,44 @@ const SingleProjectContainer = styled.div`
   height: 200px;
   width: 100%;
   display: flex;
-  border: 1px solid black;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 1px 1px 5px #3c3c3c inset;
   & + & {
     margin-top: 20px;
   }
 `;
 
 const ProjectLeftContainer = styled.div`
-  padding: 10px;
+  padding: 20px;
   height: 200px;
   width: 40%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 `;
 
 const ProjectTitle = styled.div`
   font-size: 24px;
+  color: #3c3c3c;
+`;
+
+const ProjectIconContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const Icon = styled.div`
+  margin-left: ${(props: Prop) => props.marginLift};
+  width: 30px;
+  height: 30px;
+  background-image: ${(props: Prop) => props.img};
+  background-position: center;
+  background-size: cover;
+  &:hover {
+    background-image: ${(props: Prop) => props.hoverImg};
+  }
 `;
 
 const ProjectRightContainer = styled.div`
@@ -134,12 +167,6 @@ const PhotoUrl = styled.div`
   & + & {
     margin-left: 10px;
   }
-`;
-
-const Button = styled.button`
-  margin-top: 10px;
-  width: 170px;
-  height: 40px;
 `;
 
 const Loading = styled(ReactLoading)`
@@ -220,33 +247,44 @@ function Profile() {
                 <SingleProjectContainer key={projectData.projectId}>
                   <ProjectLeftContainer>
                     <ProjectTitle>{projectData.title}</ProjectTitle>
-                    {/* <Text>{projectData.time.toDate()}</Text> */}
-                    <Button
-                      onClick={() => toSingleProjectPage(projectData.projectId)}
-                    >
-                      {t("view_project_detail")}
-                    </Button>
-                    <Button
-                      onClick={() =>
-                        toEditExistProjectPage(projectData.projectId)
-                      }
-                    >
-                      {t("edit_again")}
-                    </Button>
-                    <Button
-                      onClick={() =>
-                        deleteProjectHandler(projectData.projectId)
-                      }
-                    >
-                      {t("delete_project")}
-                    </Button>
+                    <ProjectIconContainer>
+                      <Icon
+                        img={`url(${viewIcon})`}
+                        hoverImg={`url(${viewIconHover})`}
+                        marginLift="0"
+                        onClick={() =>
+                          toSingleProjectPage(projectData.projectId)
+                        }
+                      />
+                      <Icon
+                        img={`url(${editIcon})`}
+                        hoverImg={`url(${editIconHover})`}
+                        marginLift="15px"
+                        onClick={() =>
+                          toEditExistProjectPage(projectData.projectId)
+                        }
+                      />
+                      <Icon
+                        img={`url(${trashIcon})`}
+                        hoverImg={`url(${trashIconHover})`}
+                        marginLift="auto"
+                        onClick={() =>
+                          deleteProjectHandler(projectData.projectId)
+                        }
+                      />
+                    </ProjectIconContainer>
                   </ProjectLeftContainer>
                   <ProjectRightContainer>
                     <ProjectRightInnerContainer>
-                      {projectData.pages[0].url &&
+                      {/* {projectData.pages[0].url &&
                         projectData.pages[0].url.map((singleUrl: string) => (
                           <PhotoUrl key={singleUrl} img={`url(${singleUrl})`} />
-                        ))}
+                        ))} */}
+
+                      <PhotoUrl
+                        key={projectData.mainUrl}
+                        img={`url(${projectData.mainUrl})`}
+                      />
                     </ProjectRightInnerContainer>
                   </ProjectRightContainer>
                 </SingleProjectContainer>

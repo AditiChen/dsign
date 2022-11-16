@@ -1,9 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
-import { db } from "../../context/firebaseSDK";
+import ReactLoading from "react-loading";
 
 import { AuthContext } from "../../context/authContext";
 import getFriendsProjects from "../../utils/getFriendsProjects";
@@ -17,6 +14,7 @@ interface FetchedProjectsType {
   avatar?: string;
   mainUrl: string;
   projectId: string;
+  introduction: string;
   title: string;
   time: number;
   pages: {
@@ -77,13 +75,19 @@ const BricksContainer = styled.div`
   }
 `;
 
+const Loading = styled(ReactLoading)`
+  margin: 50px auto;
+`;
+
 function PortfolioBricks() {
   const { userId, friendList } = useContext(AuthContext);
   const [projects, setProjects] = useState<FetchedProjectsType[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (userId === "") return;
     async function getProjects() {
+      setIsLoading(true);
       const friendProjectsData = await getFriendsProjects(userId, friendList);
       setProjects(friendProjectsData);
       if (friendProjectsData.length < 50) {
@@ -93,6 +97,7 @@ function PortfolioBricks() {
         );
         setProjects([...friendProjectsData, ...otherUsersProjectsData]);
       }
+      setIsLoading(false);
     }
     getProjects();
   }, [userId]);
@@ -101,8 +106,10 @@ function PortfolioBricks() {
     if (userId !== "") return;
     setProjects([]);
     async function getAllProjects() {
+      setIsLoading(true);
       const allData = await getAllProject();
       setProjects(allData);
+      setIsLoading(false);
     }
     getAllProjects();
   }, []);
@@ -112,18 +119,24 @@ function PortfolioBricks() {
       <BannerContainer>
         <Text>Banner</Text>
       </BannerContainer>
-      <BricksContainer>
-        {projects &&
-          projects.map((project) => (
-            <Brick
-              key={project.projectId}
-              projectId={project.projectId}
-              mainUrl={project.mainUrl}
-              avatar={project.avatar || ""}
-              name={project.name || ""}
-            />
-          ))}
-      </BricksContainer>
+      {isLoading ? (
+        <Loading type="cylon" color="#3c3c3c" />
+      ) : (
+        <BricksContainer>
+          {projects &&
+            projects.map((project) => (
+              <Brick
+                key={project.projectId}
+                uid={project.uid}
+                projectId={project.projectId}
+                mainUrl={project.mainUrl}
+                avatar={project.avatar || ""}
+                name={project.name || ""}
+                introduction={project.introduction || ""}
+              />
+            ))}
+        </BricksContainer>
+      )}
     </Wrapper>
   );
 }

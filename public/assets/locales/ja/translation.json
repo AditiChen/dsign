@@ -45,9 +45,6 @@
   "please_login": "ログインしてください",
   "project_list": "プロジェクト一覧",
   "go_to_create_project": "空っぽ",
-  "view_project_detail": "プロジェクト詳細を見る",
-  "edit_again": "編集プロジェクト",
-  "delete_project": "削除プロジェクト",
   "delete_project_warning": "本当にこのプロジェクトを削除しますか？",
 
   "request_list": "友達申請",
