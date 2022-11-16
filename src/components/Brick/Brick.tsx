@@ -224,7 +224,9 @@ export default function Brick({
                   }}
                 />
                 <Author fontSize="24px">{name}</Author>
-                {friendList.indexOf(uid) === -1 && uid !== userId ? (
+                {friendList.indexOf(uid) === -1 &&
+                uid !== userId &&
+                userId !== "" ? (
                   <AddFriendIcon onClick={() => addFriendHandler()} />
                 ) : (
                   ""

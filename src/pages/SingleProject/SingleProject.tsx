@@ -278,7 +278,8 @@ function SingleProject() {
                       />
                       <Author>{singleProjectData[0]?.name}</Author>
                       {friendList.indexOf(singleProjectData[0]?.uid) === -1 &&
-                      singleProjectData[0]?.uid !== userId ? (
+                      singleProjectData[0]?.uid !== userId &&
+                      userId !== "" ? (
                         <AddFriendIcon onClick={() => addFriendHandler()} />
                       ) : (
                         ""

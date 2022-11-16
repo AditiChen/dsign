@@ -281,6 +281,8 @@ export function AuthContextProvider({ children }: BodyProp) {
     setEmail("");
     setAvatar("");
     setUserProjects([]);
+    setFriendList([]);
+    setFavoriteList([]);
     setIsLogin(false);
     alert(t("logout_successfully"));
   };

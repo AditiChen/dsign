@@ -55,12 +55,12 @@ const Logo = styled(Link)`
   }
 `;
 
-const Context = styled(Link)`
+const Context = styled(Link)<{ $color?: string }>`
   padding: 10px 10px;
   margin-left: 20px;
   font-size: 20px;
   text-decoration: none;
-  color: #c4c4c4;
+  color: ${(props) => props.$color || "#c4c4c4"};
   & + & {
     margin-left: 12px;
   }
@@ -72,6 +72,7 @@ const Context = styled(Link)`
 `;
 
 const RightContainer = styled.div`
+  padding-right: 20px;
   display: flex;
 `;
 
@@ -123,13 +124,13 @@ const Language = styled.div`
   }
 `;
 
-const SignBtn = styled.button`
+const SignBtn = styled.button<{ $color?: string; backgroundColor?: string }>`
   margin-left: 30px;
   padding: 0 20px;
   height: 35px;
-  color: #ffffff;
+  color: ${(props) => props.$color || "#ffffff"};
   font-size: 18px;
-  background-color: transparent;
+  background-color: ${(props) => props.backgroundColor || "transparent"};
   border: 1px solid #616161;
   border-radius: 5px;
   &:hover {
@@ -181,6 +182,7 @@ function Header() {
         {isLogin ? (
           <>
             <Context
+              $color="#f5dfa9"
               to="createNewProject"
               onClick={() => setShowMessageFrame(false)}
             >
@@ -233,6 +235,8 @@ function Header() {
           </SignBtn>
         ) : (
           <SignBtn
+            $color="#3c3c3c"
+            backgroundColor="#f5dfa9"
             onClick={() => {
               navigate("/login");
             }}
