@@ -22,9 +22,6 @@ import confirmedIcon from "../../icons/confirmed-icon.png";
 import arrowIcon from "../../icons/arrow-icon.png";
 import arrowIconHover from "../../icons/arrow-icon-hover.png";
 
-interface Prop {
-  url?: string;
-}
 interface OverlayProps {
   setShowOverlay: Dispatch<SetStateAction<boolean>>;
   setNewPhotoDetail: (returnedUrl: string, returnedFile: File) => void;
@@ -136,11 +133,11 @@ const CollectionContainer = styled.div`
   }
 `;
 
-const CollectionImg = styled.div`
+const CollectionImg = styled.div<{ url: string }>`
   margin: 10px auto;
   width: 150px;
   height: 150px;
-  background-image: ${(props: Prop) => props.url};
+  background-image: ${(props) => props.url};
   background-size: cover;
   background-position: center;
   border-radius: 10px;
@@ -356,12 +353,13 @@ function Overlay({
                 <NewPhotoContainer>
                   <NewPhotoHeaderContainer>
                     {t("choose_photo")}
-                    <UploadPic onChange={(e: any) => onUploadFile(e)}>
+                    <UploadPic>
                       {t("upload_image")}
                       <input
                         type="file"
                         accept="image/*"
                         style={{ display: "none" }}
+                        onChange={(e) => onUploadFile(e)}
                       />
                     </UploadPic>
                   </NewPhotoHeaderContainer>

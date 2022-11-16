@@ -168,7 +168,7 @@ function EditExistProject() {
   >([]);
   const [pages, setPages] = useState<
     {
-      type: number;
+      type?: number;
       content?: string[];
       url?: string[];
       location?: { lat?: number; lng?: number };

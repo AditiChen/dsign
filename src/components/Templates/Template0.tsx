@@ -27,7 +27,7 @@ interface InsertProp {
   setPages: Dispatch<
     SetStateAction<
       {
-        type: number;
+        type?: number;
         content?: string[];
         url?: string[];
         location?: { lat?: number; lng?: number };
@@ -35,7 +35,7 @@ interface InsertProp {
     >
   >;
   pages: {
-    type: number;
+    type?: number;
     content?: string[];
     url?: string[];
     location?: { lat?: number; lng?: number };

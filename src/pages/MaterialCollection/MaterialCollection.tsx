@@ -137,9 +137,9 @@ function MaterialCollection() {
   const [currentUrl, setCurrentUrl] = useState("");
   const [progressing, setProgressing] = useState(100);
 
-  const onUploadImgFiles = (files: File[]) => {
-    const newFiles = [...files];
-    if (newFiles.length === 0) return;
+  const onUploadImgFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files === null) return;
+    const newFiles = Array.from(e.target.files);
     newFiles.forEach((file: File) => {
       const urlByUuid = `${uuid()}`;
       const imgRef = ref(storage, `images/${userId}/${urlByUuid}`);
@@ -177,16 +177,13 @@ function MaterialCollection() {
       <Wrapper>
         <HeaderContainer>
           <Text>{t("your_collection")}</Text>
-          <AddFolderIcon
-            onChange={(e: any) => {
-              onUploadImgFiles(e.target.files);
-            }}
-          >
+          <AddFolderIcon>
             <input
               type="file"
               accept="image/*"
               style={{ display: "none" }}
               multiple
+              onChange={(e) => onUploadImgFiles(e)}
             />
           </AddFolderIcon>
         </HeaderContainer>

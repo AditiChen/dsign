@@ -10,26 +10,27 @@ import { useTranslation } from "react-i18next";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 import Cropper from "react-easy-crop";
+import ReactLoading from "react-loading";
 import { Slider, Typography } from "@mui/material";
+import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 import { AuthContext } from "../../context/authContext";
 
+import { db, storage } from "../../context/firebaseSDK";
 import getCroppedImg from "../../utils/cropImage";
 import closeIcon from "../../icons/close-icon.png";
 import closeIconHover from "../../icons/close-icon-hover.png";
 import confirmIcon from "../../icons/confirm-icon.png";
 import confirmedIcon from "../../icons/confirmed-icon.png";
+import arrowIcon from "../../icons/arrow-icon.png";
+import arrowIconHover from "../../icons/arrow-icon-hover.png";
 
-interface Prop {
-  url?: string;
-}
 interface OverlayProps {
+  userId: string;
   setShowOverlay: Dispatch<SetStateAction<boolean>>;
-  setNewPhotoDetail: (returnedUrl: string, returnedFile: File) => void;
-  currentAaspect: number;
-  currentImgUrl: string;
-  isAddToCollection: boolean;
-  setIsAddToCollection: Dispatch<SetStateAction<boolean>>;
+  mainImgSrc: string;
+  setMainImgSrc: Dispatch<SetStateAction<string>>;
 }
 
 const Wrapper = styled.div`
@@ -62,6 +63,21 @@ const CloseIcon = styled.div`
   background-position: center;
   &:hover {
     background-image: url(${closeIconHover});
+  }
+`;
+
+const ArrowIcon = styled.div`
+  height: 35px;
+  width: 35px;
+  position: absolute;
+  top: 30px;
+  left: 50px;
+  background-image: url(${arrowIcon});
+  background-size: cover;
+  background-position: center;
+  &:hover {
+    cursor: pointer;
+    background-image: url(${arrowIconHover});
   }
 `;
 
@@ -109,7 +125,7 @@ const CollectionContainer = styled.div`
   max-height: 650px;
   display: grid;
   grid-gap: 10px;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   grid-auto-rows: minmax(4, auto);
   overflow: scroll;
   scrollbar-width: none;
@@ -119,16 +135,20 @@ const CollectionContainer = styled.div`
   }
 `;
 
-const CollectionImg = styled.div`
-  width: 135px;
-  height: 135px;
-  background-image: ${(props: Prop) => props.url};
+const CollectionImg = styled.div<{ url: string }>`
+  margin: 10px auto;
+  width: 150px;
+  height: 150px;
+  background-image: ${(props) => props.url};
   background-size: cover;
   background-position: center;
+  border-radius: 10px;
   &:hover {
+    margin: auto;
     cursor: pointer;
-    border: 1px solid #3c3c3c;
-    box-shadow: 1px 1px 5px #3c3c3c30;
+    width: 155px;
+    height: 155px;
+    box-shadow: 0 0 5px #3c3c3c;
   }
 `;
 
@@ -146,12 +166,13 @@ const UploadPic = styled.label`
   &:hover {
     cursor: pointer;
     color: #ffffff;
-    background-color: #3c3c3c80;
+    background-color: #616161;
   }
 `;
 
 const ControlContainer = styled.div`
   margin-top: 20px;
+  width: 80%;
   display: flex;
   align-items: center;
 `;
@@ -172,16 +193,20 @@ const Btn = styled.button`
   &:hover {
     cursor: pointer;
     color: #ffffff;
-    background-color: #3c3c3c80;
+    background-color: #616161;
   }
 `;
 
 const ConfirmIcon = styled.div`
+  margin-left: auto;
   width: 25px;
   height: 25px;
   background-image: url(${confirmIcon});
   background-size: cover;
   background-position: center;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const ConfirmedIcon = styled(ConfirmIcon)`
@@ -193,15 +218,28 @@ const Text = styled.div`
   font-size: 18px;
 `;
 
+const LoadingBackground = styled.div`
+  background-color: #00000090;
+  width: 100%;
+  height: 100%;
+  z-index: 103;
+  position: absolute;
+`;
+
+const Loading = styled(ReactLoading)`
+  position: absolute;
+  left: 425px;
+  top: 280px;
+  z-index: 104;
+`;
+
 const portalElement = document.getElementById("overlays") as HTMLElement;
 
-function Overlay({
+function SquareOverlay({
+  userId,
   setShowOverlay,
-  setNewPhotoDetail,
-  currentAaspect,
-  currentImgUrl,
-  isAddToCollection,
-  setIsAddToCollection,
+  mainImgSrc,
+  setMainImgSrc,
 }: OverlayProps) {
   const { t } = useTranslation();
   const { collection } = useContext(AuthContext);
@@ -209,6 +247,8 @@ function Overlay({
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
+  const [progressing, setProgressing] = useState(false);
+  const [isAddToCollection, setIsAddToCollection] = useState(false);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<{
     width: number;
     height: number;
@@ -217,8 +257,8 @@ function Overlay({
   }>(null!);
 
   useEffect(() => {
-    if (currentImgUrl) {
-      setImgSrc(currentImgUrl);
+    if (mainImgSrc) {
+      setImgSrc(mainImgSrc);
     }
   }, []);
 
@@ -250,16 +290,48 @@ function Overlay({
     []
   );
 
-  const showCroppedImage = useCallback(async () => {
+  const croppedImage = useCallback(async () => {
+    setProgressing(true);
     const { file, url } = (await getCroppedImg(
       imgSrc,
       croppedAreaPixels,
       rotation
     )) as { file: File; url: string };
-    const awaitCroppedImageToString = String(url);
-    setNewPhotoDetail(awaitCroppedImageToString, file);
+    const urlByTime = `${+new Date()}`;
+    const imgRef = ref(storage, `images/${userId}/${urlByTime}`);
+    const uploadTask = uploadBytesResumable(imgRef, file);
+    await new Promise((resolve, reject) => {
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        },
+        (error) => {
+          console.log("Upload err", error);
+        },
+        async () => {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          setMainImgSrc(downloadURL);
+          if (isAddToCollection) {
+            await updateDoc(doc(db, "users", userId), {
+              collection: arrayUnion(downloadURL),
+            });
+          }
+          resolve(downloadURL);
+        }
+      );
+    });
+    setProgressing(false);
     setShowOverlay((prev) => !prev);
-  }, [croppedAreaPixels, rotation, imgSrc, setNewPhotoDetail, setShowOverlay]);
+  }, [
+    croppedAreaPixels,
+    rotation,
+    zoom,
+    imgSrc,
+    setShowOverlay,
+    isAddToCollection,
+  ]);
 
   return (
     <>
@@ -268,29 +340,80 @@ function Overlay({
           <Backdrop onClick={() => setShowOverlay((prev) => !prev)} />
           <OverlayModal>
             <CloseIcon onClick={() => setShowOverlay((prev) => !prev)} />
-            <CropperContainer>
-              {imgSrc ? (
-                <Cropper
-                  image={imgSrc}
-                  crop={crop}
-                  rotation={rotation}
-                  zoom={zoom}
-                  aspect={currentAaspect}
-                  onCropChange={setCrop}
-                  onRotationChange={setRotation}
-                  onCropComplete={onCropComplete}
-                  onZoomChange={setZoom}
-                />
-              ) : (
+            {imgSrc ? (
+              <>
+                <ArrowIcon onClick={() => setImgSrc("")} />
+                <CropperContainer>
+                  {progressing && (
+                    <>
+                      <LoadingBackground />
+                      <Loading type="spokes" color="#ffffff" />
+                    </>
+                  )}
+                  <Cropper
+                    image={imgSrc}
+                    crop={crop}
+                    rotation={rotation}
+                    zoom={zoom}
+                    aspect={1 / 1}
+                    onCropChange={setCrop}
+                    onRotationChange={setRotation}
+                    onCropComplete={onCropComplete}
+                    onZoomChange={setZoom}
+                  />
+                </CropperContainer>
+                <ControlContainer>
+                  <SliderContainer>
+                    <Typography>
+                      {t("zoom_image")}: {zoomPercent(zoom)}
+                    </Typography>
+                    <Slider
+                      valueLabelDisplay="auto"
+                      valueLabelFormat={zoomPercent}
+                      min={1}
+                      max={3}
+                      step={0.1}
+                      value={zoom}
+                      onChange={(e, newZoom: any) => setZoom(newZoom)}
+                    />
+                  </SliderContainer>
+                  <SliderContainer>
+                    <Typography>
+                      {t("rotate_image")}: {`${rotation} °`}
+                    </Typography>
+                    <Slider
+                      valueLabelDisplay="auto"
+                      min={0}
+                      max={360}
+                      value={rotation}
+                      onChange={(e, newRotation: any) => {
+                        setRotation(newRotation);
+                      }}
+                    />
+                  </SliderContainer>
+                  {isAddToCollection ? (
+                    <ConfirmedIcon
+                      onClick={() => setIsAddToCollection(false)}
+                    />
+                  ) : (
+                    <ConfirmIcon onClick={() => setIsAddToCollection(true)} />
+                  )}
+                  <Text>Add to collection?</Text>
+                  <Btn onClick={croppedImage}>{t("confirm_crop")}</Btn>
+                </ControlContainer>
+              </>
+            ) : (
+              <CropperContainer>
                 <NewPhotoContainer>
                   <NewPhotoHeaderContainer>
                     {t("choose_photo")}
-                    <UploadPic onChange={(e: any) => onUploadFile(e)}>
+                    <UploadPic>
                       {t("upload_image")}
                       <input
                         type="file"
                         accept="image/*"
                         style={{ display: "none" }}
+                        onChange={(e) => onUploadFile(e)}
                       />
                     </UploadPic>
                   </NewPhotoHeaderContainer>
@@ -305,47 +428,7 @@ function Overlay({
                       ))}
                   </CollectionContainer>
                 </NewPhotoContainer>
-              )}
-            </CropperContainer>
-            {imgSrc ? (
-              <ControlContainer>
-                <Btn onClick={() => setImgSrc("")}> {t("change_image")}</Btn>
-                <SliderContainer>
-                  <Typography>
-                    {t("zoom_image")}: {zoomPercent(zoom)}
-                  </Typography>
-                  <Slider
-                    valueLabelDisplay="auto"
-                    valueLabelFormat={zoomPercent}
-                    min={1}
-                    max={3}
-                    step={0.1}
-                    value={zoom}
-                    onChange={(e, newZoom: any) => setZoom(newZoom)}
-                  />
-                </SliderContainer>
-                <SliderContainer>
-                  <Typography>
-                    {t("rotate_image")}: {`${rotation} °`}
-                  </Typography>
-                  <Slider
-                    valueLabelDisplay="auto"
-                    min={0}
-                    max={360}
-                    value={rotation}
-                    onChange={(e, newRotation: any) => setRotation(newRotation)}
-                  />
-                </SliderContainer>
-                {isAddToCollection ? (
-                  <ConfirmedIcon onClick={() => setIsAddToCollection(false)} />
-                ) : (
-                  <ConfirmIcon onClick={() => setIsAddToCollection(true)} />
-                )}
-                <Text>Add to collection?</Text>
-                <Btn onClick={showCroppedImage}>{t("confirm_crop")}</Btn>
-              </ControlContainer>
-            ) : (
-              ""
+              </CropperContainer>
             )}
           </OverlayModal>
         </Wrapper>,
@@ -355,4 +438,4 @@ function Overlay({
   );
 }
 
-export default Overlay;
+export default SquareOverlay;

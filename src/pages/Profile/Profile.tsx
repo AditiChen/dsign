@@ -15,6 +15,8 @@ import editIcon from "../../icons/edit-icon.png";
 import editIconHover from "../../icons/edit-icon-hover.png";
 import trashIcon from "../../icons/trash-icon.png";
 import trashIconHover from "../../icons/trash-icon-hover.png";
+import cameraIcon from "../../icons/camera-icon.png";
+import cameraIconHover from "../../icons/camera-icon-hover.png";
 
 interface Prop {
   url?: string;
