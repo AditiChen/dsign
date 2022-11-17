@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import styled from "styled-components";
-import { doc, deleteDoc } from "firebase/firestore";
+import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import ReactLoading from "react-loading";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -30,6 +30,8 @@ interface Prop {
   img?: string;
   hoverImg?: string;
   marginLift?: string;
+  weight?: string;
+  border?: string;
 }
 
 const Wrapper = styled.div`
@@ -40,7 +42,7 @@ const Wrapper = styled.div`
   min-height: calc(100vh - 80px);
   position: relative;
   display: flex;
-  background-color: #b4b4b4;
+  background-color: #787878;
 `;
 
 const Container = styled.div`
@@ -55,16 +57,17 @@ const Container = styled.div`
 `;
 
 const UserInfoContainer = styled.div`
-  width: 300px;
-  padding: 20px;
-  position: absolute;
-  left: 5vw;
+  height: calc(100vh - 260px);
+  width: 20vw;
+  min-width: 300px;
+  padding: 50px 20px;
+  position: fixed;
+  left: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: #f0f0f0;
-  border-radius: 10px;
-  box-shadow: 1px 1px 5px #3c3c3c inset;
+  box-shadow: 0 0 10px #3c3c3c;
 `;
 
 const Avatar = styled.div`
@@ -94,26 +97,75 @@ const CameraIcon = styled.div`
 
 const UserInfo = styled.div`
   margin-top: 20px;
-  font-size: 24px;
   color: #3c3c3c;
   font-size: ${(props: Prop) => props.size};
+  font-weight: ${(props: Prop) => props.weight};
   & + & {
-    margin-top: 12px;
+    margin-top: 10px;
+  }
+`;
+
+const IntroText = styled.div`
+  margin-top: 30px;
+  padding-bottom: 5px;
+  width: 100%;
+  font-size: 20px;
+  color: #646464;
+  border-bottom: 1px solid #969696;
+`;
+
+const Intruduction = styled.textarea`
+  padding: 10px 0;
+  width: 100%;
+  height: 100%;
+  max-height: 500px;
+  color: #3c3c3c;
+  font-size: 18px;
+  resize: none;
+  border: ${(props: Prop) => props.border};
+  outline: none;
+`;
+
+const EditBtn = styled.button`
+  margin-top: auto;
+  padding: 0 10px;
+  height: 40px;
+  min-width: 120px;
+  color: #3c3c3c;
+  font-size: 18px;
+  border: 1px solid #3c3c3c40;
+  border-radius: 10px;
+  background-color: #3c3c3c30;
+  &:hover {
+    cursor: pointer;
+    color: #ffffff;
+    background-color: #616161;
   }
 `;
 
 const ProjectListContainer = styled.div`
   margin: 0 auto;
-  width: 800px;
+  width: 45vw;
   height: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
+  /* @media screen and (min-width: 1400px) and (max-width: 1699px) {
+    width: 800px;
+  } */
 `;
 
 const ProjectHeaderContainer = styled.div`
   padding-bottom: 20px;
   display: flex;
+`;
+
+const Title = styled.div`
+  padding-left: 10px;
+  font-size: 30px;
+  color: #ffffff;
+  text-shadow: 1px 1px 3px #3c3c3c;
+  text-align: center;
 `;
 
 const ProjectsContainer = styled.div`
@@ -128,7 +180,7 @@ const SingleProjectContainer = styled.div`
   background-color: #f0f0f0;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 1px 1px 5px #3c3c3c inset;
+  box-shadow: 0 0 10px #3c3c3c;
   & + & {
     margin-top: 20px;
   }
@@ -206,12 +258,15 @@ function Profile() {
     email,
     avatar,
     userId,
+    introduction,
     userProjects,
     setSingleProjectId,
     setUserProjects,
   } = useContext(AuthContext);
   const [mainImgSrc, setMainImgSrc] = useState("");
   const [showOverlay, setShowOverlay] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [inputText, setInputText] = useState("");
 
   function toSingleProjectPage(projectId: string) {
     setSingleProjectId(projectId);
@@ -229,6 +284,12 @@ function Profile() {
     await deleteDoc(doc(db, "projects", projectId));
     const userProjectsData = await getUserProjects(userId);
     setUserProjects(userProjectsData);
+  }
+  async function updateIntro() {
+    await updateDoc(doc(db, "users", userId), {
+      introduction: inputText,
+    });
+    setIsEdit(false);
   }
 
   if (isLoading) {
@@ -258,14 +319,27 @@ function Profile() {
             <Avatar url={`url(${avatar})`}>
               <CameraIcon onClick={() => setShowOverlay((prev) => !prev)} />
             </Avatar>
-            <UserInfo size="24px">{name}</UserInfo>
+            <UserInfo size="24px" weight="600">
+              {name}
+            </UserInfo>
             <UserInfo size="20px">{email}</UserInfo>
-            <UserInfo size="20px">Introduction</UserInfo>
-            <UserInfo size="18px">Hello, I am orange!</UserInfo>
+            <IntroText>Introduction</IntroText>
+            <Intruduction
+              value={introduction}
+              onChange={(e) => setInputText(e.target.value)}
+              placeholder={t("type_content")}
+              disabled={!isEdit && true}
+              border={!isEdit ? "none" : "1px solid #787878"}
+            />
+            {isEdit ? (
+              <EditBtn onClick={() => updateIntro()}>Confirm Edit</EditBtn>
+            ) : (
+              <EditBtn onClick={() => setIsEdit(true)}>Edit</EditBtn>
+            )}
           </UserInfoContainer>
           <ProjectListContainer>
             <ProjectHeaderContainer>
-              <ProjectTitle>{t("project_list")}</ProjectTitle>
+              <Title>{t("project_list")}</Title>
             </ProjectHeaderContainer>
             {userProjects.length === 0 ? (
               <ProjectTitle>{t("go_to_create_project")}</ProjectTitle>
@@ -304,15 +378,18 @@ function Profile() {
                     </ProjectLeftContainer>
                     <ProjectRightContainer>
                       <ProjectRightInnerContainer>
-                        {/* {projectData.pages[0].url &&
-                        projectData.pages[0].url.map((singleUrl: string) => (
-                          <PhotoUrl key={singleUrl} img={`url(${singleUrl})`} />
-                        ))} */}
+                        {projectData.pages[0].url &&
+                          projectData.pages[0].url.map((singleUrl: string) => (
+                            <PhotoUrl
+                              key={singleUrl}
+                              img={`url(${singleUrl})`}
+                            />
+                          ))}
 
-                        <PhotoUrl
+                        {/* <PhotoUrl
                           key={projectData.mainUrl}
                           img={`url(${projectData.mainUrl})`}
-                        />
+                        /> */}
                       </ProjectRightInnerContainer>
                     </ProjectRightContainer>
                   </SingleProjectContainer>

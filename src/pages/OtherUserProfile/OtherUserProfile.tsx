@@ -1,6 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+} from "firebase/firestore";
 import ReactLoading from "react-loading";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -9,6 +16,12 @@ import { db } from "../../context/firebaseSDK";
 import getUserProjects from "../../utils/getUserProjects";
 import { AuthContext } from "../../context/authContext";
 import { FriendContext } from "../../context/friendContext";
+
+import likeIcon from "../../icons/like-icon.png";
+import likeIconHover from "../../icons/like-icon-hover.png";
+import likedIcon from "../../icons/liked-icon.png";
+import addFriendIcon from "../../icons/add-friend-icon.png";
+import addFriendIconHover from "../../icons/add-friend-icon-hover.png";
 
 interface Prop {
   url?: string;
@@ -19,10 +32,10 @@ interface Prop {
   position?: string;
   buttomLine?: string;
   img?: string;
+  weight?: string;
 }
 
 interface UserProjectsType {
-  author: string;
   uid: string;
   mainUrl: string;
   projectId: string;
@@ -37,7 +50,7 @@ interface UserProjectsType {
 }
 
 const Wrapper = styled.div`
-  padding: 130px 0;
+  padding: 130px 0 50px;
   width: 100%;
   min-width: 100vw;
   height: 100%;
@@ -48,10 +61,8 @@ const Wrapper = styled.div`
 
 const Container = styled.div`
   margin: 0 auto;
-  width: 80%;
-  max-width: 1500px;
+  width: 100%;
   height: 100%;
-  position: relative;
   display: flex;
   @media screen and (max-width: 1300px) {
     width: 1200px;
@@ -59,94 +70,146 @@ const Container = styled.div`
 `;
 
 const UserInfoContainer = styled.div`
-  width: 400px;
-  padding: 20px;
+  height: calc(100vh - 260px);
+  width: 20vw;
+  min-width: 300px;
+  padding: 50px 20px;
+  left: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  border: 1px solid #f0f0f0;
 `;
 
 const Avatar = styled.div`
   height: 180px;
   width: 180px;
-  background-image: ${(props: Prop) => props.url};
+  border-radius: 90px;
+  background-image: ${(props: Prop) => props.url || "none"};
   background-size: cover;
   background-position: center;
+  position: relative;
 `;
 
 const UserInfo = styled.div`
   margin-top: 20px;
-  font-size: 24px;
   color: #3c3c3c;
   font-size: ${(props: Prop) => props.size};
+  font-weight: ${(props: Prop) => props.weight};
   & + & {
-    margin-top: 12px;
+    margin-top: 10px;
   }
 `;
 
-const ProjectListContainer = styled.div`
+const IntroText = styled.div`
+  margin-top: 30px;
+  padding-bottom: 5px;
+  width: 100%;
+  font-size: 20px;
+  color: #646464;
+  border-bottom: 1px solid #969696;
+`;
+
+const Intruduction = styled.textarea`
+  padding: 10px 0;
+  width: 100%;
+  height: 100%;
+  max-height: 500px;
+  color: #3c3c3c;
+  font-size: 18px;
+  resize: none;
+  border: none;
+  outline: none;
+  background-color: transparent;
+`;
+
+const BricksContainer = styled.div`
   margin: 0 auto;
-  width: 1200px;
+  padding: 50px 0;
+  width: 1300px;
   height: 100%;
   position: relative;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  @media screen and (min-width: 1400px) and (max-width: 1699px) {
+    width: 1300px;
+  }
+  @media screen and (min-width: 1100px) and (max-width: 1399px) {
+    width: 960px;
+  }
+  @media screen and (min-width: 800px) and (max-width: 1099px) {
+    width: 630px;
+  }
+  @media screen and (max-width: 799px) {
+    padding: 20px 0;
+    width: 330px;
+  }
 `;
 
-const ProjectHeaderContainer = styled.div`
-  padding-bottom: 20px;
-  display: flex;
-`;
-
-const ProjectsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+const ImgContainer = styled.div`
+  width: 100%;
+  height: 250px;
+  background-image: ${(props: Prop) => props.img};
+  background-size: cover;
+  background-position: center;
 `;
 
 const SingleProjectContainer = styled.div`
-  height: 200px;
-  width: 100%;
-  display: flex;
-  border: 1px solid black;
-  & + & {
-    margin-top: 20px;
+  margin: 0 auto 10px auto;
+  width: 250px;
+  height: 300px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 5px #787878;
+  &:hover {
+    margin-bottom: 0;
+    width: 260px;
+    height: 260px;
+    box-shadow: 0 0 10px #3c3c3c;
+  }
+  &:hover > ${ImgContainer} {
+    width: 260px;
+    height: 260px;
+    cursor: pointer;
+  }
+  &:hover > ${ImgContainer} {
+    background-color: #3c3c3c90;
   }
 `;
 
-const ProjectLeftContainer = styled.div`
-  padding: 10px;
-  height: 200px;
-  width: 40%;
-  display: flex;
-  flex-direction: column;
-`;
-
-const ProjectTitle = styled.div`
-  font-size: 24px;
-`;
-
-const ProjectRightContainer = styled.div`
-  height: 200px;
-  width: 60%;
+const InfoContainer = styled.div`
+  padding: 0 15px;
+  width: 300px;
+  height: 50px;
   display: flex;
   align-items: center;
 `;
 
-const PhotoUrl = styled.div`
-  width: 180px;
-  height: 180px;
-  background-image: ${(props: Prop) => props.img};
-  background-position: center;
+const LikedIcon = styled.div`
+  margin-left: auto;
+  width: 30px;
+  height: 30px;
+  background-image: url(${likedIcon});
   background-size: cover;
-  & + & {
-    margin-left: 10px;
+  background-position: center;
+  &:hover {
+    cursor: pointer;
   }
 `;
 
-const Button = styled.button`
-  margin-top: 10px;
-  width: 170px;
-  height: 40px;
+const LikeIcon = styled(LikedIcon)`
+  background-image: url(${likeIcon});
+  &:hover {
+    background-image: url(${likeIconHover});
+  }
+`;
+
+const AddFriendIcon = styled(LikedIcon)`
+  background-image: url(${addFriendIcon});
+  &:hover {
+    background-image: url(${addFriendIconHover});
+  }
 `;
 
 const Loading = styled(ReactLoading)`
@@ -154,9 +217,8 @@ const Loading = styled(ReactLoading)`
 `;
 
 function OtherUserProfile() {
-  const { t } = useTranslation();
   const navigate = useNavigate();
-  const { setSingleProjectId } = useContext(AuthContext);
+  const { setSingleProjectId, favoriteList, userId } = useContext(AuthContext);
   const { clickedUserId } = useContext(FriendContext);
   const [isLoading, setIsloading] = useState(false);
   const [userProjects, setUserProjects] = useState<UserProjectsType[]>([]);
@@ -165,8 +227,10 @@ function OtherUserProfile() {
     name: string;
     avatar: string;
     email: string;
-    friendList: string[];
+    introduction: string;
   }>();
+  console.log("userData", userData);
+  console.log("userProjects", userProjects);
 
   useEffect(() => {
     setIsloading(true);
@@ -177,7 +241,7 @@ function OtherUserProfile() {
         name: string;
         avatar: string;
         email: string;
-        friendList: string[];
+        introduction: string;
       };
       setUserData(returnedData);
       const userProjectsData = await getUserProjects(returnedData.uid);
@@ -188,8 +252,20 @@ function OtherUserProfile() {
     setIsloading(false);
   }, []);
 
-  function toSingleProjectPage(projectId: string) {
-    setSingleProjectId(projectId);
+  async function likeProjectHandler(clickedId: string) {
+    await updateDoc(doc(db, "users", userId), {
+      favoriteList: arrayUnion(clickedId),
+    });
+  }
+
+  async function dislikeProjectHandler(clickedId: string) {
+    await updateDoc(doc(db, "users", userId), {
+      favoriteList: arrayRemove(clickedId),
+    });
+  }
+
+  function toSingleProjectPage(clickedId: string) {
+    setSingleProjectId(clickedId);
     navigate("/singleProject");
   }
 
@@ -206,40 +282,75 @@ function OtherUserProfile() {
       <Container>
         <UserInfoContainer>
           <Avatar url={userData && `url(${userData.avatar})`} />
-          <UserInfo size="24px">{userData && userData.name}</UserInfo>
+
+          <UserInfo size="24px" weight="600">
+            {userData && userData.name}
+          </UserInfo>
           <UserInfo size="20px">{userData && userData.email}</UserInfo>
-          <UserInfo size="20px">Introduction</UserInfo>
-          <UserInfo size="18px">Hello, I am apple!</UserInfo>
+          <IntroText>Introduction</IntroText>
+          <Intruduction value={userData && userData.introduction} disabled />
         </UserInfoContainer>
-        <ProjectListContainer>
-          <ProjectHeaderContainer>
-            <ProjectTitle>{t("project_list")}</ProjectTitle>
-          </ProjectHeaderContainer>
-          {userProjects.length === 0 ? (
-            ""
-          ) : (
-            <ProjectsContainer>
-              {userProjects.map((projectData) => (
-                <SingleProjectContainer key={projectData.projectId}>
-                  <ProjectLeftContainer>
-                    <ProjectTitle>{projectData.title}</ProjectTitle>
-                    <Button
-                      onClick={() => toSingleProjectPage(projectData.projectId)}
-                    >
-                      {t("view_project_detail")}
-                    </Button>
-                  </ProjectLeftContainer>
-                  <ProjectRightContainer>
-                    {projectData.pages[0].url &&
-                      projectData.pages[0].url.map((singleUrl: string) => (
-                        <PhotoUrl key={singleUrl} img={`url(${singleUrl})`} />
-                      ))}
-                  </ProjectRightContainer>
-                </SingleProjectContainer>
-              ))}
-            </ProjectsContainer>
-          )}
-        </ProjectListContainer>
+
+        <BricksContainer>
+          {userProjects &&
+            userProjects.map((project) => (
+              <SingleProjectContainer key={project.projectId}>
+                <ImgContainer
+                  img={`url(${project.mainUrl})`}
+                  onClick={() => toSingleProjectPage(project.projectId)}
+                />
+                <InfoContainer>
+                  {favoriteList.indexOf(project.projectId) === -1 ? (
+                    <LikeIcon
+                      onClick={() => likeProjectHandler(project.projectId)}
+                    />
+                  ) : (
+                    <LikedIcon
+                      onClick={() => dislikeProjectHandler(project.projectId)}
+                    />
+                  )}
+                </InfoContainer>
+              </SingleProjectContainer>
+            ))}
+          {userProjects &&
+            userProjects.map((project) => (
+              <SingleProjectContainer key={project.projectId}>
+                <ImgContainer
+                  img={`url(${project.mainUrl})`}
+                  onClick={() => toSingleProjectPage(project.projectId)}
+                />
+
+                {favoriteList.indexOf(project.projectId) === -1 ? (
+                  <LikeIcon
+                    onClick={() => likeProjectHandler(project.projectId)}
+                  />
+                ) : (
+                  <LikedIcon
+                    onClick={() => dislikeProjectHandler(project.projectId)}
+                  />
+                )}
+              </SingleProjectContainer>
+            ))}
+          {userProjects &&
+            userProjects.map((project) => (
+              <SingleProjectContainer key={project.projectId}>
+                <ImgContainer
+                  img={`url(${project.mainUrl})`}
+                  onClick={() => toSingleProjectPage(project.projectId)}
+                />
+
+                {favoriteList.indexOf(project.projectId) === -1 ? (
+                  <LikeIcon
+                    onClick={() => likeProjectHandler(project.projectId)}
+                  />
+                ) : (
+                  <LikedIcon
+                    onClick={() => dislikeProjectHandler(project.projectId)}
+                  />
+                )}
+              </SingleProjectContainer>
+            ))}
+        </BricksContainer>
       </Container>
     </Wrapper>
   );

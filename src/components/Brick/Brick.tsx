@@ -76,7 +76,7 @@ const UserInfoContainer = styled.div`
   border-radius: 10px 10px 0 0;
   position: absolute;
   bottom: calc(-100% + 71px);
-  left: -14px;
+  left: -15px;
 `;
 
 const UserInfoInnerContainer = styled.div`

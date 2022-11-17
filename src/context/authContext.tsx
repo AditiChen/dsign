@@ -28,6 +28,7 @@ interface UserDataType {
   name: string;
   email: string;
   avatar: string;
+  introduction: string;
   friendList: string[];
   favoriteList: string[];
   collection: string[];
@@ -53,6 +54,7 @@ interface AuthContextType {
   name: string;
   email: string;
   avatar: string;
+  introduction: string;
   friendList: string[];
   setFriendList: Dispatch<SetStateAction<string[]>>;
   favoriteList: string[];
@@ -77,6 +79,7 @@ export const AuthContext = createContext<AuthContextType>({
   name: "",
   email: "",
   avatar: "",
+  introduction: "",
   friendList: [],
   setFriendList: () => {},
   favoriteList: [],
@@ -103,6 +106,7 @@ export function AuthContextProvider({ children }: BodyProp) {
   const [avatar, setAvatar] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [introduction, setIntroduction] = useState("");
   const [friendList, setFriendList] = useState<string[]>([]);
   const [favoriteList, setFavoriteList] = useState<string[]>([]);
   const [collection, setCollection] = useState<string[]>([]);
@@ -120,10 +124,11 @@ export function AuthContextProvider({ children }: BodyProp) {
         setAvatar(data.avatar);
         setName(data.name);
         setEmail(data.email);
-        setIsLogin(true);
+        setIntroduction(data.introduction);
         setFriendList(data.friendList);
         setFavoriteList(data.favoriteList);
         setCollection(data.collection);
+        setIsLogin(true);
         const userProjectsData = await getUserProjects(uid);
         setUserProjects(userProjectsData);
       } else {
@@ -141,10 +146,11 @@ export function AuthContextProvider({ children }: BodyProp) {
       setAvatar(data.avatar);
       setName(data.name);
       setEmail(data.email);
-      setIsLogin(true);
+      setIntroduction(data.introduction);
       setFriendList(data.friendList);
       setFavoriteList(data.favoriteList);
       setCollection(data.collection);
+      setIsLogin(true);
     });
     return () => {
       unsub();
@@ -295,6 +301,7 @@ export function AuthContextProvider({ children }: BodyProp) {
       name,
       email,
       avatar,
+      introduction,
       friendList,
       setFriendList,
       favoriteList,
@@ -318,6 +325,7 @@ export function AuthContextProvider({ children }: BodyProp) {
       name,
       email,
       avatar,
+      introduction,
       friendList,
       setFriendList,
       favoriteList,

@@ -34,6 +34,7 @@ const Wrapper = styled.div`
   height: 80px;
   color: #c4c4c4;
   background-color: #3c3c3c;
+  box-shadow: 0 1px 5px #3c3c3c;
   position: fixed;
   z-index: 10;
   display: flex;
