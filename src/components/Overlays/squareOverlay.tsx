@@ -12,13 +12,13 @@ import styled from "styled-components";
 import Cropper from "react-easy-crop";
 import ReactLoading from "react-loading";
 import { Slider, Typography } from "@mui/material";
-import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { doc, updateDoc, arrayUnion, setDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-import { AuthContext } from "../../context/authContext";
-
 import { db, storage } from "../../context/firebaseSDK";
+import { AuthContext } from "../../context/authContext";
 import getCroppedImg from "../../utils/cropImage";
+
 import closeIcon from "../../icons/close-icon.png";
 import closeIconHover from "../../icons/close-icon-hover.png";
 import confirmIcon from "../../icons/confirm-icon.png";
@@ -31,6 +31,8 @@ interface OverlayProps {
   setShowOverlay: Dispatch<SetStateAction<boolean>>;
   mainImgSrc: string;
   setMainImgSrc: Dispatch<SetStateAction<string>>;
+  shape?: "rect" | "round" | undefined;
+  usage?: string;
 }
 
 const Wrapper = styled.div`
@@ -240,6 +242,8 @@ function SquareOverlay({
   setShowOverlay,
   mainImgSrc,
   setMainImgSrc,
+  shape = "rect",
+  usage = "",
 }: OverlayProps) {
   const { t } = useTranslation();
   const { collection } = useContext(AuthContext);
@@ -318,6 +322,11 @@ function SquareOverlay({
               collection: arrayUnion(downloadURL),
             });
           }
+          if (usage === "avatar") {
+            await updateDoc(doc(db, "users", userId), {
+              avatar: downloadURL,
+            });
+          }
           resolve(downloadURL);
         }
       );
@@ -360,6 +369,7 @@ function SquareOverlay({
                     onRotationChange={setRotation}
                     onCropComplete={onCropComplete}
                     onZoomChange={setZoom}
+                    cropShape={shape}
                   />
                 </CropperContainer>
                 <ControlContainer>

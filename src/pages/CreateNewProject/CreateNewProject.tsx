@@ -49,6 +49,7 @@ const EditorContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-shadow: 0 0 20px #3c3c3c;
 `;
 
 const Text = styled.div`
@@ -209,8 +210,9 @@ function CreateNewProject() {
       alert(t("lack_main_photo"));
       return;
     }
-    const checkPage = pages.every((type) => type.type === undefined);
-    if (checkPage) {
+    const checkPage = pages.findIndex((type) => type.type === undefined);
+
+    if (checkPage !== -1) {
       alert(t("upload_failed"));
       return;
     }
@@ -229,6 +231,7 @@ function CreateNewProject() {
     setUserProjects(newProjects);
     setPages([]);
     setAddedTemplate([]);
+    setMainImgSrc("");
     alert(t("upload_successfully"));
     setIsLoading(false);
     navigate("/profile");

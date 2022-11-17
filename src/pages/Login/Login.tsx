@@ -73,7 +73,7 @@ const SignInContainer = styled.div`
 
 const Input = styled.input`
   padding: 6px 10px;
-  width: 320px;
+  width: 330px;
   height: 50px;
   color: #3c3c3c;
   font-size: 18px;

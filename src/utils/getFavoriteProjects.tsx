@@ -27,6 +27,7 @@ interface FetchedProjectsType {
 }
 
 export default async function getFavoriteProjects(favoriteList: string[]) {
+  if (favoriteList.length === 0) return undefined;
   const usersRef = collection(db, "projects");
   const firstFriendQuery = query(
     usersRef,

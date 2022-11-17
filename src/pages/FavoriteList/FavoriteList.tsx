@@ -42,9 +42,21 @@ const HeaderContainer = styled.div`
   align-items: center;
 `;
 
-const Text = styled.div`
+const Title = styled.div`
   padding: 0 50px;
   font-size: 30px;
+  text-align: center;
+`;
+
+const ContentContainer = styled.div`
+  display: flex;
+`;
+
+const Content = styled.div`
+  width: 100%;
+  padding: 0 50px;
+  font-size: 24px;
+  color: #3c3c3c;
   text-align: center;
 `;
 
@@ -86,7 +98,7 @@ function FavoriteList() {
     async function getProjects() {
       setIsLoading(true);
       const favoriteProjectsData = await getFavoriteProjects(favoriteList);
-      setProjects(favoriteProjectsData);
+      setProjects(favoriteProjectsData || []);
       setIsLoading(false);
     }
     getProjects();
@@ -95,11 +107,15 @@ function FavoriteList() {
   return (
     <Wrapper>
       <HeaderContainer>
-        <Text>{t("favorite_list")}</Text>
+        <Title>{t("favorite_list")}</Title>
       </HeaderContainer>
-      {isLoading ? (
-        <Loading type="cylon" color="#3c3c3c" />
-      ) : (
+      {isLoading && <Loading type="cylon" color="#3c3c3c" />}
+      {!isLoading && favoriteList.length === 0 && (
+        <ContentContainer>
+          <Content>{t("empty_favorite_list")}</Content>
+        </ContentContainer>
+      )}
+      {!isLoading && favoriteList.length !== 0 && (
         <BricksContainer>
           {projects.map((project) => (
             <Brick

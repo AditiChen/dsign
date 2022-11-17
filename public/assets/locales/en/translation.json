@@ -66,5 +66,8 @@
   "delete_successfully": "Delete successfully",
 
   "your_collection": "Your collection",
-  "delete_photo_warning": "Are you sure that you want to remove this photo?"
+  "empty_collection": "Your collection is empty, upload some photos!",
+  "delete_photo_warning": "Are you sure that you want to remove this photo?",
+
+  "empty_favorite_list": "Your favorite list is empty, go to add some projects!"
 }

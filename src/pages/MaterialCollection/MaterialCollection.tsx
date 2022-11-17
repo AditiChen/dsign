@@ -37,7 +37,7 @@ const HeaderContainer = styled.div`
   align-items: center;
 `;
 
-const Text = styled.div`
+const Title = styled.div`
   padding: 0 50px;
   font-size: 30px;
   text-align: center;
@@ -55,6 +55,18 @@ const AddFolderIcon = styled.label`
     cursor: pointer;
     background-image: url(${uploadPhotoIconHover});
   }
+`;
+
+const ContentContainer = styled.div`
+  display: flex;
+`;
+
+const Content = styled.div`
+  width: 100%;
+  padding: 0 50px;
+  font-size: 24px;
+  color: #3c3c3c;
+  text-align: center;
 `;
 
 const BricksContainer = styled.div`
@@ -176,7 +188,7 @@ function MaterialCollection() {
     <>
       <Wrapper>
         <HeaderContainer>
-          <Text>{t("your_collection")}</Text>
+          <Title>{t("your_collection")}</Title>
           <AddFolderIcon>
             <input
               type="file"
@@ -187,6 +199,12 @@ function MaterialCollection() {
             />
           </AddFolderIcon>
         </HeaderContainer>
+        {collection.length === 0 && (
+          <ContentContainer>
+            <Content>{t("empty_collection")}</Content>
+          </ContentContainer>
+        )}
+
         <BricksContainer>
           {collection.length !== 0 &&
             collection.map((url) => (
@@ -201,9 +219,7 @@ function MaterialCollection() {
                 <TrashIcon onClick={() => deleteHandler(url)} />
               </ImgContainer>
             ))}
-          {progressing === 100 ? (
-            ""
-          ) : (
+          {progressing !== 100 && (
             <ImgContainer>
               <Loading type="spin" color="#3c3c3c" height="40px" width="40px" />
             </ImgContainer>

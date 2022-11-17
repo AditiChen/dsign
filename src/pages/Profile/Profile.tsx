@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import { doc, deleteDoc } from "firebase/firestore";
 import ReactLoading from "react-loading";
@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 
 import { db } from "../../context/firebaseSDK";
 import getUserProjects from "../../utils/getUserProjects";
+import SquareOverlay from "../../components/Overlays/squareOverlay";
 import { AuthContext } from "../../context/authContext";
 
 import viewIcon from "../../icons/view-icon.png";
@@ -61,14 +62,34 @@ const UserInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  box-shadow: 1px 1px 5px #3c3c3c inset;
 `;
 
 const Avatar = styled.div`
   height: 180px;
   width: 180px;
+  border-radius: 90px;
   background-image: ${(props: Prop) => props.url || "none"};
   background-size: cover;
   background-position: center;
+  position: relative;
+`;
+
+const CameraIcon = styled.div`
+  height: 24px;
+  width: 24px;
+  position: absolute;
+  right: 4px;
+  bottom: 0px;
+  background-image: url(${cameraIcon});
+  background-size: cover;
+  background-position: center;
+  &:hover {
+    background-image: url(${cameraIconHover});
+    cursor: pointer;
+  }
 `;
 
 const UserInfo = styled.div`
@@ -189,6 +210,8 @@ function Profile() {
     setSingleProjectId,
     setUserProjects,
   } = useContext(AuthContext);
+  const [mainImgSrc, setMainImgSrc] = useState("");
+  const [showOverlay, setShowOverlay] = useState(false);
 
   function toSingleProjectPage(projectId: string) {
     setSingleProjectId(projectId);
@@ -228,74 +251,88 @@ function Profile() {
   }
 
   return (
-    <Wrapper>
-      <Container>
-        <UserInfoContainer>
-          <Avatar url={`url(${avatar})`} />
-          <UserInfo size="24px">{name}</UserInfo>
-          <UserInfo size="20px">{email}</UserInfo>
-          <UserInfo size="20px">Introduction</UserInfo>
-          <UserInfo size="18px">Hello, I am orange!</UserInfo>
-        </UserInfoContainer>
-        <ProjectListContainer>
-          <ProjectHeaderContainer>
-            <ProjectTitle>{t("project_list")}</ProjectTitle>
-          </ProjectHeaderContainer>
-          {userProjects.length === 0 ? (
-            <ProjectTitle>{t("go_to_create_project")}</ProjectTitle>
-          ) : (
-            <ProjectsContainer>
-              {userProjects.map((projectData) => (
-                <SingleProjectContainer key={projectData.projectId}>
-                  <ProjectLeftContainer>
-                    <ProjectTitle>{projectData.title}</ProjectTitle>
-                    <ProjectIconContainer>
-                      <Icon
-                        img={`url(${viewIcon})`}
-                        hoverImg={`url(${viewIconHover})`}
-                        marginLift="0"
-                        onClick={() =>
-                          toSingleProjectPage(projectData.projectId)
-                        }
-                      />
-                      <Icon
-                        img={`url(${editIcon})`}
-                        hoverImg={`url(${editIconHover})`}
-                        marginLift="15px"
-                        onClick={() =>
-                          toEditExistProjectPage(projectData.projectId)
-                        }
-                      />
-                      <Icon
-                        img={`url(${trashIcon})`}
-                        hoverImg={`url(${trashIconHover})`}
-                        marginLift="auto"
-                        onClick={() =>
-                          deleteProjectHandler(projectData.projectId)
-                        }
-                      />
-                    </ProjectIconContainer>
-                  </ProjectLeftContainer>
-                  <ProjectRightContainer>
-                    <ProjectRightInnerContainer>
-                      {/* {projectData.pages[0].url &&
+    <>
+      <Wrapper>
+        <Container>
+          <UserInfoContainer>
+            <Avatar url={`url(${avatar})`}>
+              <CameraIcon onClick={() => setShowOverlay((prev) => !prev)} />
+            </Avatar>
+            <UserInfo size="24px">{name}</UserInfo>
+            <UserInfo size="20px">{email}</UserInfo>
+            <UserInfo size="20px">Introduction</UserInfo>
+            <UserInfo size="18px">Hello, I am orange!</UserInfo>
+          </UserInfoContainer>
+          <ProjectListContainer>
+            <ProjectHeaderContainer>
+              <ProjectTitle>{t("project_list")}</ProjectTitle>
+            </ProjectHeaderContainer>
+            {userProjects.length === 0 ? (
+              <ProjectTitle>{t("go_to_create_project")}</ProjectTitle>
+            ) : (
+              <ProjectsContainer>
+                {userProjects.map((projectData) => (
+                  <SingleProjectContainer key={projectData.projectId}>
+                    <ProjectLeftContainer>
+                      <ProjectTitle>{projectData.title}</ProjectTitle>
+                      <ProjectIconContainer>
+                        <Icon
+                          img={`url(${viewIcon})`}
+                          hoverImg={`url(${viewIconHover})`}
+                          marginLift="0"
+                          onClick={() =>
+                            toSingleProjectPage(projectData.projectId)
+                          }
+                        />
+                        <Icon
+                          img={`url(${editIcon})`}
+                          hoverImg={`url(${editIconHover})`}
+                          marginLift="15px"
+                          onClick={() =>
+                            toEditExistProjectPage(projectData.projectId)
+                          }
+                        />
+                        <Icon
+                          img={`url(${trashIcon})`}
+                          hoverImg={`url(${trashIconHover})`}
+                          marginLift="auto"
+                          onClick={() =>
+                            deleteProjectHandler(projectData.projectId)
+                          }
+                        />
+                      </ProjectIconContainer>
+                    </ProjectLeftContainer>
+                    <ProjectRightContainer>
+                      <ProjectRightInnerContainer>
+                        {/* {projectData.pages[0].url &&
                         projectData.pages[0].url.map((singleUrl: string) => (
                           <PhotoUrl key={singleUrl} img={`url(${singleUrl})`} />
                         ))} */}
 
-                      <PhotoUrl
-                        key={projectData.mainUrl}
-                        img={`url(${projectData.mainUrl})`}
-                      />
-                    </ProjectRightInnerContainer>
-                  </ProjectRightContainer>
-                </SingleProjectContainer>
-              ))}
-            </ProjectsContainer>
-          )}
-        </ProjectListContainer>
-      </Container>
-    </Wrapper>
+                        <PhotoUrl
+                          key={projectData.mainUrl}
+                          img={`url(${projectData.mainUrl})`}
+                        />
+                      </ProjectRightInnerContainer>
+                    </ProjectRightContainer>
+                  </SingleProjectContainer>
+                ))}
+              </ProjectsContainer>
+            )}
+          </ProjectListContainer>
+        </Container>
+      </Wrapper>
+      {showOverlay && (
+        <SquareOverlay
+          setShowOverlay={setShowOverlay}
+          mainImgSrc={mainImgSrc}
+          setMainImgSrc={setMainImgSrc}
+          userId={userId}
+          shape="round"
+          usage="avatar"
+        />
+      )}
+    </>
   );
 }
 

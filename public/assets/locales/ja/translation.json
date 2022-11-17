@@ -66,5 +66,8 @@
   "delete_successfully": "あぼん",
 
   "your_collection": "あなたの収集",
-  "delete_photo_warning": "本当にこの写真を削除してもいいのでしょうか？"
+  "empty_collection": "あなたのコレクションは空です、写真をアップロードしてください！",
+  "delete_photo_warning": "本当にこの写真を削除してもいいのでしょうか？",
+
+  "empty_favorite_list": "お気に入りリストが空っぽなので、プロジェクトを追加しに行こう"
 }

@@ -66,5 +66,8 @@
   "delete_successfully": "Supprimer avec succès",
 
   "your_collection": "votre collection",
-  "delete_photo_warning": "Êtes-vous sûr de vouloir supprimer cette photo ?"
+  "empty_collection": "Votre collection est vide, téléchargez des photos !",
+  "delete_photo_warning": "Êtes-vous sûr de vouloir supprimer cette photo ?",
+
+  "empty_favorite_list": "Votre liste de favoris est vide, allez-y pour ajouter des projets !"
 }

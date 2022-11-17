@@ -66,7 +66,6 @@ const Context = styled(Link)<{ $color?: string }>`
   }
   &:hover {
     text-shadow: 0 0 2px #787878;
-    font-size: 22px;
     cursor: pointer;
   }
 `;
@@ -101,7 +100,7 @@ const Icon = styled.div`
   background-image: ${(props: Prop) => props.img};
   background-size: cover;
   background-position: center;
-
+  border-radius: ${(props: Prop) => props.borderRadious};
   &:hover {
     cursor: pointer;
   }
@@ -213,6 +212,7 @@ function Header() {
             />
             <Icon
               img={avatar ? `url(${avatar})` : `url(${memberIcon})`}
+              borderRadious="18px"
               onClick={() => {
                 setShowMessageFrame(false);
                 navigate("/portfile");

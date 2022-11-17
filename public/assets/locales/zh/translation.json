@@ -11,7 +11,7 @@
   "continue_with_facebook": "以Facebook帳號登入",
   "input_name": "姓名",
   "input_email": "Email",
-  "input_password": "密碼（至少包含八位數的英文字母及數字）",
+  "input_password": "密碼（至少包含八個英文及數字）",
   "check_input_password": "再次確認密碼",
   "name_input_check": "請輸入使用者名稱",
   "email_and_password_input_check": "請輸入帳號及密碼",
@@ -66,5 +66,8 @@
   "delete_successfully": "刪除成功！",
 
   "your_collection": "你的素材庫",
-  "delete_photo_warning": "確定要刪除這張照片嗎？"
+  "empty_collection": "你的素材庫現在是空的喔，快去上傳照片吧！",
+  "delete_photo_warning": "確定要刪除這張照片嗎？",
+
+  "empty_favorite_list": "你的最愛現在是空的喔，快去加些喜歡的專案吧！"
 }
