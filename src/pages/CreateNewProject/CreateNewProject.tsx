@@ -15,6 +15,7 @@ import SquareOverlay from "../../components/Overlays/squareOverlay";
 
 import closeIcon from "../../icons/close-icon.png";
 import closeIconHover from "../../icons/close-icon-hover.png";
+import checkedIcon from "../../icons/checked-icon.png";
 
 const Wrapper = styled.div`
   padding-top: 80px;
@@ -162,6 +163,8 @@ const Btn = styled.button<{ backgroundColor?: string }>`
   height: 50px;
   color: #3c3c3c;
   font-size: 22px;
+  display: flex;
+  align-items: center;
   border: 1px solid #3c3c3c40;
   border-radius: 10px;
   background-color: ${(props) => props.backgroundColor || "#3c3c3c30"};
@@ -173,6 +176,16 @@ const Btn = styled.button<{ backgroundColor?: string }>`
   & + & {
     margin-left: 50px;
   }
+`;
+
+const CheckedIcon = styled.div`
+  margin-left: 10px;
+  width: 25px;
+  height: 25px;
+  background-image: url(${checkedIcon});
+  background-size: cover;
+  background-position: center;
+  opacity: 0.8;
 `;
 
 const Loading = styled(ReactLoading)`
@@ -322,13 +335,19 @@ function CreateNewProject() {
                       {t("upload_main_photo")}
                     </Btn>
                   ) : (
-                    <Btn onClick={() => setShowOverlay((prev) => !prev)}>
-                      {t("edit_main_photo")}
-                    </Btn>
+                    <>
+                      <Btn onClick={() => setShowOverlay((prev) => !prev)}>
+                        {t("edit_main_photo")}
+                        <CheckedIcon />
+                      </Btn>
+                      <Btn
+                        backgroundColor="#f5dfa9"
+                        onClick={() => confirmAllEdit()}
+                      >
+                        {t("confirm_edit")}
+                      </Btn>
+                    </>
                   )}
-                  <Btn onClick={() => confirmAllEdit()}>
-                    {t("confirm_edit")}
-                  </Btn>
                 </FooterContainer>
               </>
             )}

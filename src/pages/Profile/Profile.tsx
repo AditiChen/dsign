@@ -66,6 +66,7 @@ const UserInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-radius: 0 10px 10px 0;
   background-color: #f0f0f0;
   box-shadow: 0 0 10px #3c3c3c;
 `;
@@ -78,6 +79,7 @@ const Avatar = styled.div`
   background-size: cover;
   background-position: center;
   position: relative;
+  box-shadow: 0 0 5px #3c3c3c;
 `;
 
 const CameraIcon = styled.div`
@@ -118,7 +120,7 @@ const Intruduction = styled.textarea`
   padding: 10px 0;
   width: 100%;
   height: 100%;
-  max-height: 500px;
+  max-height: calc(100% - 350px);
   color: #3c3c3c;
   font-size: 18px;
   resize: none;
@@ -330,6 +332,7 @@ function Profile() {
               placeholder={t("type_content")}
               disabled={!isEdit && true}
               border={!isEdit ? "none" : "1px solid #787878"}
+              maxLength={150}
             />
             {isEdit ? (
               <EditBtn onClick={() => updateIntro()}>Confirm Edit</EditBtn>

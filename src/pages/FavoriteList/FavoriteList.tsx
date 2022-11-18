@@ -123,9 +123,9 @@ function FavoriteList() {
               uid={project.uid}
               projectId={project.projectId}
               mainUrl={project.mainUrl}
+              title={project.title}
               avatar={project.avatar || ""}
               name={project.name || ""}
-              introduction={project.introduction || ""}
             />
           ))}
         </BricksContainer>

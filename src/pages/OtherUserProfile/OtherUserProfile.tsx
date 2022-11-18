@@ -16,6 +16,8 @@ import { db } from "../../context/firebaseSDK";
 import getUserProjects from "../../utils/getUserProjects";
 import { AuthContext } from "../../context/authContext";
 import { FriendContext } from "../../context/friendContext";
+import FriendIcon from "../../components/IconButtoms/FriendIcon";
+import { LikeIcon, LikedIcon } from "../../components/IconButtoms/LikeIcons";
 
 import likeIcon from "../../icons/like-icon.png";
 import likeIconHover from "../../icons/like-icon-hover.png";
@@ -60,13 +62,10 @@ const Wrapper = styled.div`
 `;
 
 const Container = styled.div`
-  margin: 0 auto;
+  padding-right: 80px;
   width: 100%;
   height: 100%;
   display: flex;
-  @media screen and (max-width: 1300px) {
-    width: 1200px;
-  }
 `;
 
 const UserInfoContainer = styled.div`
@@ -89,6 +88,13 @@ const Avatar = styled.div`
   background-size: cover;
   background-position: center;
   position: relative;
+  box-shadow: 0 0 5px #3c3c3c;
+`;
+
+const AddFriendIconContainer = styled.div`
+  position: absolute;
+  right: -16px;
+  bottom: 0px;
 `;
 
 const UserInfo = styled.div`
@@ -114,7 +120,7 @@ const Intruduction = styled.textarea`
   padding: 10px 0;
   width: 100%;
   height: 100%;
-  max-height: 500px;
+  max-height: calc(100% - 330px);
   color: #3c3c3c;
   font-size: 18px;
   resize: none;
@@ -125,21 +131,21 @@ const Intruduction = styled.textarea`
 
 const BricksContainer = styled.div`
   margin: 0 auto;
-  padding: 50px 0;
-  width: 1300px;
+  padding: 50px 0 0 30px;
+  width: 1380px;
   height: 100%;
   position: relative;
   display: grid;
   grid-gap: 10px;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  @media screen and (min-width: 1400px) and (max-width: 1699px) {
-    width: 1300px;
+  @media screen and (min-width: 1500px) and (max-width: 1849px) {
+    width: 1100px;
   }
-  @media screen and (min-width: 1100px) and (max-width: 1399px) {
-    width: 960px;
+  @media screen and (min-width: 1220px) and (max-width: 1499px) {
+    width: 820px;
   }
-  @media screen and (min-width: 800px) and (max-width: 1099px) {
-    width: 630px;
+  @media screen and (min-width: 800px) and (max-width: 1219px) {
+    width: 530px;
   }
   @media screen and (max-width: 799px) {
     padding: 20px 0;
@@ -180,36 +186,10 @@ const SingleProjectContainer = styled.div`
 
 const InfoContainer = styled.div`
   padding: 0 15px;
-  width: 300px;
+  width: 100%;
   height: 50px;
   display: flex;
   align-items: center;
-`;
-
-const LikedIcon = styled.div`
-  margin-left: auto;
-  width: 30px;
-  height: 30px;
-  background-image: url(${likedIcon});
-  background-size: cover;
-  background-position: center;
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const LikeIcon = styled(LikedIcon)`
-  background-image: url(${likeIcon});
-  &:hover {
-    background-image: url(${likeIconHover});
-  }
-`;
-
-const AddFriendIcon = styled(LikedIcon)`
-  background-image: url(${addFriendIcon});
-  &:hover {
-    background-image: url(${addFriendIconHover});
-  }
 `;
 
 const Loading = styled(ReactLoading)`
@@ -218,7 +198,8 @@ const Loading = styled(ReactLoading)`
 
 function OtherUserProfile() {
   const navigate = useNavigate();
-  const { setSingleProjectId, favoriteList, userId } = useContext(AuthContext);
+  const { setSingleProjectId, favoriteList, userId, friendList } =
+    useContext(AuthContext);
   const { clickedUserId } = useContext(FriendContext);
   const [isLoading, setIsloading] = useState(false);
   const [userProjects, setUserProjects] = useState<UserProjectsType[]>([]);
@@ -229,8 +210,6 @@ function OtherUserProfile() {
     email: string;
     introduction: string;
   }>();
-  console.log("userData", userData);
-  console.log("userProjects", userProjects);
 
   useEffect(() => {
     setIsloading(true);
@@ -248,21 +227,8 @@ function OtherUserProfile() {
       setUserProjects(userProjectsData);
     }
     getData();
-
     setIsloading(false);
   }, []);
-
-  async function likeProjectHandler(clickedId: string) {
-    await updateDoc(doc(db, "users", userId), {
-      favoriteList: arrayUnion(clickedId),
-    });
-  }
-
-  async function dislikeProjectHandler(clickedId: string) {
-    await updateDoc(doc(db, "users", userId), {
-      favoriteList: arrayRemove(clickedId),
-    });
-  }
 
   function toSingleProjectPage(clickedId: string) {
     setSingleProjectId(clickedId);
@@ -281,8 +247,13 @@ function OtherUserProfile() {
     <Wrapper>
       <Container>
         <UserInfoContainer>
-          <Avatar url={userData && `url(${userData.avatar})`} />
-
+          <Avatar url={userData && `url(${userData.avatar})`}>
+            <AddFriendIconContainer>
+              {friendList.indexOf(clickedUserId) === -1 &&
+                clickedUserId !== userId &&
+                userId !== "" && <FriendIcon requestId={clickedUserId} />}
+            </AddFriendIconContainer>
+          </Avatar>
           <UserInfo size="24px" weight="600">
             {userData && userData.name}
           </UserInfo>
@@ -290,7 +261,6 @@ function OtherUserProfile() {
           <IntroText>Introduction</IntroText>
           <Intruduction value={userData && userData.introduction} disabled />
         </UserInfoContainer>
-
         <BricksContainer>
           {userProjects &&
             userProjects.map((project) => (
@@ -302,52 +272,20 @@ function OtherUserProfile() {
                 <InfoContainer>
                   {favoriteList.indexOf(project.projectId) === -1 ? (
                     <LikeIcon
-                      onClick={() => likeProjectHandler(project.projectId)}
+                      projectId={project.projectId}
+                      margin="0 0 0 auto"
+                      width="30px"
+                      height="30px"
                     />
                   ) : (
                     <LikedIcon
-                      onClick={() => dislikeProjectHandler(project.projectId)}
+                      projectId={project.projectId}
+                      margin="0 0 0 auto"
+                      width="30px"
+                      height="30px"
                     />
                   )}
                 </InfoContainer>
-              </SingleProjectContainer>
-            ))}
-          {userProjects &&
-            userProjects.map((project) => (
-              <SingleProjectContainer key={project.projectId}>
-                <ImgContainer
-                  img={`url(${project.mainUrl})`}
-                  onClick={() => toSingleProjectPage(project.projectId)}
-                />
-
-                {favoriteList.indexOf(project.projectId) === -1 ? (
-                  <LikeIcon
-                    onClick={() => likeProjectHandler(project.projectId)}
-                  />
-                ) : (
-                  <LikedIcon
-                    onClick={() => dislikeProjectHandler(project.projectId)}
-                  />
-                )}
-              </SingleProjectContainer>
-            ))}
-          {userProjects &&
-            userProjects.map((project) => (
-              <SingleProjectContainer key={project.projectId}>
-                <ImgContainer
-                  img={`url(${project.mainUrl})`}
-                  onClick={() => toSingleProjectPage(project.projectId)}
-                />
-
-                {favoriteList.indexOf(project.projectId) === -1 ? (
-                  <LikeIcon
-                    onClick={() => likeProjectHandler(project.projectId)}
-                  />
-                ) : (
-                  <LikedIcon
-                    onClick={() => dislikeProjectHandler(project.projectId)}
-                  />
-                )}
               </SingleProjectContainer>
             ))}
         </BricksContainer>

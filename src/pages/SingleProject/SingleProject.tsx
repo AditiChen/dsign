@@ -1,32 +1,20 @@
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import { useTranslation } from "react-i18next";
 import { useJsApiLoader } from "@react-google-maps/api";
 import ReactLoading from "react-loading";
-import {
-  doc,
-  updateDoc,
-  arrayUnion,
-  arrayRemove,
-  setDoc,
-} from "firebase/firestore";
-import { v4 as uuid } from "uuid";
+
 import { useNavigate } from "react-router-dom";
-import { db } from "../../context/firebaseSDK";
 
 import templatesArr from "../../components/singleProjectPageTemplates/TemplatesArr";
 import { GoogleMapAPI } from "../../components/singleProjectPageTemplates/GoogleMapAPI";
 import { AuthContext } from "../../context/authContext";
 import { FriendContext } from "../../context/friendContext";
 import getSingleProject from "../../utils/getSingleProject";
+import { LikeIcon, LikedIcon } from "../../components/IconButtoms/LikeIcons";
+import FriendIcon from "../../components/IconButtoms/FriendIcon";
 
 import arrowIcon from "../../icons/arrow-icon-white.png";
 import arrowIconHover from "../../icons/arrow-icon-hover.png";
-import likeIcon from "../../icons/like-icon.png";
-import likeIconHover from "../../icons/like-icon-hover.png";
-import likedIcon from "../../icons/liked-icon.png";
-import addFriendIcon from "../../icons/add-friend-icon.png";
-import addFriendIconHover from "../../icons/add-friend-icon-hover.png";
 
 interface UserProjectType {
   uid: string;
@@ -138,24 +126,18 @@ const Intor = styled.div`
   font-size: 18px;
   line-height: 22px;
   color: #616161;
+  line-height: 22px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const Author = styled.div`
   margin-left: 10px;
   color: #3c3c3c;
   font-size: 24px;
-`;
-
-const AddFriendIcon = styled.div`
-  margin-left: auto;
-  width: 30px;
-  height: 30px;
-  background-size: cover;
-  background-position: center;
-  background-image: url(${addFriendIcon});
-  &:hover {
-    background-image: url(${addFriendIconHover});
-  }
 `;
 
 const Avatar = styled.div<{ img: string }>`
@@ -172,25 +154,6 @@ const Avatar = styled.div<{ img: string }>`
   }
 `;
 
-const LikedIcon = styled.div`
-  margin-left: 20px;
-  width: 36px;
-  height: 36px;
-  background-image: url(${likedIcon});
-  background-size: cover;
-  background-position: center;
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const LikeIcon = styled(LikedIcon)`
-  background-image: url(${likeIcon});
-  &:hover {
-    background-image: url(${likeIconHover});
-  }
-`;
-
 const MapContainer = styled.div`
   width: 1200px;
   height: 700px;
@@ -202,7 +165,6 @@ const Loading = styled(ReactLoading)`
 
 function SingleProject() {
   const navigate = useNavigate();
-  const { t } = useTranslation();
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
     libraries: ["places"],
@@ -224,32 +186,6 @@ function SingleProject() {
     }
     getData();
   }, []);
-
-  async function likeProjectHandler(clickProjectId: string) {
-    if (userId === "") {
-      alert(t("please_login"));
-      return;
-    }
-    await updateDoc(doc(db, "users", userId), {
-      favoriteList: arrayUnion(clickProjectId),
-    });
-  }
-
-  async function dislikeProjectHandler(clickProjectId: string) {
-    await updateDoc(doc(db, "users", userId), {
-      favoriteList: arrayRemove(clickProjectId),
-    });
-  }
-
-  async function addFriendHandler() {
-    const requestId = uuid();
-
-    await setDoc(doc(db, "friendRequests", requestId), {
-      from: userId,
-      to: singleProjectData[0]?.uid,
-    });
-    alert(t("sen_request_successfully"));
-  }
 
   const types = singleProjectData[0]?.pages?.map((data) => data.type);
   const templateFilter = types?.map((num) => templatesArr[num]);
@@ -280,7 +216,7 @@ function SingleProject() {
                       {friendList.indexOf(singleProjectData[0]?.uid) === -1 &&
                       singleProjectData[0]?.uid !== userId &&
                       userId !== "" ? (
-                        <AddFriendIcon onClick={() => addFriendHandler()} />
+                        <FriendIcon requestId={singleProjectData[0]?.uid} />
                       ) : (
                         ""
                       )}
@@ -290,16 +226,22 @@ function SingleProject() {
                 </UserInfoContainer>
               </Avatar>
               {favoriteList.indexOf(singleProjectId) === -1 ? (
-                <LikeIcon onClick={() => likeProjectHandler(singleProjectId)} />
+                <LikeIcon
+                  margin="0 0 0 20px"
+                  width="36px"
+                  height="36px"
+                  projectId={singleProjectId}
+                />
               ) : (
                 <LikedIcon
-                  onClick={() => dislikeProjectHandler(singleProjectId)}
+                  projectId={singleProjectId}
+                  margin="0 0 0 20px"
+                  width="36px"
+                  height="36px"
                 />
               )}
             </HeaderContainer>
-            {singleProjectData.length === 0 ? (
-              ""
-            ) : (
+            {singleProjectData.length !== 0 && (
               <>
                 {templateFilter.map((Template, index) => {
                   if (Template === googleMap) {
