@@ -168,6 +168,15 @@ export default function Brick({
     navigate("/singleProject");
   }
 
+  function toProfileHandler() {
+    if (uid === userId) {
+      navigate("/profile");
+      return;
+    }
+    setClickedUserId(uid);
+    navigate("/userProfile");
+  }
+
   return (
     <SingleProjectContainer key={projectId}>
       <ImgContainer
@@ -179,13 +188,7 @@ export default function Brick({
         </TitleContainer>
       </ImgContainer>
       <InfoContainer>
-        <Avatar
-          img={`url(${avatar})`}
-          onClick={() => {
-            setClickedUserId(uid);
-            navigate("/userProfile");
-          }}
-        />
+        <Avatar img={`url(${avatar})`} onClick={() => toProfileHandler()} />
         {/* <UserInfoContainer>
             <UserInfoInnerContainer>
               <UserInfoHeaderContainer>

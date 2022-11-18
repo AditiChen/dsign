@@ -57,8 +57,9 @@ const Container = styled.div`
 `;
 
 const UserInfoContainer = styled.div`
+  margin-left: 50px;
   height: calc(100vh - 260px);
-  width: 20vw;
+  width: 15vw;
   min-width: 300px;
   padding: 50px 20px;
   position: fixed;
@@ -66,7 +67,7 @@ const UserInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-radius: 0 10px 10px 0;
+  border-radius: 10px;
   background-color: #f0f0f0;
   box-shadow: 0 0 10px #3c3c3c;
 `;
@@ -87,7 +88,7 @@ const CameraIcon = styled.div`
   width: 24px;
   position: absolute;
   right: 4px;
-  bottom: 0px;
+  bottom: -4px;
   background-image: url(${cameraIcon});
   background-size: cover;
   background-position: center;

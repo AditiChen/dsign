@@ -116,9 +116,6 @@ const InfoAvatar = styled.div<{ img: string }>`
   background-image: ${(props) => props.img};
   background-size: cover;
   background-position: center;
-  &:hover {
-    cursor: pointer;
-  }
 `;
 
 const Intor = styled.div`
@@ -151,6 +148,9 @@ const Avatar = styled.div<{ img: string }>`
   position: relative;
   &:hover > ${UserInfoContainer} {
     max-height: 150px;
+  }
+  &:hover {
+    cursor: pointer;
   }
 `;
 
@@ -201,16 +201,18 @@ function SingleProject() {
           <>
             <HeaderContainer>
               <Title>{singleProjectData && singleProjectData[0]?.title}</Title>
-              <Avatar img={`url(${singleProjectData[0]?.avatar})`}>
+              <Avatar
+                img={`url(${singleProjectData[0]?.avatar})`}
+                onClick={() => {
+                  setClickedUserId(singleProjectData[0]?.uid);
+                  navigate("/userProfile");
+                }}
+              >
                 <UserInfoContainer>
                   <UserInfoInnerContainer>
                     <UserInfoHeaderContainer>
                       <InfoAvatar
                         img={`url(${singleProjectData[0]?.avatar})`}
-                        onClick={() => {
-                          setClickedUserId(singleProjectData[0]?.uid);
-                          navigate("/userProfile");
-                        }}
                       />
                       <Author>{singleProjectData[0]?.name}</Author>
                       {friendList.indexOf(singleProjectData[0]?.uid) === -1 &&

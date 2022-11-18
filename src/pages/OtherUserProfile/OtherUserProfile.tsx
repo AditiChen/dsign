@@ -1,29 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import {
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc,
-  arrayUnion,
-  arrayRemove,
-} from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import ReactLoading from "react-loading";
-import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 
 import { db } from "../../context/firebaseSDK";
 import getUserProjects from "../../utils/getUserProjects";
 import { AuthContext } from "../../context/authContext";
 import { FriendContext } from "../../context/friendContext";
+import Brick from "../../components/Brick/Brick";
 import FriendIcon from "../../components/IconButtoms/FriendIcon";
-import { LikeIcon, LikedIcon } from "../../components/IconButtoms/LikeIcons";
-
-import likeIcon from "../../icons/like-icon.png";
-import likeIconHover from "../../icons/like-icon-hover.png";
-import likedIcon from "../../icons/liked-icon.png";
-import addFriendIcon from "../../icons/add-friend-icon.png";
-import addFriendIconHover from "../../icons/add-friend-icon-hover.png";
 
 interface Prop {
   url?: string;
@@ -69,15 +54,16 @@ const Container = styled.div`
 `;
 
 const UserInfoContainer = styled.div`
+  margin-left: 50px;
   height: calc(100vh - 260px);
-  width: 20vw;
+  width: 15vw;
   min-width: 300px;
   padding: 50px 20px;
-  left: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid #f0f0f0;
+  border: 1px solid #b4b4b4;
+  border-radius: 10px;
 `;
 
 const Avatar = styled.div`
@@ -131,18 +117,21 @@ const Intruduction = styled.textarea`
 
 const BricksContainer = styled.div`
   margin: 0 auto;
-  padding: 50px 0 0 30px;
-  width: 1380px;
+  padding-bottom: 50px;
+  width: 1640px;
   height: 100%;
   position: relative;
   display: grid;
-  grid-gap: 10px;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  @media screen and (min-width: 1500px) and (max-width: 1849px) {
-    width: 1100px;
+  grid-gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  @media screen and (min-width: 1850px) and (max-width: 2230px) {
+    width: 1300px;
   }
-  @media screen and (min-width: 1220px) and (max-width: 1499px) {
-    width: 820px;
+  @media screen and (min-width: 1450px) and (max-width: 1849px) {
+    width: 970px;
+  }
+  @media screen and (min-width: 1220px) and (max-width: 1449px) {
+    width: 640px;
   }
   @media screen and (min-width: 800px) and (max-width: 1219px) {
     width: 530px;
@@ -153,53 +142,12 @@ const BricksContainer = styled.div`
   }
 `;
 
-const ImgContainer = styled.div`
-  width: 100%;
-  height: 250px;
-  background-image: ${(props: Prop) => props.img};
-  background-size: cover;
-  background-position: center;
-`;
-
-const SingleProjectContainer = styled.div`
-  margin: 0 auto 10px auto;
-  width: 250px;
-  height: 300px;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 0 5px #787878;
-  &:hover {
-    margin-bottom: 0;
-    width: 260px;
-    height: 260px;
-    box-shadow: 0 0 10px #3c3c3c;
-  }
-  &:hover > ${ImgContainer} {
-    width: 260px;
-    height: 260px;
-    cursor: pointer;
-  }
-  &:hover > ${ImgContainer} {
-    background-color: #3c3c3c90;
-  }
-`;
-
-const InfoContainer = styled.div`
-  padding: 0 15px;
-  width: 100%;
-  height: 50px;
-  display: flex;
-  align-items: center;
-`;
-
 const Loading = styled(ReactLoading)`
   margin: 50px auto;
 `;
 
 function OtherUserProfile() {
-  const navigate = useNavigate();
-  const { setSingleProjectId, favoriteList, userId, friendList } =
-    useContext(AuthContext);
+  const { userId, friendList } = useContext(AuthContext);
   const { clickedUserId } = useContext(FriendContext);
   const [isLoading, setIsloading] = useState(false);
   const [userProjects, setUserProjects] = useState<UserProjectsType[]>([]);
@@ -230,11 +178,6 @@ function OtherUserProfile() {
     setIsloading(false);
   }, []);
 
-  function toSingleProjectPage(clickedId: string) {
-    setSingleProjectId(clickedId);
-    navigate("/singleProject");
-  }
-
   if (isLoading) {
     return (
       <Wrapper>
@@ -264,29 +207,15 @@ function OtherUserProfile() {
         <BricksContainer>
           {userProjects &&
             userProjects.map((project) => (
-              <SingleProjectContainer key={project.projectId}>
-                <ImgContainer
-                  img={`url(${project.mainUrl})`}
-                  onClick={() => toSingleProjectPage(project.projectId)}
-                />
-                <InfoContainer>
-                  {favoriteList.indexOf(project.projectId) === -1 ? (
-                    <LikeIcon
-                      projectId={project.projectId}
-                      margin="0 0 0 auto"
-                      width="30px"
-                      height="30px"
-                    />
-                  ) : (
-                    <LikedIcon
-                      projectId={project.projectId}
-                      margin="0 0 0 auto"
-                      width="30px"
-                      height="30px"
-                    />
-                  )}
-                </InfoContainer>
-              </SingleProjectContainer>
+              <Brick
+                key={project.projectId}
+                uid={project.uid}
+                projectId={project.projectId}
+                mainUrl={project.mainUrl}
+                title={project.title}
+                avatar={userData?.avatar || ""}
+                name={userData?.name || ""}
+              />
             ))}
         </BricksContainer>
       </Container>
