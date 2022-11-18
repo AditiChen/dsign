@@ -5,20 +5,17 @@ import { v4 as uuid } from "uuid";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import ReactLoading from "react-loading";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-import { db, storage } from "../../context/firebaseSDK";
+import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
 import getUserProjects from "../../utils/getUserProjects";
 import templatesImgArr from "../../components/Templates/TemplateImg";
 import templatesArr from "../../components/Templates/TemplatesArr";
+import SquareOverlay from "../../components/Overlays/squareOverlay";
 
 import closeIcon from "../../icons/close-icon.png";
 import closeIconHover from "../../icons/close-icon-hover.png";
-
-interface Prop {
-  img?: string;
-}
+import checkedIcon from "../../icons/checked-icon.png";
 
 const Wrapper = styled.div`
   padding-top: 80px;
@@ -53,6 +50,7 @@ const EditorContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-shadow: 0 0 20px #3c3c3c;
 `;
 
 const Text = styled.div`
@@ -62,37 +60,19 @@ const Text = styled.div`
 
 const Input = styled.input`
   margin-bottom: 40px;
-  padding: 6px 10px;
+  padding: 0 20px;
   width: 1200px;
-  height: 50px;
+  height: 60px;
+  font-size: 30px;
   color: #3c3c3c;
-  font-size: 20px;
-  background-color: #f0f0f090;
-  border: 1px solid gray;
+  font-weight: 700;
+  background-color: #ffffff90;
+  border: 1px solid #787878;
   border-radius: 10px;
   &:focus {
     outline: none;
-    background-color: #61616130;
+    background-color: #ffffff;
   }
-`;
-
-const UploadPic = styled.label`
-  padding: 0 20px;
-  height: 50px;
-  line-height: 50px;
-  font-size: 20px;
-  color: #3c3c3c;
-  text-align: center;
-  border: 1px solid #3c3c3c;
-  background-color: #3c3c3c30;
-`;
-
-const MainImg = styled.div`
-  width: 100px;
-  height: 100px;
-  background-image: ${(props: Prop) => props.img};
-  background-size: cover;
-  background-position: center;
 `;
 
 const SingleEditorContainer = styled.div`
@@ -153,11 +133,11 @@ const SelectInnerContainer = styled.div`
   }
 `;
 
-const SelectImg = styled.div`
+const SelectImg = styled.div<{ img: string }>`
   margin: 20px auto;
   width: 200px;
   height: 120px;
-  background-image: ${(props: Prop) => props.img};
+  background-image: ${(props) => props.img};
   background-size: cover;
   background-position: center;
   &:hover {
@@ -174,13 +154,38 @@ const SelectImg = styled.div`
   }
 `;
 
-const Btn = styled.button`
-  margin-top: 20px;
+const FooterContainer = styled.div`
+  margin-top: 40px;
+  display: flex;
+`;
+const Btn = styled.button<{ backgroundColor?: string }>`
+  padding: 0 20px;
   height: 50px;
   color: #3c3c3c;
-  font-size: 20px;
-  border: 1px solid #3c3c3c;
-  background-color: #3c3c3c30;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  border: 1px solid #3c3c3c40;
+  border-radius: 10px;
+  background-color: ${(props) => props.backgroundColor || "#3c3c3c30"};
+  &:hover {
+    cursor: pointer;
+    color: #ffffff;
+    background-color: #616161;
+  }
+  & + & {
+    margin-left: 50px;
+  }
+`;
+
+const CheckedIcon = styled.div`
+  margin-left: 10px;
+  width: 25px;
+  height: 25px;
+  background-image: url(${checkedIcon});
+  background-size: cover;
+  background-position: center;
+  opacity: 0.8;
 `;
 
 const Loading = styled(ReactLoading)`
@@ -197,7 +202,7 @@ function CreateNewProject() {
   >([]);
   const [pages, setPages] = useState<
     {
-      type: number;
+      type?: number;
       content?: string[];
       url?: string[];
       location?: { lat?: number; lng?: number };
@@ -206,20 +211,21 @@ function CreateNewProject() {
   const [position, setPosition] = useState<{ lat?: number; lng?: number }>({});
   const [title, setTitle] = useState("");
   const [mainImgSrc, setMainImgSrc] = useState("");
-  const [progressing, setProgressing] = useState(100);
+  const [showOverlay, setShowOverlay] = useState(false);
   const googleMap = templatesArr[8];
 
   async function confirmAllEdit() {
     if (title === "") {
-      alert("please enter title");
+      alert(t("lack_main_title"));
       return;
     }
     if (mainImgSrc === "") {
-      alert("please choose your main photo");
+      alert(t("lack_main_photo"));
       return;
     }
-    const checkPage = pages.every((type) => type.type === undefined);
-    if (checkPage) {
+    const checkPage = pages.findIndex((type) => type.type === undefined);
+
+    if (checkPage !== -1) {
       alert(t("upload_failed"));
       return;
     }
@@ -238,6 +244,7 @@ function CreateNewProject() {
     setUserProjects(newProjects);
     setPages([]);
     setAddedTemplate([]);
+    setMainImgSrc("");
     alert(t("upload_successfully"));
     setIsLoading(false);
     navigate("/profile");
@@ -250,43 +257,15 @@ function CreateNewProject() {
 
   useEffect(() => {
     if (position.lat === undefined && position.lng === undefined) return;
-
     const mapIndex = templateFilter.findIndex(
       (map) => map.ChoseTemplate === googleMap
     );
     if (mapIndex === -1) return;
-
     const googleMapData = { type: 8, location: position };
     const newPages = [...pages];
     newPages[mapIndex] = googleMapData;
     setPages(newPages);
   }, [position]);
-
-  const onUploadMainImgFile = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ): void => {
-    if (e.target.files && e.target.files.length > 0) {
-      const file: File = e.target.files[0];
-      const urlByTime = `${+new Date()}`;
-      const imgRef = ref(storage, `images/${userId}/${urlByTime}`);
-      const uploadTask = uploadBytesResumable(imgRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setProgressing(progress);
-        },
-        (error) => {
-          console.log("Upload err", error);
-        },
-        async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          setMainImgSrc(downloadURL);
-        }
-      );
-    }
-  };
 
   function deleteHandler(index: number) {
     const removeSelectedTemplate = addedTemplate.filter(
@@ -306,72 +285,84 @@ function CreateNewProject() {
   }
 
   return (
-    <Wrapper>
-      <SelectContainer>
-        <SelectInnerContainer>
-          {templatesImgArr.map((pic, index) => (
-            <SelectImg
-              key={uuid()}
-              img={`url(${pic})`}
-              onClick={() => {
-                setAddedTemplate((prev) => [
-                  ...prev,
-                  { uuid: uuid(), type: index },
-                ]);
-                setPages((prev: any) => [...prev, {}]);
-              }}
-            />
-          ))}
-        </SelectInnerContainer>
-      </SelectContainer>
-      <Container>
-        <EditorContainer>
-          {addedTemplate.length === 0 ? (
-            <Text>{t("create_new_project")}</Text>
-          ) : (
-            <>
-              <Input
-                placeholder={t("project_title")}
-                onChange={(e) => setTitle(e.target.value)}
+    <>
+      <Wrapper>
+        <SelectContainer>
+          <SelectInnerContainer>
+            {templatesImgArr.map((pic, index) => (
+              <SelectImg
+                key={uuid()}
+                img={`url(${pic})`}
+                onClick={() => {
+                  setAddedTemplate((prev) => [
+                    ...prev,
+                    { uuid: uuid(), type: index },
+                  ]);
+                  setPages((prev) => [...prev, {}]);
+                }}
               />
-              {templateFilter.map(({ keyUuid, ChoseTemplate }, index) => (
-                <SingleEditorContainer key={`${keyUuid}`}>
-                  <ChoseTemplate
-                    pages={pages}
-                    setPages={setPages}
-                    currentIndex={index}
-                    position={position}
-                    setPosition={setPosition}
-                  />
-                  <CloseIcon onClick={() => deleteHandler(index)} />
-                </SingleEditorContainer>
-              ))}
-
-              <UploadPic onChange={(e: any) => onUploadMainImgFile(e)}>
-                {t("upload_main_photo")}
-                <input
-                  type="file"
-                  accept="image/*"
-                  style={{ display: "none" }}
-                  multiple
+            ))}
+          </SelectInnerContainer>
+        </SelectContainer>
+        <Container>
+          <EditorContainer>
+            {addedTemplate.length === 0 ? (
+              <Text>{t("create_new_project")}</Text>
+            ) : (
+              <>
+                <Input
+                  placeholder={t("project_title")}
+                  onChange={(e) => setTitle(e.target.value)}
                 />
-              </UploadPic>
-              {progressing === 100 ? (
-                <MainImg img={`url(${mainImgSrc})`} />
-              ) : (
-                <Loading
-                  type="spin"
-                  color="#3c3c3c"
-                  height="40px"
-                  width="40px"
-                />
-              )}
-              <Btn onClick={() => confirmAllEdit()}>{t("confirm_edit")}</Btn>
-            </>
-          )}
-        </EditorContainer>
-      </Container>
-    </Wrapper>
+                {templateFilter.map(({ keyUuid, ChoseTemplate }, index) => (
+                  <SingleEditorContainer key={`${keyUuid}`}>
+                    <ChoseTemplate
+                      pages={pages}
+                      setPages={setPages}
+                      currentIndex={index}
+                      position={position}
+                      setPosition={setPosition}
+                    />
+                    <CloseIcon onClick={() => deleteHandler(index)} />
+                  </SingleEditorContainer>
+                ))}
+                <FooterContainer>
+                  {mainImgSrc === "" ? (
+                    <Btn
+                      backgroundColor="#f5dfa9"
+                      onClick={() => setShowOverlay((prev) => !prev)}
+                    >
+                      {t("upload_main_photo")}
+                    </Btn>
+                  ) : (
+                    <>
+                      <Btn onClick={() => setShowOverlay((prev) => !prev)}>
+                        {t("edit_main_photo")}
+                        <CheckedIcon />
+                      </Btn>
+                      <Btn
+                        backgroundColor="#f5dfa9"
+                        onClick={() => confirmAllEdit()}
+                      >
+                        {t("confirm_edit")}
+                      </Btn>
+                    </>
+                  )}
+                </FooterContainer>
+              </>
+            )}
+          </EditorContainer>
+        </Container>
+      </Wrapper>
+      {showOverlay && (
+        <SquareOverlay
+          setShowOverlay={setShowOverlay}
+          mainImgSrc={mainImgSrc}
+          setMainImgSrc={setMainImgSrc}
+          userId={userId}
+        />
+      )}
+    </>
   );
 }
 

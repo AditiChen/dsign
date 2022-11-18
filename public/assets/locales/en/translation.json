@@ -25,9 +25,8 @@
   "logout_confirm": "Are you sure that you want to logout?",
   "logout_successfully": "Logout successfully!",
 
-  "upload_main_photo": "Upload cover photo",
+  "create_new_project": "Choose a template to start",
   "project_title": "Title",
-  "create_new_project": "Create new project",
   "insert_location": "Enter the address",
   "confirm_location": "Confirm Location",
   "type_content": "Type content here...",
@@ -37,8 +36,12 @@
   "zoom_image": "Zoom",
   "rotate_image": "Rotation",
   "confirm_crop": "Confirm crop",
+  "upload_main_photo": "Upload cover photo",
+  "edit_main_photo": "Edit cover photo",
   "confirm_edit": "Confirm edit",
   "drop_edit": "Drop edit",
+  "lack_main_title": "Please enter your title",
+  "lack_main_photo": "Please choose your main photo",
   "upload_failed": "Do you miss updating details? please check every template again.",
   "upload_successfully": "Upload project successfully!",
 
@@ -63,5 +66,8 @@
   "delete_successfully": "Delete successfully",
 
   "your_collection": "Your collection",
-  "delete_photo_warning": "Are you sure that you want to remove this photo?"
+  "empty_collection": "Your collection is empty, upload some photos!",
+  "delete_photo_warning": "Are you sure that you want to remove this photo?",
+
+  "empty_favorite_list": "Your favorite list is empty, go to add some projects!"
 }

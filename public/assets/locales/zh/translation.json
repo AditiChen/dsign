@@ -11,7 +11,7 @@
   "continue_with_facebook": "以Facebook帳號登入",
   "input_name": "姓名",
   "input_email": "Email",
-  "input_password": "密碼（至少包含八位數的英文字母及數字）",
+  "input_password": "密碼（至少包含八個英文及數字）",
   "check_input_password": "再次確認密碼",
   "name_input_check": "請輸入使用者名稱",
   "email_and_password_input_check": "請輸入帳號及密碼",
@@ -25,9 +25,8 @@
   "logout_confirm": "確定要登出嗎？",
   "logout_successfully": "登出成功！",
 
-  "upload_main_photo": "上傳封面照片",
+  "create_new_project": "點選版型開始編輯吧！",
   "project_title": "標題",
-  "create_new_project": "建立新專案",
   "insert_location": "輸入地點",
   "confirm_location": "確認地點",
   "type_content": "請輸入內容...",
@@ -37,8 +36,12 @@
   "zoom_image": "放大",
   "rotate_image": "旋轉",
   "confirm_crop": "確認裁切範圍",
+  "upload_main_photo": "上傳封面照片",
+  "edit_main_photo": "編輯封面照片",
   "confirm_edit": "上傳專案",
   "drop_edit": "取消編輯",
+  "lack_main_title": "請輸入標題",
+  "lack_main_photo": "請選擇封面照片",
   "upload_failed": "有圖片或文字沒有上傳喔，請再檢查一下每一個版面：）",
   "upLoad_successfully": "專案建立成功!",
 
@@ -63,5 +66,8 @@
   "delete_successfully": "刪除成功！",
 
   "your_collection": "你的素材庫",
-  "delete_photo_warning": "確定要刪除這張照片嗎？"
+  "empty_collection": "你的素材庫現在是空的喔，快去上傳照片吧！",
+  "delete_photo_warning": "確定要刪除這張照片嗎？",
+
+  "empty_favorite_list": "你的最愛現在是空的喔，快去加些喜歡的專案吧！"
 }

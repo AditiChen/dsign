@@ -119,7 +119,7 @@ const SingleMessageRight = styled(SingleMessageLeft)`
 
 const SendMessageContainer = styled.div`
   height: 50px;
-  padding: 5px;
+  padding: 5px 5px 5px 10px;
   position: relative;
   display: flex;
   align-items: center;
@@ -127,8 +127,8 @@ const SendMessageContainer = styled.div`
 `;
 
 const MessageInput = styled.input`
-  height: 40px;
-  width: 290px;
+  height: 36px;
+  width: 285px;
   border-radius: 20px;
   padding: 5px 45px 5px 15px;
   border: solid 1px #d4d4d4;

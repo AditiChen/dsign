@@ -40,7 +40,7 @@ const BannerContainer = styled.div`
   margin: 0 auto;
   width: 100%;
   height: 700px;
-  max-height: calc(100vh - 80px);
+  max-height: 90vh;
   background-color: #00000090;
 `;
 
@@ -130,9 +130,9 @@ function PortfolioBricks() {
                 uid={project.uid}
                 projectId={project.projectId}
                 mainUrl={project.mainUrl}
+                title={project.title}
                 avatar={project.avatar || ""}
                 name={project.name || ""}
-                introduction={project.introduction || ""}
               />
             ))}
         </BricksContainer>

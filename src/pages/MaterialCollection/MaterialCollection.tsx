@@ -37,7 +37,7 @@ const HeaderContainer = styled.div`
   align-items: center;
 `;
 
-const Text = styled.div`
+const Title = styled.div`
   padding: 0 50px;
   font-size: 30px;
   text-align: center;
@@ -55,6 +55,18 @@ const AddFolderIcon = styled.label`
     cursor: pointer;
     background-image: url(${uploadPhotoIconHover});
   }
+`;
+
+const ContentContainer = styled.div`
+  display: flex;
+`;
+
+const Content = styled.div`
+  width: 100%;
+  padding: 0 50px;
+  font-size: 24px;
+  color: #3c3c3c;
+  text-align: center;
 `;
 
 const BricksContainer = styled.div`
@@ -137,9 +149,9 @@ function MaterialCollection() {
   const [currentUrl, setCurrentUrl] = useState("");
   const [progressing, setProgressing] = useState(100);
 
-  const onUploadImgFiles = (files: File[]) => {
-    const newFiles = [...files];
-    if (newFiles.length === 0) return;
+  const onUploadImgFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files === null) return;
+    const newFiles = Array.from(e.target.files);
     newFiles.forEach((file: File) => {
       const urlByUuid = `${uuid()}`;
       const imgRef = ref(storage, `images/${userId}/${urlByUuid}`);
@@ -176,20 +188,23 @@ function MaterialCollection() {
     <>
       <Wrapper>
         <HeaderContainer>
-          <Text>{t("your_collection")}</Text>
-          <AddFolderIcon
-            onChange={(e: any) => {
-              onUploadImgFiles(e.target.files);
-            }}
-          >
+          <Title>{t("your_collection")}</Title>
+          <AddFolderIcon>
             <input
               type="file"
               accept="image/*"
               style={{ display: "none" }}
               multiple
+              onChange={(e) => onUploadImgFiles(e)}
             />
           </AddFolderIcon>
         </HeaderContainer>
+        {collection.length === 0 && (
+          <ContentContainer>
+            <Content>{t("empty_collection")}</Content>
+          </ContentContainer>
+        )}
+
         <BricksContainer>
           {collection.length !== 0 &&
             collection.map((url) => (
@@ -204,9 +219,7 @@ function MaterialCollection() {
                 <TrashIcon onClick={() => deleteHandler(url)} />
               </ImgContainer>
             ))}
-          {progressing === 100 ? (
-            ""
-          ) : (
+          {progressing !== 100 && (
             <ImgContainer>
               <Loading type="spin" color="#3c3c3c" height="40px" width="40px" />
             </ImgContainer>

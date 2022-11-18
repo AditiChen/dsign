@@ -29,7 +29,7 @@ interface InsertProp {
   setPages: Dispatch<
     SetStateAction<
       {
-        type: number;
+        type?: number;
         content?: string[];
         url?: string[];
         location?: { lat?: number; lng?: number };
@@ -37,7 +37,7 @@ interface InsertProp {
     >
   >;
   pages: {
-    type: number;
+    type?: number;
     content?: string[];
     url?: string[];
     location?: { lat?: number; lng?: number };
@@ -77,7 +77,7 @@ const LeftCircle = styled.div`
 
 const Context = styled.textarea`
   padding: 10px;
-  height: 180px;
+  height: 150px;
   width: 240px;
   color: #ffffff;
   font-size: 20px;

@@ -369,9 +369,7 @@ function FriendList() {
         ) : (
           ""
         )}
-        {friendRequests.length === 0 ? (
-          ""
-        ) : (
+        {friendRequests.length !== 0 && (
           <>
             <Separator>
               <Text size="20px">{t("request_list")}</Text>
@@ -401,9 +399,7 @@ function FriendList() {
             ))}
           </>
         )}
-        {friendDataList.length === 0 ? (
-          ""
-        ) : (
+        {friendDataList.length !== 0 && (
           <>
             <Separator>
               <Text size="20px">{t("friend_list")}</Text>
