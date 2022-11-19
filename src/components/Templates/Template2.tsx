@@ -1,18 +1,7 @@
 import styled from "styled-components";
 import { t } from "i18next";
-import { v4 as uuid } from "uuid";
-import {
-  useState,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useContext,
-} from "react";
-import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { useState, Dispatch, SetStateAction, useEffect } from "react";
 
-import { AuthContext } from "../../context/authContext";
-import { db } from "../../context/firebaseSDK";
-import upLoadImgToCloudStorage from "../../utils/upLoadImgToCloudStorage";
 import Overlay from "../Overlays/templateOverlay";
 
 import uploadPhotoIcon from "../../icons/uploadPhoto-icon.png";
@@ -20,8 +9,6 @@ import uploadPhotoIcon from "../../icons/uploadPhoto-icon.png";
 interface Prop {
   url?: string;
   backgroundColor?: string;
-  top?: string;
-  left?: string;
 }
 
 interface InsertProp {
@@ -45,7 +32,6 @@ interface InsertProp {
 }
 
 const Wrapper = styled.div`
-  margin: 0 auto;
   width: 1200px;
   height: 760px;
   position: relative;
@@ -94,6 +80,7 @@ const ImgContainer = styled.div`
 const AsideImg = styled.div`
   width: 430px;
   height: 100%;
+  position: relative;
   background-image: ${(props: Prop) => props.url};
   background-color: ${(props: Prop) => props.backgroundColor};
   background-size: cover;
@@ -113,6 +100,7 @@ const MiddleImgContainer = styled.div`
 const MiddleImg = styled.div`
   width: 320px;
   height: 265px;
+  position: relative;
   background-image: ${(props: Prop) => props.url};
   background-color: ${(props: Prop) => props.backgroundColor};
   background-size: cover;
@@ -122,8 +110,9 @@ const MiddleImg = styled.div`
 const UploadIcon = styled.div`
   width: 50px;
   height: 50px;
-  top: ${(props: Prop) => props.top};
-  left: ${(props: Prop) => props.left};
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 2;
   position: absolute;
   background-image: url(${uploadPhotoIcon});
@@ -132,12 +121,8 @@ const UploadIcon = styled.div`
 `;
 
 function Template2(props: InsertProp) {
-  const { userId } = useContext(AuthContext);
   const [inputText, setInputText] = useState<string[]>([""]);
   const [showOverlay, setShowOverlay] = useState(false);
-  // for better user experience
-  const [photoUrl, setPhotoUrl] = useState<string[]>(["", "", "", ""]);
-  // the actual upload url
   const [storageUrl, setStorageUrl] = useState<string[]>(["", "", "", ""]);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [currentImgUrl, setCurrentImgUrl] = useState("");
@@ -146,7 +131,6 @@ function Template2(props: InsertProp) {
   const { setPages, currentIndex, pages } = props;
 
   useEffect(() => {
-    setPhotoUrl(pages[currentIndex].url || ["", "", "", ""]);
     setInputText(pages[currentIndex].content || [""]);
     setStorageUrl(pages[currentIndex].url || ["", "", "", ""]);
   }, []);
@@ -163,35 +147,16 @@ function Template2(props: InsertProp) {
     const newPages = [...pages];
     newPages[currentIndex] = pageData;
     setPages(newPages);
-  }, [inputText, storageUrl, photoUrl]);
+  }, [inputText, storageUrl]);
 
-  async function upLoadImgToFirebase(file: File) {
-    if (!file) return;
-    const urlByUuid = uuid();
-    const downloadURL = (await upLoadImgToCloudStorage(
-      file,
-      userId,
-      urlByUuid
-    )) as string;
-    const newStorageUrl = [...storageUrl];
-    newStorageUrl[currentImgIndex] = downloadURL;
-    if (isAddToCollection) {
-      await updateDoc(doc(db, "users", userId), {
-        collection: arrayUnion(downloadURL),
-      });
-    }
-    setStorageUrl(newStorageUrl);
-  }
-
-  const setNewPhotoDetail = (returnedUrl: string, returnedFile: File) => {
-    const newUrl = [...photoUrl];
+  const setNewPhotoUrl = (returnedUrl: string) => {
+    const newUrl = [...storageUrl];
     newUrl[currentImgIndex] = returnedUrl;
-    setPhotoUrl(newUrl);
-    upLoadImgToFirebase(returnedFile);
+    setStorageUrl(newUrl);
   };
 
   function upLoadNewPhoto(index: number, aspect: number) {
-    setCurrentImgUrl(photoUrl[index]);
+    setCurrentImgUrl(storageUrl[index]);
     setShowOverlay((prev) => !prev);
     setCurrentImgIndex(index);
     setCurrentAspect(aspect);
@@ -212,54 +177,46 @@ function Template2(props: InsertProp) {
             onClick={() => {
               upLoadNewPhoto(0, 430 / 540);
             }}
-            backgroundColor={photoUrl[0] === "" ? "#b4b4b4" : ""}
-            url={photoUrl[0] === "" ? "" : `url(${photoUrl[0]})`}
+            backgroundColor={storageUrl[0] === "" ? "#b4b4b4" : ""}
+            url={storageUrl[0] === "" ? "" : `url(${storageUrl[0]})`}
           >
-            {photoUrl[0] === "" ? <UploadIcon top="240px" left="190px" /> : ""}
+            {storageUrl[0] === "" && <UploadIcon />}
           </AsideImg>
           <MiddleImgContainer>
             <MiddleImg
               onClick={() => {
                 upLoadNewPhoto(1, 320 / 265);
               }}
-              backgroundColor={photoUrl[1] === "" ? "#b4b4b4" : ""}
-              url={photoUrl[1] === "" ? "" : `url(${photoUrl[1]})`}
+              backgroundColor={storageUrl[1] === "" ? "#b4b4b4" : ""}
+              url={storageUrl[1] === "" ? "" : `url(${storageUrl[1]})`}
             >
-              {photoUrl[1] === "" ? (
-                <UploadIcon top="110px" left="135px" />
-              ) : (
-                ""
-              )}
+              {storageUrl[1] === "" && <UploadIcon />}
             </MiddleImg>
             <MiddleImg
               onClick={() => {
                 upLoadNewPhoto(2, 320 / 265);
               }}
-              backgroundColor={photoUrl[2] === "" ? "#b4b4b4" : ""}
-              url={photoUrl[2] === "" ? "" : `url(${photoUrl[2]})`}
+              backgroundColor={storageUrl[2] === "" ? "#b4b4b4" : ""}
+              url={storageUrl[2] === "" ? "" : `url(${storageUrl[2]})`}
             >
-              {photoUrl[2] === "" ? (
-                <UploadIcon top="380px" left="135px" />
-              ) : (
-                ""
-              )}
+              {storageUrl[2] === "" && <UploadIcon />}
             </MiddleImg>
           </MiddleImgContainer>
           <AsideImg
             onClick={() => {
               upLoadNewPhoto(3, 430 / 540);
             }}
-            backgroundColor={photoUrl[3] === "" ? "#b4b4b4" : ""}
-            url={photoUrl[3] === "" ? "" : `url(${photoUrl[3]})`}
+            backgroundColor={storageUrl[3] === "" ? "#b4b4b4" : ""}
+            url={storageUrl[3] === "" ? "" : `url(${storageUrl[3]})`}
           >
-            {photoUrl[3] === "" ? <UploadIcon top="240px" left="950px" /> : ""}
+            {storageUrl[3] === "" && <UploadIcon />}
           </AsideImg>
         </ImgContainer>
       </Wrapper>
       {showOverlay && (
         <Overlay
           setShowOverlay={setShowOverlay}
-          setNewPhotoDetail={setNewPhotoDetail}
+          setNewPhotoUrl={setNewPhotoUrl}
           currentAaspect={currentAaspect}
           currentImgUrl={currentImgUrl}
           isAddToCollection={isAddToCollection}

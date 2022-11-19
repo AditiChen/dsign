@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { t } from "i18next";
-import { v4 as uuid } from "uuid";
 import {
   useState,
   Dispatch,
@@ -8,11 +7,8 @@ import {
   useEffect,
   useContext,
 } from "react";
-import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 
 import { AuthContext } from "../../context/authContext";
-import { db } from "../../context/firebaseSDK";
-import upLoadImgToCloudStorage from "../../utils/upLoadImgToCloudStorage";
 import Overlay from "../Overlays/templateOverlay";
 
 import trapezoid from "./template1_trapezoid.png";
@@ -46,7 +42,6 @@ interface InsertProp {
 }
 
 const Wrapper = styled.div`
-  margin: 0 auto;
   width: 1200px;
   height: 760px;
   position: relative;
@@ -137,12 +132,8 @@ const UploadIcon = styled.div`
 `;
 
 function Template1(props: InsertProp) {
-  const { userId } = useContext(AuthContext);
   const [inputText, setInputText] = useState<string[]>([""]);
   const [showOverlay, setShowOverlay] = useState(false);
-  // for better user experience
-  const [photoUrl, setPhotoUrl] = useState<string[]>(["", "", ""]);
-  // the actual upload url
   const [storageUrl, setStorageUrl] = useState<string[]>(["", "", ""]);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [currentImgUrl, setCurrentImgUrl] = useState("");
@@ -151,7 +142,6 @@ function Template1(props: InsertProp) {
   const { setPages, currentIndex, pages } = props;
 
   useEffect(() => {
-    setPhotoUrl(pages[currentIndex].url || ["", "", ""]);
     setInputText(pages[currentIndex].content || [""]);
     setStorageUrl(pages[currentIndex].url || ["", "", ""]);
   }, []);
@@ -168,35 +158,16 @@ function Template1(props: InsertProp) {
     const newPages = [...pages];
     newPages[currentIndex] = pageData;
     setPages(newPages);
-  }, [inputText, storageUrl, photoUrl]);
+  }, [inputText, storageUrl]);
 
-  async function upLoadImgToFirebase(file: File) {
-    if (!file) return;
-    const urlByUuid = uuid();
-    const downloadURL = (await upLoadImgToCloudStorage(
-      file,
-      userId,
-      urlByUuid
-    )) as string;
-    const newStorageUrl = [...storageUrl];
-    newStorageUrl[currentImgIndex] = downloadURL;
-    if (isAddToCollection) {
-      await updateDoc(doc(db, "users", userId), {
-        collection: arrayUnion(downloadURL),
-      });
-    }
-    setStorageUrl(newStorageUrl);
-  }
-
-  const setNewPhotoDetail = (returnedUrl: string, returnedFile: File) => {
-    const newUrl = [...photoUrl];
+  const setNewPhotoUrl = (returnedUrl: string) => {
+    const newUrl = [...storageUrl];
     newUrl[currentImgIndex] = returnedUrl;
-    setPhotoUrl(newUrl);
-    upLoadImgToFirebase(returnedFile);
+    setStorageUrl(newUrl);
   };
 
   function upLoadNewPhoto(index: number, aspect: number) {
-    setCurrentImgUrl(photoUrl[index]);
+    setCurrentImgUrl(storageUrl[index]);
     setShowOverlay((prev) => !prev);
     setCurrentImgIndex(index);
     setCurrentAspect(aspect);
@@ -209,10 +180,10 @@ function Template1(props: InsertProp) {
           onClick={() => {
             upLoadNewPhoto(0, 1200 / 760);
           }}
-          backgroundColor={photoUrl[0] === "" ? "#b4b4b4" : ""}
-          url={photoUrl[0] === "" ? "" : `url(${photoUrl[0]})`}
+          backgroundColor={storageUrl[0] === "" ? "#b4b4b4" : ""}
+          url={storageUrl[0] === "" ? "" : `url(${storageUrl[0]})`}
         >
-          {photoUrl[0] === "" ? <UploadIcon top="350px" left="400px" /> : ""}
+          {storageUrl[0] === "" && <UploadIcon top="350px" left="400px" />}
         </BackgroundImg>
         <Trapezoid />
         <Context
@@ -225,26 +196,26 @@ function Template1(props: InsertProp) {
             onClick={() => {
               upLoadNewPhoto(1, 300 / 200);
             }}
-            backgroundColor={photoUrl[1] === "" ? "#b4b4b4" : ""}
-            url={photoUrl[1] === "" ? "" : `url(${photoUrl[1]})`}
+            backgroundColor={storageUrl[1] === "" ? "#b4b4b4" : ""}
+            url={storageUrl[1] === "" ? "" : `url(${storageUrl[1]})`}
           >
-            {photoUrl[1] === "" ? <UploadIcon top="80px" left="130px" /> : ""}
+            {storageUrl[1] === "" && <UploadIcon top="80px" left="130px" />}
           </LeftImg>
           <RightImg
             onClick={() => {
               upLoadNewPhoto(2, 200 / 200);
             }}
-            backgroundColor={photoUrl[2] === "" ? "#b4b4b4" : ""}
-            url={photoUrl[2] === "" ? "" : `url(${photoUrl[2]})`}
+            backgroundColor={storageUrl[2] === "" ? "#b4b4b4" : ""}
+            url={storageUrl[2] === "" ? "" : `url(${storageUrl[2]})`}
           >
-            {photoUrl[2] === "" ? <UploadIcon top="80px" left="410px" /> : ""}
+            {storageUrl[2] === "" && <UploadIcon top="80px" left="410px" />}
           </RightImg>
         </ImgContainer>
       </Wrapper>
       {showOverlay && (
         <Overlay
           setShowOverlay={setShowOverlay}
-          setNewPhotoDetail={setNewPhotoDetail}
+          setNewPhotoUrl={setNewPhotoUrl}
           currentAaspect={currentAaspect}
           currentImgUrl={currentImgUrl}
           isAddToCollection={isAddToCollection}

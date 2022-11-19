@@ -62,7 +62,7 @@ export function GoogleMapAPI({
           fullscreenControl: false,
         }}
       >
-        <Marker position={center} />
+        {position.lat !== undefined && <Marker position={center} />}
       </GoogleMap>
     </Wrapper>
   );

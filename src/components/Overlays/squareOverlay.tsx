@@ -315,19 +315,19 @@ function SquareOverlay({
           console.log("Upload err", error);
         },
         async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          setMainImgSrc(downloadURL);
+          const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
+          setMainImgSrc(downloadUrl);
           if (isAddToCollection) {
             await updateDoc(doc(db, "users", userId), {
-              collection: arrayUnion(downloadURL),
+              collection: arrayUnion(downloadUrl),
             });
           }
           if (usage === "avatar") {
             await updateDoc(doc(db, "users", userId), {
-              avatar: downloadURL,
+              avatar: downloadUrl,
             });
           }
-          resolve(downloadURL);
+          resolve(downloadUrl);
         }
       );
     });
