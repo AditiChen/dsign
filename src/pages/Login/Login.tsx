@@ -2,8 +2,15 @@ import { useState, useContext } from "react";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import ReactLoading from "react-loading";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "../../context/firebaseSDK";
 
 import { AuthContext } from "../../context/authContext";
+
+import googleIcon from "../../icons/google-icon.png";
+import googleIconHover from "../../icons/google-icon-hover.png";
+import fbIcon from "../../icons/fb-icon.png";
+import fbIconHover from "../../icons/fb-icon-hover.png";
 
 interface Prop {
   url?: string;
@@ -14,6 +21,9 @@ interface Prop {
   position?: string;
   buttomLine?: string;
   img?: string;
+  hoverImg?: string;
+  margin?: string;
+  checkLoading?: boolean;
 }
 
 const Wrapper = styled.div`
@@ -24,6 +34,7 @@ const Wrapper = styled.div`
   min-height: calc(100vh - 80px);
   position: relative;
   display: flex;
+  background-color: #787878;
 `;
 
 const Container = styled.div`
@@ -34,8 +45,20 @@ const Container = styled.div`
   display: flex;
 `;
 
+const SignInContainer = styled.div`
+  margin: 0 auto;
+  height: 100%;
+  width: 100%;
+  max-width: 460px;
+  position: relative;
+  border: 1px solid #b4b4b4;
+  border-radius: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 0 20px #3c3c3c;
+`;
+
 const LoginContainer = styled.div`
-  padding: 20px;
+  padding: 20px 30px;
   display: flex;
   flex-direction: column;
 `;
@@ -45,7 +68,7 @@ const SignStatus = styled.button`
   padding: 0;
   width: 50%;
   height: 60px;
-  font-size: 20px;
+  font-size: 22px;
   color: #313538;
   border: none;
   border-bottom: ${(props: Prop) => props.buttomLine || "none"};
@@ -54,6 +77,9 @@ const SignStatus = styled.button`
   & + & {
     border-left: 1px solid #b4b4b4;
   }
+  &:hover {
+    cursor: pointer;
+  }
   @media screen and (max-width: 1279px) {
     margin-bottom: 24px;
     height: 40px;
@@ -61,24 +87,15 @@ const SignStatus = styled.button`
   }
 `;
 
-const SignInContainer = styled.div`
-  margin: 0 auto;
-  height: 100%;
-  width: 100%;
-  max-width: 460px;
-  position: relative;
-  border: 1px solid #b4b4b4;
-  border-radius: 20px;
-`;
-
 const Input = styled.input`
   padding: 6px 10px;
-  width: 330px;
+  width: 100%;
   height: 50px;
   color: #3c3c3c;
   font-size: 18px;
   background-color: #f0f0f090;
-  border: 1px solid gray;
+  border: 1px solid #646464;
+  border-radius: 10px;
   & + & {
     margin-top: 30px;
   }
@@ -94,17 +111,21 @@ const SignContainer = styled.div`
 
 const SignBtn = styled.button`
   margin-top: 30px;
+  margin-left: auto;
   padding: 0 20px;
   height: 40px;
   color: #3c3c3c;
-  font-size: 18px;
-  background-color: transparent;
-  border: 1px solid #3c3c3c;
+  font-size: 20px;
+  border: 1px solid #3c3c3c40;
+  border-radius: 10px;
+  background-color: #3c3c3c30;
+  display: flex;
+  align-items: center;
   &:hover {
-    box-shadow: 1px 1px 5px #616161;
-  }
-  &:focus {
-    outline: none;
+    cursor: ${(props: Prop) =>
+      props.checkLoading ? "not-allowed" : "pointer"};
+    color: #ffffff;
+    background-color: #616161;
   }
 `;
 
@@ -112,7 +133,7 @@ const LoginOptionsContainer = styled.div`
   margin: 0 auto;
   width: 85%;
   max-width: 380px;
-  height: 40px;
+  height: 20px;
   position: relative;
 `;
 
@@ -120,10 +141,11 @@ const LoginOptionsText = styled.div`
   height: 40px;
   padding: 0 20px;
   background-color: #ffffff;
-  color: #787878;
+  color: #3c3c3c;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  font-size: 20px;
   @media screen and (max-width: 1279px) {
     height: 30px;
     padding: 0 10px;
@@ -140,8 +162,54 @@ const LoginOptionsLine = styled.div`
   }
 `;
 
+const Icon = styled.div`
+  margin-right: 20px;
+  height: 24px;
+  width: 24px;
+  background-position: center;
+  background-size: cover;
+`;
+
+const GoogleIcon = styled(Icon)`
+  background-image: url(${googleIcon});
+`;
+
+const FbIcon = styled(Icon)`
+  background-image: url(${fbIcon});
+`;
+
+const OptionalLiginBtn = styled.button`
+  margin-top: 10px;
+  padding: 0 20px;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  color: #4285f4;
+  font-size: 20px;
+  background-color: transparent;
+  border: 1px solid #3c3c3c40;
+  border-radius: 20px;
+  & + & {
+    margin-top: 25px;
+    margin-bottom: 20px;
+  }
+  &:hover {
+    cursor: pointer;
+    color: #ffffff;
+    border: none;
+    background-color: #4285f4;
+  }
+  &:hover ${GoogleIcon} {
+    background-image: url(${googleIconHover});
+  }
+  &:hover ${FbIcon} {
+    background-image: url(${fbIconHover});
+  }
+`;
+
 const Loading = styled(ReactLoading)`
-  margin: 50px auto;
+  margin: ${(props: Prop) => props.margin};
 `;
 
 function SignIn() {
@@ -158,6 +226,7 @@ function SignIn() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [signin, setSignin] = useState(true);
+  const [checkLoading, setCheckLoading] = useState(false);
 
   function signInHandler() {
     if (!inputEmail || !password) {
@@ -179,38 +248,75 @@ function SignIn() {
     emailSignInHandler(inputEmail, password);
   }
 
-  function signUpHandler() {
+  async function signUpHandler() {
     if (!inputName) {
       alert(t("name_input_check"));
       return;
     }
-    if (!inputEmail || !password) {
-      alert(t("email_and_password_input_check"));
+    setCheckLoading(true);
+    const userRef = collection(db, "users");
+    const qName = query(userRef, where("name", "==", inputName));
+    const querySnapshotName = await getDocs(qName);
+    const nameRefReturnedData = querySnapshotName.docs[0]?.data();
+    if (nameRefReturnedData !== undefined) {
+      alert(t("user name already exist"));
+      setInputName("");
+      setCheckLoading(false);
       return;
     }
+
+    if (!inputEmail || !password) {
+      alert(t("email_and_password_input_check"));
+      setCheckLoading(false);
+      return;
+    }
+
     if (
       inputEmail.search(
         /^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/
       )
     ) {
       alert(t("email_format_check"));
+      setCheckLoading(false);
       return;
     }
+
+    const qEmail = query(userRef, where("email", "==", inputEmail));
+    const querySnapshotEmail = await getDocs(qEmail);
+    const emailRefReturnedData = querySnapshotEmail.docs[0]?.data();
+    if (emailRefReturnedData !== undefined) {
+      alert(t("user email already exist"));
+      setInputEmail("");
+      setCheckLoading(false);
+      return;
+    }
+
     if (password.length < 8) {
       alert(t("password_letter_check"));
+      setCheckLoading(false);
       return;
     }
+    if (password.search(/^(?=.*\d)(?=.*[a-zA-Z]).{8,20}$/)) {
+      alert(
+        "password should contain at least one english letter and one number"
+      );
+      setCheckLoading(false);
+      return;
+    }
+
     if (password !== confirmPassword) {
       alert(t("password_confirm_failed"));
+      setCheckLoading(false);
       return;
     }
+    setCheckLoading(false);
     signUp(inputEmail, password, inputName);
   }
 
   if (isLoading) {
     return (
       <Wrapper>
-        <Loading type="cylon" color="#3c3c3c" />
+        <Loading type="cylon" color="#3c3c3c" margin="50px auto" />
       </Wrapper>
     );
   }
@@ -221,7 +327,7 @@ function SignIn() {
         <SignInContainer>
           <SignStatus
             onClick={() => setSignin(true)}
-            color={signin ? "" : "#f0f0f0"}
+            color={signin ? "" : "#3c3c3c30"}
             position="20px 0px 0px 0px"
             buttomLine={signin ? "" : "1px solid #b4b4b4"}
           >
@@ -229,7 +335,7 @@ function SignIn() {
           </SignStatus>
           <SignStatus
             onClick={() => setSignin(false)}
-            color={signin ? "#f0f0f0" : ""}
+            color={signin ? "#3c3c3c30" : ""}
             buttomLine={signin ? "1px solid #b4b4b4" : ""}
           >
             {t("sign_up")}
@@ -248,7 +354,12 @@ function SignIn() {
                 onChange={(e) => setPassword(e.target.value)}
               />
               <SignContainer>
-                <SignBtn onClick={() => signInHandler()}>{t("login")}</SignBtn>
+                <SignBtn
+                  checkLoading={checkLoading}
+                  onClick={() => signInHandler()}
+                >
+                  {t("login")}
+                </SignBtn>
               </SignContainer>
             </LoginContainer>
           ) : (
@@ -275,8 +386,19 @@ function SignIn() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
               <SignContainer>
-                <SignBtn onClick={() => signUpHandler()}>
+                <SignBtn
+                  checkLoading={checkLoading}
+                  onClick={() => signUpHandler()}
+                >
                   {t("sign_up")}
+                  {checkLoading && (
+                    <Loading
+                      type="spokes"
+                      height="20px"
+                      width="20px"
+                      margin="0 0 0 15px"
+                    />
+                  )}
                 </SignBtn>
               </SignContainer>
             </LoginContainer>
@@ -286,20 +408,22 @@ function SignIn() {
             <LoginOptionsLine />
           </LoginOptionsContainer>
           <LoginContainer>
-            <SignBtn
+            <OptionalLiginBtn
               onClick={() => {
                 googleLoginHandler();
               }}
             >
+              <GoogleIcon />
               {t("continue_with_google")}
-            </SignBtn>
-            <SignBtn
+            </OptionalLiginBtn>
+            <OptionalLiginBtn
               onClick={() => {
                 facebookLoginHandler();
               }}
             >
+              <FbIcon />
               {t("continue_with_facebook")}
-            </SignBtn>
+            </OptionalLiginBtn>
           </LoginContainer>
         </SignInContainer>
       </Container>

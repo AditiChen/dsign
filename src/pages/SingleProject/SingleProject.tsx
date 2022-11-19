@@ -120,8 +120,7 @@ const InfoAvatar = styled.div<{ img: string }>`
 
 const Intor = styled.div`
   margin: 10px 0;
-  font-size: 18px;
-  line-height: 22px;
+  font-size: 16px;
   color: #616161;
   line-height: 22px;
   display: -webkit-box;

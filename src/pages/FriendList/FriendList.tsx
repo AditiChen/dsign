@@ -69,7 +69,7 @@ const SearchContainer = styled.div`
 const SearchInput = styled.input`
   height: 40px;
   width: 100%;
-  border-radius: 5px;
+  border-radius: 20px;
   padding: 5px 45px 5px 20px;
   border: solid 1px #d4d4d4;
   font-size: 18px;
@@ -81,20 +81,41 @@ const SearchInput = styled.input`
     background-color: #3c3c3c20;
   }
   &::placeholder {
-    color: #616161;
+    color: #b4b4b4;
   }
 `;
 
 const SearchIcon = styled.div`
-  height: 30px;
-  width: 30px;
+  height: 28px;
+  width: 28px;
   position: absolute;
-  right: 10px;
+  right: 15px;
   background-image: url(${searchIcon});
   background-size: cover;
   background-position: center;
   &:hover {
     cursor: pointer;
+  }
+`;
+
+const SwichClickStatusContainer = styled.div`
+  height: 40px;
+  display: flex;
+`;
+
+const SwichClickStatusBtn = styled.div<{ color: string; border: string }>`
+  margin: 5px 0;
+  color: ${(props) => props.color};
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 30px;
+  border-bottom: ${(props) => props.border};
+  &:hover {
+    cursor: pointer;
+    color: #3c3c3c;
+  }
+  & + & {
+    margin-left: 30px;
   }
 `;
 
@@ -156,16 +177,20 @@ const BtnContainer = styled.div`
 `;
 
 const SendRequestBtn = styled.button`
-  margin-left: 10px;
   padding: 0 10px;
   height: 40px;
-  font-size: 16px;
+  color: #3c3c3c;
+  font-size: 18px;
+  border: 1px solid #3c3c3c40;
+  border-radius: 10px;
   background-color: #3c3c3c30;
-  border: 1px solid gray;
-  border-radius: 5px;
   &:hover {
     cursor: pointer;
-    box-shadow: 1px 1px 3px #3c3c3c50;
+    color: #ffffff;
+    background-color: #616161;
+  }
+  & + & {
+    margin-left: 10px;
   }
 `;
 
@@ -209,6 +234,7 @@ function FriendList() {
     name: string;
     avatar: string;
   }>({ friendUid: "", name: "", avatar: "" });
+  const [clickState, setClickState] = useState("list");
 
   async function searchHandler() {
     const inputCheck = friendDataList.findIndex(
@@ -221,18 +247,24 @@ function FriendList() {
       return;
     }
 
-    const usersRef = collection(db, "users");
-    const q = query(usersRef, where("email", "==", inputValue));
-    const querySnapshot = await getDocs(q);
-    const returnedData = querySnapshot.docs[0]?.data();
-    if (returnedData === undefined) {
+    const userRef = collection(db, "users");
+    const qEmail = query(userRef, where("email", "==", inputValue));
+    const querySnapshotEmail = await getDocs(qEmail);
+    const emailRefReturnedData = querySnapshotEmail.docs[0]?.data();
+    const qName = query(userRef, where("name", "==", inputValue));
+    const querySnapshotName = await getDocs(qName);
+    const nameRefReturnedData = querySnapshotName.docs[0]?.data();
+    if (
+      emailRefReturnedData === undefined &&
+      nameRefReturnedData === undefined
+    ) {
       alert(t("user_not_found"));
       setHasSearchValue(false);
       setInputValue("");
       return;
     }
 
-    const returnId = returnedData.uid;
+    const returnId = emailRefReturnedData?.uid || nameRefReturnedData?.uid;
     const requestRef = collection(db, "friendRequests");
     const q2 = query(
       requestRef,
@@ -254,7 +286,7 @@ function FriendList() {
 
     setHasSearchValue(true);
     setInputValue("");
-    setSearchData(returnedData);
+    setSearchData(emailRefReturnedData || nameRefReturnedData);
   }
 
   async function sendRequest() {
@@ -280,7 +312,6 @@ function FriendList() {
     querySnapshot.forEach((responseDoc) => {
       docId = responseDoc.id;
     });
-
     await deleteDoc(doc(db, "friendRequests", docId));
     await updateDoc(doc(db, "users", userId), {
       friendList: arrayUnion(requestId),
@@ -290,6 +321,7 @@ function FriendList() {
     });
     alert(t("be_friend"));
   }
+
   async function rejectRequestHandler(requestId: string) {
     const ans = window.confirm(t("confirm_reject"));
     if (ans === false) return;
@@ -351,7 +383,7 @@ function FriendList() {
             <SearchIcon onClick={() => searchHandler()} />
           </SearchContainer>
         </Separator>
-        {hasSearchValue ? (
+        {hasSearchValue && (
           <Separator>
             <FriendListContainer>
               <Avatar url={`url(${searchData.avatar})`} />
@@ -366,76 +398,85 @@ function FriendList() {
               </BtnContainer>
             </FriendListContainer>
           </Separator>
-        ) : (
-          ""
         )}
-        {friendRequests.length !== 0 && (
-          <>
-            <Separator>
-              <Text size="20px">{t("request_list")}</Text>
-            </Separator>
-            {friendRequests.map((request) => (
-              <Separator key={request.uid}>
-                <FriendListContainer>
-                  <Avatar url={`url(${request.avatar})`} />
-                  <TextContainer>
-                    <Text size="20px">{request.name}</Text>
-                    <Text color="#616161">{request.email}</Text>
-                  </TextContainer>
-                  <BtnContainer>
-                    <SendRequestBtn
-                      onClick={() => acceptRequestHandler(request.uid)}
-                    >
-                      {t("accept_friend_request")}
-                    </SendRequestBtn>
-                    <SendRequestBtn
-                      onClick={() => rejectRequestHandler(request.uid)}
-                    >
-                      {t("reject_friend_request")}
-                    </SendRequestBtn>
-                  </BtnContainer>
-                </FriendListContainer>
-              </Separator>
-            ))}
-          </>
+        <Separator>
+          <SwichClickStatusContainer>
+            <SwichClickStatusBtn
+              color={clickState === "list" ? "#3c3c3c" : "#b4b4b4"}
+              border={clickState === "list" ? "1px solid #3c3c3c" : "none"}
+              onClick={() => setClickState("list")}
+            >
+              {t("friend_list")}
+            </SwichClickStatusBtn>
+            <SwichClickStatusBtn
+              color={clickState === "request" ? "#3c3c3c" : "#b4b4b4"}
+              border={clickState === "request" ? "1px solid #3c3c3c" : "none"}
+              onClick={() => setClickState("request")}
+            >
+              {t("request_list")}
+            </SwichClickStatusBtn>
+          </SwichClickStatusContainer>
+        </Separator>
+        {clickState === "request" && friendRequests.length === 0 && (
+          <Text size="20px">no request</Text>
         )}
-        {friendDataList.length !== 0 && (
-          <>
-            <Separator>
-              <Text size="20px">{t("friend_list")}</Text>
+        {clickState === "request" &&
+          friendRequests.length !== 0 &&
+          friendRequests.map((request) => (
+            <Separator key={request.uid}>
+              <FriendListContainer>
+                <Avatar url={`url(${request.avatar})`} />
+                <TextContainer>
+                  <Text size="20px">{request.name}</Text>
+                  <Text color="#616161">{request.email}</Text>
+                </TextContainer>
+                <BtnContainer>
+                  <SendRequestBtn
+                    onClick={() => acceptRequestHandler(request.uid)}
+                  >
+                    {t("accept_friend_request")}
+                  </SendRequestBtn>
+                  <SendRequestBtn
+                    onClick={() => rejectRequestHandler(request.uid)}
+                  >
+                    {t("reject_friend_request")}
+                  </SendRequestBtn>
+                </BtnContainer>
+              </FriendListContainer>
             </Separator>
-            {friendDataList.map((user) => (
-              <Separator key={user.uid}>
-                <FriendListContainer>
-                  <Avatar
-                    url={`url(${user.avatar})`}
+          ))}
+        {clickState === "list" &&
+          friendDataList.length !== 0 &&
+          friendDataList.map((user) => (
+            <Separator key={user.uid}>
+              <FriendListContainer>
+                <Avatar
+                  url={`url(${user.avatar})`}
+                  onClick={() => {
+                    setClickedUserId(user.uid);
+                    navigate("/userProfile");
+                  }}
+                />
+                <TextContainer>
+                  <Text size="20px">{user.name}</Text>
+                  <Text color="#616161">{user.email}</Text>
+                  <MessageIcon
                     onClick={() => {
-                      setClickedUserId(user.uid);
-                      navigate("/userProfile");
+                      setMessageFriendDtl({
+                        friendUid: user.uid,
+                        name: user.name,
+                        avatar: user.avatar,
+                      });
+                      setShowMessageFrame(true);
                     }}
                   />
-                  <TextContainer>
-                    <Text size="20px">{user.name}</Text>
-                    <Text color="#616161">{user.email}</Text>
-                    <MessageIcon
-                      onClick={() => {
-                        setMessageFriendDtl({
-                          friendUid: user.uid,
-                          name: user.name,
-                          avatar: user.avatar,
-                        });
-                        setShowMessageFrame(true);
-                      }}
-                    />
-                  </TextContainer>
-                  <BtnContainer>
-                    <DeleteIcon onClick={() => deleteFriendHandler(user.uid)} />
-                  </BtnContainer>
-                </FriendListContainer>
-              </Separator>
-            ))}
-          </>
-        )}
+                </TextContainer>
+                <BtnContainer>
+                  <DeleteIcon onClick={() => deleteFriendHandler(user.uid)} />
+                </BtnContainer>
+              </FriendListContainer>
+            </Separator>
+          ))}
         {showMessageFrame && (
           <Message messageFriendDtl={messageFriendDtl} userId={userId} />
         )}

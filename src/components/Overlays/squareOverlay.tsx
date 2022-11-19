@@ -12,7 +12,7 @@ import styled from "styled-components";
 import Cropper from "react-easy-crop";
 import ReactLoading from "react-loading";
 import { Slider, Typography } from "@mui/material";
-import { doc, updateDoc, arrayUnion, setDoc } from "firebase/firestore";
+import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 import { db, storage } from "../../context/firebaseSDK";
@@ -296,7 +296,7 @@ function SquareOverlay({
 
   const croppedImage = useCallback(async () => {
     setProgressing(true);
-    const { file, url } = (await getCroppedImg(
+    const { file } = (await getCroppedImg(
       imgSrc,
       croppedAreaPixels,
       rotation

@@ -184,7 +184,7 @@ export function AuthContextProvider({ children }: BodyProp) {
       const userProjectsData = await getUserProjects(uid);
       alert(t("login_successfully"));
       setUserProjects(userProjectsData);
-      navigate("/profile");
+      navigate("/portfolioBricks");
     } catch (e) {
       alert(t("login_failed"));
       console.log(e);
@@ -220,7 +220,7 @@ export function AuthContextProvider({ children }: BodyProp) {
       setUserId(uid);
       setIsLogin(true);
       alert(t("sign_up_successfully"));
-      navigate("/profile");
+      navigate("/portfolioBricks");
     } catch (e) {
       alert(t("sign_up_failed"));
       console.log(e);
@@ -251,7 +251,7 @@ export function AuthContextProvider({ children }: BodyProp) {
     setIsLoading(false);
     const userProjectsData = await getUserProjects(uid);
     setUserProjects(userProjectsData);
-    navigate("/profile");
+    navigate("/portfolioBricks");
   };
 
   const facebookLoginHandler = async () => {
@@ -277,7 +277,7 @@ export function AuthContextProvider({ children }: BodyProp) {
     setIsLoading(false);
     const userProjectsData = await getUserProjects(uid);
     setUserProjects(userProjectsData);
-    navigate("/profile");
+    navigate("/portfolioBricks");
   };
 
   const logout = () => {
