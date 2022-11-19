@@ -16,6 +16,8 @@ import SquareOverlay from "../../components/Overlays/squareOverlay";
 
 import closeIcon from "../../icons/close-icon.png";
 import closeIconHover from "../../icons/close-icon-hover.png";
+import arrowIcon from "../../icons/arrow-icon-white.png";
+import arrowIconHover from "../../icons/arrow-icon-hover.png";
 
 const Wrapper = styled.div`
   padding-top: 80px;
@@ -37,6 +39,25 @@ const Container = styled.div`
   height: 100%;
   min-height: calc(100vh - 260px);
   display: flex;
+`;
+
+const ArrowIcon = styled.div`
+  height: 35px;
+  width: 35px;
+  position: absolute;
+  top: 90px;
+  left: 290px;
+  background-image: url(${arrowIcon});
+  background-size: cover;
+  background-position: center;
+  &:hover {
+    cursor: pointer;
+    background-image: url(${arrowIconHover});
+  }
+  @media screen and (max-width: 1860px) {
+    top: 230px;
+    left: 50px;
+  }
 `;
 
 const EditorContainer = styled.div`
@@ -306,6 +327,7 @@ function EditExistProject() {
           </SelectInnerContainer>
         </SelectContainer>
         <Container>
+          <ArrowIcon onClick={() => navigate(-1)} />
           <EditorContainer>
             {addedTemplate.length === 0 ? (
               <div>{t("create_new_project")}</div>
@@ -334,7 +356,10 @@ function EditExistProject() {
                   <Btn onClick={() => setShowOverlay((prev) => !prev)}>
                     {t("edit_main_photo")}
                   </Btn>
-                  <Btn onClick={() => confirmAllEdit()}>
+                  <Btn
+                    backgroundColor="#f5dfa9"
+                    onClick={() => confirmAllEdit()}
+                  >
                     {t("confirm_edit")}
                   </Btn>
                   <Btn onClick={() => navigate("/profile")}>

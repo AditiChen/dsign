@@ -12,7 +12,7 @@ import styled from "styled-components";
 import Cropper from "react-easy-crop";
 import ReactLoading from "react-loading";
 import { Slider, Typography } from "@mui/material";
-import { doc, updateDoc, arrayUnion, setDoc } from "firebase/firestore";
+import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 import { db, storage } from "../../context/firebaseSDK";
@@ -296,7 +296,7 @@ function SquareOverlay({
 
   const croppedImage = useCallback(async () => {
     setProgressing(true);
-    const { file, url } = (await getCroppedImg(
+    const { file } = (await getCroppedImg(
       imgSrc,
       croppedAreaPixels,
       rotation
@@ -315,19 +315,19 @@ function SquareOverlay({
           console.log("Upload err", error);
         },
         async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          setMainImgSrc(downloadURL);
+          const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
+          setMainImgSrc(downloadUrl);
           if (isAddToCollection) {
             await updateDoc(doc(db, "users", userId), {
-              collection: arrayUnion(downloadURL),
+              collection: arrayUnion(downloadUrl),
             });
           }
           if (usage === "avatar") {
             await updateDoc(doc(db, "users", userId), {
-              avatar: downloadURL,
+              avatar: downloadUrl,
             });
           }
-          resolve(downloadURL);
+          resolve(downloadUrl);
         }
       );
     });

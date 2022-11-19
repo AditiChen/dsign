@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import ReactLoading from "react-loading";
@@ -271,6 +271,10 @@ function Profile() {
   const [isEdit, setIsEdit] = useState(false);
   const [inputText, setInputText] = useState("");
 
+  useEffect(() => {
+    setInputText(introduction);
+  }, [introduction]);
+
   function toSingleProjectPage(projectId: string) {
     setSingleProjectId(projectId);
     navigate("/singleProject");
@@ -328,7 +332,7 @@ function Profile() {
             <UserInfo size="20px">{email}</UserInfo>
             <IntroText>Introduction</IntroText>
             <Intruduction
-              value={introduction}
+              value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               placeholder={t("type_content")}
               disabled={!isEdit && true}

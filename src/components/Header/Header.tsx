@@ -1,7 +1,7 @@
 import i18next, { t as i18t } from "i18next";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
-import { useState, useContext, useRef } from "react";
+import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../../context/authContext";
@@ -56,14 +56,15 @@ const Logo = styled(Link)`
   }
 `;
 
-const Context = styled(Link)<{ $color?: string }>`
-  padding: 10px 10px;
-  margin-left: 20px;
+const Context = styled(Link)<{ $color?: string; border: string }>`
+  padding: 2px 0;
+  margin-left: 40px;
   font-size: 20px;
   text-decoration: none;
   color: ${(props) => props.$color || "#c4c4c4"};
+  border-bottom: ${(props) => props.border};
   & + & {
-    margin-left: 12px;
+    margin-left: 32px;
   }
   &:hover {
     text-shadow: 0 0 2px #787878;
@@ -111,6 +112,16 @@ const Icon = styled.div`
   &:hover > ${LanguageOptionsContainer} {
     max-height: 170px;
   }
+`;
+
+const FriendNotificiation = styled.div`
+  height: 12px;
+  width: 12px;
+  position: absolute;
+  right: -4px;
+  bottom: 2px;
+  border-radius: 6px;
+  background-color: #82ac7c;
 `;
 
 const Language = styled.div`
@@ -164,9 +175,10 @@ function LanguageOptions() {
 
 function Header() {
   const { avatar, isLogin, logout } = useContext(AuthContext);
-  const { setShowMessageFrame } = useContext(FriendContext);
+  const { setShowMessageFrame, friendRequests } = useContext(FriendContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [clickState, setClickState] = useState("");
 
   function logoutHandler() {
     const ans = window.confirm(t("logout_confirm"));
@@ -178,50 +190,73 @@ function Header() {
   return (
     <Wrapper>
       <LeftContainer>
-        <Logo to="portfolioBricks" onClick={() => setShowMessageFrame(false)} />
-        {isLogin ? (
+        <Logo
+          to="portfolioBricks"
+          onClick={() => {
+            setClickState("");
+            setShowMessageFrame(false);
+          }}
+        />
+        {isLogin && (
           <>
             <Context
               $color="#f5dfa9"
               to="createNewProject"
-              onClick={() => setShowMessageFrame(false)}
+              border={clickState === "create" ? "1px solid #f5dfa9" : "none"}
+              onClick={() => {
+                setClickState("create");
+                setShowMessageFrame(false);
+              }}
             >
               {t("create")}
             </Context>
             <Context
               to="favoriteList"
-              onClick={() => setShowMessageFrame(false)}
+              border={clickState === "favorite" ? "1px solid #c4c4c4" : "none"}
+              onClick={() => {
+                setClickState("favorite");
+                setShowMessageFrame(false);
+              }}
             >
               {t("favorite_list")}
             </Context>
-            <Context to="collection" onClick={() => setShowMessageFrame(false)}>
+            <Context
+              to="collection"
+              border={
+                clickState === "collection" ? "1px solid #c4c4c4" : "none"
+              }
+              onClick={() => {
+                setClickState("collection");
+                setShowMessageFrame(false);
+              }}
+            >
               {t("collection_list")}
             </Context>
           </>
-        ) : (
-          ""
         )}
       </LeftContainer>
       <RightContainer>
-        {isLogin ? (
+        {isLogin && (
           <>
             <Icon
               img={`url(${friendsIcon})`}
               onClick={() => {
+                setClickState("");
                 navigate("/friendList");
               }}
-            />
+            >
+              {friendRequests.length !== 0 && <FriendNotificiation />}
+            </Icon>
             <Icon
               img={avatar ? `url(${avatar})` : `url(${memberIcon})`}
               borderRadious="18px"
               onClick={() => {
+                setClickState("");
                 setShowMessageFrame(false);
                 navigate("/portfile");
               }}
             />
           </>
-        ) : (
-          ""
         )}
         <Icon img={`url(${languageIcon})`}>
           <LanguageOptions />
@@ -229,6 +264,7 @@ function Header() {
         {isLogin ? (
           <SignBtn
             onClick={() => {
+              setClickState("");
               logoutHandler();
             }}
           >
@@ -239,6 +275,7 @@ function Header() {
             $color="#3c3c3c"
             backgroundColor="#f5dfa9"
             onClick={() => {
+              setClickState("");
               navigate("/login");
             }}
           >

@@ -10,8 +10,12 @@ import { useTranslation } from "react-i18next";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 import Cropper from "react-easy-crop";
+import ReactLoading from "react-loading";
 import { Slider, Typography } from "@mui/material";
+import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
+import { db, storage } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
 
 import getCroppedImg from "../../utils/cropImage";
@@ -24,7 +28,7 @@ import arrowIconHover from "../../icons/arrow-icon-hover.png";
 
 interface OverlayProps {
   setShowOverlay: Dispatch<SetStateAction<boolean>>;
-  setNewPhotoDetail: (returnedUrl: string, returnedFile: File) => void;
+  setNewPhotoUrl: (returnedUrl: string) => void;
   currentAaspect: number;
   currentImgUrl: string;
   isAddToCollection: boolean;
@@ -100,6 +104,21 @@ const CropperContainer = styled.div`
   width: 80%;
   height: 90%;
   position: relative;
+`;
+
+const LoadingBackground = styled.div`
+  background-color: #00000090;
+  width: 100%;
+  height: 100%;
+  z-index: 103;
+  position: absolute;
+`;
+
+const Loading = styled(ReactLoading)`
+  position: absolute;
+  left: 425px;
+  top: 280px;
+  z-index: 104;
 `;
 
 const NewPhotoContainer = styled.div`
@@ -220,18 +239,19 @@ const portalElement = document.getElementById("overlays") as HTMLElement;
 
 function Overlay({
   setShowOverlay,
-  setNewPhotoDetail,
+  setNewPhotoUrl,
   currentAaspect,
   currentImgUrl,
   isAddToCollection,
   setIsAddToCollection,
 }: OverlayProps) {
   const { t } = useTranslation();
-  const { collection } = useContext(AuthContext);
+  const { collection, userId } = useContext(AuthContext);
   const [imgSrc, setImgSrc] = useState<string>("");
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
+  const [progressing, setProgressing] = useState(false);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<{
     width: number;
     height: number;
@@ -274,16 +294,41 @@ function Overlay({
   );
 
   const showCroppedImage = useCallback(async () => {
-    const { file, url } = (await getCroppedImg(
+    setProgressing(true);
+    const { file } = (await getCroppedImg(
       imgSrc,
       croppedAreaPixels,
       rotation
     )) as { file: File; url: string };
-    const awaitCroppedImageToString = String(url);
+    const urlByTime = `${+new Date()}`;
+    const imgRef = ref(storage, `images/${userId}/${urlByTime}`);
+    const uploadTask = uploadBytesResumable(imgRef, file);
+    await new Promise((resolve, reject) => {
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        },
+        (error) => {
+          console.log("Upload err", error);
+        },
+        async () => {
+          const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
+          setNewPhotoUrl(downloadUrl);
+          if (isAddToCollection) {
+            await updateDoc(doc(db, "users", userId), {
+              collection: arrayUnion(downloadUrl),
+            });
+          }
+          resolve(downloadUrl);
+        }
+      );
+    });
+    setProgressing(false);
     setIsAddToCollection(false);
-    setNewPhotoDetail(awaitCroppedImageToString, file);
     setShowOverlay((prev) => !prev);
-  }, [croppedAreaPixels, rotation, imgSrc, setNewPhotoDetail, setShowOverlay]);
+  }, [croppedAreaPixels, rotation, imgSrc, setNewPhotoUrl, setShowOverlay]);
 
   return (
     <>
@@ -296,6 +341,12 @@ function Overlay({
               <>
                 <ArrowIcon onClick={() => setImgSrc("")} />
                 <CropperContainer>
+                  {progressing && (
+                    <>
+                      <LoadingBackground />
+                      <Loading type="spokes" color="#ffffff" />
+                    </>
+                  )}
                   <Cropper
                     image={imgSrc}
                     crop={crop}
