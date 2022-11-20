@@ -61,7 +61,7 @@ const LeftImgContainer = styled.div`
 const LeftImg = styled.div`
   width: 200px;
   height: 200px;
-  border-radius: 100px;
+  border-radius: 50%;
   background-image: ${(props: Prop) => props.url};
   background-color: ${(props: Prop) => props.backgroundColor};
   background-size: cover;
@@ -72,7 +72,7 @@ const LeftImg = styled.div`
 const RightImg = styled.div`
   width: 600px;
   height: 600px;
-  border-radius: 300px;
+  border-radius: 50%;
   background-image: ${(props: Prop) => props.url};
   background-color: ${(props: Prop) => props.backgroundColor};
   background-size: cover;

@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Steve Jobs",
+    "quote": "Stay hunger, stay foolish",
+    "photo": "https://firebasestorage.googleapis.com/v0/b/d-sig-2f338.appspot.com/o/images%2Fartists%2Fsteve-jobs.webp?alt=media&token=304dc61c-d543-4791-bf7d-87c3ac987a11",
+    "wikipedia": "https://en.wikipedia.org/wiki/Steve_Jobs"
+  },
+  {
+    "name": "Zaha Hadid",
+    "quote": "There are 360 degrees, so why stick to one?",
+    "photo": "https://firebasestorage.googleapis.com/v0/b/d-sig-2f338.appspot.com/o/images%2Fartists%2Fzaha-hadid.webp?alt=media&token=65edb0e8-f4f8-4e49-9e37-7e9be6dafaf1",
+    "wikipedia": "https://en.wikipedia.org/wiki/Zaha_Hadid"
+  },
+  {
+    "name": "Mies van der Rohe",
+    "quote": "Less is more, God is in the details",
+    "photo": "https://firebasestorage.googleapis.com/v0/b/d-sig-2f338.appspot.com/o/images%2Fartists%2Fmies-van-der-rohe.webp?alt=media&token=540ff425-ec39-4567-ba98-b14f54f83d3e",
+    "wikipedia": "https://en.wikipedia.org/wiki/Ludwig_Mies_van_der_Rohe"
+  },
+  {
+    "name": "Louis Kahn",
+    "quote": "Architecture is the reaching out for the truth.",
+    "photo": "https://firebasestorage.googleapis.com/v0/b/d-sig-2f338.appspot.com/o/images%2Fartists%2Flouis-kahn.webp?alt=media&token=6b6d02ed-ce6f-4756-a6f4-47c74df52914",
+    "wikipedia": "https://en.wikipedia.org/wiki/Louis_Kahn"
+  },
+  {
+    "name": "Le Corbusier",
+    "quote": "Architecture is the learned game, correct & magnificent, of forms assembled in the light.",
+    "photo": "https://firebasestorage.googleapis.com/v0/b/d-sig-2f338.appspot.com/o/images%2Fartists%2Fle-corbusier.webp?alt=media&token=79b70888-abc0-42e6-af63-3f3bea5bf35d",
+    "wikipedia": "https://en.wikipedia.org/wiki/Le_Corbusier"
+  },
+  {
+    "name": "Frank Gehry",
+    "quote": "The best advice I've received is to be yourself. The best artists do that.",
+    "photo": "https://firebasestorage.googleapis.com/v0/b/d-sig-2f338.appspot.com/o/images%2Fartists%2Ffrank-gehry.webp?alt=media&token=8fa7b839-9e89-45db-9ec4-0dd2a1233b73",
+    "wikipedia": "https://en.wikipedia.org/wiki/Frank_Gehry"
+  },
+  {
+    "name": "Tadao Ando",
+    "quote": "I don't believe architecture has to speak too much. It should remain silent and let nature in the guise of sunlight and wind.",
+    "photo": "https://firebasestorage.googleapis.com/v0/b/d-sig-2f338.appspot.com/o/images%2Fartists%2Ftadao-ando.webp?alt=media&token=5ffca1e9-df2a-486e-8277-90fb60b12da7",
+    "wikipedia": "https://en.wikipedia.org/wiki/Tadao_Ando"
+  },
+  {
+    "name": "Pablo Picasso",
+    "quote": "Art is the lie that enables us to realize the truth.",
+    "photo": "https://firebasestorage.googleapis.com/v0/b/d-sig-2f338.appspot.com/o/images%2Fartists%2Fpablo-picasso.webp?alt=media&token=cadb35c4-9eb7-4a47-9156-7ea338182ca9",
+    "wikipedia": "https://en.wikipedia.org/wiki/Pablo_Picasso"
+  },
+  {
+    "name": "Claude Monet",
+    "quote": "Color is my daylong obsession, joy, and torment.",
+    "photo": "https://firebasestorage.googleapis.com/v0/b/d-sig-2f338.appspot.com/o/images%2Fartists%2Fclaude-monet.webp?alt=media&token=05560d7c-bc47-437f-ba32-494dad6ed9fd",
+    "wikipedia": "https://en.wikipedia.org/wiki/Claude_Monet"
+  }
+]

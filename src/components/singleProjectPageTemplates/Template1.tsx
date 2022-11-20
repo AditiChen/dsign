@@ -22,6 +22,7 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   align-items: center;
+  border-bottom: 1px solid #b4b4b4;
 `;
 
 const BackgroundImg = styled.div`

@@ -15,7 +15,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: 'Montserrat';
+    font-family: 'Roboto','Noto Sans TC','Noto Sans JP', sans-serif;
   }
   #root {
      min-height: 100vh;
