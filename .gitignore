@@ -8,6 +8,9 @@
 # testing
 /coverage
 
+# story photos
+/src/pages/PortfolioBricks/data
+
 # environment
 .env
 

@@ -204,7 +204,6 @@ function MaterialCollection() {
             <Content>{t("empty_collection")}</Content>
           </ContentContainer>
         )}
-
         <BricksContainer>
           {collection.length !== 0 &&
             collection.map((url) => (

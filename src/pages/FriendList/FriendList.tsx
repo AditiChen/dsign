@@ -418,7 +418,9 @@ function FriendList() {
           </SwichClickStatusContainer>
         </Separator>
         {clickState === "request" && friendRequests.length === 0 && (
-          <Text size="20px">no request</Text>
+          <Separator>
+            <Text size="20px"> {t("no_friend_request")}</Text>
+          </Separator>
         )}
         {clickState === "request" &&
           friendRequests.length !== 0 &&

@@ -22,6 +22,7 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   align-items: center;
+  border-bottom: 1px solid #b4b4b4;
 `;
 
 const BackgroundImg = styled.div`
@@ -77,7 +78,7 @@ const LeftImg = styled.div`
   position: absolute;
   top: 70px;
   left: 50px;
-  border-radius: 165px;
+  border-radius: 50%;
   box-shadow: 0 0 5px #3c3c3c;
 `;
 
@@ -92,7 +93,7 @@ const RightImg = styled.div`
   position: absolute;
   right: 70px;
   bottom: 70px;
-  border-radius: 100px;
+  border-radius: 50%;
   box-shadow: 0 0 5px #3c3c3c;
 `;
 

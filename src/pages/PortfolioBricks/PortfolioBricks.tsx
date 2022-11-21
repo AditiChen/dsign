@@ -7,6 +7,7 @@ import getFriendsProjects from "../../utils/getFriendsProjects";
 import getOtherUsersProject from "../../utils/getOtherUsersProject";
 import getAllProject from "../../utils/getAllProject";
 import Brick from "../../components/Brick/Brick";
+import Carousel from "./Carousel";
 
 interface FetchedProjectsType {
   uid: string;
@@ -36,19 +37,10 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
-const BannerContainer = styled.div`
-  margin: 0 auto;
+const CarouselContainer = styled.div`
   width: 100%;
-  height: 700px;
-  max-height: 90vh;
-  background-color: #00000090;
-`;
-
-const Text = styled.div`
-  padding: 50px;
-  color: white;
-  font-size: 50px;
-  text-align: center;
+  height: 80vh;
+  position: relative;
 `;
 
 const BricksContainer = styled.div`
@@ -116,9 +108,9 @@ function PortfolioBricks() {
 
   return (
     <Wrapper>
-      <BannerContainer>
-        <Text>Banner</Text>
-      </BannerContainer>
+      <CarouselContainer>
+        <Carousel />
+      </CarouselContainer>
       {isLoading ? (
         <Loading type="cylon" color="#3c3c3c" />
       ) : (

@@ -61,7 +61,7 @@ const UserInfoContainer = styled.div`
   height: calc(100vh - 260px);
   width: 15vw;
   min-width: 300px;
-  padding: 50px 20px;
+  padding: 30px 20px;
   position: fixed;
   left: 0;
   display: flex;

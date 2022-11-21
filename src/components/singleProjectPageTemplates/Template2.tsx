@@ -22,6 +22,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: #616161;
+  border-bottom: 1px solid #b4b4b4;
 `;
 
 const HeaderContainer = styled.div`

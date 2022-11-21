@@ -136,9 +136,10 @@ const NewPhotoHeaderContainer = styled.div`
 `;
 
 const CollectionContainer = styled.div`
-  margin-top: 10px;
+  margin: 10px 0;
   padding: 20px;
   width: 100%;
+  min-height: 200px;
   max-height: 650px;
   display: grid;
   grid-gap: 10px;
@@ -233,6 +234,7 @@ const ConfirmedIcon = styled(ConfirmIcon)`
 const Text = styled.div`
   margin-left: 10px;
   font-size: 18px;
+  color: #3c3c3c;
 `;
 
 const portalElement = document.getElementById("overlays") as HTMLElement;
@@ -424,6 +426,9 @@ function Overlay({
                         />
                       ))}
                   </CollectionContainer>
+                  {collection.length === 0 && (
+                    <Text>{t("empty_collection")}</Text>
+                  )}
                 </NewPhotoContainer>
               </CropperContainer>
             )}
