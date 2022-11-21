@@ -27,6 +27,9 @@ const QuoteContainer = styled.div`
   max-width: 35%;
   display: flex;
   flex-direction: column;
+  @media screen and (min-width: 1200px) and (max-width: 1599px) {
+    max-width: 40%;
+  }
 `;
 
 const Quote = styled.div`
@@ -36,6 +39,14 @@ const Quote = styled.div`
   color: #ffffff;
   font-family: "Caveat", cursive;
   font-weight: 600;
+  @media screen and (min-width: 1600px) and (max-width: 1859px) {
+    line-height: 60px;
+    font-size: 44px;
+  }
+  @media screen and (min-width: 1200px) and (max-width: 1599px) {
+    line-height: 55px;
+    font-size: 40px;
+  }
 `;
 
 const Name = styled.div`
@@ -44,6 +55,10 @@ const Name = styled.div`
   line-height: 50px;
   color: #ffffff;
   font-family: "Caveat", cursive;
+  @media screen and (min-width: 1200px) and (max-width: 1599px) {
+    font-size: 24px;
+    line-height: 40px;
+  }
 `;
 
 const Photo = styled.img`
