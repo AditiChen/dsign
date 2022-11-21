@@ -18,13 +18,13 @@ const StoryContainer = styled.div<{ opacity: number; zIndex: number }>`
   text-decoration: none;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-evenly;
   opacity: ${(props) => props.opacity};
   z-index: ${(props) => props.zIndex};
 `;
 
 const QuoteContainer = styled.div`
-  max-width: 40%;
+  max-width: 35%;
   display: flex;
   flex-direction: column;
 `;
