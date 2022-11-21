@@ -89,6 +89,20 @@ const Doc = styled.div<{ backgroundColor: string }>`
   }
 `;
 
+function getArtistsData() {
+  const randomIndexArtistsData = [];
+  const randomIndex = [];
+  do {
+    const randomNum = Math.floor(Math.random() * artists.length);
+    const repeatCheck = randomIndex.indexOf(randomNum);
+    if (repeatCheck === -1) {
+      randomIndex.push(randomNum);
+      randomIndexArtistsData.push(artists[randomNum]);
+    }
+  } while (randomIndex.length < 3);
+  return randomIndexArtistsData;
+}
+
 function Carousel() {
   const [storys, setStorys] = useState<
     {
@@ -102,25 +116,17 @@ function Carousel() {
   const intervalRef = useRef<number>();
 
   useEffect(() => {
-    const randomIndexData = [];
-    const randomIndex = [];
-    do {
-      const randomNum = Math.floor(Math.random() * artists.length);
-      const repeatCheck = randomIndex.indexOf(randomNum);
-      if (repeatCheck === -1) {
-        randomIndex.push(randomNum);
-        randomIndexData.push(artists[randomNum]);
-      }
-    } while (randomIndex.length < 3);
-    setStorys(randomIndexData);
-  }, []);
-
-  useEffect(() => {
-    intervalRef.current = window.setInterval(() => {
-      setActiveIndex((prev) => (prev === storys.length - 1 ? 0 : prev + 1));
-    }, 5000);
+    const ArtistsData = getArtistsData();
+    if (ArtistsData.length === 3) {
+      intervalRef.current = window.setInterval(() => {
+        setActiveIndex((prev) =>
+          prev === ArtistsData.length - 1 ? 0 : prev + 1
+        );
+      }, 5000);
+    }
+    setStorys(ArtistsData);
     return () => clearInterval(intervalRef.current);
-  }, [storys]);
+  }, []);
 
   return (
     <>

@@ -250,7 +250,7 @@ function SignIn() {
 
   async function signUpHandler() {
     if (!inputName) {
-      alert(t("name_input_check"));
+      alert(t("check_input_name"));
       return;
     }
     setCheckLoading(true);
@@ -259,7 +259,7 @@ function SignIn() {
     const querySnapshotName = await getDocs(qName);
     const nameRefReturnedData = querySnapshotName.docs[0]?.data();
     if (nameRefReturnedData !== undefined) {
-      alert(t("user name already exist"));
+      alert(t("name_exist"));
       setInputName("");
       setCheckLoading(false);
       return;
@@ -285,21 +285,19 @@ function SignIn() {
     const querySnapshotEmail = await getDocs(qEmail);
     const emailRefReturnedData = querySnapshotEmail.docs[0]?.data();
     if (emailRefReturnedData !== undefined) {
-      alert(t("user email already exist"));
+      alert(t("email_exist"));
       setInputEmail("");
       setCheckLoading(false);
       return;
     }
 
     if (password.length < 8) {
-      alert(t("password_letter_check"));
+      alert(t("password_length_check"));
       setCheckLoading(false);
       return;
     }
     if (password.search(/^(?=.*\d)(?=.*[a-zA-Z]).{8,20}$/)) {
-      alert(
-        "password should contain at least one english letter and one number"
-      );
+      alert(t("password_letter_check"));
       setCheckLoading(false);
       return;
     }
