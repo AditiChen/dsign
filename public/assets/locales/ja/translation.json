@@ -64,6 +64,8 @@
   "accept_friend_request": "同意",
   "reject_friend_request": "拒否",
   "confirm_reject": "本当にフレンド申請を拒否していいのでしょうか？",
+  "reject_yes_answer": "はい",
+  "reject_no_answer": "を考えてみよう",
   "be_friend": "あなたは友達です",
   "friend_list": "友人一覧",
   "confirm_remove": "本当にこの友人を削除してもいいのでしょうか？",

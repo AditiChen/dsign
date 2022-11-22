@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 import { AuthContext } from "../../context/authContext";
 import { FriendContext } from "../../context/friendContext";
@@ -180,9 +181,16 @@ function Header() {
   const navigate = useNavigate();
   const [clickState, setClickState] = useState("");
 
-  function logoutHandler() {
-    const ans = window.confirm(t("logout_confirm"));
-    if (ans === false) return;
+  async function logoutHandler() {
+    const ans = await Swal.fire({
+      text: t("logout_confirm"),
+      icon: "warning",
+      confirmButtonColor: "#646464",
+      confirmButtonText: t("reject_yes_answer"),
+      showDenyButton: true,
+      denyButtonText: t("reject_no_answer"),
+    });
+    if (ans.isDenied === true) return;
     logout();
     navigate("/login");
   }

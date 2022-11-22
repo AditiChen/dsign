@@ -12,11 +12,7 @@ const Wrapper = styled.div`
 `;
 
 function Footer() {
-  return (
-    <Wrapper>
-      <div>footer</div>
-    </Wrapper>
-  );
+  return <Wrapper />;
 }
 
 export default Footer;

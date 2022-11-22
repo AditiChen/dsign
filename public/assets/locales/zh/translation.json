@@ -64,6 +64,8 @@
   "accept_friend_request": "同意",
   "reject_friend_request": "拒絕",
   "confirm_reject": "你確定要拒絕嗎？",
+  "reject_yes_answer": "對！",
+  "reject_no_answer": "我再想想",
   "be_friend": "你們現在是好友了！",
   "friend_list": "好友列表",
   "confirm_remove": "確定要刪除這個好友嗎？",

@@ -4,6 +4,7 @@ import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import ReactLoading from "react-loading";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import Swal from "sweetalert2";
 
 import { db } from "../../context/firebaseSDK";
 import getUserProjects from "../../utils/getUserProjects";
@@ -286,8 +287,16 @@ function Profile() {
   }
 
   async function deleteProjectHandler(projectId: string) {
-    const ans = window.confirm(t("delete_project_warning"));
-    if (ans === false) return;
+    const ans = await Swal.fire({
+      text: t("delete_project_warning"),
+      icon: "warning",
+      confirmButtonColor: "#646464",
+      confirmButtonText: t("reject_yes_answer"),
+      showDenyButton: true,
+      denyButtonText: t("reject_no_answer"),
+    });
+    if (ans.isDenied === true) return;
+
     await deleteDoc(doc(db, "projects", projectId));
     const userProjectsData = await getUserProjects(userId);
     setUserProjects(userProjectsData);
