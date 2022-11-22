@@ -282,14 +282,14 @@ function EditExistProject() {
 
   const templateFilter = addedTemplate?.map((num) => ({
     keyUuid: [num.uuid],
-    Chosetemplate: templatesArr[num.type],
+    ChoseTemplate: templatesArr[num.type],
   }));
 
   useEffect(() => {
     if (position.lat === undefined && position.lng === undefined) return;
 
     const mapIndex = templateFilter.findIndex(
-      (map) => map.Chosetemplate === googleMap
+      (map) => map.ChoseTemplate === googleMap
     );
     if (mapIndex === -1) return;
 
@@ -349,9 +349,9 @@ function EditExistProject() {
                   onChange={(e) => setTitle(e.target.value)}
                 />
                 {templateFilter.map(
-                  ({ keyUuid, Chosetemplate }, templateIndex) => (
+                  ({ keyUuid, ChoseTemplate }, templateIndex) => (
                     <SingleEditorContainer key={`${keyUuid}`}>
-                      <Chosetemplate
+                      <ChoseTemplate
                         pages={pages}
                         setPages={setPages}
                         currentIndex={templateIndex}

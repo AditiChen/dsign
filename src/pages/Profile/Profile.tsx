@@ -27,7 +27,6 @@ interface Prop {
   text?: string;
   focus?: string;
   position?: string;
-  buttomLine?: string;
   img?: string;
   hoverImg?: string;
   marginLift?: string;
@@ -117,7 +116,7 @@ const IntroText = styled.div`
   border-bottom: 1px solid #969696;
 `;
 
-const Intruduction = styled.textarea`
+const Introduction = styled.textarea`
   padding: 10px 0;
   width: 100%;
   height: 100%;
@@ -336,7 +335,7 @@ function Profile() {
             </UserInfo>
             <UserInfo size="20px">{email}</UserInfo>
             <IntroText>Introduction</IntroText>
-            <Intruduction
+            <Introduction
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               placeholder={t("type_content")}

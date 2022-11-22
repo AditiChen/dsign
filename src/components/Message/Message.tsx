@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { v4 as uuid } from "uuid";
 import ReactLoading from "react-loading";
 import {
@@ -75,7 +75,7 @@ const AvatarContainer = styled.div`
   box-shadow: 0 1px 3px #3c3c3c80;
 `;
 
-const Atatar = styled.div`
+const Avatar = styled.div`
   margin: 0 5px;
   width: 36px;
   height: 36px;
@@ -187,6 +187,7 @@ function Message({
       time?: Timestamp;
     }[]
   >([]);
+  const scrollRef = useRef<HTMLDivElement>(null!);
 
   useEffect(() => {
     setIsLoading(true);
@@ -268,7 +269,11 @@ function Message({
     return () => unsubscribe();
   }, [chatroomId]);
 
-  async function sendMesssageHandler() {
+  useEffect(() => {
+    scrollRef.current?.scrollTo(9999, 9999);
+  }, [historyMessages]);
+
+  async function sendMessageHandler() {
     if (inputValue === "") return;
     setInputValue("");
     const messageId = `${+new Date()}`;
@@ -293,7 +298,7 @@ function Message({
     });
   }
 
-  function closeMessageFram() {
+  function closeMessageFrame() {
     updateDoc(doc(db, `chatrooms/${chatroomId}`), {
       onlineUserIds: arrayRemove(userId),
     });
@@ -302,13 +307,13 @@ function Message({
 
   return (
     <Wrapper>
-      <CloseIcon onClick={() => closeMessageFram()} />
+      <CloseIcon onClick={() => closeMessageFrame()} />
       <Container>
         <AvatarContainer>
-          <Atatar img={`url(${messageFriendDtl.avatar})`} />
+          <Avatar img={`url(${messageFriendDtl.avatar})`} />
           <Name>{messageFriendDtl.name}</Name>
         </AvatarContainer>
-        <MessageContainer>
+        <MessageContainer ref={scrollRef}>
           {isLoading ? (
             <Loading type="cylon" color="#3c3c3c" />
           ) : (
@@ -335,7 +340,7 @@ function Message({
           <MessageInput
             onKeyPress={(e) => {
               if (e.key === "Enter") {
-                sendMesssageHandler();
+                sendMessageHandler();
               }
             }}
             onChange={(e) => {
@@ -343,7 +348,7 @@ function Message({
             }}
             value={inputValue}
           />
-          <SendMessageIcon onClick={() => sendMesssageHandler()} />
+          <SendMessageIcon onClick={() => sendMessageHandler()} />
         </SendMessageContainer>
       </Container>
     </Wrapper>

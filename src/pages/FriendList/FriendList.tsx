@@ -101,12 +101,12 @@ const SearchIcon = styled.div`
   }
 `;
 
-const SwichClickStatusContainer = styled.div`
+const SwitchClickStatusContainer = styled.div`
   height: 40px;
   display: flex;
 `;
 
-const SwichClickStatusBtn = styled.div<{ color: string; border: string }>`
+const SwitchClickStatusBtn = styled.div<{ color: string; border: string }>`
   margin: 5px 0;
   color: ${(props) => props.color};
   font-size: 22px;
@@ -123,7 +123,7 @@ const SwichClickStatusBtn = styled.div<{ color: string; border: string }>`
   }
 `;
 
-const NotificiationPirod = styled.div`
+const NotificationDot = styled.div`
   height: 10px;
   width: 10px;
   position: absolute;
@@ -455,25 +455,25 @@ function FriendList() {
           </Separator>
         )}
         <Separator>
-          <SwichClickStatusContainer>
-            <SwichClickStatusBtn
+          <SwitchClickStatusContainer>
+            <SwitchClickStatusBtn
               color={clickState === "list" ? "#3c3c3c" : "#b4b4b4"}
               border={clickState === "list" ? "1px solid #3c3c3c" : "none"}
               onClick={() => setClickState("list")}
             >
               {t("friend_list")}
-            </SwichClickStatusBtn>
-            <SwichClickStatusBtn
+            </SwitchClickStatusBtn>
+            <SwitchClickStatusBtn
               color={clickState === "request" ? "#3c3c3c" : "#b4b4b4"}
               border={clickState === "request" ? "1px solid #3c3c3c" : "none"}
               onClick={() => setClickState("request")}
             >
               {t("request_list")}
               {friendRequests.length !== 0 && (
-                <NotificiationPirod top="0px" right="-10px" />
+                <NotificationDot top="0px" right="-10px" />
               )}
-            </SwichClickStatusBtn>
-          </SwichClickStatusContainer>
+            </SwitchClickStatusBtn>
+          </SwitchClickStatusContainer>
         </Separator>
         {clickState === "request" && friendRequests.length === 0 && (
           <Separator>
@@ -538,7 +538,7 @@ function FriendList() {
                       unreadMessages.map((friendId) => {
                         if (friendId.friendId !== user.uid) return null;
                         return (
-                          <NotificiationPirod
+                          <NotificationDot
                             key={friendId.friendId}
                             top="-2px"
                             right="-5px"

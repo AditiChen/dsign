@@ -21,11 +21,11 @@ interface Prop {
   border?: string;
   borderBtm?: string;
   paddingBtm?: string;
-  borderRadious?: string;
+  borderRadius?: string;
   backgroundColor?: string;
 }
 
-const laguages = [
+const languages = [
   { code: "en", name: "English", country_code: "GB" },
   { code: "fr", name: "Français", country_code: "FR" },
   { code: "zh", name: "中文", country_code: "TW" },
@@ -102,7 +102,7 @@ const Icon = styled.div`
   background-image: ${(props: Prop) => props.img};
   background-size: cover;
   background-position: center;
-  border-radius: ${(props: Prop) => props.borderRadious};
+  border-radius: ${(props: Prop) => props.borderRadius};
   &:hover {
     cursor: pointer;
   }
@@ -114,7 +114,7 @@ const Icon = styled.div`
   }
 `;
 
-const NotificiationPirod = styled.div`
+const NotificationDot = styled.div`
   height: 12px;
   width: 12px;
   position: absolute;
@@ -169,7 +169,7 @@ function LanguageOptions() {
   return (
     <LanguageOptionsContainer>
       <LanguageHeader>{i18t("languages")}</LanguageHeader>
-      {laguages.map((lng, index) => (
+      {languages.map((lng, index) => (
         <Language
           key={`${lng.code}`}
           backgroundColor={activeIndex === index ? "#d4d4d4" : "none"}
@@ -266,16 +266,16 @@ function Header() {
               }}
             >
               {(friendRequests.length !== 0 || unreadMessages.length !== 0) && (
-                <NotificiationPirod />
+                <NotificationDot />
               )}
             </Icon>
             <Icon
               img={avatar ? `url(${avatar})` : `url(${memberIcon})`}
-              borderRadious="18px"
+              borderRadius="18px"
               onClick={() => {
                 setClickState("");
                 setShowMessageFrame(false);
-                navigate("/portfile");
+                navigate("/profile");
               }}
             />
           </>
