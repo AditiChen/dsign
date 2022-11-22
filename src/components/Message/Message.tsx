@@ -270,7 +270,7 @@ function Message({
   }, [chatroomId]);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo(9999, 9999);
+    scrollRef.current?.scrollTo({ top: 9999, behavior: "smooth" });
   }, [historyMessages]);
 
   async function sendMessageHandler() {
