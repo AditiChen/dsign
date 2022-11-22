@@ -16,11 +16,13 @@ import {
   arrayRemove,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+
 import { AuthContext } from "../../context/authContext";
 import { FriendContext } from "../../context/friendContext";
 import { db } from "../../context/firebaseSDK";
-
 import Message from "../../components/Message/Message";
+
 import searchIcon from "../../icons/search-icon.png";
 import messageIcon from "../../icons/chat-icon.png";
 import messageIconHover from "../../icons/chat-icon-hover.png";
@@ -241,7 +243,11 @@ function FriendList() {
       (email) => email.email === inputValue
     );
     if (inputCheck !== -1) {
-      alert(t("already_friend"));
+      Swal.fire({
+        text: t("already_friend"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
       setHasSearchValue(false);
       setInputValue("");
       return;
@@ -258,7 +264,11 @@ function FriendList() {
       emailRefReturnedData === undefined &&
       nameRefReturnedData === undefined
     ) {
-      alert(t("user_not_found"));
+      Swal.fire({
+        text: t("user_not_found"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
       setHasSearchValue(false);
       setInputValue("");
       return;
@@ -278,7 +288,11 @@ function FriendList() {
     });
 
     if (docId !== "") {
-      alert(t("already_sent_request"));
+      Swal.fire({
+        text: t("already_sent_request"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
       setHasSearchValue(false);
       setInputValue("");
       return;
@@ -295,7 +309,11 @@ function FriendList() {
       from: userId,
       to: searchData.uid,
     });
-    alert(t("sen_request_successfully"));
+    Swal.fire({
+      text: t("sen_request_successfully"),
+      icon: "success",
+      confirmButtonColor: "#646464",
+    });
     setSearchData({});
     setHasSearchValue(false);
   }
@@ -319,12 +337,24 @@ function FriendList() {
     await updateDoc(doc(db, "users", requestId), {
       friendList: arrayUnion(userId),
     });
-    alert(t("be_friend"));
+    Swal.fire({
+      text: t("be_friend"),
+      icon: "success",
+      confirmButtonColor: "#646464",
+    });
   }
 
   async function rejectRequestHandler(requestId: string) {
-    const ans = window.confirm(t("confirm_reject"));
-    if (ans === false) return;
+    const ans = await Swal.fire({
+      text: t("confirm_reject"),
+      icon: "warning",
+      confirmButtonColor: "#646464",
+      confirmButtonText: t("reject_yes_answer"),
+      showDenyButton: true,
+      denyButtonText: t("reject_no_answer"),
+    });
+    if (ans.isDenied === true) return;
+
     const requestRef = collection(db, "friendRequests");
     const q = query(
       requestRef,
@@ -340,8 +370,16 @@ function FriendList() {
   }
 
   async function deleteFriendHandler(friendId: string) {
-    const ans = window.confirm(t("confirm_remove"));
-    if (ans === false) return;
+    const ans = await Swal.fire({
+      text: t("confirm_remove"),
+      icon: "warning",
+      confirmButtonColor: "#646464",
+      confirmButtonText: t("reject_yes_answer"),
+      showDenyButton: true,
+      denyButtonText: t("reject_no_answer"),
+    });
+    if (ans.isDenied === true) return;
+
     const idRef = doc(db, "users", userId);
     await updateDoc(idRef, {
       friendList: arrayRemove(friendId),
@@ -350,7 +388,10 @@ function FriendList() {
     await updateDoc(friendIdRef, {
       friendList: arrayRemove(userId),
     });
-    alert(t("delete_successfully"));
+    Swal.fire({
+      text: t("delete_successfully"),
+      confirmButtonColor: "#646464",
+    });
   }
 
   if (isLoading) {

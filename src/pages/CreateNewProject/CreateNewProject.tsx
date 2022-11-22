@@ -5,6 +5,7 @@ import { v4 as uuid } from "uuid";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import ReactLoading from "react-loading";
+import Swal from "sweetalert2";
 
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
@@ -158,7 +159,10 @@ const FooterContainer = styled.div`
   margin-top: 40px;
   display: flex;
 `;
-const Btn = styled.button<{ backgroundColor?: string }>`
+const Btn = styled.button<{
+  backgroundColor?: string;
+  backgroundColorHover?: string;
+}>`
   padding: 0 20px;
   height: 50px;
   color: #3c3c3c;
@@ -171,7 +175,7 @@ const Btn = styled.button<{ backgroundColor?: string }>`
   &:hover {
     cursor: pointer;
     color: #ffffff;
-    background-color: #616161;
+    background-color: ${(props) => props.backgroundColorHover || "#616161"};
   }
   & + & {
     margin-left: 50px;
@@ -216,17 +220,29 @@ function CreateNewProject() {
 
   async function confirmAllEdit() {
     if (title === "") {
-      alert(t("lack_main_title"));
+      Swal.fire({
+        text: t("lack_main_title"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
       return;
     }
     if (mainImgSrc === "") {
-      alert(t("lack_main_photo"));
+      Swal.fire({
+        text: t("lack_main_photo"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
       return;
     }
     const checkPage = pages.findIndex((type) => type.type === undefined);
 
     if (checkPage !== -1) {
-      alert(t("upload_failed"));
+      Swal.fire({
+        text: t("upload_failed"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
       return;
     }
     setIsLoading(true);
@@ -245,7 +261,11 @@ function CreateNewProject() {
     setPages([]);
     setAddedTemplate([]);
     setMainImgSrc("");
-    alert(t("upload_successfully"));
+    Swal.fire({
+      text: t("upload_successfully"),
+      icon: "success",
+      confirmButtonColor: "#646464",
+    });
     setIsLoading(false);
     navigate("/profile");
   }
@@ -330,6 +350,7 @@ function CreateNewProject() {
                   {mainImgSrc === "" ? (
                     <Btn
                       backgroundColor="#f5dfa9"
+                      backgroundColorHover="#9d8a62"
                       onClick={() => setShowOverlay((prev) => !prev)}
                     >
                       {t("upload_main_photo")}
@@ -342,6 +363,7 @@ function CreateNewProject() {
                       </Btn>
                       <Btn
                         backgroundColor="#f5dfa9"
+                        backgroundColorHover="#9d8a62"
                         onClick={() => confirmAllEdit()}
                       >
                         {t("confirm_edit")}

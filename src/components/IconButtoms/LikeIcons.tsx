@@ -2,6 +2,7 @@ import { useContext } from "react";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+import Swal from "sweetalert2";
 
 import { AuthContext } from "../../context/authContext";
 import { db } from "../../context/firebaseSDK";
@@ -50,7 +51,11 @@ export function LikeIcon({
 
   async function likeProjectHandler() {
     if (userId === "") {
-      alert(t("please_login"));
+      Swal.fire({
+        text: t("please_login"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
       return;
     }
     await updateDoc(doc(db, "users", userId), {

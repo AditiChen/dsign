@@ -1,7 +1,7 @@
 {
   "favorite_list": "Favorite List",
   "collection_list": "Collection",
-  "create": "Create",
+  "create": "Create New",
   "languages": "Languages",
 
   "login": "Login",
@@ -64,6 +64,8 @@
   "accept_friend_request": "Accept",
   "reject_friend_request": "Reject",
   "confirm_reject": "Are you sure that you want to refuse?",
+  "reject_yes_answer": "Yes",
+  "reject_no_answer": "Let me consider",
   "be_friend": "You are friend now!",
   "friend_list": "Friend List",
   "confirm_remove": "Are you sure that you want to remove this friend?",

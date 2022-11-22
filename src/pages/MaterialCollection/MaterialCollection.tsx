@@ -5,8 +5,9 @@ import ReactLoading from "react-loading";
 import { v4 as uuid } from "uuid";
 import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { db, storage } from "../../context/firebaseSDK";
+import Swal from "sweetalert2";
 
+import { db, storage } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
 import SinglePhotoOverlay from "../../components/Overlays/singlePhotoOverlay";
 
@@ -177,8 +178,16 @@ function MaterialCollection() {
   };
 
   async function deleteHandler(url: string) {
-    const ans = window.confirm(t("delete_photo_warning"));
-    if (ans === false) return;
+    const ans = await Swal.fire({
+      text: t("delete_photo_warning"),
+      icon: "warning",
+      confirmButtonColor: "#646464",
+      confirmButtonText: t("reject_yes_answer"),
+      showDenyButton: true,
+      denyButtonText: t("reject_no_answer"),
+    });
+    if (ans.isDenied === true) return;
+
     await updateDoc(doc(db, "users", userId), {
       collection: arrayRemove(url),
     });

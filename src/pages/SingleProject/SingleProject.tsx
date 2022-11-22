@@ -47,7 +47,7 @@ const Wrapper = styled.div`
 const ArrowIcon = styled.div`
   height: 35px;
   width: 35px;
-  position: absolute;
+  position: fixed;
   top: 110px;
   left: 50px;
   background-image: url(${arrowIcon});

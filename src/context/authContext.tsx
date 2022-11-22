@@ -18,6 +18,8 @@ import {
 import { useTranslation } from "react-i18next";
 import { doc, setDoc, getDoc, onSnapshot } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+
 import { db, auth } from "./firebaseSDK";
 import getUserProjects from "../utils/getUserProjects";
 
@@ -182,11 +184,18 @@ export function AuthContextProvider({ children }: BodyProp) {
 
       setUserId(uid);
       const userProjectsData = await getUserProjects(uid);
-      alert(t("login_successfully"));
+      Swal.fire({
+        text: t("login_successfully"),
+        confirmButtonColor: "#646464",
+      });
       setUserProjects(userProjectsData);
       navigate("/portfolioBricks");
     } catch (e) {
-      alert(t("login_failed"));
+      Swal.fire({
+        text: t("login_failed"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
       console.log(e);
     }
     setIsLoading(false);
@@ -219,10 +228,17 @@ export function AuthContextProvider({ children }: BodyProp) {
       });
       setUserId(uid);
       setIsLogin(true);
-      alert(t("sign_up_successfully"));
+      Swal.fire({
+        text: t("sign_up_successfully"),
+        confirmButtonColor: "#646464",
+      });
       navigate("/portfolioBricks");
     } catch (e) {
-      alert(t("sign_up_failed"));
+      Swal.fire({
+        text: t("sign_up_failed"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
       console.log(e);
     }
     setIsLoading(false);
@@ -290,7 +306,10 @@ export function AuthContextProvider({ children }: BodyProp) {
     setFriendList([]);
     setFavoriteList([]);
     setIsLogin(false);
-    alert(t("logout_successfully"));
+    Swal.fire({
+      text: t("logout_successfully"),
+      confirmButtonColor: "#646464",
+    });
   };
 
   const authProviderValue = useMemo(

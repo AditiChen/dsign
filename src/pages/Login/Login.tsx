@@ -3,8 +3,9 @@ import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import ReactLoading from "react-loading";
 import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from "../../context/firebaseSDK";
+import Swal from "sweetalert2";
 
+import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
 
 import googleIcon from "../../icons/google-icon.png";
@@ -230,7 +231,11 @@ function SignIn() {
 
   function signInHandler() {
     if (!inputEmail || !password) {
-      alert(t("email_and_password_input_check"));
+      Swal.fire({
+        text: t("email_and_password_input_check"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
       return;
     }
     if (
@@ -238,11 +243,19 @@ function SignIn() {
         /^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/
       )
     ) {
-      alert(t("email_format_check"));
+      Swal.fire({
+        text: t("email_format_check"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
       return;
     }
     if (password.length < 8) {
-      alert(t("password_letter_check"));
+      Swal.fire({
+        text: t("password_letter_check"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
       return;
     }
     emailSignInHandler(inputEmail, password);
@@ -250,7 +263,11 @@ function SignIn() {
 
   async function signUpHandler() {
     if (!inputName) {
-      alert(t("check_input_name"));
+      Swal.fire({
+        text: t("check_input_name"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
       return;
     }
     setCheckLoading(true);
@@ -259,14 +276,22 @@ function SignIn() {
     const querySnapshotName = await getDocs(qName);
     const nameRefReturnedData = querySnapshotName.docs[0]?.data();
     if (nameRefReturnedData !== undefined) {
-      alert(t("name_exist"));
+      Swal.fire({
+        text: t("name_exist"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
       setInputName("");
       setCheckLoading(false);
       return;
     }
 
     if (!inputEmail || !password) {
-      alert(t("email_and_password_input_check"));
+      Swal.fire({
+        text: t("email_and_password_input_check"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
       setCheckLoading(false);
       return;
     }
@@ -276,7 +301,11 @@ function SignIn() {
         /^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/
       )
     ) {
-      alert(t("email_format_check"));
+      Swal.fire({
+        text: t("email_format_check"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
       setCheckLoading(false);
       return;
     }
@@ -285,25 +314,41 @@ function SignIn() {
     const querySnapshotEmail = await getDocs(qEmail);
     const emailRefReturnedData = querySnapshotEmail.docs[0]?.data();
     if (emailRefReturnedData !== undefined) {
-      alert(t("email_exist"));
+      Swal.fire({
+        text: t("email_exist"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
       setInputEmail("");
       setCheckLoading(false);
       return;
     }
 
     if (password.length < 8) {
-      alert(t("password_length_check"));
+      Swal.fire({
+        text: t("password_length_check"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
       setCheckLoading(false);
       return;
     }
     if (password.search(/^(?=.*\d)(?=.*[a-zA-Z]).{8,20}$/)) {
-      alert(t("password_letter_check"));
+      Swal.fire({
+        text: t("password_letter_check"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
       setCheckLoading(false);
       return;
     }
 
     if (password !== confirmPassword) {
-      alert(t("password_confirm_failed"));
+      Swal.fire({
+        text: t("password_confirm_failed"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
       setCheckLoading(false);
       return;
     }

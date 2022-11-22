@@ -10,6 +10,7 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
+import Swal from "sweetalert2";
 
 import { AuthContext } from "../../context/authContext";
 import { db } from "../../context/firebaseSDK";
@@ -47,7 +48,11 @@ export default function FriendIcon({ requestId }: { requestId: string }) {
       docId = responseDoc.id;
     });
     if (docId !== "") {
-      alert(t("already_sent_request"));
+      Swal.fire({
+        text: t("already_sent_request"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
       return;
     }
     const newDocId = uuid();
@@ -55,7 +60,7 @@ export default function FriendIcon({ requestId }: { requestId: string }) {
       from: userId,
       to: requestId,
     });
-    alert(t("sen_request_successfully"));
+    Swal.fire({ text: t("sen_request_successfully"), icon: "success" });
   }
 
   return <Friend onClick={() => addFriendHandler()} />;

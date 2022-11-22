@@ -5,6 +5,7 @@ import { v4 as uuid } from "uuid";
 import { doc, setDoc } from "firebase/firestore";
 import ReactLoading from "react-loading";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
@@ -175,7 +176,10 @@ const FooterContainer = styled.div`
   display: flex;
 `;
 
-const Btn = styled.button<{ backgroundColor?: string }>`
+const Btn = styled.button<{
+  backgroundColor?: string;
+  backgroundColorHover?: string;
+}>`
   padding: 0 20px;
   height: 50px;
   color: #3c3c3c;
@@ -186,7 +190,7 @@ const Btn = styled.button<{ backgroundColor?: string }>`
   &:hover {
     cursor: pointer;
     color: #ffffff;
-    background-color: #616161;
+    background-color: ${(props) => props.backgroundColorHover || "#616161"};
   }
   & + & {
     margin-left: 50px;
@@ -246,7 +250,11 @@ function EditExistProject() {
   async function confirmAllEdit() {
     const checkPage = pages.every((type) => type.type === undefined);
     if (checkPage) {
-      alert(t("upload_failed"));
+      Swal.fire({
+        text: t("upload_failed"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
       return;
     }
     setIsLoading(true);
@@ -265,7 +273,11 @@ function EditExistProject() {
     setPages([]);
     setAddedTemplate([]);
     setSingleProjectId("");
-    alert(t("upload_successfully"));
+    Swal.fire({
+      text: t("upload_successfully"),
+      icon: "success",
+      confirmButtonColor: "#646464",
+    });
     navigate("/profile");
     setIsLoading(false);
   }
@@ -358,11 +370,16 @@ function EditExistProject() {
                   </Btn>
                   <Btn
                     backgroundColor="#f5dfa9"
+                    backgroundColorHover="#9d8a62"
                     onClick={() => confirmAllEdit()}
                   >
                     {t("confirm_edit")}
                   </Btn>
-                  <Btn onClick={() => navigate("/profile")}>
+                  <Btn
+                    backgroundColor="#ffe8ee"
+                    backgroundColorHover="#81484f"
+                    onClick={() => navigate("/profile")}
+                  >
                     {t("drop_edit")}
                   </Btn>
                 </FooterContainer>

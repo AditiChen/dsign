@@ -65,6 +65,8 @@
   "reject_friend_request": "Rejeter",
   "be_friend": "Tu es un ami maintenant",
   "confirm_reject": "Vous êtes sûr de vouloir refuser ?",
+  "reject_yes_answer": "Oui",
+  "reject_no_answer": "Permettez-moi de considérer",
   "friend_list": "Liste d'amis",
   "confirm_remove": "Êtes-vous sûr de vouloir supprimer cet ami ?",
   "delete_successfully": "Supprimer avec succès",
