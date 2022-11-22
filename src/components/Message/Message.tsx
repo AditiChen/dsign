@@ -222,6 +222,8 @@ function Message({
         const roomId = uuid();
         await setDoc(doc(db, "chatrooms", roomId), {
           owners: [userId, messageFriendDtl.friendUid],
+          unread: "",
+          onlineUserIds: [],
         });
         setChatroomId(roomId);
       }

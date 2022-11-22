@@ -33,6 +33,8 @@ interface Prop {
   size?: string;
   color?: string;
   url?: string;
+  top?: string;
+  right?: string;
 }
 
 const Wrapper = styled.div`
@@ -125,8 +127,8 @@ const NotificiationPirod = styled.div`
   height: 10px;
   width: 10px;
   position: absolute;
-  top: 0px;
-  right: -10px;
+  top: ${(props: Prop) => props.top};
+  right: ${(props: Prop) => props.right};
   border-radius: 50%;
   background-color: #82ac7c;
 `;
@@ -177,6 +179,7 @@ const MessageIcon = styled.div`
   background-image: url(${messageIcon});
   background-size: cover;
   background-position: center;
+  position: relative;
   &:hover {
     cursor: pointer;
     background-image: url(${messageIconHover});
@@ -231,6 +234,7 @@ function FriendList() {
     setClickedUserId,
     showMessageFrame,
     setShowMessageFrame,
+    unreadMessages,
   } = useContext(FriendContext);
   const [inputValue, setInputValue] = useState("");
   const [hasSearchValue, setHasSearchValue] = useState(false);
@@ -464,7 +468,9 @@ function FriendList() {
               onClick={() => setClickState("request")}
             >
               {t("request_list")}
-              {friendRequests.length !== 0 && <NotificiationPirod />}
+              {friendRequests.length !== 0 && (
+                <NotificiationPirod top="0px" right="-10px" />
+              )}
             </SwichClickStatusBtn>
           </SwichClickStatusContainer>
         </Separator>
@@ -522,7 +528,19 @@ function FriendList() {
                       });
                       setShowMessageFrame(true);
                     }}
-                  />
+                  >
+                    {unreadMessages.length !== 0 &&
+                      unreadMessages.map((friendId) => {
+                        if (friendId.friendId !== user.uid) return null;
+                        return (
+                          <NotificiationPirod
+                            key={friendId.friendId}
+                            top="-2px"
+                            right="-4px"
+                          />
+                        );
+                      })}
+                  </MessageIcon>
                 </TextContainer>
                 <BtnContainer>
                   <DeleteIcon onClick={() => deleteFriendHandler(user.uid)} />
