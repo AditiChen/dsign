@@ -81,7 +81,6 @@ const HeaderContainer = styled.div`
 
 const Title = styled.div`
   font-size: 30px;
-  color: #3c3c3c;
   font-weight: 700;
 `;
 
@@ -132,7 +131,6 @@ const Intor = styled.div`
 
 const Author = styled.div`
   margin-left: 10px;
-  color: #3c3c3c;
   font-size: 24px;
 `;
 

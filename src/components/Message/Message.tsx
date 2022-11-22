@@ -104,10 +104,9 @@ const MessageInnerContainer = styled.div`
 
 const SingleMessageLeft = styled.div`
   margin-bottom: 10px;
-  padding: 0 10px;
+  padding: 10px;
   width: 250px;
   font-size: 18px;
-  line-height: 30px;
   border: 1px solid #3c3c3c60;
   border-radius: 5px;
   background-color: #ffffff90;
@@ -134,7 +133,6 @@ const MessageInput = styled.input`
   border: solid 1px #d4d4d4;
   font-size: 18px;
   line-height: 30px;
-  color: #3c3c3c;
   background-color: #f0f0f090;
   &:focus {
     outline: none;

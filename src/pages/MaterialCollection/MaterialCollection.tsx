@@ -66,7 +66,6 @@ const Content = styled.div`
   width: 100%;
   padding: 0 50px;
   font-size: 24px;
-  color: #3c3c3c;
   text-align: center;
 `;
 

@@ -16,6 +16,7 @@ const GlobalStyle = createGlobalStyle`
 
   body {
     font-family: 'Roboto','Noto Sans TC','Noto Sans JP', sans-serif;
+    color:#3c3c3c;
   }
   #root {
      min-height: 100vh;

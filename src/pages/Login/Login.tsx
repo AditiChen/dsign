@@ -92,7 +92,6 @@ const Input = styled.input`
   padding: 6px 10px;
   width: 100%;
   height: 50px;
-  color: #3c3c3c;
   font-size: 18px;
   background-color: #f0f0f090;
   border: 1px solid #646464;
@@ -115,7 +114,6 @@ const SignBtn = styled.button`
   margin-left: auto;
   padding: 0 20px;
   height: 40px;
-  color: #3c3c3c;
   font-size: 20px;
   border: 1px solid #3c3c3c40;
   border-radius: 10px;
@@ -142,7 +140,6 @@ const LoginOptionsText = styled.div`
   height: 40px;
   padding: 0 20px;
   background-color: #ffffff;
-  color: #3c3c3c;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -285,7 +282,6 @@ function SignIn() {
       setCheckLoading(false);
       return;
     }
-
     if (!inputEmail || !password) {
       Swal.fire({
         text: t("email_and_password_input_check"),

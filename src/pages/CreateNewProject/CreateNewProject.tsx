@@ -56,7 +56,6 @@ const EditorContainer = styled.div`
 
 const Text = styled.div`
   font-size: 24px;
-  color: #3c3c3c;
 `;
 
 const Input = styled.input`
@@ -65,7 +64,6 @@ const Input = styled.input`
   width: 1200px;
   height: 60px;
   font-size: 30px;
-  color: #3c3c3c;
   font-weight: 700;
   background-color: #ffffff90;
   border: 1px solid #787878;
@@ -165,7 +163,6 @@ const Btn = styled.button<{
 }>`
   padding: 0 20px;
   height: 50px;
-  color: #3c3c3c;
   font-size: 22px;
   display: flex;
   align-items: center;

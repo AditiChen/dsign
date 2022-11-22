@@ -114,7 +114,6 @@ const NewPhotoHeaderContainer = styled.div`
   padding: 0 20px;
   height: 40px;
   width: 100%;
-  color: #3c3c3c;
   font-size: 24px;
   line-height: 40px;
   align-items: center;
@@ -161,7 +160,6 @@ const UploadPic = styled.label`
   height: 40px;
   line-height: 40px;
   font-size: 20px;
-  color: #3c3c3c;
   text-align: center;
   border: 1px solid #3c3c3c40;
   border-radius: 10px;
@@ -188,7 +186,6 @@ const SliderContainer = styled.div`
 const Btn = styled.button`
   margin-left: 20px;
   height: 40px;
-  color: #3c3c3c;
   font-size: 18px;
   border: 1px solid #3c3c3c40;
   border-radius: 10px;
@@ -219,7 +216,6 @@ const ConfirmedIcon = styled(ConfirmIcon)`
 const Text = styled.div`
   margin-left: 10px;
   font-size: 18px;
-  color: #3c3c3c;
 `;
 
 const LoadingBackground = styled.div`

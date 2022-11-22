@@ -76,7 +76,6 @@ const SearchInput = styled.input`
   border: solid 1px #d4d4d4;
   font-size: 18px;
   line-height: 30px;
-  color: #3c3c3c;
   background-color: #f0f0f090;
   &:focus {
     outline: none;
@@ -112,6 +111,7 @@ const SwichClickStatusBtn = styled.div<{ color: string; border: string }>`
   font-weight: 600;
   line-height: 30px;
   border-bottom: ${(props) => props.border};
+  position: relative;
   &:hover {
     cursor: pointer;
     color: #3c3c3c;
@@ -119,6 +119,16 @@ const SwichClickStatusBtn = styled.div<{ color: string; border: string }>`
   & + & {
     margin-left: 30px;
   }
+`;
+
+const NotificiationPirod = styled.div`
+  height: 10px;
+  width: 10px;
+  position: absolute;
+  top: 0px;
+  right: -10px;
+  border-radius: 50%;
+  background-color: #82ac7c;
 `;
 
 const FriendListContainer = styled.div`
@@ -181,7 +191,6 @@ const BtnContainer = styled.div`
 const SendRequestBtn = styled.button`
   padding: 0 10px;
   height: 40px;
-  color: #3c3c3c;
   font-size: 18px;
   border: 1px solid #3c3c3c40;
   border-radius: 10px;
@@ -455,6 +464,7 @@ function FriendList() {
               onClick={() => setClickState("request")}
             >
               {t("request_list")}
+              {friendRequests.length !== 0 && <NotificiationPirod />}
             </SwichClickStatusBtn>
           </SwichClickStatusContainer>
         </Separator>

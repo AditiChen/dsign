@@ -55,6 +55,9 @@ export function FriendContextProvider({ children }: BodyProp) {
   const [friendRequests, setFriendRequests] = useState<FriendData[]>([]);
   const [friendDataList, setFriendDataList] = useState<FriendData[]>([]);
   const [showMessageFrame, setShowMessageFrame] = useState(false);
+  const [unreadMessages, setUnreadMessages] = useState<
+    { chatroomId: string; friendId: string }[]
+  >([]);
 
   useEffect(() => {
     if (userId === "") return undefined;

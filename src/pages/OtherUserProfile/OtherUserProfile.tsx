@@ -85,7 +85,6 @@ const AddFriendIconContainer = styled.div`
 
 const UserInfo = styled.div`
   margin-top: 20px;
-  color: #3c3c3c;
   font-size: ${(props: Prop) => props.size};
   font-weight: ${(props: Prop) => props.weight};
   & + & {
@@ -107,7 +106,6 @@ const Intruduction = styled.textarea`
   width: 100%;
   height: 100%;
   max-height: calc(100% - 330px);
-  color: #3c3c3c;
   font-size: 18px;
   resize: none;
   border: none;

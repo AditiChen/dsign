@@ -1,7 +1,7 @@
 import i18next, { t as i18t } from "i18next";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
-import { useState, useContext } from "react";
+import { useState, useContext, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
@@ -17,9 +17,12 @@ interface Prop {
   height?: string;
   img?: string;
   size?: string;
+  $color?: string;
+  border?: string;
   borderBtm?: string;
   paddingBtm?: string;
   borderRadious?: string;
+  backgroundColor?: string;
 }
 
 const laguages = [
@@ -57,13 +60,13 @@ const Logo = styled(Link)`
   }
 `;
 
-const Context = styled(Link)<{ $color?: string; border: string }>`
+const Context = styled(Link)`
   padding: 2px 0;
   margin-left: 40px;
   font-size: 20px;
   text-decoration: none;
-  color: ${(props) => props.$color || "#c4c4c4"};
-  border-bottom: ${(props) => props.border};
+  color: ${(props: Prop) => props.$color || "#c4c4c4"};
+  border-bottom: ${(props: Prop) => props.border};
   & + & {
     margin-left: 32px;
   }
@@ -92,10 +95,6 @@ const LanguageOptionsContainer = styled.div`
   z-index: 1;
 `;
 
-const LanguageOptionsInnerContainer = styled.div`
-  padding: 10px;
-`;
-
 const Icon = styled.div`
   height: 35px;
   width: 35px;
@@ -111,38 +110,52 @@ const Icon = styled.div`
     margin-left: 30px;
   }
   &:hover > ${LanguageOptionsContainer} {
-    max-height: 170px;
+    max-height: 180px;
   }
 `;
 
-const FriendNotificiation = styled.div`
+const NotificiationPirod = styled.div`
   height: 12px;
   width: 12px;
   position: absolute;
   right: -4px;
   bottom: 2px;
-  border-radius: 6px;
+  border-radius: 50%;
   background-color: #82ac7c;
 `;
 
-const Language = styled.div`
-  padding-bottom: ${(props: Prop) => props.paddingBtm || "0"};
-  font-size: ${(props: Prop) => props.size};
-  color: #3c3c3c;
-  border-bottom: ${(props: Prop) => props.borderBtm};
+const LanguageHeader = styled.div`
+  width: 100%;
   text-align: center;
-  & + & {
-    margin-top: 16px;
+  padding: 10px 5px;
+  color: #3c3c3c;
+  font-size: 16px;
+  font-weight: 500;
+  border-bottom: 1px solid #3c3c3c;
+  &:hover {
+    cursor: default;
   }
 `;
 
-const SignBtn = styled.button<{ $color?: string; backgroundColor?: string }>`
+const Language = styled.div`
+  padding: 10px 0;
+  font-size: 14px;
+  color: #3c3c3c;
+  text-align: center;
+  background-color: ${(props: Prop) => props.backgroundColor};
+  &:hover {
+    background-color: #3c3c3c;
+    color: white;
+  }
+`;
+
+const SignBtn = styled.button`
   margin-left: 30px;
   padding: 0 20px;
   height: 35px;
-  color: ${(props) => props.$color || "#ffffff"};
+  color: ${(props: Prop) => props.$color || "#ffffff"};
   font-size: 18px;
-  background-color: ${(props) => props.backgroundColor || "transparent"};
+  background-color: ${(props: Prop) => props.backgroundColor || "transparent"};
   border: 1px solid #616161;
   border-radius: 5px;
   &:hover {
@@ -152,24 +165,22 @@ const SignBtn = styled.button<{ $color?: string; backgroundColor?: string }>`
 `;
 
 function LanguageOptions() {
+  const [activeIndex, setActiveIndex] = useState(0);
   return (
     <LanguageOptionsContainer>
-      <LanguageOptionsInnerContainer>
-        <Language size="16px" borderBtm="1px solid #3c3c3c" paddingBtm="10px">
-          {i18t("languages")}
+      <LanguageHeader>{i18t("languages")}</LanguageHeader>
+      {laguages.map((lng, index) => (
+        <Language
+          key={`${lng.code}`}
+          backgroundColor={activeIndex === index ? "#d4d4d4" : "none"}
+          onClick={() => {
+            setActiveIndex(index);
+            i18next.changeLanguage(lng.code);
+          }}
+        >
+          {lng.name}
         </Language>
-        {laguages.map((lng) => (
-          <Language
-            key={`${lng.code}`}
-            size="14px"
-            onClick={() => {
-              i18next.changeLanguage(lng.code);
-            }}
-          >
-            {lng.name}
-          </Language>
-        ))}
-      </LanguageOptionsInnerContainer>
+      ))}
     </LanguageOptionsContainer>
   );
 }
@@ -253,7 +264,7 @@ function Header() {
                 navigate("/friendList");
               }}
             >
-              {friendRequests.length !== 0 && <FriendNotificiation />}
+              {friendRequests.length !== 0 && <NotificiationPirod />}
             </Icon>
             <Icon
               img={avatar ? `url(${avatar})` : `url(${memberIcon})`}

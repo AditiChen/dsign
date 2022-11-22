@@ -139,7 +139,6 @@ const Avatar = styled.div`
 
 const Author = styled.div`
   margin-left: 10px;
-  color: #3c3c3c;
   font-size: ${(props: Prop) => props.fontSize};
 `;
 
