@@ -11,6 +11,10 @@ import {
   doc,
   onSnapshot,
   Timestamp,
+  getDoc,
+  arrayUnion,
+  arrayRemove,
+  updateDoc,
 } from "firebase/firestore";
 
 import { FriendContext } from "../../context/friendContext";
@@ -168,6 +172,7 @@ function Message({
     friendUid: string;
     name: string;
     avatar: string;
+    chatroomId: string;
   };
   userId: string;
 }) {
@@ -185,7 +190,15 @@ function Message({
 
   useEffect(() => {
     setIsLoading(true);
-    setHistoryMessages([]);
+    if (messageFriendDtl.chatroomId !== "") {
+      updateDoc(doc(db, `chatrooms/${messageFriendDtl.chatroomId}`), {
+        onlineUserIds: arrayUnion(userId),
+        unread: "",
+      });
+      setChatroomId(messageFriendDtl.chatroomId);
+      setIsLoading(false);
+      return;
+    }
     async function checkRoomExist() {
       const messageRef = collection(db, "chatrooms");
       const q1 = query(
@@ -223,7 +236,7 @@ function Message({
         await setDoc(doc(db, "chatrooms", roomId), {
           owners: [userId, messageFriendDtl.friendUid],
           unread: "",
-          onlineUserIds: [],
+          onlineUserIds: [userId],
         });
         setChatroomId(roomId);
       }
@@ -235,6 +248,9 @@ function Message({
   useEffect(() => {
     if (chatroomId === "") return undefined;
     setIsLoading(true);
+    updateDoc(doc(db, "chatrooms", chatroomId), {
+      onlineUserIds: arrayUnion(userId),
+    });
     const q = query(collection(db, `chatrooms/${chatroomId}/messages`));
     const unsubscribe = onSnapshot(q, async (querySnapshot) => {
       const messages: { from: string; message: string; time: Timestamp }[] = [];
@@ -256,6 +272,20 @@ function Message({
     if (inputValue === "") return;
     setInputValue("");
     const messageId = `${+new Date()}`;
+    const docSnap = await getDoc(doc(db, `chatrooms/${chatroomId}`));
+    const chatroomData = docSnap.data() as {
+      onlineUserIds: string[];
+      owners: string[];
+      unread: string;
+    };
+    const checkFriendOnlineStatus = chatroomData.onlineUserIds.indexOf(
+      messageFriendDtl.friendUid
+    );
+    if (checkFriendOnlineStatus === -1) {
+      updateDoc(doc(db, `chatrooms/${chatroomId}`), {
+        unread: messageFriendDtl.friendUid,
+      });
+    }
     await setDoc(doc(db, `chatrooms/${chatroomId}/messages/${messageId}/`), {
       from: userId,
       message: `${inputValue}`,
@@ -263,9 +293,16 @@ function Message({
     });
   }
 
+  function closeMessageFram() {
+    updateDoc(doc(db, `chatrooms/${chatroomId}`), {
+      onlineUserIds: arrayRemove(userId),
+    });
+    setShowMessageFrame((prev) => !prev);
+  }
+
   return (
     <Wrapper>
-      <CloseIcon onClick={() => setShowMessageFrame((prev) => !prev)} />
+      <CloseIcon onClick={() => closeMessageFram()} />
       <Container>
         <AvatarContainer>
           <Atatar img={`url(${messageFriendDtl.avatar})`} />

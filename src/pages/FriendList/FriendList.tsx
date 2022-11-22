@@ -248,7 +248,8 @@ function FriendList() {
     friendUid: string;
     name: string;
     avatar: string;
-  }>({ friendUid: "", name: "", avatar: "" });
+    chatroomId: string;
+  }>({ friendUid: "", name: "", avatar: "", chatroomId: "" });
   const [clickState, setClickState] = useState("list");
 
   async function searchHandler() {
@@ -521,10 +522,14 @@ function FriendList() {
                   <Text color="#616161">{user.email}</Text>
                   <MessageIcon
                     onClick={() => {
+                      const chatroomId = unreadMessages.find(
+                        (room) => room.friendId === user.uid
+                      );
                       setMessageFriendDtl({
                         friendUid: user.uid,
                         name: user.name,
                         avatar: user.avatar,
+                        chatroomId: chatroomId?.chatroomId || "",
                       });
                       setShowMessageFrame(true);
                     }}
@@ -536,7 +541,7 @@ function FriendList() {
                           <NotificiationPirod
                             key={friendId.friendId}
                             top="-2px"
-                            right="-4px"
+                            right="-5px"
                           />
                         );
                       })}

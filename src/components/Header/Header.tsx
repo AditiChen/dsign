@@ -187,7 +187,8 @@ function LanguageOptions() {
 
 function Header() {
   const { avatar, isLogin, logout } = useContext(AuthContext);
-  const { setShowMessageFrame, friendRequests } = useContext(FriendContext);
+  const { setShowMessageFrame, friendRequests, unreadMessages } =
+    useContext(FriendContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [clickState, setClickState] = useState("");
@@ -264,7 +265,9 @@ function Header() {
                 navigate("/friendList");
               }}
             >
-              {friendRequests.length !== 0 && <NotificiationPirod />}
+              {(friendRequests.length !== 0 || unreadMessages.length !== 0) && (
+                <NotificiationPirod />
+              )}
             </Icon>
             <Icon
               img={avatar ? `url(${avatar})` : `url(${memberIcon})`}

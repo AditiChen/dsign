@@ -13,7 +13,6 @@ import {
   query,
   where,
   getDoc,
-  getDocs,
   doc,
 } from "firebase/firestore";
 import { db } from "./firebaseSDK";
@@ -64,7 +63,6 @@ export function FriendContextProvider({ children }: BodyProp) {
 
   useEffect(() => {
     if (userId === "") return undefined;
-    setFriendRequests([]);
     const q = query(
       collection(db, "friendRequests"),
       where("to", "==", userId)
@@ -87,7 +85,6 @@ export function FriendContextProvider({ children }: BodyProp) {
 
   useEffect(() => {
     if (userId === "") return undefined;
-    setFriendDataList([]);
     const unsub = onSnapshot(doc(db, "users", userId), async (returnedDoc) => {
       const result = friendList?.map(async (id: string) => {
         const docSnap = await getDoc(doc(db, "users", id));
