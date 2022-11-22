@@ -27,7 +27,6 @@ interface Prop {
   text?: string;
   focus?: string;
   position?: string;
-  buttomLine?: string;
   img?: string;
   hoverImg?: string;
   marginLift?: string;
@@ -101,7 +100,6 @@ const CameraIcon = styled.div`
 
 const UserInfo = styled.div`
   margin-top: 20px;
-  color: #3c3c3c;
   font-size: ${(props: Prop) => props.size};
   font-weight: ${(props: Prop) => props.weight};
   & + & {
@@ -118,12 +116,11 @@ const IntroText = styled.div`
   border-bottom: 1px solid #969696;
 `;
 
-const Intruduction = styled.textarea`
+const Introduction = styled.textarea`
   padding: 10px 0;
   width: 100%;
   height: 100%;
   max-height: calc(100% - 350px);
-  color: #3c3c3c;
   font-size: 18px;
   resize: none;
   border: ${(props: Prop) => props.border};
@@ -135,7 +132,6 @@ const EditBtn = styled.button`
   padding: 0 10px;
   height: 40px;
   min-width: 120px;
-  color: #3c3c3c;
   font-size: 18px;
   border: 1px solid #3c3c3c40;
   border-radius: 10px;
@@ -168,7 +164,7 @@ const Title = styled.div`
   padding-left: 10px;
   font-size: 30px;
   color: #ffffff;
-  text-shadow: 1px 1px 3px #3c3c3c;
+  font-weight: 500;
   text-align: center;
 `;
 
@@ -201,7 +197,6 @@ const ProjectLeftContainer = styled.div`
 
 const ProjectTitle = styled.div`
   font-size: 24px;
-  color: #3c3c3c;
 `;
 
 const ProjectIconContainer = styled.div`
@@ -335,12 +330,12 @@ function Profile() {
             <Avatar url={`url(${avatar})`}>
               <CameraIcon onClick={() => setShowOverlay((prev) => !prev)} />
             </Avatar>
-            <UserInfo size="24px" weight="600">
+            <UserInfo size="24px" weight="500">
               {name}
             </UserInfo>
             <UserInfo size="20px">{email}</UserInfo>
             <IntroText>Introduction</IntroText>
-            <Intruduction
+            <Introduction
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               placeholder={t("type_content")}

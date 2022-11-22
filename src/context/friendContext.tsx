@@ -36,6 +36,7 @@ interface FriendContextType {
   setFriendRequests: Dispatch<SetStateAction<FriendData[]>>;
   showMessageFrame: boolean;
   setShowMessageFrame: Dispatch<SetStateAction<boolean>>;
+  unreadMessages: { chatroomId: string; friendId: string }[];
 }
 
 export const FriendContext = createContext<FriendContextType>({
@@ -47,6 +48,7 @@ export const FriendContext = createContext<FriendContextType>({
   setFriendRequests: () => {},
   showMessageFrame: false,
   setShowMessageFrame: () => {},
+  unreadMessages: [],
 });
 
 export function FriendContextProvider({ children }: BodyProp) {
@@ -55,10 +57,12 @@ export function FriendContextProvider({ children }: BodyProp) {
   const [friendRequests, setFriendRequests] = useState<FriendData[]>([]);
   const [friendDataList, setFriendDataList] = useState<FriendData[]>([]);
   const [showMessageFrame, setShowMessageFrame] = useState(false);
+  const [unreadMessages, setUnreadMessages] = useState<
+    { chatroomId: string; friendId: string }[]
+  >([]);
 
   useEffect(() => {
     if (userId === "") return undefined;
-    setFriendRequests([]);
     const q = query(
       collection(db, "friendRequests"),
       where("to", "==", userId)
@@ -81,7 +85,6 @@ export function FriendContextProvider({ children }: BodyProp) {
 
   useEffect(() => {
     if (userId === "") return undefined;
-    setFriendDataList([]);
     const unsub = onSnapshot(doc(db, "users", userId), async (returnedDoc) => {
       const result = friendList?.map(async (id: string) => {
         const docSnap = await getDoc(doc(db, "users", id));
@@ -96,6 +99,31 @@ export function FriendContextProvider({ children }: BodyProp) {
     };
   }, [userId, friendList]);
 
+  useEffect(() => {
+    if (userId === "") return undefined;
+    const queryUnread = query(
+      collection(db, "chatrooms"),
+      where("unread", "==", userId)
+    );
+    const unsubscribe = onSnapshot(queryUnread, async (querySnapshot) => {
+      const chatRoomDtl: { chatroomId: string; friendId: string }[] = [];
+      querySnapshot.forEach((responseDoc) => {
+        const friendId = responseDoc
+          .data()
+          .owners.find((id: string) => id !== userId);
+        const returnedData = {
+          chatroomId: responseDoc.id,
+          friendId,
+        };
+        chatRoomDtl.push(returnedData);
+      });
+      setUnreadMessages(chatRoomDtl);
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, [userId, friendList]);
+
   const authProviderValue = useMemo(
     () => ({
       friendDataList,
@@ -106,6 +134,7 @@ export function FriendContextProvider({ children }: BodyProp) {
       setFriendRequests,
       showMessageFrame,
       setShowMessageFrame,
+      unreadMessages,
     }),
     [
       friendDataList,
@@ -116,6 +145,7 @@ export function FriendContextProvider({ children }: BodyProp) {
       setFriendRequests,
       showMessageFrame,
       setShowMessageFrame,
+      unreadMessages,
     ]
   );
 

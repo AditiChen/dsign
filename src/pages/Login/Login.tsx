@@ -20,7 +20,7 @@ interface Prop {
   text?: string;
   focus?: string;
   position?: string;
-  buttomLine?: string;
+  buttonLine?: string;
   img?: string;
   hoverImg?: string;
   margin?: string;
@@ -72,7 +72,7 @@ const SignStatus = styled.button`
   font-size: 22px;
   color: #313538;
   border: none;
-  border-bottom: ${(props: Prop) => props.buttomLine || "none"};
+  border-bottom: ${(props: Prop) => props.buttonLine || "none"};
   border-radius: ${(props: Prop) => props.position || "0px 20px 0px 0px"};
   background-color: ${(props) => props.color || "#fff"};
   & + & {
@@ -92,7 +92,6 @@ const Input = styled.input`
   padding: 6px 10px;
   width: 100%;
   height: 50px;
-  color: #3c3c3c;
   font-size: 18px;
   background-color: #f0f0f090;
   border: 1px solid #646464;
@@ -115,7 +114,6 @@ const SignBtn = styled.button`
   margin-left: auto;
   padding: 0 20px;
   height: 40px;
-  color: #3c3c3c;
   font-size: 20px;
   border: 1px solid #3c3c3c40;
   border-radius: 10px;
@@ -142,7 +140,6 @@ const LoginOptionsText = styled.div`
   height: 40px;
   padding: 0 20px;
   background-color: #ffffff;
-  color: #3c3c3c;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -179,7 +176,7 @@ const FbIcon = styled(Icon)`
   background-image: url(${fbIcon});
 `;
 
-const OptionalLiginBtn = styled.button`
+const OptionalLoginBtn = styled.button`
   margin-top: 10px;
   padding: 0 20px;
   width: 100%;
@@ -226,7 +223,7 @@ function SignIn() {
   const [inputEmail, setInputEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [signin, setSignin] = useState(true);
+  const [signIn, setSignIn] = useState(true);
   const [checkLoading, setCheckLoading] = useState(false);
 
   function signInHandler() {
@@ -285,7 +282,6 @@ function SignIn() {
       setCheckLoading(false);
       return;
     }
-
     if (!inputEmail || !password) {
       Swal.fire({
         text: t("email_and_password_input_check"),
@@ -369,21 +365,21 @@ function SignIn() {
       <Container>
         <SignInContainer>
           <SignStatus
-            onClick={() => setSignin(true)}
-            color={signin ? "" : "#3c3c3c30"}
+            onClick={() => setSignIn(true)}
+            color={signIn ? "" : "#3c3c3c30"}
             position="20px 0px 0px 0px"
-            buttomLine={signin ? "" : "1px solid #b4b4b4"}
+            buttonLine={signIn ? "" : "1px solid #b4b4b4"}
           >
             {t("login")}
           </SignStatus>
           <SignStatus
-            onClick={() => setSignin(false)}
-            color={signin ? "#3c3c3c30" : ""}
-            buttomLine={signin ? "1px solid #b4b4b4" : ""}
+            onClick={() => setSignIn(false)}
+            color={signIn ? "#3c3c3c30" : ""}
+            buttonLine={signIn ? "1px solid #b4b4b4" : ""}
           >
             {t("sign_up")}
           </SignStatus>
-          {signin ? (
+          {signIn ? (
             <LoginContainer>
               <Input
                 placeholder={t("input_email")}
@@ -451,22 +447,22 @@ function SignIn() {
             <LoginOptionsLine />
           </LoginOptionsContainer>
           <LoginContainer>
-            <OptionalLiginBtn
+            <OptionalLoginBtn
               onClick={() => {
                 googleLoginHandler();
               }}
             >
               <GoogleIcon />
               {t("continue_with_google")}
-            </OptionalLiginBtn>
-            <OptionalLiginBtn
+            </OptionalLoginBtn>
+            <OptionalLoginBtn
               onClick={() => {
                 facebookLoginHandler();
               }}
             >
               <FbIcon />
               {t("continue_with_facebook")}
-            </OptionalLiginBtn>
+            </OptionalLoginBtn>
           </LoginContainer>
         </SignInContainer>
       </Container>

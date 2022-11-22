@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../../context/authContext";
 import { FriendContext } from "../../context/friendContext";
-import { LikeIcon, LikedIcon } from "../IconButtoms/LikeIcons";
+import { LikeIcon, LikedIcon } from "../IconButtons/LikeIcons";
 
 interface Prop {
   img?: string;
@@ -139,7 +139,6 @@ const Avatar = styled.div`
 
 const Author = styled.div`
   margin-left: 10px;
-  color: #3c3c3c;
   font-size: ${(props: Prop) => props.fontSize};
 `;
 

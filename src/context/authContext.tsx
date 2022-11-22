@@ -276,18 +276,18 @@ export function AuthContextProvider({ children }: BodyProp) {
     const result = await signInWithPopup(auth, provider);
     const credential = FacebookAuthProvider.credentialFromResult(result);
     const { uid, photoURL, displayName } = result.user;
-    const fbMmail = result.user.email;
+    const fbMail = result.user.email;
     await setDoc(doc(db, "users", uid), {
       uid,
       name: displayName,
-      email: fbMmail,
+      email: fbMail,
       avatar: photoURL,
       friendList: [],
       favoriteList: [],
       collection: [],
       introduction: "",
     });
-    if (!fbMmail || !photoURL || !displayName) return;
+    if (!fbMail || !photoURL || !displayName) return;
     setUserId(uid);
     setIsLogin(true);
     setIsLoading(false);

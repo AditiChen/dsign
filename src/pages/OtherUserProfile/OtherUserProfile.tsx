@@ -8,7 +8,7 @@ import getUserProjects from "../../utils/getUserProjects";
 import { AuthContext } from "../../context/authContext";
 import { FriendContext } from "../../context/friendContext";
 import Brick from "../../components/Brick/Brick";
-import FriendIcon from "../../components/IconButtoms/FriendIcon";
+import FriendIcon from "../../components/IconButtons/FriendIcon";
 
 interface Prop {
   url?: string;
@@ -17,7 +17,6 @@ interface Prop {
   text?: string;
   focus?: string;
   position?: string;
-  buttomLine?: string;
   img?: string;
   weight?: string;
 }
@@ -85,7 +84,6 @@ const AddFriendIconContainer = styled.div`
 
 const UserInfo = styled.div`
   margin-top: 20px;
-  color: #3c3c3c;
   font-size: ${(props: Prop) => props.size};
   font-weight: ${(props: Prop) => props.weight};
   & + & {
@@ -102,12 +100,11 @@ const IntroText = styled.div`
   border-bottom: 1px solid #969696;
 `;
 
-const Intruduction = styled.textarea`
+const Introduction = styled.textarea`
   padding: 10px 0;
   width: 100%;
   height: 100%;
   max-height: calc(100% - 330px);
-  color: #3c3c3c;
   font-size: 18px;
   resize: none;
   border: none;
@@ -149,7 +146,7 @@ const Loading = styled(ReactLoading)`
 function OtherUserProfile() {
   const { userId, friendList } = useContext(AuthContext);
   const { clickedUserId } = useContext(FriendContext);
-  const [isLoading, setIsloading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [userProjects, setUserProjects] = useState<UserProjectsType[]>([]);
   const [userData, setUserData] = useState<{
     uid: string;
@@ -160,7 +157,7 @@ function OtherUserProfile() {
   }>();
 
   useEffect(() => {
-    setIsloading(true);
+    setIsLoading(true);
     async function getData() {
       const docSnap = await getDoc(doc(db, "users", clickedUserId));
       const returnedData = docSnap.data() as {
@@ -175,7 +172,7 @@ function OtherUserProfile() {
       setUserProjects(userProjectsData);
     }
     getData();
-    setIsloading(false);
+    setIsLoading(false);
   }, []);
 
   if (isLoading) {
@@ -202,7 +199,7 @@ function OtherUserProfile() {
           </UserInfo>
           <UserInfo size="20px">{userData && userData.email}</UserInfo>
           <IntroText>Introduction</IntroText>
-          <Intruduction value={userData && userData.introduction} disabled />
+          <Introduction value={userData && userData.introduction} disabled />
         </UserInfoContainer>
         <BricksContainer>
           {userProjects &&

@@ -55,7 +55,6 @@ const Context = styled.textarea`
   padding: 10px;
   width: 100%;
   height: 300px;
-  color: #3c3c3c;
   font-size: 20px;
   line-height: 24px;
   background-color: transparent;

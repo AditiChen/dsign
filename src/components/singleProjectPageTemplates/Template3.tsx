@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import leftCircle from "./template3_left_cicle.png";
+import leftCircle from "./template3_left_circle.png";
 
 interface Prop {
   border?: string;

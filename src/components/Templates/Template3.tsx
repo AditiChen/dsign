@@ -4,7 +4,7 @@ import { useState, Dispatch, SetStateAction, useEffect } from "react";
 
 import Overlay from "../Overlays/templateOverlay";
 
-import leftCircle from "./template3_left_cicle.png";
+import leftCircle from "./template3_left_circle.png";
 import uploadPhotoIcon from "../../icons/uploadPhoto-icon.png";
 
 interface Prop {

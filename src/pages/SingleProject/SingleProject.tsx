@@ -10,8 +10,8 @@ import { GoogleMapAPI } from "../../components/singleProjectPageTemplates/Google
 import { AuthContext } from "../../context/authContext";
 import { FriendContext } from "../../context/friendContext";
 import getSingleProject from "../../utils/getSingleProject";
-import { LikeIcon, LikedIcon } from "../../components/IconButtoms/LikeIcons";
-import FriendIcon from "../../components/IconButtoms/FriendIcon";
+import { LikeIcon, LikedIcon } from "../../components/IconButtons/LikeIcons";
+import FriendIcon from "../../components/IconButtons/FriendIcon";
 
 import arrowIcon from "../../icons/arrow-icon-white.png";
 import arrowIconHover from "../../icons/arrow-icon-hover.png";
@@ -81,7 +81,6 @@ const HeaderContainer = styled.div`
 
 const Title = styled.div`
   font-size: 30px;
-  color: #3c3c3c;
   font-weight: 700;
 `;
 
@@ -132,7 +131,6 @@ const Intor = styled.div`
 
 const Author = styled.div`
   margin-left: 10px;
-  color: #3c3c3c;
   font-size: 24px;
 `;
 

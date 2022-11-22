@@ -81,7 +81,6 @@ const Input = styled.input`
   width: 1200px;
   height: 60px;
   font-size: 30px;
-  color: #3c3c3c;
   font-weight: 700;
   background-color: #ffffff90;
   border: 1px solid #787878;
@@ -182,7 +181,6 @@ const Btn = styled.button<{
 }>`
   padding: 0 20px;
   height: 50px;
-  color: #3c3c3c;
   font-size: 22px;
   border: 1px solid #3c3c3c40;
   border-radius: 10px;
@@ -284,14 +282,14 @@ function EditExistProject() {
 
   const templateFilter = addedTemplate?.map((num) => ({
     keyUuid: [num.uuid],
-    Chosetemplate: templatesArr[num.type],
+    ChoseTemplate: templatesArr[num.type],
   }));
 
   useEffect(() => {
     if (position.lat === undefined && position.lng === undefined) return;
 
     const mapIndex = templateFilter.findIndex(
-      (map) => map.Chosetemplate === googleMap
+      (map) => map.ChoseTemplate === googleMap
     );
     if (mapIndex === -1) return;
 
@@ -351,9 +349,9 @@ function EditExistProject() {
                   onChange={(e) => setTitle(e.target.value)}
                 />
                 {templateFilter.map(
-                  ({ keyUuid, Chosetemplate }, templateIndex) => (
+                  ({ keyUuid, ChoseTemplate }, templateIndex) => (
                     <SingleEditorContainer key={`${keyUuid}`}>
-                      <Chosetemplate
+                      <ChoseTemplate
                         pages={pages}
                         setPages={setPages}
                         currentIndex={templateIndex}

@@ -33,6 +33,8 @@ interface Prop {
   size?: string;
   color?: string;
   url?: string;
+  top?: string;
+  right?: string;
 }
 
 const Wrapper = styled.div`
@@ -76,7 +78,6 @@ const SearchInput = styled.input`
   border: solid 1px #d4d4d4;
   font-size: 18px;
   line-height: 30px;
-  color: #3c3c3c;
   background-color: #f0f0f090;
   &:focus {
     outline: none;
@@ -100,18 +101,19 @@ const SearchIcon = styled.div`
   }
 `;
 
-const SwichClickStatusContainer = styled.div`
+const SwitchClickStatusContainer = styled.div`
   height: 40px;
   display: flex;
 `;
 
-const SwichClickStatusBtn = styled.div<{ color: string; border: string }>`
+const SwitchClickStatusBtn = styled.div<{ color: string; border: string }>`
   margin: 5px 0;
   color: ${(props) => props.color};
   font-size: 22px;
   font-weight: 600;
   line-height: 30px;
   border-bottom: ${(props) => props.border};
+  position: relative;
   &:hover {
     cursor: pointer;
     color: #3c3c3c;
@@ -119,6 +121,16 @@ const SwichClickStatusBtn = styled.div<{ color: string; border: string }>`
   & + & {
     margin-left: 30px;
   }
+`;
+
+const NotificationDot = styled.div`
+  height: 10px;
+  width: 10px;
+  position: absolute;
+  top: ${(props: Prop) => props.top};
+  right: ${(props: Prop) => props.right};
+  border-radius: 50%;
+  background-color: #82ac7c;
 `;
 
 const FriendListContainer = styled.div`
@@ -167,6 +179,7 @@ const MessageIcon = styled.div`
   background-image: url(${messageIcon});
   background-size: cover;
   background-position: center;
+  position: relative;
   &:hover {
     cursor: pointer;
     background-image: url(${messageIconHover});
@@ -181,7 +194,6 @@ const BtnContainer = styled.div`
 const SendRequestBtn = styled.button`
   padding: 0 10px;
   height: 40px;
-  color: #3c3c3c;
   font-size: 18px;
   border: 1px solid #3c3c3c40;
   border-radius: 10px;
@@ -222,6 +234,7 @@ function FriendList() {
     setClickedUserId,
     showMessageFrame,
     setShowMessageFrame,
+    unreadMessages,
   } = useContext(FriendContext);
   const [inputValue, setInputValue] = useState("");
   const [hasSearchValue, setHasSearchValue] = useState(false);
@@ -235,7 +248,8 @@ function FriendList() {
     friendUid: string;
     name: string;
     avatar: string;
-  }>({ friendUid: "", name: "", avatar: "" });
+    chatroomId: string;
+  }>({ friendUid: "", name: "", avatar: "", chatroomId: "" });
   const [clickState, setClickState] = useState("list");
 
   async function searchHandler() {
@@ -441,22 +455,25 @@ function FriendList() {
           </Separator>
         )}
         <Separator>
-          <SwichClickStatusContainer>
-            <SwichClickStatusBtn
+          <SwitchClickStatusContainer>
+            <SwitchClickStatusBtn
               color={clickState === "list" ? "#3c3c3c" : "#b4b4b4"}
               border={clickState === "list" ? "1px solid #3c3c3c" : "none"}
               onClick={() => setClickState("list")}
             >
               {t("friend_list")}
-            </SwichClickStatusBtn>
-            <SwichClickStatusBtn
+            </SwitchClickStatusBtn>
+            <SwitchClickStatusBtn
               color={clickState === "request" ? "#3c3c3c" : "#b4b4b4"}
               border={clickState === "request" ? "1px solid #3c3c3c" : "none"}
               onClick={() => setClickState("request")}
             >
               {t("request_list")}
-            </SwichClickStatusBtn>
-          </SwichClickStatusContainer>
+              {friendRequests.length !== 0 && (
+                <NotificationDot top="0px" right="-10px" />
+              )}
+            </SwitchClickStatusBtn>
+          </SwitchClickStatusContainer>
         </Separator>
         {clickState === "request" && friendRequests.length === 0 && (
           <Separator>
@@ -505,14 +522,30 @@ function FriendList() {
                   <Text color="#616161">{user.email}</Text>
                   <MessageIcon
                     onClick={() => {
+                      const chatroomId = unreadMessages.find(
+                        (room) => room.friendId === user.uid
+                      );
                       setMessageFriendDtl({
                         friendUid: user.uid,
                         name: user.name,
                         avatar: user.avatar,
+                        chatroomId: chatroomId?.chatroomId || "",
                       });
                       setShowMessageFrame(true);
                     }}
-                  />
+                  >
+                    {unreadMessages.length !== 0 &&
+                      unreadMessages.map((friendId) => {
+                        if (friendId.friendId !== user.uid) return null;
+                        return (
+                          <NotificationDot
+                            key={friendId.friendId}
+                            top="-2px"
+                            right="-5px"
+                          />
+                        );
+                      })}
+                  </MessageIcon>
                 </TextContainer>
                 <BtnContainer>
                   <DeleteIcon onClick={() => deleteFriendHandler(user.uid)} />

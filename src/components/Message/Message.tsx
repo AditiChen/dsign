@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { v4 as uuid } from "uuid";
 import ReactLoading from "react-loading";
 import {
@@ -11,6 +11,10 @@ import {
   doc,
   onSnapshot,
   Timestamp,
+  getDoc,
+  arrayUnion,
+  arrayRemove,
+  updateDoc,
 } from "firebase/firestore";
 
 import { FriendContext } from "../../context/friendContext";
@@ -71,7 +75,7 @@ const AvatarContainer = styled.div`
   box-shadow: 0 1px 3px #3c3c3c80;
 `;
 
-const Atatar = styled.div`
+const Avatar = styled.div`
   margin: 0 5px;
   width: 36px;
   height: 36px;
@@ -104,10 +108,9 @@ const MessageInnerContainer = styled.div`
 
 const SingleMessageLeft = styled.div`
   margin-bottom: 10px;
-  padding: 0 10px;
+  padding: 10px;
   width: 250px;
   font-size: 18px;
-  line-height: 30px;
   border: 1px solid #3c3c3c60;
   border-radius: 5px;
   background-color: #ffffff90;
@@ -134,7 +137,6 @@ const MessageInput = styled.input`
   border: solid 1px #d4d4d4;
   font-size: 18px;
   line-height: 30px;
-  color: #3c3c3c;
   background-color: #f0f0f090;
   &:focus {
     outline: none;
@@ -170,6 +172,7 @@ function Message({
     friendUid: string;
     name: string;
     avatar: string;
+    chatroomId: string;
   };
   userId: string;
 }) {
@@ -184,10 +187,19 @@ function Message({
       time?: Timestamp;
     }[]
   >([]);
+  const scrollRef = useRef<HTMLDivElement>(null!);
 
   useEffect(() => {
     setIsLoading(true);
-    setHistoryMessages([]);
+    if (messageFriendDtl.chatroomId !== "") {
+      updateDoc(doc(db, `chatrooms/${messageFriendDtl.chatroomId}`), {
+        onlineUserIds: arrayUnion(userId),
+        unread: "",
+      });
+      setChatroomId(messageFriendDtl.chatroomId);
+      setIsLoading(false);
+      return;
+    }
     async function checkRoomExist() {
       const messageRef = collection(db, "chatrooms");
       const q1 = query(
@@ -224,6 +236,8 @@ function Message({
         const roomId = uuid();
         await setDoc(doc(db, "chatrooms", roomId), {
           owners: [userId, messageFriendDtl.friendUid],
+          unread: "",
+          onlineUserIds: [userId],
         });
         setChatroomId(roomId);
       }
@@ -235,6 +249,9 @@ function Message({
   useEffect(() => {
     if (chatroomId === "") return undefined;
     setIsLoading(true);
+    updateDoc(doc(db, "chatrooms", chatroomId), {
+      onlineUserIds: arrayUnion(userId),
+    });
     const q = query(collection(db, `chatrooms/${chatroomId}/messages`));
     const unsubscribe = onSnapshot(q, async (querySnapshot) => {
       const messages: { from: string; message: string; time: Timestamp }[] = [];
@@ -252,10 +269,28 @@ function Message({
     return () => unsubscribe();
   }, [chatroomId]);
 
-  async function sendMesssageHandler() {
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: 9999, behavior: "smooth" });
+  }, [historyMessages]);
+
+  async function sendMessageHandler() {
     if (inputValue === "") return;
     setInputValue("");
     const messageId = `${+new Date()}`;
+    const docSnap = await getDoc(doc(db, `chatrooms/${chatroomId}`));
+    const chatroomData = docSnap.data() as {
+      onlineUserIds: string[];
+      owners: string[];
+      unread: string;
+    };
+    const checkFriendOnlineStatus = chatroomData.onlineUserIds.indexOf(
+      messageFriendDtl.friendUid
+    );
+    if (checkFriendOnlineStatus === -1) {
+      updateDoc(doc(db, `chatrooms/${chatroomId}`), {
+        unread: messageFriendDtl.friendUid,
+      });
+    }
     await setDoc(doc(db, `chatrooms/${chatroomId}/messages/${messageId}/`), {
       from: userId,
       message: `${inputValue}`,
@@ -263,15 +298,22 @@ function Message({
     });
   }
 
+  function closeMessageFrame() {
+    updateDoc(doc(db, `chatrooms/${chatroomId}`), {
+      onlineUserIds: arrayRemove(userId),
+    });
+    setShowMessageFrame((prev) => !prev);
+  }
+
   return (
     <Wrapper>
-      <CloseIcon onClick={() => setShowMessageFrame((prev) => !prev)} />
+      <CloseIcon onClick={() => closeMessageFrame()} />
       <Container>
         <AvatarContainer>
-          <Atatar img={`url(${messageFriendDtl.avatar})`} />
+          <Avatar img={`url(${messageFriendDtl.avatar})`} />
           <Name>{messageFriendDtl.name}</Name>
         </AvatarContainer>
-        <MessageContainer>
+        <MessageContainer ref={scrollRef}>
           {isLoading ? (
             <Loading type="cylon" color="#3c3c3c" />
           ) : (
@@ -298,7 +340,7 @@ function Message({
           <MessageInput
             onKeyPress={(e) => {
               if (e.key === "Enter") {
-                sendMesssageHandler();
+                sendMessageHandler();
               }
             }}
             onChange={(e) => {
@@ -306,7 +348,7 @@ function Message({
             }}
             value={inputValue}
           />
-          <SendMessageIcon onClick={() => sendMesssageHandler()} />
+          <SendMessageIcon onClick={() => sendMessageHandler()} />
         </SendMessageContainer>
       </Container>
     </Wrapper>
