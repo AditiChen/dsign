@@ -390,18 +390,20 @@ function Profile() {
                     </ProjectLeftContainer>
                     <ProjectRightContainer>
                       <ProjectRightInnerContainer>
-                        {projectData.pages[0].url &&
-                          projectData.pages[0].url.map((singleUrl: string) => (
-                            <PhotoUrl
-                              key={singleUrl}
-                              img={`url(${singleUrl})`}
-                            />
-                          ))}
+                        {/* {projectData.pages[0].photos &&
+                          projectData.pages[0].photos.map(
+                            (singleUrl: string) => (
+                              <PhotoUrl
+                                key={singleUrl}
+                                img={`url(${singleUrl})`}
+                              />
+                            )
+                          )} */}
 
-                        {/* <PhotoUrl
+                        <PhotoUrl
                           key={projectData.mainUrl}
                           img={`url(${projectData.mainUrl})`}
-                        /> */}
+                        />
                       </ProjectRightInnerContainer>
                     </ProjectRightContainer>
                   </SingleProjectContainer>

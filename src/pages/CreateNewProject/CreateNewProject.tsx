@@ -6,12 +6,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import ReactLoading from "react-loading";
 import Swal from "sweetalert2";
-import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-  DroppableProvided,
-} from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
@@ -19,7 +14,7 @@ import getUserProjects from "../../utils/getUserProjects";
 import templatesImgArr from "../../components/Templates/TemplateImg";
 import templatesArr from "../../components/Templates/TemplatesArr";
 import SquareOverlay from "../../components/Overlays/squareOverlay";
-import TemplateData from "../../components/Templates/TemplatesData.json";
+import templateData from "../../components/Templates/TemplatesData.json";
 
 import closeIcon from "../../icons/close-icon.png";
 import closeIconHover from "../../icons/close-icon-hover.png";
@@ -219,6 +214,7 @@ function CreateNewProject() {
   const [mainImgSrc, setMainImgSrc] = useState("");
   const [showOverlay, setShowOverlay] = useState(false);
   const googleMap = templatesArr[9];
+
   console.log(pages);
 
   async function confirmAllEdit() {
@@ -262,6 +258,7 @@ function CreateNewProject() {
     const newProjects = await getUserProjects(userId);
     setUserProjects(newProjects);
     setPages([]);
+    setPosition({});
     setMainImgSrc("");
     Swal.fire({
       text: t("upload_successfully"),
@@ -278,9 +275,8 @@ function CreateNewProject() {
       ({ type }) => templatesArr[type] === googleMap
     );
     if (mapIndex === -1) return;
-    const googleMapData = { key: uuid(), type: 9, location: position };
     const newPages = [...pages];
-    newPages[mapIndex] = googleMapData;
+    newPages[mapIndex].location = position;
     setPages(newPages);
   }, [position]);
 
@@ -319,7 +315,7 @@ function CreateNewProject() {
                   onClick={() => {
                     setPages((prev) => [
                       ...prev,
-                      { key: uuid(), ...TemplateData[index] },
+                      { key: uuid(), ...templateData[index] },
                     ]);
                   }}
                 />
@@ -333,6 +329,7 @@ function CreateNewProject() {
               ) : (
                 <>
                   <Input
+                    value={title}
                     placeholder={t("project_title")}
                     onChange={(e) => setTitle(e.target.value)}
                   />

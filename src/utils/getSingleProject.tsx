@@ -22,9 +22,10 @@ export default async function getSingleProject(projectId: string) {
     title: string;
     time: number;
     pages: {
+      key: string;
       type: number;
       content?: string[];
-      url?: string[];
+      photos?: string[];
       location?: { lat?: number; lng?: number };
     }[];
   }[] = [];

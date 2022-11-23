@@ -26,9 +26,10 @@ interface UserProjectType {
   title: string;
   time: number;
   pages: {
+    key: string;
     type: number;
     content?: string[];
-    url?: string[];
+    photos?: string[];
     location?: { lat?: number; lng?: number };
   }[];
 }
@@ -178,6 +179,7 @@ function SingleProject() {
     async function getData() {
       setIsLoading(true);
       const result = await getSingleProject(singleProjectId);
+      console.log({ result });
       setSingleProjectData(result);
       setIsLoading(false);
     }
@@ -261,7 +263,7 @@ function SingleProject() {
                       key={`${index + 1}`}
                       photoUrl={
                         (singleProjectData &&
-                          singleProjectData[0]?.pages[index].url) ||
+                          singleProjectData[0]?.pages[index].photos) ||
                         []
                       }
                       content={
