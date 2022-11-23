@@ -316,6 +316,7 @@ function SquareOverlay({
         avatar: downloadUrl,
       });
     }
+    setMainImgSrc(downloadUrl);
     setProgressing(false);
     setShowOverlay((prev) => !prev);
   }, [

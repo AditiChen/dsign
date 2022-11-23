@@ -130,7 +130,7 @@ const NotificationDot = styled.div`
   top: ${(props: Prop) => props.top};
   right: ${(props: Prop) => props.right};
   border-radius: 50%;
-  background-color: #82ac7c;
+  background-image: linear-gradient(#89b07e, #4f8365);
 `;
 
 const FriendListContainer = styled.div`

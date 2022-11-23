@@ -1,25 +1,11 @@
 import styled from "styled-components";
 import { t } from "i18next";
-import {
-  useState,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useContext,
-} from "react";
+import { useState, Dispatch, SetStateAction, useEffect } from "react";
 
-import { AuthContext } from "../../context/authContext";
-import upLoadImgToCloudStorage from "../../utils/upLoadImgToCloudStorage";
 import Overlay from "../Overlays/templateOverlay";
 
 import uploadPhotoIcon from "../../icons/uploadPhoto-icon.png";
 
-interface Prop {
-  url?: string;
-  backgroundColor?: string;
-  top?: string;
-  left?: string;
-}
 interface InsertProp {
   setPages: Dispatch<
     SetStateAction<
@@ -52,10 +38,22 @@ const Wrapper = styled.div`
 `;
 
 const Text = styled.div`
-  margin: auto;
-  padding-bottom: 100px;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
   font-size: 24px;
-  text-align: center;
+  z-index: 1;
+`;
+
+const Img = styled.div<{ url?: string; backgroundColor?: string }>`
+  width: 1200px;
+  height: 760px;
+  background-image: ${(props) => props.url};
+  background-color: ${(props) => props.backgroundColor};
+  background-size: cover;
+  background-position: center;
+  position: relative;
 `;
 
 const UploadIcon = styled.div`
@@ -71,17 +69,9 @@ const UploadIcon = styled.div`
   background-position: center;
 `;
 
-const InputContainer = styled.label`
-  width: 1200px;
-  height: 760px;
-  position: absolute;
-`;
-
-function Template8(props: InsertProp) {
-  const { userId } = useContext(AuthContext);
+function Template7(props: InsertProp) {
   const [showOverlay, setShowOverlay] = useState(false);
-  const [inputText, setInputText] = useState<string[]>([""]);
-  const [storageUrl, setStorageUrl] = useState<string[]>(["", "", ""]);
+  const [storageUrl, setStorageUrl] = useState<string[]>([""]);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [currentImgUrl, setCurrentImgUrl] = useState("");
   const [currentAaspect, setCurrentAspect] = useState(1 / 1);
@@ -89,11 +79,14 @@ function Template8(props: InsertProp) {
   const { setPages, currentIndex, pages } = props;
 
   useEffect(() => {
+    setStorageUrl(pages[currentIndex].photos || [""]);
+  }, []);
+
+  useEffect(() => {
     const newPages = [...pages];
-    newPages[currentIndex].content = inputText;
     newPages[currentIndex].photos = storageUrl;
     setPages(newPages);
-  }, [inputText, storageUrl]);
+  }, [storageUrl]);
 
   const setNewPhotoUrl = (returnedUrl: string) => {
     const newUrl = [...storageUrl];
@@ -108,34 +101,19 @@ function Template8(props: InsertProp) {
     setCurrentAspect(aspect);
   }
 
-  const onUploadFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files === null) return;
-    const fileNameByTime = `${+new Date()}`;
-    const imgUrl = await upLoadImgToCloudStorage(
-      e.target.files[0],
-      userId,
-      fileNameByTime
-    );
-    console.log("imgUrl", imgUrl);
-  };
-
   return (
     <>
       <Wrapper>
-        <Text>{t("upload_image")}</Text>
-        <UploadIcon />
-        <InputContainer>
-          <input
-            type="file"
-            accept="image/*"
-            style={{
-              display: "none",
-              width: "1200px",
-              height: "760px",
-            }}
-            onChange={(e) => onUploadFile(e)}
-          />
-        </InputContainer>
+        {storageUrl[0] === "" && <Text>{t("upload_own_template")}</Text>}
+        <Img
+          onClick={() => {
+            upLoadNewPhoto(0, 1200 / 760);
+          }}
+          backgroundColor={storageUrl[0] === "" ? "#b4b4b4" : ""}
+          url={storageUrl[0] === "" ? "" : `url(${storageUrl[0]})`}
+        >
+          {storageUrl[0] === "" && <UploadIcon />}
+        </Img>
       </Wrapper>
       {showOverlay && (
         <Overlay
@@ -151,4 +129,4 @@ function Template8(props: InsertProp) {
   );
 }
 
-export default Template8;
+export default Template7;

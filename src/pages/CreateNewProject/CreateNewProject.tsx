@@ -224,7 +224,10 @@ function CreateNewProject() {
   }, []);
 
   useEffect(() => {
-    if (pages.length === 0) return;
+    if (pages.length === 0) {
+      window.sessionStorage.removeItem("pages");
+      return;
+    }
     const toJsonFormat = JSON.stringify(pages);
     window.sessionStorage.setItem("pages", toJsonFormat);
   }, [pages]);
@@ -283,6 +286,7 @@ function CreateNewProject() {
     setPages([]);
     setPosition({});
     setMainImgSrc("");
+    window.sessionStorage.removeItem("pages");
     Swal.fire({
       text: t("upload_successfully"),
       icon: "success",

@@ -179,7 +179,6 @@ function SingleProject() {
     async function getData() {
       setIsLoading(true);
       const result = await getSingleProject(singleProjectId);
-      console.log({ result });
       setSingleProjectData(result);
       setIsLoading(false);
     }
@@ -188,7 +187,7 @@ function SingleProject() {
 
   const types = singleProjectData[0]?.pages?.map((data) => data.type);
   const templateFilter = types?.map((num) => templatesArr[num]);
-  const googleMap = templatesArr[8];
+  const googleMap = templatesArr[9];
 
   return (
     <Wrapper>

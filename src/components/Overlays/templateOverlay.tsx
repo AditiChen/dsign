@@ -324,7 +324,12 @@ function Overlay({
             <CloseIcon onClick={() => setShowOverlay((prev) => !prev)} />
             {imgSrc ? (
               <>
-                <ArrowIcon onClick={() => setImgSrc("")} />
+                <ArrowIcon
+                  onClick={() => {
+                    setImgSrc("");
+                    setProgressing(false);
+                  }}
+                />
                 <CropperContainer>
                   {progressing && (
                     <>
@@ -380,7 +385,7 @@ function Overlay({
                   ) : (
                     <ConfirmIcon onClick={() => setIsAddToCollection(true)} />
                   )}
-                  <Text>Add to collection?</Text>
+                  <Text>{t("add_to_collection")}</Text>
                   <Btn onClick={showCroppedImage}>{t("confirm_crop")}</Btn>
                 </ControlContainer>
               </>
