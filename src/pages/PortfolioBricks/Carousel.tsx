@@ -104,7 +104,7 @@ function getArtistsData() {
 }
 
 function Carousel() {
-  const [storys, setStorys] = useState<
+  const [stories, setStories] = useState<
     {
       name: string;
       quote: string;
@@ -124,14 +124,14 @@ function Carousel() {
         );
       }, 5000);
     }
-    setStorys(ArtistsData);
+    setStories(ArtistsData);
     return () => clearInterval(intervalRef.current);
   }, []);
 
   return (
     <>
       <CarouselContainer>
-        {storys.map(({ quote, name, photo, wikipedia }, index) => (
+        {stories.map(({ quote, name, photo, wikipedia }, index) => (
           <StoryContainer
             key={wikipedia}
             opacity={index === activeIndex ? 1 : 0}
@@ -149,7 +149,7 @@ function Carousel() {
         ))}
       </CarouselContainer>
       <DocsContainer>
-        {storys.map((_, index) => (
+        {stories.map((_, index) => (
           <Doc
             key={`${index + 1}`}
             backgroundColor={index === activeIndex ? "#ffffff" : "#787878"}
@@ -158,7 +158,7 @@ function Carousel() {
               window.clearInterval(intervalRef.current);
               intervalRef.current = window.setInterval(() => {
                 setActiveIndex((prev) =>
-                  prev === storys.length - 1 ? 0 : prev + 1
+                  prev === stories.length - 1 ? 0 : prev + 1
                 );
               }, 5000);
             }}

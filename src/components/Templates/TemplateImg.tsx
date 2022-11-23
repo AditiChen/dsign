@@ -6,6 +6,7 @@ import template4 from "./template4.png";
 import template5 from "./template5.png";
 import template6 from "./template6.png";
 import template7 from "./template7.png";
+import template8 from "./template8.png";
 
 import googleMapPng from "./googleMapPng.png";
 
@@ -18,6 +19,7 @@ const templatesImgArr = [
   template5,
   template6,
   template7,
+  template8,
   googleMapPng,
 ];
 export default templatesImgArr;

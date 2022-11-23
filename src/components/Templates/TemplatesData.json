@@ -1,0 +1,12 @@
+[
+  { "type": 0, "content": [""], "photos": ["", ""] },
+  { "type": 1, "content": [""], "photos": ["", "", ""] },
+  { "type": 2, "content": [""], "photos": ["", "", "", ""] },
+  { "type": 3, "content": [""], "photos": ["", "", ""] },
+  { "type": 4, "content": [""], "photos": ["", "", "", ""] },
+  { "type": 5, "content": [""], "photos": ["", ""] },
+  { "type": 6, "content": [""], "photos": ["", ""] },
+  { "type": 7, "content": [""], "photos": ["", "", ""] },
+  { "type": 8, "photos": [""] },
+  { "type": 9, "location": { "lat": 0, "lng": 0 } }
+]
