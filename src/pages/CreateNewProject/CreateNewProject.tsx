@@ -215,7 +215,30 @@ function CreateNewProject() {
   const [showOverlay, setShowOverlay] = useState(false);
   const googleMap = templatesArr[9];
 
-  console.log(pages);
+  useEffect(() => {
+    const sessionStorageData = sessionStorage.getItem("pages");
+    if (sessionStorageData !== null) {
+      const parseData = JSON.parse(sessionStorageData);
+      setPages(parseData);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (pages.length === 0) return;
+    const toJsonFormat = JSON.stringify(pages);
+    window.sessionStorage.setItem("pages", toJsonFormat);
+  }, [pages]);
+
+  useEffect(() => {
+    if (position.lat === undefined && position.lng === undefined) return;
+    const mapIndex = pages.findIndex(
+      ({ type }) => templatesArr[type] === googleMap
+    );
+    if (mapIndex === -1) return;
+    const newPages = [...pages];
+    newPages[mapIndex].location = position;
+    setPages(newPages);
+  }, [position]);
 
   async function confirmAllEdit() {
     if (title === "") {
@@ -268,17 +291,6 @@ function CreateNewProject() {
     setIsLoading(false);
     navigate("/profile");
   }
-
-  useEffect(() => {
-    if (position.lat === undefined && position.lng === undefined) return;
-    const mapIndex = pages.findIndex(
-      ({ type }) => templatesArr[type] === googleMap
-    );
-    if (mapIndex === -1) return;
-    const newPages = [...pages];
-    newPages[mapIndex].location = position;
-    setPages(newPages);
-  }, [position]);
 
   function deleteHandler(index: number) {
     const removeSelectedPageData = pages.filter((data, i) => index !== i);

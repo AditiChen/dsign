@@ -230,7 +230,6 @@ function EditExistProject() {
     if (singleProjectId === "") return;
     async function fetchData() {
       const projectDetail = await getSingleProject(singleProjectId);
-      console.log({ projectDetail });
       setPages(projectDetail[0].pages);
       setTitle(projectDetail[0].title);
       setMainImgSrc(projectDetail[0].mainUrl);
