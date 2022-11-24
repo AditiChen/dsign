@@ -216,10 +216,24 @@ const SignBtn = styled.button`
   }
 `;
 
+const MobileLanguageIcon = styled.div`
+  height: 26px;
+  width: 26px;
+  position: fixed;
+  right: 55px;
+  display: none;
+  background-image: url(${languageIcon});
+  background-size: cover;
+  background-position: center;
+  @media screen and (max-width: 799px) {
+    display: block;
+  }
+`;
+
 const MenuIcon = styled.div`
   margin-right: 10px;
-  height: 30px;
-  width: 30px;
+  height: 26px;
+  width: 26px;
   display: none;
   position: fixed;
   right: 10px;
@@ -252,20 +266,6 @@ const MobileContext = styled(Link)`
   text-decoration: none;
   color: #c4c4c4;
   border-bottom: 1px solid #c4c4c4;
-`;
-
-const MobileLanguageIcon = styled.div`
-  height: 30px;
-  width: 30px;
-  position: fixed;
-  right: 60px;
-  display: none;
-  background-image: url(${languageIcon});
-  background-size: cover;
-  background-position: center;
-  @media screen and (max-width: 799px) {
-    display: block;
-  }
 `;
 
 function LanguageOptions({ isShowLanguages }: { isShowLanguages: boolean }) {
