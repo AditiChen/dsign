@@ -25,14 +25,19 @@ interface FetchedProjectsType {
 }
 
 const Wrapper = styled.div`
-  padding-top: 80px;
   width: 100%;
   min-width: 100vw;
   height: 100%;
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 140px);
   position: relative;
   display: flex;
   flex-direction: column;
+  @media screen and (min-width: 800px) and (max-width: 1024px) {
+    min-height: calc(100vh - 120px);
+  }
+  @media screen and (max-width: 799px) {
+    min-height: calc(100vh - 90px);
+  }
 `;
 
 const HeaderContainer = styled.div`
@@ -40,12 +45,24 @@ const HeaderContainer = styled.div`
   height: 120px;
   display: flex;
   align-items: center;
+  @media screen and (min-width: 800px) and (max-width: 1024px) {
+    height: 80px;
+  }
+  @media screen and (max-width: 799px) {
+    height: 50px;
+  }
 `;
 
 const Title = styled.div`
   padding: 0 50px;
   font-size: 30px;
   text-align: center;
+  @media screen and (min-width: 800px) and (max-width: 1024px) {
+    font-size: 24px;
+  }
+  @media screen and (max-width: 799px) {
+    font-size: 20px;
+  }
 `;
 
 const ContentContainer = styled.div`
@@ -57,6 +74,12 @@ const Content = styled.div`
   padding: 0 50px;
   font-size: 24px;
   text-align: center;
+  @media screen and (min-width: 800px) and (max-width: 1024px) {
+    font-size: 18px;
+  }
+  @media screen and (max-width: 799px) {
+    font-size: 14px;
+  }
 `;
 
 const BricksContainer = styled.div`
@@ -75,11 +98,16 @@ const BricksContainer = styled.div`
     width: 960px;
   }
   @media screen and (min-width: 800px) and (max-width: 1099px) {
+    padding: 30px 0;
     width: 630px;
   }
-  @media screen and (max-width: 799px) {
-    padding: 20px 0;
-    width: 330px;
+  @media screen and (min-width: 600px) and (max-width: 799px) {
+    width: 530px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+  @media screen and (max-width: 599px) {
+    padding: 0 0 20px 0;
+    width: 300px;
   }
 `;
 

@@ -69,7 +69,6 @@ const BricksContainer = styled.div`
     width: 630px;
   }
   @media screen and (min-width: 600px) and (max-width: 799px) {
-    padding: 30px 0;
     width: 530px;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }

@@ -36,6 +36,10 @@ const CloseIcon = styled.div`
   &:hover {
     background-image: url(${closeIconHover});
   }
+  @media screen and (max-width: 799px) {
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 const OverlayModal = styled.div`
@@ -50,11 +54,19 @@ const OverlayModal = styled.div`
   transform: translate(-50%, -50%);
   z-index: 102;
   background-color: white;
+  @media screen and (max-width: 1399px) {
+    max-width: 95vw;
+    max-height: 95vh;
+  }
 `;
 
 const Img = styled.img`
   max-width: 1300px;
   max-height: 800px;
+  @media screen and (max-width: 1399px) {
+    max-width: 95vw;
+    max-height: 95vh;
+  }
 `;
 
 const portalElement = document.getElementById("overlays") as HTMLElement;

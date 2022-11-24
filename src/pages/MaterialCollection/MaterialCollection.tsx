@@ -21,14 +21,19 @@ interface Prop {
 }
 
 const Wrapper = styled.div`
-  padding-top: 80px;
   width: 100%;
   min-width: 100vw;
   height: 100%;
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 140px);
   position: relative;
   display: flex;
   flex-direction: column;
+  @media screen and (min-width: 800px) and (max-width: 1024px) {
+    min-height: calc(100vh - 120px);
+  }
+  @media screen and (max-width: 799px) {
+    min-height: calc(100vh - 90px);
+  }
 `;
 
 const HeaderContainer = styled.div`
@@ -36,12 +41,25 @@ const HeaderContainer = styled.div`
   height: 120px;
   display: flex;
   align-items: center;
+  @media screen and (min-width: 800px) and (max-width: 1024px) {
+    height: 80px;
+  }
+  @media screen and (max-width: 799px) {
+    height: 50px;
+  }
 `;
 
 const Title = styled.div`
   padding: 0 50px;
   font-size: 30px;
   text-align: center;
+  @media screen and (min-width: 800px) and (max-width: 1024px) {
+    font-size: 24px;
+  }
+  @media screen and (max-width: 799px) {
+    padding: 0 30px;
+    font-size: 20px;
+  }
 `;
 
 const AddFolderIcon = styled.label`
@@ -55,6 +73,10 @@ const AddFolderIcon = styled.label`
   &:hover {
     cursor: pointer;
     background-image: url(${uploadPhotoIconHover});
+  }
+  @media screen and (max-width: 799px) {
+    width: 30px;
+    height: 30px;
   }
 `;
 
@@ -121,6 +143,19 @@ const ImgContainer = styled.div`
     width: 250px;
     height: 250px;
   }
+  @media screen and (max-width: 799px) {
+    margin: 5px auto;
+    width: 240px;
+    height: 240px;
+    &:hover {
+      width: 240px;
+      height: 240px;
+    }
+    &:hover > ${Img} {
+      width: 240px;
+      height: 240px;
+    }
+  }
 `;
 
 const TrashIcon = styled.div`
@@ -135,6 +170,10 @@ const TrashIcon = styled.div`
   background-position: center;
   &:hover {
     background-image: url(${trashIconHover});
+  }
+  @media screen and (max-width: 799px) {
+    width: 24px;
+    height: 24px;
   }
 `;
 
