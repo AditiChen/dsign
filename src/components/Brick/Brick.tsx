@@ -11,6 +11,7 @@ interface Prop {
   url?: string;
   fontSize?: string;
 }
+
 const TitleContainer = styled.div`
   width: 100%;
   height: 0;
@@ -48,6 +49,9 @@ const ImgContainer = styled.div`
     width: 100%;
     height: 120px;
   }
+  @media screen and (max-width: 799px) {
+    height: 250px;
+  }
 `;
 
 const InfoContainer = styled.div`
@@ -56,6 +60,9 @@ const InfoContainer = styled.div`
   height: 50px;
   display: flex;
   align-items: center;
+  @media screen and (max-width: 799px) {
+    width: 250px;
+  }
 `;
 
 const SingleProjectContainer = styled.div`
@@ -80,49 +87,22 @@ const SingleProjectContainer = styled.div`
   &:hover > ${InfoContainer} {
     width: 310px;
   }
+  @media screen and (max-width: 799px) {
+    width: 250px;
+    height: 300px;
+    &:hover {
+      width: 250px;
+      height: 300px;
+    }
+    &:hover > ${ImgContainer} {
+      width: 250px;
+      height: 250px;
+    }
+    &:hover > ${InfoContainer} {
+      width: 250px;
+    }
+  }
 `;
-
-// const UserInfoContainer = styled.div`
-//   max-height: 0px;
-//   background: linear-gradient(to bottom, #ffffff90, #ffffff);
-//   transform-origin: bottom;
-//   overflow: hidden;
-//   transition: max-height 0.3s ease-in;
-//   border-radius: 10px 10px 0 0;
-//   position: absolute;
-//   bottom: calc(-100% + 71px);
-//   left: -15px;
-// `;
-
-// const UserInfoInnerContainer = styled.div`
-//   padding: 20px 15px;
-//   max-height: 150px;
-//   width: 310px;
-// `;
-
-// const UserInfoHeaderContainer = styled.div`
-//   display: flex;
-//   align-items: center;
-// `;
-
-// const InfoAvatar = styled.div`
-//   width: 50px;
-//   height: 50px;
-//   border-radius: 25px;
-//   background-image: ${(props: Prop) => props.img};
-//   background-size: cover;
-//   background-position: center;
-//   &:hover {
-//     cursor: pointer;
-//   }
-// `;
-
-// const Intor = styled.div`
-//   margin: 10px 0;
-//   font-size: 18px;
-//   line-height: 22px;
-//   color: #616161;
-// `;
 
 const Avatar = styled.div`
   width: 36px;
@@ -188,29 +168,6 @@ export default function Brick({
       </ImgContainer>
       <InfoContainer>
         <Avatar img={`url(${avatar})`} onClick={() => toProfileHandler()} />
-        {/* <UserInfoContainer>
-            <UserInfoInnerContainer>
-              <UserInfoHeaderContainer>
-                <InfoAvatar
-                  img={`url(${avatar})`}
-                  onClick={() => {
-                    setClickedUserId(uid);
-                    navigate("/userProfile");
-                  }}
-                />
-                <Author fontSize="24px">{name}</Author>
-                {friendList.indexOf(uid) === -1 &&
-                uid !== userId &&
-                userId !== "" ? (
-                  <FriendIcon requestId={uid} />
-                ) : (
-                  ""
-                )}
-              </UserInfoHeaderContainer>
-              <Intor>{introduction}</Intor>
-            </UserInfoInnerContainer>
-          </UserInfoContainer> */}
-        {/* </Avatar> */}
         <Author fontSize="18px">{name}</Author>
         {favoriteList.indexOf(projectId) === -1 ? (
           <LikeIcon

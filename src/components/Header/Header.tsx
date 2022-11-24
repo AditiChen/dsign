@@ -7,14 +7,20 @@ import Swal from "sweetalert2";
 
 import { AuthContext } from "../../context/authContext";
 import { FriendContext } from "../../context/friendContext";
+import useOnClickOutside from "../../utils/useOnClickOutside";
 
 import languageIcon from "./language-icon.png";
 import logoIcon from "./Logo.png";
 import memberIcon from "./user-icon.png";
 import friendsIcon from "./friends-icon.png";
+import menuIcon from "./menu-icon.png";
 
 interface Prop {
   height?: string;
+  maxHeight?: string;
+  maxWidth?: string;
+  right?: string;
+  bottom?: string;
   img?: string;
   size?: string;
   $color?: string;
@@ -35,7 +41,7 @@ const languages = [
 const Wrapper = styled.div`
   padding: 0 30px;
   width: 100vw;
-  height: 80px;
+  height: 70px;
   color: #c4c4c4;
   background-color: #3c3c3c;
   box-shadow: 0 1px 5px #3c3c3c;
@@ -44,6 +50,15 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  @media screen and (min-width: 800px) and (max-width: 1024px) {
+    padding: 0 20px;
+    height: 60px;
+  }
+  @media screen and (max-width: 799px) {
+    padding: 0 16px;
+    height: 50px;
+    justify-content: center;
+  }
 `;
 
 const LeftContainer = styled.div`
@@ -55,14 +70,24 @@ const Logo = styled(Link)`
   width: 155px;
   height: 45px;
   background-image: url(${logoIcon});
+  background-size: cover;
+  background-position: center;
   &:hover {
     cursor: pointer;
+  }
+  @media screen and (min-width: 800px) and (max-width: 1024px) {
+    width: 124px;
+    height: 36px;
+  }
+  @media screen and (max-width: 799px) {
+    width: 93px;
+    height: 27px;
   }
 `;
 
 const Context = styled(Link)`
-  padding: 2px 0;
   margin-left: 40px;
+  padding-top: 10px;
   font-size: 20px;
   text-decoration: none;
   color: ${(props: Prop) => props.$color || "#c4c4c4"};
@@ -74,16 +99,28 @@ const Context = styled(Link)`
     text-shadow: 0 0 2px #787878;
     cursor: pointer;
   }
+  @media screen and (min-width: 800px) and (max-width: 1024px) {
+    margin-left: 20px;
+    font-size: 18px;
+    & + & {
+      margin-left: 20px;
+    }
+  }
+  @media screen and (max-width: 799px) {
+    display: none;
+  }
 `;
 
 const RightContainer = styled.div`
-  padding-right: 20px;
   display: flex;
+  @media screen and (max-width: 799px) {
+    display: none;
+  }
 `;
 
 const LanguageOptionsContainer = styled.div`
   width: 110px;
-  max-height: 0;
+  max-height: ${(props: Prop) => props.maxHeight};
   position: absolute;
   top: 45px;
   right: -38px;
@@ -109,8 +146,12 @@ const Icon = styled.div`
   & + & {
     margin-left: 30px;
   }
-  &:hover > ${LanguageOptionsContainer} {
-    max-height: 180px;
+  @media screen and (min-width: 800px) and (max-width: 1024px) {
+    height: 30px;
+    width: 30px;
+    & + & {
+      margin-left: 20px;
+    }
   }
 `;
 
@@ -118,8 +159,8 @@ const NotificationDot = styled.div`
   height: 12px;
   width: 12px;
   position: absolute;
-  right: -4px;
-  bottom: 2px;
+  right: ${(props: Prop) => props.right};
+  bottom: ${(props: Prop) => props.bottom};
   border-radius: 50%;
   background-image: linear-gradient(#89b07e, #4f8365);
 `;
@@ -153,7 +194,7 @@ const SignBtn = styled.button`
   margin-left: 30px;
   padding: 0 20px;
   height: 35px;
-  color: ${(props: Prop) => props.$color || "#ffffff"};
+  color: ${(props: Prop) => props.$color || "#c4c4c4"};
   font-size: 18px;
   background-color: ${(props: Prop) => props.backgroundColor || "transparent"};
   border: 1px solid #616161;
@@ -162,12 +203,76 @@ const SignBtn = styled.button`
     box-shadow: 1px 1px 5px #616161;
     cursor: pointer;
   }
+  @media screen and (min-width: 800px) and (max-width: 1024px) {
+    margin-left: 20px;
+    padding: 0 10px;
+    height: 30px;
+    font-size: 16px;
+    align-self: flex-end;
+  }
+  @media screen and (max-width: 799px) {
+    margin: 5px auto;
+    font-size: 14px;
+  }
 `;
 
-function LanguageOptions() {
+const MenuIcon = styled.div`
+  margin-right: 10px;
+  height: 30px;
+  width: 30px;
+  display: none;
+  position: fixed;
+  right: 10px;
+  background-image: url(${menuIcon});
+  background-size: cover;
+  background-position: center;
+  @media screen and (max-width: 799px) {
+    display: block;
+  }
+`;
+
+const MobileContainer = styled.div`
+  max-width: ${(props: Prop) => props.maxWidth};
+  position: fixed;
+  right: 0px;
+  top: 50px;
+  background-color: #3c3c3c;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: max-width 0.3s ease-in;
+  box-shadow: -1px 0 5px #3c3c3c;
+`;
+
+const MobileContext = styled(Link)`
+  padding: 15px 10px;
+  width: 200px;
+  font-size: 14px;
+  position: relative;
+  text-decoration: none;
+  color: #c4c4c4;
+  border-bottom: 1px solid #c4c4c4;
+`;
+
+const MobileLanguageIcon = styled.div`
+  height: 30px;
+  width: 30px;
+  position: fixed;
+  right: 60px;
+  display: none;
+  background-image: url(${languageIcon});
+  background-size: cover;
+  background-position: center;
+  @media screen and (max-width: 799px) {
+    display: block;
+  }
+`;
+
+function LanguageOptions({ isShowLanguages }: { isShowLanguages: boolean }) {
   const [activeIndex, setActiveIndex] = useState(0);
+
   return (
-    <LanguageOptionsContainer>
+    <LanguageOptionsContainer maxHeight={isShowLanguages ? "180px" : "0"}>
       <LanguageHeader>{i18t("languages")}</LanguageHeader>
       {languages.map((lng, index) => (
         <Language
@@ -192,6 +297,13 @@ function Header() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [clickState, setClickState] = useState("");
+  const [isShowLanguages, setIsShowLanguages] = useState(false);
+  const [isShowMobileMenu, setIsShowMobileMenu] = useState(false);
+  const languageRef = useRef<HTMLDivElement>(null!);
+  const mobileMenuRef = useRef<HTMLDivElement>(null!);
+
+  useOnClickOutside(languageRef, () => setIsShowLanguages(false));
+  useOnClickOutside(mobileMenuRef, () => setIsShowMobileMenu(false));
 
   async function logoutHandler() {
     const ans = await Swal.fire({
@@ -266,7 +378,7 @@ function Header() {
               }}
             >
               {(friendRequests.length !== 0 || unreadMessages.length !== 0) && (
-                <NotificationDot />
+                <NotificationDot right="-4px" bottom="2px" />
               )}
             </Icon>
             <Icon
@@ -280,8 +392,12 @@ function Header() {
             />
           </>
         )}
-        <Icon img={`url(${languageIcon})`}>
-          <LanguageOptions />
+        <Icon
+          ref={languageRef}
+          img={`url(${languageIcon})`}
+          onClick={() => setIsShowLanguages((prev) => !prev)}
+        >
+          <LanguageOptions isShowLanguages={isShowLanguages} />
         </Icon>
         {isLogin ? (
           <SignBtn
@@ -305,6 +421,77 @@ function Header() {
           </SignBtn>
         )}
       </RightContainer>
+      <MobileLanguageIcon
+        ref={languageRef}
+        onClick={() => setIsShowLanguages((prev) => !prev)}
+      >
+        <LanguageOptions isShowLanguages={isShowLanguages} />
+      </MobileLanguageIcon>
+      <MenuIcon
+        ref={mobileMenuRef}
+        onClick={() => setIsShowMobileMenu((prev) => !prev)}
+      >
+        <MobileContainer maxWidth={isShowMobileMenu ? "250px" : "0"}>
+          {isLogin ? (
+            <>
+              <MobileContext to="profile">{t("profile")}</MobileContext>
+              <MobileContext to="friendList">
+                {t("friend_list")}
+                {(friendRequests.length !== 0 ||
+                  unreadMessages.length !== 0) && (
+                  <NotificationDot right="15px" bottom="15px" />
+                )}
+              </MobileContext>
+              <MobileContext
+                to="createNewProject"
+                onClick={() => {
+                  setClickState("create");
+                  setShowMessageFrame(false);
+                }}
+              >
+                {t("create")}
+              </MobileContext>
+              <MobileContext
+                to="favoriteList"
+                onClick={() => {
+                  setClickState("favorite");
+                  setShowMessageFrame(false);
+                }}
+              >
+                {t("favorite_list")}
+              </MobileContext>
+              <MobileContext
+                to="collection"
+                onClick={() => {
+                  setClickState("collection");
+                  setShowMessageFrame(false);
+                }}
+              >
+                {t("collection_list")}
+              </MobileContext>
+              <SignBtn
+                onClick={() => {
+                  setClickState("");
+                  logoutHandler();
+                }}
+              >
+                {t("logout")}
+              </SignBtn>
+            </>
+          ) : (
+            <SignBtn
+              $color="#3c3c3c"
+              backgroundColor="#f5dfa9"
+              onClick={() => {
+                setClickState("");
+                navigate("/login");
+              }}
+            >
+              {t("login")}
+            </SignBtn>
+          )}
+        </MobileContainer>
+      </MenuIcon>
     </Wrapper>
   );
 }

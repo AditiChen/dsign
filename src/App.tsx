@@ -22,6 +22,18 @@ const GlobalStyle = createGlobalStyle`
      min-height: 100vh;
   }`;
 
+const BodyWrapper = styled.div`
+  padding-top: 70px;
+  height: 100%;
+  width: 100vw;
+  @media screen and (min-width: 800px) and (max-width: 1199px) {
+    padding-top: 60px;
+  }
+  @media screen and (min-width: 300px) and (max-width: 799px) {
+    padding-top: 50px;
+  }
+`;
+
 const Loading = styled(ReactLoading)`
   margin: 50px auto;
 `;
@@ -37,7 +49,9 @@ function App() {
       <AuthContextProvider>
         <FriendContextProvider>
           {location.pathname !== "/" && <Header />}
-          <Outlet />
+          <BodyWrapper>
+            <Outlet />
+          </BodyWrapper>
           {location.pathname !== "/" && <Footer />}
         </FriendContextProvider>
       </AuthContextProvider>
