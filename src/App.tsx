@@ -29,7 +29,7 @@ const BodyWrapper = styled.div`
   @media screen and (min-width: 800px) and (max-width: 1199px) {
     padding-top: 60px;
   }
-  @media screen and (min-width: 300px) and (max-width: 799px) {
+  @media screen and (max-width: 799px) {
     padding-top: 50px;
   }
 `;
