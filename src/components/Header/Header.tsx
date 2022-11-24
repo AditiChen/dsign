@@ -198,11 +198,11 @@ function Header() {
       text: t("logout_confirm"),
       icon: "warning",
       confirmButtonColor: "#646464",
-      confirmButtonText: t("reject_yes_answer"),
+      confirmButtonText: t("reject_no_answer"),
       showDenyButton: true,
-      denyButtonText: t("reject_no_answer"),
+      denyButtonText: t("reject_yes_answer"),
     });
-    if (ans.isDenied === true) return;
+    if (ans.isConfirmed === true) return;
     logout();
     navigate("/login");
   }
