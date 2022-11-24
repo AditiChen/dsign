@@ -130,7 +130,7 @@ const NotificationDot = styled.div`
   top: ${(props: Prop) => props.top};
   right: ${(props: Prop) => props.right};
   border-radius: 50%;
-  background-color: #82ac7c;
+  background-image: linear-gradient(#89b07e, #4f8365);
 `;
 
 const FriendListContainer = styled.div`
@@ -363,11 +363,11 @@ function FriendList() {
       text: t("confirm_reject"),
       icon: "warning",
       confirmButtonColor: "#646464",
-      confirmButtonText: t("reject_yes_answer"),
+      confirmButtonText: t("reject_no_answer"),
       showDenyButton: true,
-      denyButtonText: t("reject_no_answer"),
+      denyButtonText: t("reject_yes_answer"),
     });
-    if (ans.isDenied === true) return;
+    if (ans.isConfirmed === true) return;
 
     const requestRef = collection(db, "friendRequests");
     const q = query(
@@ -388,11 +388,11 @@ function FriendList() {
       text: t("confirm_remove"),
       icon: "warning",
       confirmButtonColor: "#646464",
-      confirmButtonText: t("reject_yes_answer"),
+      confirmButtonText: t("reject_no_answer"),
       showDenyButton: true,
-      denyButtonText: t("reject_no_answer"),
+      denyButtonText: t("reject_yes_answer"),
     });
-    if (ans.isDenied === true) return;
+    if (ans.isConfirmed === true) return;
 
     const idRef = doc(db, "users", userId);
     await updateDoc(idRef, {

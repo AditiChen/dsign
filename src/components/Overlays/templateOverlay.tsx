@@ -13,10 +13,10 @@ import Cropper from "react-easy-crop";
 import ReactLoading from "react-loading";
 import { Slider, Typography } from "@mui/material";
 import { doc, updateDoc, arrayUnion } from "firebase/firestore";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 import { db, storage } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
+import upLoadImgToCloudStorage from "../../utils/upLoadImgToCloudStorage";
 
 import getCroppedImg from "../../utils/cropImage";
 import closeIcon from "../../icons/close-icon.png";
@@ -298,31 +298,18 @@ function Overlay({
       croppedAreaPixels,
       rotation
     )) as { file: File; url: string };
-    const urlByTime = `${+new Date()}`;
-    const imgRef = ref(storage, `images/${userId}/${urlByTime}`);
-    const uploadTask = uploadBytesResumable(imgRef, file);
-    await new Promise((resolve, reject) => {
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        },
-        (error) => {
-          console.log("Upload err", error);
-        },
-        async () => {
-          const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
-          setNewPhotoUrl(downloadUrl);
-          if (isAddToCollection) {
-            await updateDoc(doc(db, "users", userId), {
-              collection: arrayUnion(downloadUrl),
-            });
-          }
-          resolve(downloadUrl);
-        }
-      );
-    });
+    const fileNameByTime = `${+new Date()}`;
+    const downloadUrl = (await upLoadImgToCloudStorage(
+      file,
+      userId,
+      fileNameByTime
+    )) as string;
+    setNewPhotoUrl(downloadUrl);
+    if (isAddToCollection) {
+      await updateDoc(doc(db, "users", userId), {
+        collection: arrayUnion(downloadUrl),
+      });
+    }
     setProgressing(false);
     setIsAddToCollection(false);
     setShowOverlay((prev) => !prev);
@@ -337,7 +324,12 @@ function Overlay({
             <CloseIcon onClick={() => setShowOverlay((prev) => !prev)} />
             {imgSrc ? (
               <>
-                <ArrowIcon onClick={() => setImgSrc("")} />
+                <ArrowIcon
+                  onClick={() => {
+                    setImgSrc("");
+                    setProgressing(false);
+                  }}
+                />
                 <CropperContainer>
                   {progressing && (
                     <>
@@ -393,7 +385,7 @@ function Overlay({
                   ) : (
                     <ConfirmIcon onClick={() => setIsAddToCollection(true)} />
                   )}
-                  <Text>Add to collection?</Text>
+                  <Text>{t("add_to_collection")}</Text>
                   <Btn onClick={showCroppedImage}>{t("confirm_crop")}</Btn>
                 </ControlContainer>
               </>

@@ -6,6 +6,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import ReactLoading from "react-loading";
 import Swal from "sweetalert2";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
@@ -13,6 +14,7 @@ import getUserProjects from "../../utils/getUserProjects";
 import templatesImgArr from "../../components/Templates/TemplateImg";
 import templatesArr from "../../components/Templates/TemplatesArr";
 import SquareOverlay from "../../components/Overlays/squareOverlay";
+import templateData from "../../components/Templates/TemplatesData.json";
 
 import closeIcon from "../../icons/close-icon.png";
 import closeIconHover from "../../icons/close-icon-hover.png";
@@ -198,14 +200,12 @@ function CreateNewProject() {
   const { t } = useTranslation();
   const { userId, setUserProjects } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
-  const [addedTemplate, setAddedTemplate] = useState<
-    { uuid: string; type: number }[]
-  >([]);
   const [pages, setPages] = useState<
     {
-      type?: number;
+      key: string;
+      type: number;
       content?: string[];
-      url?: string[];
+      photos?: string[];
       location?: { lat?: number; lng?: number };
     }[]
   >([]);
@@ -213,7 +213,53 @@ function CreateNewProject() {
   const [title, setTitle] = useState("");
   const [mainImgSrc, setMainImgSrc] = useState("");
   const [showOverlay, setShowOverlay] = useState(false);
-  const googleMap = templatesArr[8];
+  const googleMap = templatesArr[9];
+
+  useEffect(() => {
+    const sessionStorageData = sessionStorage.getItem("pages");
+    if (sessionStorageData !== null) {
+      const parseData = JSON.parse(sessionStorageData);
+      setPages(parseData);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (pages.length === 0) {
+      window.sessionStorage.removeItem("pages");
+      window.sessionStorage.removeItem("title");
+      window.sessionStorage.removeItem("mainImg");
+      return;
+    }
+    const toJsonFormat = JSON.stringify(pages);
+    window.sessionStorage.setItem("pages", toJsonFormat);
+    window.sessionStorage.setItem("title", title);
+    window.sessionStorage.setItem("mainImg", mainImgSrc);
+  }, [pages, title, mainImgSrc]);
+
+  useEffect(() => {
+    if (position.lat === undefined && position.lng === undefined) return;
+    const mapIndex = pages.findIndex(
+      ({ type }) => templatesArr[type] === googleMap
+    );
+    if (mapIndex === -1) return;
+    const newPages = [...pages];
+    newPages[mapIndex].location = position;
+    setPages(newPages);
+  }, [position]);
+
+  const onDragEnd = (e: any) => {
+    const { source, destination } = e;
+    if (!destination) return;
+    const newPagesOrder = [...pages];
+    const [remove] = newPagesOrder.splice(source.index, 1);
+    newPagesOrder.splice(destination.index, 0, remove);
+    setPages(newPagesOrder);
+  };
+
+  function deleteHandler(index: number) {
+    const removeSelectedPageData = pages.filter((data, i) => index !== i);
+    setPages(removeSelectedPageData);
+  }
 
   async function confirmAllEdit() {
     if (title === "") {
@@ -232,9 +278,24 @@ function CreateNewProject() {
       });
       return;
     }
-    const checkPage = pages.findIndex((type) => type.type === undefined);
 
-    if (checkPage !== -1) {
+    let isLackingDetail = false;
+    for (let i = 0; i < pages.length; i += 1) {
+      if (pages[i].type === 9) {
+        isLackingDetail =
+          pages[i].location?.lat === 0 && pages[i].location?.lng === 0 && true;
+        break;
+      }
+      const checkPhoto = pages[i].photos?.findIndex((photo) => photo !== "");
+      const checkContent = pages[i].content?.findIndex(
+        (content) => content !== ""
+      );
+      if (checkPhoto === -1 || checkContent === -1) {
+        isLackingDetail = true;
+        break;
+      }
+    }
+    if (isLackingDetail === true) {
       Swal.fire({
         text: t("upload_failed"),
         icon: "warning",
@@ -252,12 +313,14 @@ function CreateNewProject() {
       time: new Date(),
       pages,
     });
-
     const newProjects = await getUserProjects(userId);
     setUserProjects(newProjects);
     setPages([]);
-    setAddedTemplate([]);
+    setPosition({});
     setMainImgSrc("");
+    window.sessionStorage.removeItem("pages");
+    window.sessionStorage.removeItem("title");
+    window.sessionStorage.removeItem("mainImg");
     Swal.fire({
       text: t("upload_successfully"),
       icon: "success",
@@ -267,112 +330,120 @@ function CreateNewProject() {
     navigate("/profile");
   }
 
-  const templateFilter = addedTemplate?.map((num) => ({
-    keyUuid: [num.uuid],
-    ChoseTemplate: templatesArr[num.type],
-  }));
-
-  useEffect(() => {
-    if (position.lat === undefined && position.lng === undefined) return;
-    const mapIndex = templateFilter.findIndex(
-      (map) => map.ChoseTemplate === googleMap
-    );
-    if (mapIndex === -1) return;
-    const googleMapData = { type: 8, location: position };
-    const newPages = [...pages];
-    newPages[mapIndex] = googleMapData;
-    setPages(newPages);
-  }, [position]);
-
-  function deleteHandler(index: number) {
-    const removeSelectedTemplate = addedTemplate.filter(
-      (data, i) => index !== i
-    );
-    const removeSelectedPageData = pages.filter((data, i) => index !== i);
-    setAddedTemplate(removeSelectedTemplate);
-    setPages(removeSelectedPageData);
-  }
-
   if (isLoading) {
     return (
       <Wrapper>
-        <Loading type="cylon" color="#3c3c3c" />
+        <Loading type="cylon" color="#ffffff" />
       </Wrapper>
     );
   }
 
   return (
     <>
-      <Wrapper>
-        <SelectContainer>
-          <SelectInnerContainer>
-            {templatesImgArr.map((pic, index) => (
-              <SelectImg
-                key={uuid()}
-                img={`url(${pic})`}
-                onClick={() => {
-                  setAddedTemplate((prev) => [
-                    ...prev,
-                    { uuid: uuid(), type: index },
-                  ]);
-                  setPages((prev) => [...prev, {}]);
-                }}
-              />
-            ))}
-          </SelectInnerContainer>
-        </SelectContainer>
-        <Container>
-          <EditorContainer>
-            {addedTemplate.length === 0 ? (
-              <Text>{t("create_new_project")}</Text>
-            ) : (
-              <>
-                <Input
-                  placeholder={t("project_title")}
-                  onChange={(e) => setTitle(e.target.value)}
+      <DragDropContext onDragEnd={(e) => onDragEnd(e)}>
+        <Wrapper>
+          <SelectContainer>
+            <SelectInnerContainer>
+              {templatesImgArr.map((pic, index) => (
+                <SelectImg
+                  key={uuid()}
+                  img={`url(${pic})`}
+                  onClick={() => {
+                    setPages((prev) => [
+                      ...prev,
+                      { key: uuid(), ...templateData[index] },
+                    ]);
+                  }}
                 />
-                {templateFilter.map(({ keyUuid, ChoseTemplate }, index) => (
-                  <SingleEditorContainer key={`${keyUuid}`}>
-                    <ChoseTemplate
-                      pages={pages}
-                      setPages={setPages}
-                      currentIndex={index}
-                      position={position}
-                      setPosition={setPosition}
-                    />
-                    <CloseIcon onClick={() => deleteHandler(index)} />
-                  </SingleEditorContainer>
-                ))}
-                <FooterContainer>
-                  {mainImgSrc === "" ? (
-                    <Btn
-                      backgroundColor="#f5dfa9"
-                      backgroundColorHover="#9d8a62"
-                      onClick={() => setShowOverlay((prev) => !prev)}
-                    >
-                      {t("upload_main_photo")}
-                    </Btn>
-                  ) : (
-                    <>
-                      <Btn onClick={() => setShowOverlay((prev) => !prev)}>
-                        {t("edit_main_photo")}
-                        <CheckedIcon />
-                      </Btn>
-                      <Btn
-                        backgroundColor="#f5dfa9"
-                        backgroundColorHover="#9d8a62"
-                        onClick={() => confirmAllEdit()}
+              ))}
+            </SelectInnerContainer>
+          </SelectContainer>
+          <Container>
+            <EditorContainer>
+              {pages.length === 0 ? (
+                <Text>{t("create_new_project")}</Text>
+              ) : (
+                <>
+                  <Input
+                    value={title}
+                    placeholder={t("project_title")}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                  <Droppable droppableId="drop-id">
+                    {(droppableProvided, droppableSnapshot) => (
+                      <div
+                        {...droppableProvided.droppableProps}
+                        ref={droppableProvided.innerRef}
                       >
-                        {t("confirm_edit")}
-                      </Btn>
-                    </>
-                  )}
-                </FooterContainer>
-              </>
-            )}
-          </EditorContainer>
-        </Container>
-      </Wrapper>
+                        {pages.map((page, index) => {
+                          const Template = templatesArr[page.type];
+                          return (
+                            <Draggable
+                              draggableId={page.key}
+                              index={index}
+                              key={page.key}
+                            >
+                              {(provided, snapshot) => (
+                                <SingleEditorContainer
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                >
+                                  <Template
+                                    pages={pages}
+                                    setPages={setPages}
+                                    currentIndex={index}
+                                    position={position}
+                                    setPosition={setPosition}
+                                  />
+                                  <CloseIcon
+                                    onClick={() => deleteHandler(index)}
+                                  />
+                                </SingleEditorContainer>
+                              )}
+                            </Draggable>
+                          );
+                        })}
+                        {droppableProvided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                  <FooterContainer>
+                    {mainImgSrc === "" ? (
+                      <>
+                        <Btn
+                          backgroundColor="#f5dfa9"
+                          backgroundColorHover="#9d8a62"
+                          onClick={() => setShowOverlay((prev) => !prev)}
+                        >
+                          {t("upload_main_photo")}
+                        </Btn>
+                        <Btn onClick={() => confirmAllEdit()}>
+                          {t("confirm_edit")}
+                        </Btn>
+                      </>
+                    ) : (
+                      <>
+                        <Btn onClick={() => setShowOverlay((prev) => !prev)}>
+                          {t("edit_main_photo")}
+                          <CheckedIcon />
+                        </Btn>
+                        <Btn
+                          backgroundColor="#f5dfa9"
+                          backgroundColorHover="#9d8a62"
+                          onClick={() => confirmAllEdit()}
+                        >
+                          {t("confirm_edit")}
+                        </Btn>
+                      </>
+                    )}
+                  </FooterContainer>
+                </>
+              )}
+            </EditorContainer>
+          </Container>
+        </Wrapper>
+      </DragDropContext>
       {showOverlay && (
         <SquareOverlay
           setShowOverlay={setShowOverlay}

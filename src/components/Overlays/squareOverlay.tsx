@@ -18,6 +18,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
 import getCroppedImg from "../../utils/cropImage";
+import upLoadImgToCloudStorage from "../../utils/upLoadImgToCloudStorage";
 
 import closeIcon from "../../icons/close-icon.png";
 import closeIconHover from "../../icons/close-icon-hover.png";
@@ -299,36 +300,23 @@ function SquareOverlay({
       croppedAreaPixels,
       rotation
     )) as { file: File; url: string };
-    const urlByTime = `${+new Date()}`;
-    const imgRef = ref(storage, `images/${userId}/${urlByTime}`);
-    const uploadTask = uploadBytesResumable(imgRef, file);
-    await new Promise((resolve, reject) => {
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        },
-        (error) => {
-          console.log("Upload err", error);
-        },
-        async () => {
-          const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
-          setMainImgSrc(downloadUrl);
-          if (isAddToCollection) {
-            await updateDoc(doc(db, "users", userId), {
-              collection: arrayUnion(downloadUrl),
-            });
-          }
-          if (usage === "avatar") {
-            await updateDoc(doc(db, "users", userId), {
-              avatar: downloadUrl,
-            });
-          }
-          resolve(downloadUrl);
-        }
-      );
-    });
+    const fileNameByTime = `${+new Date()}`;
+    const downloadUrl = (await upLoadImgToCloudStorage(
+      file,
+      userId,
+      fileNameByTime
+    )) as string;
+    if (isAddToCollection) {
+      await updateDoc(doc(db, "users", userId), {
+        collection: arrayUnion(downloadUrl),
+      });
+    }
+    if (usage === "avatar") {
+      await updateDoc(doc(db, "users", userId), {
+        avatar: downloadUrl,
+      });
+    }
+    setMainImgSrc(downloadUrl);
     setProgressing(false);
     setShowOverlay((prev) => !prev);
   }, [

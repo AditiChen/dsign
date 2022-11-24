@@ -33,9 +33,16 @@ const GoogleInput = styled.input`
 `;
 
 const ConfirmInputBtn = styled.button`
+  margin-left: 10px;
   height: 40px;
   width: 110px;
-  border: 1px solid #c3c3c3;
+  border: 1px solid #3c3c3c40;
+  border-radius: 10px;
+  &:hover {
+    cursor: pointer;
+    color: #ffffff;
+    background-color: #616161;
+  }
 `;
 
 const Loading = styled(ReactLoading)`

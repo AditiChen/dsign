@@ -286,11 +286,11 @@ function Profile() {
       text: t("delete_project_warning"),
       icon: "warning",
       confirmButtonColor: "#646464",
-      confirmButtonText: t("reject_yes_answer"),
+      confirmButtonText: t("reject_no_answer"),
       showDenyButton: true,
-      denyButtonText: t("reject_no_answer"),
+      denyButtonText: t("reject_yes_answer"),
     });
-    if (ans.isDenied === true) return;
+    if (ans.isConfirmed === true) return;
 
     await deleteDoc(doc(db, "projects", projectId));
     const userProjectsData = await getUserProjects(userId);
@@ -390,18 +390,20 @@ function Profile() {
                     </ProjectLeftContainer>
                     <ProjectRightContainer>
                       <ProjectRightInnerContainer>
-                        {projectData.pages[0].url &&
-                          projectData.pages[0].url.map((singleUrl: string) => (
-                            <PhotoUrl
-                              key={singleUrl}
-                              img={`url(${singleUrl})`}
-                            />
-                          ))}
+                        {/* {projectData.pages[0].photos &&
+                          projectData.pages[0].photos.map(
+                            (singleUrl: string) => (
+                              <PhotoUrl
+                                key={singleUrl}
+                                img={`url(${singleUrl})`}
+                              />
+                            )
+                          )} */}
 
-                        {/* <PhotoUrl
+                        <PhotoUrl
                           key={projectData.mainUrl}
                           img={`url(${projectData.mainUrl})`}
-                        /> */}
+                        />
                       </ProjectRightInnerContainer>
                     </ProjectRightContainer>
                   </SingleProjectContainer>

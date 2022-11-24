@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useJsApiLoader } from "@react-google-maps/api";
 import ReactLoading from "react-loading";
@@ -26,9 +26,10 @@ interface UserProjectType {
   title: string;
   time: number;
   pages: {
+    key: string;
     type: number;
     content?: string[];
-    url?: string[];
+    photos?: string[];
     location?: { lat?: number; lng?: number };
   }[];
 }
@@ -173,6 +174,7 @@ function SingleProject() {
     []
   );
   const [isLoading, setIsLoading] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null!);
 
   useEffect(() => {
     async function getData() {
@@ -184,14 +186,18 @@ function SingleProject() {
     getData();
   }, []);
 
+  useEffect(() => {
+    containerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+  }, [singleProjectData]);
+
   const types = singleProjectData[0]?.pages?.map((data) => data.type);
   const templateFilter = types?.map((num) => templatesArr[num]);
-  const googleMap = templatesArr[8];
+  const googleMap = templatesArr[9];
 
   return (
     <Wrapper>
       <ArrowIcon onClick={() => navigate(-1)} />
-      <Container>
+      <Container ref={containerRef}>
         {isLoading || !isLoaded ? (
           <Loading type="cylon" color="#3c3c3c" />
         ) : (
@@ -261,7 +267,7 @@ function SingleProject() {
                       key={`${index + 1}`}
                       photoUrl={
                         (singleProjectData &&
-                          singleProjectData[0]?.pages[index].url) ||
+                          singleProjectData[0]?.pages[index].photos) ||
                         []
                       }
                       content={

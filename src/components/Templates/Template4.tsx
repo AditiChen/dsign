@@ -16,17 +16,19 @@ interface InsertProp {
   setPages: Dispatch<
     SetStateAction<
       {
-        type?: number;
+        key: string;
+        type: number;
         content?: string[];
-        url?: string[];
+        photos?: string[];
         location?: { lat?: number; lng?: number };
       }[]
     >
   >;
   pages: {
-    type?: number;
+    key: string;
+    type: number;
     content?: string[];
-    url?: string[];
+    photos?: string[];
     location?: { lat?: number; lng?: number };
   }[];
   currentIndex: number;
@@ -103,20 +105,13 @@ function Template4(props: InsertProp) {
 
   useEffect(() => {
     setInputText(pages[currentIndex].content || [""]);
-    setStorageUrl(pages[currentIndex].url || ["", "", "", ""]);
+    setStorageUrl(pages[currentIndex].photos || ["", "", "", ""]);
   }, []);
 
   useEffect(() => {
-    const pageData = {
-      type: 4,
-      content: inputText,
-      url: storageUrl,
-    };
-    const contentCheck = pageData.content.every((text) => text !== "");
-    const urlCheck = storageUrl.every((url) => url !== "");
-    if (contentCheck === false || urlCheck === false) return;
     const newPages = [...pages];
-    newPages[currentIndex] = pageData;
+    newPages[currentIndex].content = inputText;
+    newPages[currentIndex].photos = storageUrl;
     setPages(newPages);
   }, [inputText, storageUrl]);
 
