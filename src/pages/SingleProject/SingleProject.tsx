@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useJsApiLoader } from "@react-google-maps/api";
 import ReactLoading from "react-loading";
@@ -174,6 +174,7 @@ function SingleProject() {
     []
   );
   const [isLoading, setIsLoading] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null!);
 
   useEffect(() => {
     async function getData() {
@@ -185,6 +186,10 @@ function SingleProject() {
     getData();
   }, []);
 
+  useEffect(() => {
+    containerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+  }, [singleProjectData]);
+
   const types = singleProjectData[0]?.pages?.map((data) => data.type);
   const templateFilter = types?.map((num) => templatesArr[num]);
   const googleMap = templatesArr[9];
@@ -192,7 +197,7 @@ function SingleProject() {
   return (
     <Wrapper>
       <ArrowIcon onClick={() => navigate(-1)} />
-      <Container>
+      <Container ref={containerRef}>
         {isLoading || !isLoaded ? (
           <Loading type="cylon" color="#3c3c3c" />
         ) : (

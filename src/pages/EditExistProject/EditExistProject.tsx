@@ -208,15 +208,14 @@ const Loading = styled(ReactLoading)`
 function EditExistProject() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { userId, name, setUserProjects, singleProjectId, setSingleProjectId } =
-    useContext(AuthContext);
+  const { userId, setUserProjects, singleProjectId } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [pages, setPages] = useState<
     {
       key: string;
       type: number;
       content?: string[];
-      url?: string[];
+      photos?: string[];
       location?: { lat?: number; lng?: number };
     }[]
   >([]);
@@ -244,40 +243,6 @@ function EditExistProject() {
     fetchData();
   }, []);
 
-  async function confirmAllEdit() {
-    const checkPage = pages.every((type) => type.type === undefined);
-    if (checkPage) {
-      Swal.fire({
-        text: t("upload_failed"),
-        icon: "warning",
-        confirmButtonColor: "#646464",
-      });
-      return;
-    }
-    setIsLoading(true);
-    await setDoc(doc(db, "projects", singleProjectId), {
-      author: name,
-      uid: userId,
-      mainUrl: mainImgSrc,
-      projectId: singleProjectId,
-      title,
-      time: new Date(),
-      pages,
-    });
-
-    const newProjects = await getUserProjects(userId);
-    setUserProjects(newProjects);
-    setPages([]);
-    setSingleProjectId("");
-    Swal.fire({
-      text: t("upload_successfully"),
-      icon: "success",
-      confirmButtonColor: "#646464",
-    });
-    navigate("/profile");
-    setIsLoading(false);
-  }
-
   useEffect(() => {
     if (position.lat === undefined && position.lng === undefined) return;
     const mapIndex = pages.findIndex(
@@ -288,6 +253,71 @@ function EditExistProject() {
     newPages[mapIndex].location = position;
     setPages(newPages);
   }, [position]);
+
+  async function confirmAllEdit() {
+    if (title === "") {
+      Swal.fire({
+        text: t("lack_main_title"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
+      return;
+    }
+    if (mainImgSrc === "") {
+      Swal.fire({
+        text: t("lack_main_photo"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
+      return;
+    }
+
+    let isLackingDetail = false;
+    for (let i = 0; i < pages.length; i += 1) {
+      if (pages[i].type === 9) {
+        isLackingDetail =
+          pages[i].location?.lat === 0 && pages[i].location?.lng === 0 && true;
+        break;
+      }
+      const checkPhoto = pages[i].photos?.findIndex((photo) => photo !== "");
+      const checkContent = pages[i].content?.findIndex(
+        (content) => content !== ""
+      );
+      if (checkPhoto === -1 || checkContent === -1) {
+        isLackingDetail = true;
+        break;
+      }
+    }
+    if (isLackingDetail === true) {
+      Swal.fire({
+        text: t("upload_failed"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
+      return;
+    }
+    setIsLoading(true);
+    await setDoc(doc(db, "projects", singleProjectId), {
+      uid: userId,
+      mainUrl: mainImgSrc,
+      projectId: singleProjectId,
+      title,
+      time: new Date(),
+      pages,
+    });
+    const newProjects = await getUserProjects(userId);
+    setUserProjects(newProjects);
+    setPages([]);
+    setPosition({});
+    setMainImgSrc("");
+    Swal.fire({
+      text: t("upload_successfully"),
+      icon: "success",
+      confirmButtonColor: "#646464",
+    });
+    setIsLoading(false);
+    navigate("/profile");
+  }
 
   function deleteHandler(index: number) {
     const removeSelectedPageData = pages.filter((data, i) => index !== i);
@@ -306,7 +336,7 @@ function EditExistProject() {
   if (isLoading) {
     return (
       <Wrapper>
-        <Loading type="cylon" color="#3c3c3c" />
+        <Loading type="cylon" color="#ffffff" />
       </Wrapper>
     );
   }

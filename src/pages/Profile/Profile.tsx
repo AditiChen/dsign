@@ -286,11 +286,11 @@ function Profile() {
       text: t("delete_project_warning"),
       icon: "warning",
       confirmButtonColor: "#646464",
-      confirmButtonText: t("reject_yes_answer"),
+      confirmButtonText: t("reject_no_answer"),
       showDenyButton: true,
-      denyButtonText: t("reject_no_answer"),
+      denyButtonText: t("reject_yes_answer"),
     });
-    if (ans.isDenied === true) return;
+    if (ans.isConfirmed === true) return;
 
     await deleteDoc(doc(db, "projects", projectId));
     const userProjectsData = await getUserProjects(userId);
