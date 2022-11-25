@@ -55,8 +55,8 @@ const OverlayModal = styled.div`
   z-index: 102;
   background-color: white;
   @media screen and (max-width: 1399px) {
-    max-width: 95vw;
-    max-height: 95vh;
+    max-width: 90vw;
+    max-height: 90vh;
   }
 `;
 

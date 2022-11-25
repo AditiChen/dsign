@@ -26,15 +26,15 @@ root.render(
         <Route index element={<Landing />} />
         <Route path="portfolioBricks" element={<PortfolioBricks />} />
         <Route path="profile" element={<Profile />} />
-        <Route path="singleProject" element={<SingleProject />} />
+        <Route path="singleProject/:id" element={<SingleProject />} />
         <Route path="createNewProject" element={<CreateNewProject />} />
-        <Route path="editExistProject" element={<EditExistProject />} />
+        <Route path="editExistProject/:id" element={<EditExistProject />} />
         <Route path="friendList" element={<FriendList />} />
-        <Route path="userProfile" element={<OtherUserProfile />} />
+        <Route path="userProfile/:id" element={<OtherUserProfile />} />
         <Route path="favoriteList" element={<FavoriteList />} />
         <Route path="collection" element={<MaterialCollection />} />
         <Route path="login" element={<Login />} />
-        <Route path="*" element={<Navigate to="profile" replace />} />
+        <Route path="*" element={<Navigate to="portfolioBricks" replace />} />
       </Route>
     </Routes>
   </BrowserRouter>

@@ -2,11 +2,11 @@ import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { doc, getDoc } from "firebase/firestore";
 import ReactLoading from "react-loading";
+import { useParams } from "react-router-dom";
 
 import { db } from "../../context/firebaseSDK";
 import getUserProjects from "../../utils/getUserProjects";
 import { AuthContext } from "../../context/authContext";
-import { FriendContext } from "../../context/friendContext";
 import Brick from "../../components/Brick/Brick";
 import FriendIcon from "../../components/IconButtons/FriendIcon";
 
@@ -144,8 +144,8 @@ const Loading = styled(ReactLoading)`
 `;
 
 function OtherUserProfile() {
+  const id = useParams().id as string;
   const { userId, friendList } = useContext(AuthContext);
-  const { clickedUserId } = useContext(FriendContext);
   const [isLoading, setIsLoading] = useState(false);
   const [userProjects, setUserProjects] = useState<UserProjectsType[]>([]);
   const [userData, setUserData] = useState<{
@@ -159,7 +159,7 @@ function OtherUserProfile() {
   useEffect(() => {
     setIsLoading(true);
     async function getData() {
-      const docSnap = await getDoc(doc(db, "users", clickedUserId));
+      const docSnap = await getDoc(doc(db, "users", id));
       const returnedData = docSnap.data() as {
         uid: string;
         name: string;
@@ -189,9 +189,9 @@ function OtherUserProfile() {
         <UserInfoContainer>
           <Avatar url={userData && `url(${userData.avatar})`}>
             <AddFriendIconContainer>
-              {friendList.indexOf(clickedUserId) === -1 &&
-                clickedUserId !== userId &&
-                userId !== "" && <FriendIcon requestId={clickedUserId} />}
+              {friendList.indexOf(id) === -1 &&
+                id !== userId &&
+                userId !== "" && <FriendIcon requestId={id} />}
             </AddFriendIconContainer>
           </Avatar>
           <UserInfo size="24px" weight="600">

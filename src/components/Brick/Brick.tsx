@@ -62,6 +62,7 @@ const InfoContainer = styled.div`
   align-items: center;
   @media screen and (max-width: 799px) {
     width: 250px;
+    height: 40px;
   }
 `;
 
@@ -89,10 +90,10 @@ const SingleProjectContainer = styled.div`
   }
   @media screen and (max-width: 799px) {
     width: 250px;
-    height: 300px;
+    height: 290px;
     &:hover {
       width: 250px;
-      height: 300px;
+      height: 290px;
     }
     &:hover > ${ImgContainer} {
       width: 250px;
@@ -115,11 +116,18 @@ const Avatar = styled.div`
   &:hover {
     cursor: pointer;
   }
+  @media screen and (max-width: 799px) {
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 const Author = styled.div`
   margin-left: 10px;
-  font-size: ${(props: Prop) => props.fontSize};
+  font-size: 18px;
+  @media screen and (max-width: 799px) {
+    font-size: 16px;
+  }
 `;
 
 export default function Brick({
@@ -138,29 +146,21 @@ export default function Brick({
   title: string;
 }) {
   const navigate = useNavigate();
-  const { userId, setSingleProjectId, favoriteList, friendList } =
-    useContext(AuthContext);
-  const { setClickedUserId } = useContext(FriendContext);
-
-  function toSingleProjectPage() {
-    setSingleProjectId(projectId);
-    navigate("/singleProject");
-  }
+  const { userId, favoriteList } = useContext(AuthContext);
 
   function toProfileHandler() {
     if (uid === userId) {
       navigate("/profile");
       return;
     }
-    setClickedUserId(uid);
-    navigate("/userProfile");
+    navigate(`/userProfile/${uid}`);
   }
 
   return (
     <SingleProjectContainer key={projectId}>
       <ImgContainer
         img={`url(${mainUrl})`}
-        onClick={() => toSingleProjectPage()}
+        onClick={() => navigate(`/singleProject/${projectId}`)}
       >
         <TitleContainer>
           <TitleText>{title}</TitleText>
@@ -168,7 +168,7 @@ export default function Brick({
       </ImgContainer>
       <InfoContainer>
         <Avatar img={`url(${avatar})`} onClick={() => toProfileHandler()} />
-        <Author fontSize="18px">{name}</Author>
+        <Author>{name}</Author>
         {favoriteList.indexOf(projectId) === -1 ? (
           <LikeIcon
             margin="0 0 0 auto"

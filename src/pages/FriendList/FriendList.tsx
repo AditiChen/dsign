@@ -15,7 +15,7 @@ import {
   arrayUnion,
   arrayRemove,
 } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import { AuthContext } from "../../context/authContext";
@@ -296,7 +296,6 @@ function FriendList() {
   const {
     friendRequests,
     friendDataList,
-    setClickedUserId,
     showMessageFrame,
     setShowMessageFrame,
     unreadMessages,
@@ -588,8 +587,7 @@ function FriendList() {
                 <Avatar
                   url={`url(${user.avatar})`}
                   onClick={() => {
-                    setClickedUserId(user.uid);
-                    navigate("/userProfile");
+                    navigate(`/userProfile/${user.uid}`);
                   }}
                 />
                 <TextContainer>

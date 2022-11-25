@@ -2,13 +2,11 @@ import { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useJsApiLoader } from "@react-google-maps/api";
 import ReactLoading from "react-loading";
-
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import templatesArr from "../../components/singleProjectPageTemplates/TemplatesArr";
 import { GoogleMapAPI } from "../../components/singleProjectPageTemplates/GoogleMapAPI";
 import { AuthContext } from "../../context/authContext";
-import { FriendContext } from "../../context/friendContext";
 import getSingleProject from "../../utils/getSingleProject";
 import { LikeIcon, LikedIcon } from "../../components/IconButtons/LikeIcons";
 import FriendIcon from "../../components/IconButtons/FriendIcon";
@@ -35,11 +33,9 @@ interface UserProjectType {
 }
 
 const Wrapper = styled.div`
-  padding-top: 80px;
   width: 100%;
-  min-width: 100vw;
   height: 100%;
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 140px);
   display: flex;
   position: relative;
   background-color: #3c3c3c90;
@@ -163,13 +159,12 @@ const Loading = styled(ReactLoading)`
 
 function SingleProject() {
   const navigate = useNavigate();
+  const id = useParams().id as string;
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
     libraries: ["places"],
   });
-  const { userId, singleProjectId, favoriteList, friendList } =
-    useContext(AuthContext);
-  const { setClickedUserId } = useContext(FriendContext);
+  const { userId, favoriteList, friendList } = useContext(AuthContext);
   const [singleProjectData, setSingleProjectData] = useState<UserProjectType[]>(
     []
   );
@@ -179,7 +174,7 @@ function SingleProject() {
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
-      const result = await getSingleProject(singleProjectId);
+      const result = await getSingleProject(id);
       setSingleProjectData(result);
       setIsLoading(false);
     }
@@ -207,8 +202,7 @@ function SingleProject() {
               <Avatar
                 img={`url(${singleProjectData[0]?.avatar})`}
                 onClick={() => {
-                  setClickedUserId(singleProjectData[0]?.uid);
-                  navigate("/userProfile");
+                  navigate(`/userProfile/${singleProjectData[0]?.uid}`);
                 }}
               >
                 <UserInfoContainer>
@@ -230,16 +224,16 @@ function SingleProject() {
                   </UserInfoInnerContainer>
                 </UserInfoContainer>
               </Avatar>
-              {favoriteList.indexOf(singleProjectId) === -1 ? (
+              {favoriteList.indexOf(id) === -1 ? (
                 <LikeIcon
                   margin="0 0 0 20px"
                   width="36px"
                   height="36px"
-                  projectId={singleProjectId}
+                  projectId={id}
                 />
               ) : (
                 <LikedIcon
-                  projectId={singleProjectId}
+                  projectId={id}
                   margin="0 0 0 20px"
                   width="36px"
                   height="36px"

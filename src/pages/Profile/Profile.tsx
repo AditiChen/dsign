@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import ReactLoading from "react-loading";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Swal from "sweetalert2";
 
@@ -35,11 +35,11 @@ interface Prop {
 }
 
 const Wrapper = styled.div`
-  padding: 130px 0 50px;
+  padding: 50px 0;
   width: 100%;
   min-width: 100vw;
   height: 100%;
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 140px);
   position: relative;
   display: flex;
   background-color: #787878;
@@ -259,7 +259,6 @@ function Profile() {
     userId,
     introduction,
     userProjects,
-    setSingleProjectId,
     setUserProjects,
   } = useContext(AuthContext);
   const [mainImgSrc, setMainImgSrc] = useState("");
@@ -270,16 +269,6 @@ function Profile() {
   useEffect(() => {
     setInputText(introduction);
   }, [introduction]);
-
-  function toSingleProjectPage(projectId: string) {
-    setSingleProjectId(projectId);
-    navigate("/singleProject");
-  }
-
-  function toEditExistProjectPage(projectId: string) {
-    setSingleProjectId(projectId);
-    navigate("/editExistProject");
-  }
 
   async function deleteProjectHandler(projectId: string) {
     const ans = await Swal.fire({
@@ -367,7 +356,7 @@ function Profile() {
                           hoverImg={`url(${viewIconHover})`}
                           marginLift="0"
                           onClick={() =>
-                            toSingleProjectPage(projectData.projectId)
+                            navigate(`/singleProject/${projectData.projectId}`)
                           }
                         />
                         <Icon
@@ -375,7 +364,9 @@ function Profile() {
                           hoverImg={`url(${editIconHover})`}
                           marginLift="15px"
                           onClick={() =>
-                            toEditExistProjectPage(projectData.projectId)
+                            navigate(
+                              `/editExistProject/${projectData.projectId}`
+                            )
                           }
                         />
                         <Icon

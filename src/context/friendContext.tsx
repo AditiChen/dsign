@@ -28,8 +28,6 @@ interface FriendData {
 }
 
 interface FriendContextType {
-  clickedUserId: string;
-  setClickedUserId: Dispatch<SetStateAction<string>>;
   friendDataList: FriendData[];
   setFriendDataList: Dispatch<SetStateAction<FriendData[]>>;
   friendRequests: FriendData[];
@@ -40,8 +38,6 @@ interface FriendContextType {
 }
 
 export const FriendContext = createContext<FriendContextType>({
-  clickedUserId: "",
-  setClickedUserId: () => {},
   friendDataList: [],
   setFriendDataList: () => {},
   friendRequests: [],
@@ -53,7 +49,6 @@ export const FriendContext = createContext<FriendContextType>({
 
 export function FriendContextProvider({ children }: BodyProp) {
   const { userId, friendList } = useContext(AuthContext);
-  const [clickedUserId, setClickedUserId] = useState("");
   const [friendRequests, setFriendRequests] = useState<FriendData[]>([]);
   const [friendDataList, setFriendDataList] = useState<FriendData[]>([]);
   const [showMessageFrame, setShowMessageFrame] = useState(false);
@@ -128,8 +123,6 @@ export function FriendContextProvider({ children }: BodyProp) {
     () => ({
       friendDataList,
       setFriendDataList,
-      clickedUserId,
-      setClickedUserId,
       friendRequests,
       setFriendRequests,
       showMessageFrame,
@@ -139,8 +132,6 @@ export function FriendContextProvider({ children }: BodyProp) {
     [
       friendDataList,
       setFriendDataList,
-      clickedUserId,
-      setClickedUserId,
       friendRequests,
       setFriendRequests,
       showMessageFrame,

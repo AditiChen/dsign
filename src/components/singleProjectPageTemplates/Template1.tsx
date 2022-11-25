@@ -35,7 +35,7 @@ const BackgroundImg = styled.div`
 `;
 
 const Trapezoid = styled.div`
-  height: 100%;
+  height: 760px;
   width: 496px;
   position: absolute;
   right: 0;

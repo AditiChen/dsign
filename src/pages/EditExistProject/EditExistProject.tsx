@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { v4 as uuid } from "uuid";
 import { doc, setDoc } from "firebase/firestore";
 import ReactLoading from "react-loading";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
@@ -23,16 +23,14 @@ import arrowIcon from "../../icons/arrow-icon-white.png";
 import arrowIconHover from "../../icons/arrow-icon-hover.png";
 
 const Wrapper = styled.div`
-  padding-top: 80px;
   width: 100%;
-  min-width: 100vw;
   height: 100%;
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 140px);
   display: flex;
   position: relative;
   background-color: #787878;
   @media screen and (max-width: 1860px) {
-    padding-top: 200px;
+    padding-top: 120px;
   }
 `;
 
@@ -208,7 +206,8 @@ const Loading = styled(ReactLoading)`
 function EditExistProject() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { userId, setUserProjects, singleProjectId } = useContext(AuthContext);
+  const id = useParams().id as string;
+  const { userId, setUserProjects } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [pages, setPages] = useState<
     {
@@ -226,9 +225,8 @@ function EditExistProject() {
   const googleMap = templatesArr[9];
 
   useEffect(() => {
-    if (singleProjectId === "") return;
     async function fetchData() {
-      const projectDetail = await getSingleProject(singleProjectId);
+      const projectDetail = await getSingleProject(id);
       setPages(projectDetail[0].pages);
       setTitle(projectDetail[0].title);
       setMainImgSrc(projectDetail[0].mainUrl);
@@ -297,10 +295,10 @@ function EditExistProject() {
       return;
     }
     setIsLoading(true);
-    await setDoc(doc(db, "projects", singleProjectId), {
+    await setDoc(doc(db, "projects", id), {
       uid: userId,
       mainUrl: mainImgSrc,
-      projectId: singleProjectId,
+      projectId: id,
       title,
       time: new Date(),
       pages,

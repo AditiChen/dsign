@@ -63,8 +63,6 @@ interface AuthContextType {
   setFavoriteList: Dispatch<SetStateAction<string[]>>;
   collection: string[];
   setCollection: Dispatch<SetStateAction<string[]>>;
-  singleProjectId: string;
-  setSingleProjectId: Dispatch<SetStateAction<string>>;
   userProjects: UserProjectsType[];
   setUserProjects: Dispatch<SetStateAction<UserProjectsType[]>>;
   emailSignInHandler(email: string, password: string): void;
@@ -90,8 +88,6 @@ export const AuthContext = createContext<AuthContextType>({
   setUserProjects: () => {},
   collection: [],
   setCollection: () => {},
-  singleProjectId: "",
-  setSingleProjectId: () => {},
   emailSignInHandler: () => {},
   signUp: () => {},
   googleLoginHandler: () => {},
@@ -112,7 +108,6 @@ export function AuthContextProvider({ children }: BodyProp) {
   const [friendList, setFriendList] = useState<string[]>([]);
   const [favoriteList, setFavoriteList] = useState<string[]>([]);
   const [collection, setCollection] = useState<string[]>([]);
-  const [singleProjectId, setSingleProjectId] = useState("");
   const [userProjects, setUserProjects] = useState<UserProjectsType[]>([]);
 
   useEffect(() => {
@@ -334,8 +329,6 @@ export function AuthContextProvider({ children }: BodyProp) {
       logout,
       userProjects,
       setUserProjects,
-      singleProjectId,
-      setSingleProjectId,
     }),
     [
       isLogin,
@@ -358,8 +351,6 @@ export function AuthContextProvider({ children }: BodyProp) {
       logout,
       userProjects,
       setUserProjects,
-      singleProjectId,
-      setSingleProjectId,
     ]
   );
 
