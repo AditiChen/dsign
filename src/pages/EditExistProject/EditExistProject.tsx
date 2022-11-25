@@ -206,7 +206,6 @@ const Loading = styled(ReactLoading)`
 function EditExistProject() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const id = useParams().id as string;
   const { userId, setUserProjects } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [pages, setPages] = useState<
@@ -224,9 +223,12 @@ function EditExistProject() {
   const [showOverlay, setShowOverlay] = useState(false);
   const googleMap = templatesArr[9];
 
+  const urlString = new URL(window.location.href);
+  const singleProjectId = urlString.searchParams.get("id") as string;
+
   useEffect(() => {
     async function fetchData() {
-      const projectDetail = await getSingleProject(id);
+      const projectDetail = await getSingleProject(singleProjectId);
       setPages(projectDetail[0].pages);
       setTitle(projectDetail[0].title);
       setMainImgSrc(projectDetail[0].mainUrl);
@@ -295,10 +297,10 @@ function EditExistProject() {
       return;
     }
     setIsLoading(true);
-    await setDoc(doc(db, "projects", id), {
+    await setDoc(doc(db, "projects", singleProjectId), {
       uid: userId,
       mainUrl: mainImgSrc,
-      projectId: id,
+      projectId: singleProjectId,
       title,
       time: new Date(),
       pages,

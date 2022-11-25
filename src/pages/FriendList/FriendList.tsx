@@ -587,7 +587,7 @@ function FriendList() {
                 <Avatar
                   url={`url(${user.avatar})`}
                   onClick={() => {
-                    navigate(`/userProfile/${user.uid}`);
+                    navigate(`/userProfile?id=${user.uid}`);
                   }}
                 />
                 <TextContainer>

@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { doc, getDoc } from "firebase/firestore";
 import ReactLoading from "react-loading";
-import { useParams } from "react-router-dom";
 
 import { db } from "../../context/firebaseSDK";
 import getUserProjects from "../../utils/getUserProjects";
@@ -36,11 +35,10 @@ interface UserProjectsType {
 }
 
 const Wrapper = styled.div`
-  padding: 130px 0 50px;
+  padding: 50px;
   width: 100%;
   min-width: 100vw;
   height: 100%;
-  min-height: calc(100vh - 80px);
   position: relative;
   display: flex;
 `;
@@ -144,7 +142,6 @@ const Loading = styled(ReactLoading)`
 `;
 
 function OtherUserProfile() {
-  const id = useParams().id as string;
   const { userId, friendList } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [userProjects, setUserProjects] = useState<UserProjectsType[]>([]);
@@ -156,10 +153,13 @@ function OtherUserProfile() {
     introduction: string;
   }>();
 
+  const urlString = new URL(window.location.href);
+  const otherUserId = urlString.searchParams.get("id") as string;
+
   useEffect(() => {
     setIsLoading(true);
     async function getData() {
-      const docSnap = await getDoc(doc(db, "users", id));
+      const docSnap = await getDoc(doc(db, "users", otherUserId));
       const returnedData = docSnap.data() as {
         uid: string;
         name: string;
@@ -189,9 +189,9 @@ function OtherUserProfile() {
         <UserInfoContainer>
           <Avatar url={userData && `url(${userData.avatar})`}>
             <AddFriendIconContainer>
-              {friendList.indexOf(id) === -1 &&
-                id !== userId &&
-                userId !== "" && <FriendIcon requestId={id} />}
+              {friendList.indexOf(otherUserId) === -1 &&
+                otherUserId !== userId &&
+                userId !== "" && <FriendIcon requestId={otherUserId} />}
             </AddFriendIconContainer>
           </Avatar>
           <UserInfo size="24px" weight="600">

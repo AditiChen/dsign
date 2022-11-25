@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import ReactLoading from "react-loading";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Swal from "sweetalert2";
 
@@ -356,7 +356,9 @@ function Profile() {
                           hoverImg={`url(${viewIconHover})`}
                           marginLift="0"
                           onClick={() =>
-                            navigate(`/singleProject/${projectData.projectId}`)
+                            navigate(
+                              `/singleProject?id=${projectData.projectId}`
+                            )
                           }
                         />
                         <Icon
@@ -365,7 +367,7 @@ function Profile() {
                           marginLift="15px"
                           onClick={() =>
                             navigate(
-                              `/editExistProject/${projectData.projectId}`
+                              `/editExistProject?id=${projectData.projectId}`
                             )
                           }
                         />

@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useJsApiLoader } from "@react-google-maps/api";
 import ReactLoading from "react-loading";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import templatesArr from "../../components/singleProjectPageTemplates/TemplatesArr";
 import { GoogleMapAPI } from "../../components/singleProjectPageTemplates/GoogleMapAPI";
@@ -159,7 +159,6 @@ const Loading = styled(ReactLoading)`
 
 function SingleProject() {
   const navigate = useNavigate();
-  const id = useParams().id as string;
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
     libraries: ["places"],
@@ -171,10 +170,13 @@ function SingleProject() {
   const [isLoading, setIsLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null!);
 
+  const urlString = new URL(window.location.href);
+  const singleProjectId = urlString.searchParams.get("id") as string;
+
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
-      const result = await getSingleProject(id);
+      const result = await getSingleProject(singleProjectId);
       setSingleProjectData(result);
       setIsLoading(false);
     }
@@ -189,6 +191,14 @@ function SingleProject() {
   const templateFilter = types?.map((num) => templatesArr[num]);
   const googleMap = templatesArr[9];
 
+  function toProfileHandler(uid: string) {
+    if (uid === userId) {
+      navigate("/profile");
+      return;
+    }
+    navigate(`/userProfile?id=${uid}`);
+  }
+
   return (
     <Wrapper>
       <ArrowIcon onClick={() => navigate(-1)} />
@@ -202,7 +212,7 @@ function SingleProject() {
               <Avatar
                 img={`url(${singleProjectData[0]?.avatar})`}
                 onClick={() => {
-                  navigate(`/userProfile/${singleProjectData[0]?.uid}`);
+                  toProfileHandler(singleProjectData[0]?.uid);
                 }}
               >
                 <UserInfoContainer>
@@ -224,16 +234,16 @@ function SingleProject() {
                   </UserInfoInnerContainer>
                 </UserInfoContainer>
               </Avatar>
-              {favoriteList.indexOf(id) === -1 ? (
+              {favoriteList.indexOf(singleProjectId) === -1 ? (
                 <LikeIcon
                   margin="0 0 0 20px"
                   width="36px"
                   height="36px"
-                  projectId={id}
+                  projectId={singleProjectId}
                 />
               ) : (
                 <LikedIcon
-                  projectId={id}
+                  projectId={singleProjectId}
                   margin="0 0 0 20px"
                   width="36px"
                   height="36px"

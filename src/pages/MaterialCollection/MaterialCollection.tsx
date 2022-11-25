@@ -6,10 +6,12 @@ import { v4 as uuid } from "uuid";
 import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import Swal from "sweetalert2";
+import imageCompression from "browser-image-compression";
 
 import { db, storage } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
 import SinglePhotoOverlay from "../../components/Overlays/singlePhotoOverlay";
+import upLoadImgToCloudStorage from "../../utils/upLoadImgToCloudStorage";
 
 import uploadPhotoIcon from "../../icons/uploadPhoto-icon.png";
 import uploadPhotoIconHover from "../../icons/uploadPhoto-icon-hover.png";
@@ -186,32 +188,26 @@ function MaterialCollection() {
   const { userId, collection } = useContext(AuthContext);
   const [showOverlay, setShowOverlay] = useState(false);
   const [currentUrl, setCurrentUrl] = useState("");
-  const [progressing, setProgressing] = useState(100);
+  const [progressing, setProgressing] = useState(false);
 
   const onUploadImgFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files === null) return;
     const newFiles = Array.from(e.target.files);
-    newFiles.forEach((file: File) => {
+    newFiles.forEach(async (file: File) => {
+      setProgressing(true);
+      const compressedFile = await imageCompression(file, {
+        maxSizeMB: 1,
+      });
       const urlByUuid = `${uuid()}`;
-      const imgRef = ref(storage, `images/${userId}/${urlByUuid}`);
-      const uploadTask = uploadBytesResumable(imgRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setProgressing(progress);
-        },
-        (error) => {},
-        async () => {
-          const downloadURL = await getDownloadURL(
-            ref(storage, `images/${userId}/${urlByUuid}`)
-          );
-          await updateDoc(doc(db, "users", userId), {
-            collection: arrayUnion(downloadURL),
-          });
-        }
-      );
+      const downloadUrl = (await upLoadImgToCloudStorage(
+        compressedFile,
+        userId,
+        urlByUuid
+      )) as string;
+      await updateDoc(doc(db, "users", userId), {
+        collection: arrayUnion(downloadUrl),
+      });
+      setProgressing(false);
     });
   };
 
@@ -220,11 +216,11 @@ function MaterialCollection() {
       text: t("delete_photo_warning"),
       icon: "warning",
       confirmButtonColor: "#646464",
-      confirmButtonText: t("reject_yes_answer"),
+      confirmButtonText: t("reject_no_answer"),
       showDenyButton: true,
-      denyButtonText: t("reject_no_answer"),
+      denyButtonText: t("reject_yes_answer"),
     });
-    if (ans.isDenied === true) return;
+    if (ans.isConfirmed === true) return;
 
     await updateDoc(doc(db, "users", userId), {
       collection: arrayRemove(url),
@@ -265,7 +261,7 @@ function MaterialCollection() {
                 <TrashIcon onClick={() => deleteHandler(url)} />
               </ImgContainer>
             ))}
-          {progressing !== 100 && (
+          {progressing && (
             <ImgContainer>
               <Loading type="spin" color="#3c3c3c" height="40px" width="40px" />
             </ImgContainer>

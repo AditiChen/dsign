@@ -13,9 +13,8 @@ import Cropper from "react-easy-crop";
 import ReactLoading from "react-loading";
 import { Slider, Typography } from "@mui/material";
 import { doc, updateDoc, arrayUnion } from "firebase/firestore";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-import { db, storage } from "../../context/firebaseSDK";
+import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
 import getCroppedImg from "../../utils/cropImage";
 import upLoadImgToCloudStorage from "../../utils/upLoadImgToCloudStorage";

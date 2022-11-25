@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../../context/authContext";
-import { FriendContext } from "../../context/friendContext";
 import { LikeIcon, LikedIcon } from "../IconButtons/LikeIcons";
 
 interface Prop {
@@ -153,14 +152,14 @@ export default function Brick({
       navigate("/profile");
       return;
     }
-    navigate(`/userProfile/${uid}`);
+    navigate(`/userProfile?id=${uid}`);
   }
 
   return (
     <SingleProjectContainer key={projectId}>
       <ImgContainer
         img={`url(${mainUrl})`}
-        onClick={() => navigate(`/singleProject/${projectId}`)}
+        onClick={() => navigate(`/singleProject?id=${projectId}`)}
       >
         <TitleContainer>
           <TitleText>{title}</TitleText>
