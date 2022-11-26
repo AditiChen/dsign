@@ -59,6 +59,7 @@ const InfoContainer = styled.div`
   height: 50px;
   display: flex;
   align-items: center;
+  border-top: 1px solid #f0f0f0;
   @media screen and (max-width: 799px) {
     width: 250px;
     height: 40px;
@@ -112,6 +113,7 @@ const Avatar = styled.div`
   background-size: cover;
   background-position: center;
   position: relative;
+  border: 1px solid #b4b4b4;
   &:hover {
     cursor: pointer;
   }

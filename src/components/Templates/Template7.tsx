@@ -42,6 +42,11 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   background-color: #b4b4b490;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 56px 35px;
+    width: 840px;
+    height: 532px;
+  }
 `;
 
 const LeftContainer = styled.div`
@@ -52,6 +57,11 @@ const LeftContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin-right: 35px;
+    padding-top: 35px;
+    width: 315px;
+  }
 `;
 
 const Context = styled.textarea`
@@ -69,6 +79,12 @@ const Context = styled.textarea`
   &:focus {
     outline: none;
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 6px;
+    height: 224px;
+    font-size: 14px;
+    line-height: 17px;
+  }
 `;
 
 const LeftImgContainer = styled.div`
@@ -85,6 +101,10 @@ const LeftImg = styled.div`
   background-size: cover;
   background-position: center;
   position: relative;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 140px;
+    height: 140px;
+  }
 `;
 
 const RightImg = styled.div`
@@ -96,6 +116,10 @@ const RightImg = styled.div`
   background-size: cover;
   background-position: center;
   position: relative;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 420px;
+    height: 420px;
+  }
 `;
 
 const UploadIcon = styled.div`
@@ -109,6 +133,10 @@ const UploadIcon = styled.div`
   background-image: url(${uploadPhotoIcon});
   background-size: cover;
   background-position: center;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 36px;
+    height: 36px;
+  }
 `;
 
 function Template7(props: InsertProp) {

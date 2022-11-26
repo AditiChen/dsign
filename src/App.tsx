@@ -1,3 +1,4 @@
+import "./stylesSheet/global.css";
 import { Suspense } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import styled, { createGlobalStyle } from "styled-components";
@@ -17,6 +18,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     font-family: 'Roboto','Noto Sans TC','Noto Sans JP', sans-serif;
     color:#3c3c3c;
+    &
   }
   #root {
      min-height: 100vh;

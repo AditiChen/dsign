@@ -11,6 +11,10 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   background-color: #b4b4b490;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 532px;
+  }
 `;
 
 const Img = styled.div<{ url?: string; backgroundColor?: string }>`
@@ -21,6 +25,10 @@ const Img = styled.div<{ url?: string; backgroundColor?: string }>`
   background-size: cover;
   background-position: center;
   position: relative;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 532px;
+  }
 `;
 
 function Template8(props: InsertProp) {

@@ -5,7 +5,7 @@ import ReactLoading from "react-loading";
 import { useNavigate } from "react-router-dom";
 
 import templatesArr from "../../components/singleProjectPageTemplates/TemplatesArr";
-import { GoogleMapAPI } from "../../components/singleProjectPageTemplates/GoogleMapAPI";
+import { GoogleMapAPI } from "../../components/Templates/GoogleMapAPI";
 import { AuthContext } from "../../context/authContext";
 import getSingleProject from "../../utils/getSingleProject";
 import { LikeIcon, LikedIcon } from "../../components/IconButtons/LikeIcons";
@@ -39,13 +39,19 @@ const Wrapper = styled.div`
   display: flex;
   position: relative;
   background-color: #3c3c3c90;
+  @media screen and (min-width: 800px) and (max-width: 1024px) {
+    min-height: calc(100vh - 120px);
+  }
+  @media screen and (max-width: 799px) {
+    min-height: calc(100vh - 90px);
+  }
 `;
 
 const ArrowIcon = styled.div`
   height: 35px;
   width: 35px;
   position: fixed;
-  top: 110px;
+  top: 90px;
   left: 50px;
   background-image: url(${arrowIcon});
   background-size: cover;
@@ -54,17 +60,26 @@ const ArrowIcon = styled.div`
     cursor: pointer;
     background-image: url(${arrowIconHover});
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    height: 25px;
+    width: 25px;
+    top: 90px;
+    left: 35px;
+  }
 `;
 
 const Container = styled.div`
   margin: 0 auto;
   width: 1200px;
   height: 100%;
-  min-height: 840px;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   background-color: white;
   box-shadow: 0 0 20px black;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+  }
 `;
 
 const HeaderContainer = styled.div`
@@ -74,11 +89,18 @@ const HeaderContainer = styled.div`
   height: 80px;
   display: flex;
   align-items: flex-end;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 8px 14px;
+    height: 56px;
+  }
 `;
 
 const Title = styled.div`
   font-size: 30px;
   font-weight: 700;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    font-size: 20px;
+  }
 `;
 
 const UserInfoContainer = styled.div`
@@ -98,6 +120,11 @@ const UserInfoInnerContainer = styled.div`
   padding: 20px 15px;
   max-height: 150px;
   width: 310px;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 14px 10px;
+    max-height: 105px;
+    width: 217px;
+  }
 `;
 
 const UserInfoHeaderContainer = styled.div`
@@ -108,10 +135,15 @@ const UserInfoHeaderContainer = styled.div`
 const InfoAvatar = styled.div<{ img: string }>`
   width: 50px;
   height: 50px;
-  border-radius: 25px;
+  border: 1px solid #b4b4b4;
+  border-radius: 50%;
   background-image: ${(props) => props.img};
   background-size: cover;
   background-position: center;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 35px;
+    height: 35px;
+  }
 `;
 
 const Intor = styled.div`
@@ -124,18 +156,28 @@ const Intor = styled.div`
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin: 6px 0;
+    font-size: 12px;
+    line-height: 16px;
+  }
 `;
 
 const Author = styled.div`
   margin-left: 10px;
   font-size: 24px;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin-left: 6px;
+    font-size: 16px;
+  }
 `;
 
 const Avatar = styled.div<{ img: string }>`
   margin-left: auto;
   width: 36px;
   height: 36px;
-  border-radius: 18px;
+  border: 1px solid #b4b4b4;
+  border-radius: 50%;
   background-image: ${(props) => props.img};
   background-size: cover;
   background-position: center;
@@ -146,11 +188,22 @@ const Avatar = styled.div<{ img: string }>`
   &:hover {
     cursor: pointer;
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 25px;
+    height: 25px;
+    &:hover > ${UserInfoContainer} {
+      max-height: 105px;
+    }
+  }
 `;
 
 const MapContainer = styled.div`
   width: 1200px;
-  height: 700px;
+  height: 760px;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 532px;
+  }
 `;
 
 const Loading = styled(ReactLoading)`
@@ -237,16 +290,16 @@ function SingleProject() {
               {favoriteList.indexOf(singleProjectId) === -1 ? (
                 <LikeIcon
                   margin="0 0 0 20px"
-                  width="36px"
-                  height="36px"
+                  width="34px"
+                  height="34px"
                   projectId={singleProjectId}
                 />
               ) : (
                 <LikedIcon
                   projectId={singleProjectId}
                   margin="0 0 0 20px"
-                  width="36px"
-                  height="36px"
+                  width="34px"
+                  height="34px"
                 />
               )}
             </HeaderContainer>

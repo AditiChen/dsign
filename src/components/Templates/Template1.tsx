@@ -12,6 +12,8 @@ interface Prop {
   backgroundColor?: string;
   top?: string;
   left?: string;
+  mobileTop?: string;
+  mobileLeft?: string;
 }
 
 interface InsertProp {
@@ -42,6 +44,10 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   align-items: center;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 532px;
+  }
 `;
 
 const BackgroundImg = styled.div`
@@ -52,6 +58,10 @@ const BackgroundImg = styled.div`
   background-size: cover;
   background-position: center;
   opacity: 0.9;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 532px;
+  }
 `;
 
 const Trapezoid = styled.div`
@@ -63,12 +73,15 @@ const Trapezoid = styled.div`
   background-image: url(${trapezoid});
   background-size: cover;
   background-position: center;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 347px;
+  }
 `;
 
 const Context = styled.textarea`
   padding: 10px;
-  height: 180px;
   width: 270px;
+  height: 180px;
   color: #ffffff;
   font-size: 20px;
   line-height: 24px;
@@ -84,6 +97,15 @@ const Context = styled.textarea`
   &:focus {
     outline: none;
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 6px;
+    width: 189px;
+    height: 126px;
+    font-size: 14px;
+    line-height: 17px;
+    right: 35px;
+    bottom: 196px;
+  }
 `;
 
 const ImgContainer = styled.div`
@@ -91,6 +113,10 @@ const ImgContainer = styled.div`
   right: 50px;
   bottom: 50px;
   display: flex;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    right: 35px;
+    bottom: 35px;
+  }
 `;
 
 const LeftImg = styled.div`
@@ -101,6 +127,10 @@ const LeftImg = styled.div`
   background-size: cover;
   background-position: center;
   box-shadow: 0 0 5px #3c3c3c;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 210px;
+    height: 140px;
+  }
 `;
 
 const RightImg = styled.div`
@@ -112,6 +142,11 @@ const RightImg = styled.div`
   background-size: cover;
   background-position: center;
   box-shadow: 0 0 5px #3c3c3c;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin-left: 21px;
+    width: 140px;
+    height: 140px;
+  }
 `;
 
 const UploadIcon = styled.div`
@@ -124,6 +159,12 @@ const UploadIcon = styled.div`
   background-image: url(${uploadPhotoIcon});
   background-size: cover;
   background-position: center;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 36px;
+    height: 36px;
+    top: ${(props: Prop) => props.mobileTop};
+    left: ${(props: Prop) => props.mobileLeft};
+  }
 `;
 
 function Template1(props: InsertProp) {
@@ -171,7 +212,14 @@ function Template1(props: InsertProp) {
           backgroundColor={storageUrl[0] === "" ? "#b4b4b4" : ""}
           url={storageUrl[0] === "" ? "" : `url(${storageUrl[0]})`}
         >
-          {storageUrl[0] === "" && <UploadIcon top="350px" left="400px" />}
+          {storageUrl[0] === "" && (
+            <UploadIcon
+              top="350px"
+              left="400px"
+              mobileTop="240px"
+              mobileLeft="280px"
+            />
+          )}
         </BackgroundImg>
         <Trapezoid />
         <Context
@@ -187,7 +235,14 @@ function Template1(props: InsertProp) {
             backgroundColor={storageUrl[1] === "" ? "#b4b4b4" : ""}
             url={storageUrl[1] === "" ? "" : `url(${storageUrl[1]})`}
           >
-            {storageUrl[1] === "" && <UploadIcon top="80px" left="130px" />}
+            {storageUrl[1] === "" && (
+              <UploadIcon
+                top="80px"
+                left="130px"
+                mobileTop="55px"
+                mobileLeft="90px"
+              />
+            )}
           </LeftImg>
           <RightImg
             onClick={() => {
@@ -196,7 +251,14 @@ function Template1(props: InsertProp) {
             backgroundColor={storageUrl[2] === "" ? "#b4b4b4" : ""}
             url={storageUrl[2] === "" ? "" : `url(${storageUrl[2]})`}
           >
-            {storageUrl[2] === "" && <UploadIcon top="80px" left="410px" />}
+            {storageUrl[2] === "" && (
+              <UploadIcon
+                top="80px"
+                left="410px"
+                mobileTop="55px"
+                mobileLeft="285px"
+              />
+            )}
           </RightImg>
         </ImgContainer>
       </Wrapper>

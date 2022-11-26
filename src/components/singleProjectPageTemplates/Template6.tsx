@@ -20,7 +20,10 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   background-color: #b4b4b490;
-  border-bottom: 1px solid #b4b4b4;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 532px;
+  }
 `;
 
 const LeftContainer = styled.div`
@@ -31,6 +34,11 @@ const LeftContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin: 0 35px;
+    padding: 42px 0;
+    width: 420px;
+  }
 `;
 
 const Context = styled.textarea`
@@ -40,14 +48,19 @@ const Context = styled.textarea`
   font-size: 20px;
   line-height: 24px;
   background-color: transparent;
-  border: 1px solid #3c3c3c;
-  resize: none;
   border: none;
+  resize: none;
   &::placeholder {
     color: #646464;
   }
   &:focus {
     outline: none;
+  }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 6px;
+    height: 210px;
+    font-size: 14px;
+    line-height: 17px;
   }
 `;
 
@@ -60,6 +73,10 @@ const LeftImg = styled.div`
   background-position: center;
   position: relative;
   border-radius: 10px;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    height: 210px;
+    border-radius: 6px;
+  }
 `;
 
 const RightImg = styled.div`
@@ -70,6 +87,9 @@ const RightImg = styled.div`
   background-size: cover;
   background-position: center;
   position: relative;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 350px;
+  }
 `;
 
 function Template3(props: InsertProp) {

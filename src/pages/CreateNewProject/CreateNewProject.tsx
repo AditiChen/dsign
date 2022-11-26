@@ -23,14 +23,16 @@ import checkedIcon from "../../icons/checked-icon.png";
 const Wrapper = styled.div`
   padding-top: 80px;
   width: 100%;
-  min-width: 100vw;
   height: 100%;
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 140px);
   display: flex;
   position: relative;
   background-color: #787878;
-  @media screen and (max-width: 1860px) {
-    padding-top: 200px;
+  @media screen and (min-width: 800px) and (max-width: 1024px) {
+    min-height: calc(100vh - 120px);
+  }
+  @media screen and (max-width: 799px) {
+    min-height: calc(100vh - 90px);
   }
 `;
 
@@ -40,6 +42,9 @@ const Container = styled.div`
   height: 100%;
   min-height: calc(100vh - 260px);
   display: flex;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 900px;
+  }
 `;
 
 const EditorContainer = styled.div`
@@ -47,20 +52,27 @@ const EditorContainer = styled.div`
   padding: 50px;
   width: 100%;
   height: 100%;
-  min-height: 80vh;
+  min-height: 75vh;
   background-color: #f0f0f0;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   box-shadow: 0 0 20px #3c3c3c;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 30px;
+    border-radius: 14px;
+  }
 `;
 
 const Text = styled.div`
   font-size: 24px;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    font-size: 20px;
+  }
 `;
 
-const Input = styled.input`
+const Title = styled.input`
   margin-bottom: 40px;
   padding: 0 20px;
   width: 1200px;
@@ -74,6 +86,13 @@ const Input = styled.input`
     outline: none;
     background-color: #ffffff;
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 40px;
+    margin-bottom: 30px;
+    font-size: 20px;
+    border-radius: 6px;
+  }
 `;
 
 const SingleEditorContainer = styled.div`
@@ -82,6 +101,13 @@ const SingleEditorContainer = styled.div`
   height: 760px;
   & + & {
     margin-top: 80px;
+  }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 532px;
+  }
+  & + & {
+    margin-top: 40px;
   }
 `;
 
@@ -98,46 +124,42 @@ const CloseIcon = styled.div`
   &:hover {
     background-image: url(${closeIconHover});
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 30px;
+    height: 30px;
+    top: -15px;
+    right: -14px;
+  }
 `;
 
 const SelectContainer = styled.div`
-  padding: 20px;
-  width: 270px;
-  height: calc(100vh - 160px);
+  padding-top: 85px;
+  width: 100vw;
+  height: 160px;
   display: flex;
   position: fixed;
-  left: 0;
+  top: 0;
   flex-direction: column;
   align-items: center;
   background-color: #ffffff;
-  box-shadow: 0 -1px 3px black;
+  box-shadow: 1px 0 5px black;
   overflow: scroll;
   scrollbar-width: none;
   z-index: 5;
   ::-webkit-scrollbar {
     display: none;
   }
-  @media screen and (max-width: 1860px) {
-    padding-top: 100px;
-    top: 0;
-    width: 100vw;
-    height: 200px;
-    box-shadow: 1px 0 5px black;
-  }
 `;
 
 const SelectInnerContainer = styled.div`
   height: 100%;
-  @media screen and (max-width: 1860px) {
-    margin: 0 auto;
-    display: flex;
-  }
+  margin: 0 auto;
+  display: flex;
 `;
 
 const SelectImg = styled.div<{ img: string }>`
-  margin: 20px auto;
-  width: 200px;
-  height: 120px;
+  width: 100px;
+  height: 64px;
   background-image: ${(props) => props.img};
   background-size: cover;
   background-position: center;
@@ -145,20 +167,19 @@ const SelectImg = styled.div<{ img: string }>`
     cursor: pointer;
     box-shadow: 1px 1px 5px gray;
   }
-  @media screen and (max-width: 1860px) {
-    margin: 0;
-    width: 130px;
-    height: 80px;
-    & + & {
-      margin-left: 10px;
-    }
+  & + & {
+    margin-left: 10px;
   }
 `;
 
 const FooterContainer = styled.div`
   margin-top: 40px;
   display: flex;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin-top: 30px;
+  }
 `;
+
 const Btn = styled.button<{
   backgroundColor?: string;
   backgroundColorHover?: string;
@@ -178,6 +199,14 @@ const Btn = styled.button<{
   }
   & + & {
     margin-left: 50px;
+  }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    font-size: 16px;
+    height: 40px;
+    border-radius: 6px;
+    & + & {
+      margin-left: 20px;
+    }
   }
 `;
 
@@ -364,7 +393,7 @@ function CreateNewProject() {
                 <Text>{t("create_new_project")}</Text>
               ) : (
                 <>
-                  <Input
+                  <Title
                     value={title}
                     placeholder={t("project_title")}
                     onChange={(e) => setTitle(e.target.value)}

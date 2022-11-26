@@ -42,6 +42,10 @@ const Wrapper = styled.div`
   align-items: center;
   background-color: #696969;
   border-bottom: 1px solid #b4b4b4;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 532px;
+  }
 `;
 
 const HeaderContainer = styled.div`
@@ -50,6 +54,10 @@ const HeaderContainer = styled.div`
   height: 220px;
   display: flex;
   align-items: center;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 14px;
+    height: 154px;
+  }
 `;
 
 const Context = styled.textarea`
@@ -69,6 +77,13 @@ const Context = styled.textarea`
   &:focus {
     outline: none;
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 6px;
+    height: 126px;
+    width: 287px;
+    font-size: 14px;
+    line-height: 17px;
+  }
 `;
 
 const ImgContainer = styled.div`
@@ -78,6 +93,10 @@ const ImgContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   position: relative;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 378px;
+  }
 `;
 
 const AsideImg = styled.div`
@@ -88,6 +107,9 @@ const AsideImg = styled.div`
   background-color: ${(props: Prop) => props.backgroundColor};
   background-size: cover;
   background-position: center;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 300px;
+  }
 `;
 
 const MiddleImgContainer = styled.div`
@@ -98,6 +120,9 @@ const MiddleImgContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   position: relative;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 224px;
+  }
 `;
 
 const MiddleImg = styled.div`
@@ -108,6 +133,10 @@ const MiddleImg = styled.div`
   background-color: ${(props: Prop) => props.backgroundColor};
   background-size: cover;
   background-position: center;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 224px;
+    height: 185px;
+  }
 `;
 
 const UploadIcon = styled.div`
@@ -121,6 +150,10 @@ const UploadIcon = styled.div`
   background-image: url(${uploadPhotoIcon});
   background-size: cover;
   background-position: center;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 36px;
+    height: 36px;
+  }
 `;
 
 function Template2(props: InsertProp) {

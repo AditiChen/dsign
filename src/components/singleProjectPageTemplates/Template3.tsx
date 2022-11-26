@@ -3,11 +3,7 @@ import styled from "styled-components";
 import leftCircle from "./template3_left_circle.png";
 
 interface Prop {
-  border?: string;
   url?: string;
-  backgroundColor?: string;
-  top?: string;
-  left?: string;
 }
 
 interface InsertProp {
@@ -16,23 +12,28 @@ interface InsertProp {
 }
 
 const Wrapper = styled.div`
-  margin: 0 auto;
   width: 1200px;
   height: 760px;
   position: relative;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #b4b4b4;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 532px;
+  }
 `;
 
 const BackgroundImg = styled.div`
   width: 1200px;
   height: 760px;
   background-image: ${(props: Prop) => props.url};
-  background-color: ${(props: Prop) => props.backgroundColor};
   background-size: cover;
   background-position: center;
   opacity: 0.9;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 532px;
+  }
 `;
 
 const LeftCircle = styled.div`
@@ -44,6 +45,9 @@ const LeftCircle = styled.div`
   background-image: url(${leftCircle});
   background-size: cover;
   background-position: center;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 298px;
+  }
 `;
 
 const Context = styled.textarea`
@@ -57,7 +61,6 @@ const Context = styled.textarea`
   left: 30px;
   bottom: 30px;
   background-color: transparent;
-  border: 1px solid #b4b4b4;
   border: none;
   resize: none;
   &::placeholder {
@@ -66,13 +69,21 @@ const Context = styled.textarea`
   &:focus {
     outline: none;
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 6px;
+    height: 105px;
+    width: 168px;
+    font-size: 14px;
+    line-height: 17px;
+    left: 21px;
+    bottom: 21px;
+  }
 `;
 
 const LeftImg = styled.div`
   width: 330px;
   height: 330px;
   background-image: ${(props: Prop) => props.url};
-  background-color: ${(props: Prop) => props.backgroundColor};
   background-size: cover;
   background-position: center;
   position: absolute;
@@ -80,6 +91,12 @@ const LeftImg = styled.div`
   left: 50px;
   border-radius: 50%;
   box-shadow: 0 0 5px #3c3c3c;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 230px;
+    height: 230px;
+    top: 49px;
+    left: 35px;
+  }
 `;
 
 const RightImg = styled.div`
@@ -87,7 +104,6 @@ const RightImg = styled.div`
   width: 200px;
   height: 200px;
   background-image: ${(props: Prop) => props.url};
-  background-color: ${(props: Prop) => props.backgroundColor};
   background-size: cover;
   background-position: center;
   position: absolute;
@@ -95,6 +111,13 @@ const RightImg = styled.div`
   bottom: 70px;
   border-radius: 50%;
   box-shadow: 0 0 5px #3c3c3c;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin-left: 21px;
+    width: 140px;
+    height: 140px;
+    right: 49px;
+    bottom: 49px;
+  }
 `;
 
 function Template3(props: InsertProp) {

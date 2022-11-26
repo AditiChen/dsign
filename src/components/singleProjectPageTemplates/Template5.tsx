@@ -21,7 +21,11 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   background-color: #b4b4b490;
-  border-bottom: 1px solid #b4b4b4;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 42px 35px;
+    width: 840px;
+    height: 532px;
+  }
 `;
 
 const Context = styled.textarea`
@@ -31,14 +35,19 @@ const Context = styled.textarea`
   font-size: 20px;
   line-height: 24px;
   background-color: transparent;
-  border: 1px solid #3c3c3c;
-  resize: none;
   border: none;
+  resize: none;
   &::placeholder {
     color: #646464;
   }
   &:focus {
     outline: none;
+  }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 6px;
+    width: 315px;
+    font-size: 14px;
+    line-height: 17px;
   }
 `;
 
@@ -48,6 +57,10 @@ const ImgContainer = styled.div`
   height: 100%;
   display: flex;
   justify-content: space-between;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin-left: 38px;
+    width: 455px;
+  }
 `;
 
 const Img = styled.div`
@@ -59,6 +72,10 @@ const Img = styled.div`
   background-position: center;
   position: relative;
   border-radius: 10px;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 206px;
+    border-radius: 6px;
+  }
 `;
 
 function Template5(props: InsertProp) {

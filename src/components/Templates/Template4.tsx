@@ -42,6 +42,11 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   background-color: #b4b4b490;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 42px 35px;
+    width: 840px;
+    height: 532px;
+  }
 `;
 
 const ImgContainer = styled.div`
@@ -60,6 +65,11 @@ const Img = styled.div`
   background-position: center;
   position: relative;
   border-radius: 10px;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 230px;
+    height: 210px;
+    border-radius: 6px;
+  }
 `;
 
 const Context = styled.textarea`
@@ -70,13 +80,19 @@ const Context = styled.textarea`
   font-size: 20px;
   line-height: 24px;
   background-color: transparent;
-  border: 1px solid #3c3c3c;
+  border: 1px solid #646464;
   resize: none;
   &::placeholder {
     color: #646464;
   }
   &:focus {
     outline: none;
+  }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin: 0 21px;
+    padding: 6px;
+    font-size: 14px;
+    line-height: 17px;
   }
 `;
 
@@ -91,6 +107,10 @@ const UploadIcon = styled.div`
   background-image: url(${uploadPhotoIcon});
   background-size: cover;
   background-position: center;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 36px;
+    height: 36px;
+  }
 `;
 
 function Template4(props: InsertProp) {

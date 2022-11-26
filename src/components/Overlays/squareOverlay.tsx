@@ -54,8 +54,8 @@ const Backdrop = styled.div`
 `;
 
 const CloseIcon = styled.div`
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
   position: absolute;
   top: -15px;
   right: -15px;
@@ -66,11 +66,17 @@ const CloseIcon = styled.div`
   &:hover {
     background-image: url(${closeIconHover});
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 22px;
+    height: 22px;
+    top: -10px;
+    right: -10px;
+  }
 `;
 
 const ArrowIcon = styled.div`
-  height: 35px;
-  width: 35px;
+  height: 30px;
+  width: 30px;
   position: absolute;
   top: 30px;
   left: 50px;
@@ -80,6 +86,12 @@ const ArrowIcon = styled.div`
   &:hover {
     cursor: pointer;
     background-image: url(${arrowIconHover});
+  }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 20px;
+    height: 20px;
+    top: 16px;
+    left: 24px;
   }
 `;
 
@@ -98,12 +110,18 @@ const OverlayModal = styled.div`
   transform: translate(-50%, -50%);
   z-index: 102;
   background-color: white;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 35px;
+  }
 `;
 
 const CropperContainer = styled.div`
   width: 80%;
   height: 90%;
   position: relative;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 90%;
+  }
 `;
 
 const NewPhotoContainer = styled.div`
@@ -117,6 +135,11 @@ const NewPhotoHeaderContainer = styled.div`
   font-size: 24px;
   line-height: 40px;
   align-items: center;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 0 14px;
+    font-size: 16px;
+    line-height: 30px;
+  }
 `;
 
 const CollectionContainer = styled.div`
@@ -135,6 +158,10 @@ const CollectionContainer = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin: 6px 0;
+    padding: 14px;
+  }
 `;
 
 const CollectionImg = styled.div<{ url: string }>`
@@ -151,6 +178,12 @@ const CollectionImg = styled.div<{ url: string }>`
     width: 155px;
     height: 155px;
     box-shadow: 0 0 5px #3c3c3c;
+  }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin: 6px auto;
+    width: 100px;
+    height: 100px;
+    border-radius: 6px;
   }
 `;
 
@@ -169,6 +202,14 @@ const UploadPic = styled.label`
     color: #ffffff;
     background-color: #616161;
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin-left: 7px;
+    padding: 0 10px;
+    height: 28px;
+    line-height: 28px;
+    font-size: 16px;
+    border-radius: 6px;
+  }
 `;
 
 const ControlContainer = styled.div`
@@ -176,6 +217,9 @@ const ControlContainer = styled.div`
   width: 80%;
   display: flex;
   align-items: center;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 90%;
+  }
 `;
 
 const SliderContainer = styled.div`
@@ -195,6 +239,12 @@ const Btn = styled.button`
     color: #ffffff;
     background-color: #616161;
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin-left: 14px;
+    height: 30px;
+    font-size: 12px;
+    border-radius: 6px;
+  }
 `;
 
 const ConfirmIcon = styled.div`
@@ -207,6 +257,10 @@ const ConfirmIcon = styled.div`
   &:hover {
     cursor: pointer;
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 18px;
+    height: 18px;
+  }
 `;
 
 const ConfirmedIcon = styled(ConfirmIcon)`
@@ -216,6 +270,10 @@ const ConfirmedIcon = styled(ConfirmIcon)`
 const Text = styled.div`
   margin-left: 10px;
   font-size: 18px;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin-left: 6px;
+    font-size: 12px;
+  }
 `;
 
 const LoadingBackground = styled.div`
@@ -228,8 +286,9 @@ const LoadingBackground = styled.div`
 
 const Loading = styled(ReactLoading)`
   position: absolute;
-  left: 425px;
-  top: 280px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-45%, -50%);
   z-index: 104;
 `;
 
@@ -341,7 +400,12 @@ function SquareOverlay({
                   {progressing && (
                     <>
                       <LoadingBackground />
-                      <Loading type="spokes" color="#ffffff" />
+                      <Loading
+                        type="spokes"
+                        color="#ffffff"
+                        width="40px"
+                        height="40px"
+                      />
                     </>
                   )}
                   <Cropper
