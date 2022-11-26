@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { v4 as uuid } from "uuid";
 import { doc, setDoc } from "firebase/firestore";
@@ -28,7 +28,12 @@ const Wrapper = styled.div`
   display: flex;
   position: relative;
   background-color: #787878;
+  @media screen and (min-width: 1025px) and (max-width: 1199px) {
+    padding-top: 90px;
+    min-height: calc(100vh - 120px);
+  }
   @media screen and (min-width: 800px) and (max-width: 1024px) {
+    padding-top: 80px;
     min-height: calc(100vh - 120px);
   }
   @media screen and (max-width: 799px) {
@@ -63,12 +68,18 @@ const EditorContainer = styled.div`
     padding: 30px;
     border-radius: 14px;
   }
+  @media screen and (max-width: 949px) {
+    display: none;
+  }
 `;
 
 const Text = styled.div`
   font-size: 24px;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     font-size: 20px;
+  }
+  @media screen and (max-width: 949px) {
+    font-size: 16px;
   }
 `;
 
@@ -133,9 +144,8 @@ const CloseIcon = styled.div`
 `;
 
 const SelectContainer = styled.div`
-  padding-top: 85px;
+  padding: 85px 0 10px 0;
   width: 100vw;
-  height: 160px;
   display: flex;
   position: fixed;
   top: 0;
@@ -143,32 +153,76 @@ const SelectContainer = styled.div`
   align-items: center;
   background-color: #ffffff;
   box-shadow: 1px 0 5px black;
-  overflow: scroll;
-  scrollbar-width: none;
   z-index: 5;
   ::-webkit-scrollbar {
+    display: none;
+  }
+  @media screen and (min-width: 1024px) and (max-width: 1449px) {
+    padding: 85px 0 10px 0;
+    max-height: 160px;
+    transition: max-height 0.3s ease-in;
+    overflow: hidden;
+    &:hover {
+      max-height: 240px;
+    }
+  }
+  @media screen and (min-width: 950px) and (max-width: 1023px) {
+    padding: 75px 0 10px 0;
+    max-height: 150px;
+    transition: max-height 0.3s ease-in;
+    overflow: hidden;
+    &:hover {
+      max-height: 230px;
+    }
+  }
+  @media screen and (max-width: 949px) {
     display: none;
   }
 `;
 
 const SelectInnerContainer = styled.div`
-  height: 100%;
   margin: 0 auto;
+  height: 100%;
+  width: 1300px;
+  overflow: hidden;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 150px;
+  }
+`;
+
+const SelectImgOverflowContainer = styled.div`
+  margin: auto;
   display: flex;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    height: 100%;
+    flex-wrap: wrap;
+  }
 `;
 
 const SelectImg = styled.div<{ img: string }>`
-  width: 100px;
-  height: 64px;
+  width: 120px;
+  height: 70px;
   background-image: ${(props) => props.img};
   background-size: cover;
   background-position: center;
+  border: 1px solid #d4d4d4;
   &:hover {
     cursor: pointer;
     box-shadow: 1px 1px 5px gray;
+    border: none;
   }
   & + & {
     margin-left: 10px;
+  }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    width: 110px;
+    height: 65px;
+    & + & {
+      margin-left: 0;
+    }
   }
 `;
 
@@ -242,6 +296,7 @@ function CreateNewProject() {
   const [title, setTitle] = useState("");
   const [mainImgSrc, setMainImgSrc] = useState("");
   const [showOverlay, setShowOverlay] = useState(false);
+  const selectAreaRef = useRef(null!);
   const googleMap = templatesArr[9];
 
   useEffect(() => {
@@ -373,18 +428,20 @@ function CreateNewProject() {
         <Wrapper>
           <SelectContainer>
             <SelectInnerContainer>
-              {templatesImgArr.map((pic, index) => (
-                <SelectImg
-                  key={uuid()}
-                  img={`url(${pic})`}
-                  onClick={() => {
-                    setPages((prev) => [
-                      ...prev,
-                      { key: uuid(), ...templateData[index] },
-                    ]);
-                  }}
-                />
-              ))}
+              <SelectImgOverflowContainer ref={selectAreaRef}>
+                {templatesImgArr.map((pic, index) => (
+                  <SelectImg
+                    key={uuid()}
+                    img={`url(${pic})`}
+                    onClick={() => {
+                      setPages((prev) => [
+                        ...prev,
+                        { key: uuid(), ...templateData[index] },
+                      ]);
+                    }}
+                  />
+                ))}
+              </SelectImgOverflowContainer>
             </SelectInnerContainer>
           </SelectContainer>
           <Container>

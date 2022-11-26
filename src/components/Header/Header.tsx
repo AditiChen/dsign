@@ -163,6 +163,10 @@ const NotificationDot = styled.div`
   bottom: ${(props: Prop) => props.bottom};
   border-radius: 50%;
   background-image: linear-gradient(#89b07e, #4f8365);
+  @media screen and (min-width: 800px) and (max-width: 1024px) {
+    height: 10px;
+    width: 10px;
+  }
 `;
 
 const LanguageHeader = styled.div`
