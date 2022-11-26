@@ -39,20 +39,28 @@ const languages = [
 ];
 
 const Wrapper = styled.div`
+  width: 100vw;
+  height: 60px;
+  color: #c4c4c4;
+  position: relative;
+  z-index: 10;
+  @media screen and (max-width: 949px) {
+    height: 50px;
+  }
+`;
+
+const Container = styled.div`
   padding: 0 30px;
   width: 100vw;
-  height: 70px;
-  color: #c4c4c4;
+  height: 60px;
   background-color: #3c3c3c;
   box-shadow: 0 1px 5px #3c3c3c;
   position: fixed;
-  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  @media screen and (min-width: 800px) and (max-width: 1024px) {
-    padding: 0 20px;
-    height: 60px;
+  @media screen and (max-width: 949px) {
+    height: 50px;
   }
   @media screen and (max-width: 799px) {
     padding: 0 16px;
@@ -67,8 +75,8 @@ const LeftContainer = styled.div`
 `;
 
 const Logo = styled(Link)`
-  width: 155px;
-  height: 45px;
+  width: 146px;
+  height: 42px;
   background-image: url(${logoIcon});
   background-size: cover;
   background-position: center;
@@ -88,7 +96,7 @@ const Logo = styled(Link)`
 const Context = styled(Link)`
   margin-left: 40px;
   padding-top: 10px;
-  font-size: 20px;
+  font-size: 18px;
   text-decoration: none;
   color: ${(props: Prop) => props.$color || "#c4c4c4"};
   border-bottom: ${(props: Prop) => props.border};
@@ -101,7 +109,7 @@ const Context = styled(Link)`
   }
   @media screen and (min-width: 800px) and (max-width: 1024px) {
     margin-left: 20px;
-    font-size: 18px;
+    font-size: 16px;
     & + & {
       margin-left: 20px;
     }
@@ -199,7 +207,7 @@ const SignBtn = styled.button`
   padding: 0 20px;
   height: 35px;
   color: ${(props: Prop) => props.$color || "#c4c4c4"};
-  font-size: 18px;
+  font-size: 16px;
   background-color: ${(props: Prop) => props.backgroundColor || "transparent"};
   border: 1px solid #616161;
   border-radius: 5px;
@@ -211,7 +219,7 @@ const SignBtn = styled.button`
     margin-left: 20px;
     padding: 0 10px;
     height: 30px;
-    font-size: 16px;
+    font-size: 14px;
     align-self: flex-end;
   }
   @media screen and (max-width: 799px) {
@@ -325,163 +333,97 @@ function Header() {
 
   return (
     <Wrapper>
-      <LeftContainer>
-        <Logo
-          to="portfolioBricks"
-          onClick={() => {
-            setClickState("");
-            setShowMessageFrame(false);
-          }}
-        />
-        {isLogin && (
-          <>
-            <Context
-              $color="#f5dfa9"
-              to="createNewProject"
-              border={clickState === "create" ? "1px solid #f5dfa9" : "none"}
-              onClick={() => {
-                setClickState("create");
-                setShowMessageFrame(false);
-              }}
-            >
-              {t("create")}
-            </Context>
-            <Context
-              to="favoriteList"
-              border={clickState === "favorite" ? "1px solid #c4c4c4" : "none"}
-              onClick={() => {
-                setClickState("favorite");
-                setShowMessageFrame(false);
-              }}
-            >
-              {t("favorite_list")}
-            </Context>
-            <Context
-              to="collection"
-              border={
-                clickState === "collection" ? "1px solid #c4c4c4" : "none"
-              }
-              onClick={() => {
-                setClickState("collection");
-                setShowMessageFrame(false);
-              }}
-            >
-              {t("collection_list")}
-            </Context>
-          </>
-        )}
-      </LeftContainer>
-      <RightContainer>
-        {isLogin && (
-          <>
-            <Icon
-              img={`url(${friendsIcon})`}
-              onClick={() => {
-                setClickState("");
-                navigate("/friendList");
-              }}
-            >
-              {(friendRequests.length !== 0 || unreadMessages.length !== 0) && (
-                <NotificationDot right="-4px" bottom="2px" />
-              )}
-            </Icon>
-            <Icon
-              img={avatar ? `url(${avatar})` : `url(${memberIcon})`}
-              borderRadius="18px"
-              onClick={() => {
-                setClickState("");
-                setShowMessageFrame(false);
-                navigate("/profile");
-              }}
-            />
-          </>
-        )}
-        <Icon
-          ref={languageRef}
-          img={`url(${languageIcon})`}
-          onClick={() => setIsShowLanguages((prev) => !prev)}
-        >
-          <LanguageOptions isShowLanguages={isShowLanguages} />
-        </Icon>
-        {isLogin ? (
-          <SignBtn
+      <Container>
+        <LeftContainer>
+          <Logo
+            to="portfolioBricks"
             onClick={() => {
               setClickState("");
-              logoutHandler();
+              setShowMessageFrame(false);
             }}
-          >
-            {t("logout")}
-          </SignBtn>
-        ) : (
-          <SignBtn
-            $color="#3c3c3c"
-            backgroundColor="#f5dfa9"
-            onClick={() => {
-              setClickState("");
-              navigate("/login");
-            }}
-          >
-            {t("login")}
-          </SignBtn>
-        )}
-      </RightContainer>
-      <MobileLanguageIcon
-        ref={languageRef}
-        onClick={() => setIsShowLanguages((prev) => !prev)}
-      >
-        <LanguageOptions isShowLanguages={isShowLanguages} />
-      </MobileLanguageIcon>
-      <MenuIcon
-        ref={mobileMenuRef}
-        onClick={() => setIsShowMobileMenu((prev) => !prev)}
-      >
-        <MobileContainer maxWidth={isShowMobileMenu ? "250px" : "0"}>
-          {isLogin ? (
+          />
+          {isLogin && (
             <>
-              <MobileContext to="profile">{t("profile")}</MobileContext>
-              <MobileContext to="friendList">
-                {t("friend_list")}
-                {(friendRequests.length !== 0 ||
-                  unreadMessages.length !== 0) && (
-                  <NotificationDot right="15px" bottom="15px" />
-                )}
-              </MobileContext>
-              <MobileContext
+              <Context
+                $color="#f5dfa9"
                 to="createNewProject"
+                border={clickState === "create" ? "1px solid #f5dfa9" : "none"}
                 onClick={() => {
                   setClickState("create");
                   setShowMessageFrame(false);
                 }}
               >
                 {t("create")}
-              </MobileContext>
-              <MobileContext
+              </Context>
+              <Context
                 to="favoriteList"
+                border={
+                  clickState === "favorite" ? "1px solid #c4c4c4" : "none"
+                }
                 onClick={() => {
                   setClickState("favorite");
                   setShowMessageFrame(false);
                 }}
               >
                 {t("favorite_list")}
-              </MobileContext>
-              <MobileContext
+              </Context>
+              <Context
                 to="collection"
+                border={
+                  clickState === "collection" ? "1px solid #c4c4c4" : "none"
+                }
                 onClick={() => {
                   setClickState("collection");
                   setShowMessageFrame(false);
                 }}
               >
                 {t("collection_list")}
-              </MobileContext>
-              <SignBtn
+              </Context>
+            </>
+          )}
+        </LeftContainer>
+        <RightContainer>
+          {isLogin && (
+            <>
+              <Icon
+                img={`url(${friendsIcon})`}
                 onClick={() => {
                   setClickState("");
-                  logoutHandler();
+                  navigate("/friendList");
                 }}
               >
-                {t("logout")}
-              </SignBtn>
+                {(friendRequests.length !== 0 ||
+                  unreadMessages.length !== 0) && (
+                  <NotificationDot right="-4px" bottom="2px" />
+                )}
+              </Icon>
+              <Icon
+                img={avatar ? `url(${avatar})` : `url(${memberIcon})`}
+                borderRadius="18px"
+                onClick={() => {
+                  setClickState("");
+                  setShowMessageFrame(false);
+                  navigate("/profile");
+                }}
+              />
             </>
+          )}
+          <Icon
+            ref={languageRef}
+            img={`url(${languageIcon})`}
+            onClick={() => setIsShowLanguages((prev) => !prev)}
+          >
+            <LanguageOptions isShowLanguages={isShowLanguages} />
+          </Icon>
+          {isLogin ? (
+            <SignBtn
+              onClick={() => {
+                setClickState("");
+                logoutHandler();
+              }}
+            >
+              {t("logout")}
+            </SignBtn>
           ) : (
             <SignBtn
               $color="#3c3c3c"
@@ -494,8 +436,79 @@ function Header() {
               {t("login")}
             </SignBtn>
           )}
-        </MobileContainer>
-      </MenuIcon>
+        </RightContainer>
+        <MobileLanguageIcon
+          ref={languageRef}
+          onClick={() => setIsShowLanguages((prev) => !prev)}
+        >
+          <LanguageOptions isShowLanguages={isShowLanguages} />
+        </MobileLanguageIcon>
+        <MenuIcon
+          ref={mobileMenuRef}
+          onClick={() => setIsShowMobileMenu((prev) => !prev)}
+        >
+          <MobileContainer maxWidth={isShowMobileMenu ? "250px" : "0"}>
+            {isLogin ? (
+              <>
+                <MobileContext to="profile">{t("profile")}</MobileContext>
+                <MobileContext to="friendList">
+                  {t("friend_list")}
+                  {(friendRequests.length !== 0 ||
+                    unreadMessages.length !== 0) && (
+                    <NotificationDot right="15px" bottom="15px" />
+                  )}
+                </MobileContext>
+                <MobileContext
+                  to="createNewProject"
+                  onClick={() => {
+                    setClickState("create");
+                    setShowMessageFrame(false);
+                  }}
+                >
+                  {t("create")}
+                </MobileContext>
+                <MobileContext
+                  to="favoriteList"
+                  onClick={() => {
+                    setClickState("favorite");
+                    setShowMessageFrame(false);
+                  }}
+                >
+                  {t("favorite_list")}
+                </MobileContext>
+                <MobileContext
+                  to="collection"
+                  onClick={() => {
+                    setClickState("collection");
+                    setShowMessageFrame(false);
+                  }}
+                >
+                  {t("collection_list")}
+                </MobileContext>
+                <SignBtn
+                  onClick={() => {
+                    setClickState("");
+                    logoutHandler();
+                  }}
+                >
+                  {t("logout")}
+                </SignBtn>
+              </>
+            ) : (
+              <SignBtn
+                $color="#3c3c3c"
+                backgroundColor="#f5dfa9"
+                onClick={() => {
+                  setClickState("");
+                  navigate("/login");
+                }}
+              >
+                {t("login")}
+              </SignBtn>
+            )}
+          </MobileContainer>
+        </MenuIcon>
+      </Container>
     </Wrapper>
   );
 }

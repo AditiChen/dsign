@@ -48,8 +48,8 @@ const Wrapper = styled.div`
 `;
 
 const ArrowIcon = styled.div`
-  height: 35px;
-  width: 35px;
+  height: 24px;
+  width: 24px;
   position: fixed;
   top: 90px;
   left: 50px;
@@ -61,9 +61,9 @@ const ArrowIcon = styled.div`
     background-image: url(${arrowIconHover});
   }
   @media screen and (min-width: 950px) and (max-width: 1449px) {
-    height: 25px;
-    width: 25px;
-    top: 90px;
+    height: 20px;
+    width: 20px;
+    top: 80px;
     left: 35px;
   }
 `;
@@ -197,15 +197,6 @@ const Avatar = styled.div<{ img: string }>`
   }
 `;
 
-const MapContainer = styled.div`
-  width: 1200px;
-  height: 760px;
-  @media screen and (min-width: 950px) and (max-width: 1449px) {
-    width: 840px;
-    height: 532px;
-  }
-`;
-
 const Loading = styled(ReactLoading)`
   margin: 50px auto;
 `;
@@ -308,15 +299,14 @@ function SingleProject() {
                 {templateFilter.map((Template, index) => {
                   if (Template === googleMap) {
                     return (
-                      <MapContainer key={`${index + 1}`}>
-                        <GoogleMapAPI
-                          position={
-                            (singleProjectData &&
-                              singleProjectData[0]?.pages[index].location) ||
-                            {}
-                          }
-                        />
-                      </MapContainer>
+                      <GoogleMapAPI
+                        key={`${index + 1}`}
+                        position={
+                          (singleProjectData &&
+                            singleProjectData[0]?.pages[index].location) ||
+                          {}
+                        }
+                      />
                     );
                   }
                   return (

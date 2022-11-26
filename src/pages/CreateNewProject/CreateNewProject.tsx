@@ -21,23 +21,14 @@ import closeIconHover from "../../icons/close-icon-hover.png";
 import checkedIcon from "../../icons/checked-icon.png";
 
 const Wrapper = styled.div`
-  padding-top: 80px;
+  padding-top: 95px;
   width: 100%;
   height: 100%;
-  min-height: calc(100vh - 140px);
   display: flex;
   position: relative;
   background-color: #787878;
-  @media screen and (min-width: 1025px) and (max-width: 1199px) {
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
     padding-top: 90px;
-    min-height: calc(100vh - 120px);
-  }
-  @media screen and (min-width: 800px) and (max-width: 1024px) {
-    padding-top: 80px;
-    min-height: calc(100vh - 120px);
-  }
-  @media screen and (max-width: 799px) {
-    min-height: calc(100vh - 90px);
   }
 `;
 
@@ -45,10 +36,13 @@ const Container = styled.div`
   margin: 50px auto;
   width: 1300px;
   height: 100%;
-  min-height: calc(100vh - 260px);
+  min-height: calc(100vh - 240px);
   display: flex;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     width: 900px;
+  }
+  @media screen and (max-width: 949px) {
+    margin: 30px auto;
   }
 `;
 
@@ -78,9 +72,6 @@ const Text = styled.div`
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     font-size: 20px;
   }
-  @media screen and (max-width: 949px) {
-    font-size: 16px;
-  }
 `;
 
 const Title = styled.input`
@@ -88,6 +79,7 @@ const Title = styled.input`
   padding: 0 20px;
   width: 1200px;
   height: 60px;
+  color: #3c3c3c;
   font-size: 30px;
   font-weight: 700;
   background-color: #ffffff90;
@@ -144,7 +136,7 @@ const CloseIcon = styled.div`
 `;
 
 const SelectContainer = styled.div`
-  padding: 85px 0 10px 0;
+  padding: 75px 0 10px 0;
   width: 100vw;
   display: flex;
   position: fixed;
@@ -157,17 +149,7 @@ const SelectContainer = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
-  @media screen and (min-width: 1024px) and (max-width: 1449px) {
-    padding: 85px 0 10px 0;
-    max-height: 160px;
-    transition: max-height 0.3s ease-in;
-    overflow: hidden;
-    &:hover {
-      max-height: 240px;
-    }
-  }
-  @media screen and (min-width: 950px) and (max-width: 1023px) {
-    padding: 75px 0 10px 0;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
     max-height: 150px;
     transition: max-height 0.3s ease-in;
     overflow: hidden;
@@ -264,7 +246,7 @@ const Btn = styled.button<{
   }
 `;
 
-const CheckedIcon = styled.div`
+const CheckMainImgIcon = styled.div`
   margin-left: 10px;
   width: 25px;
   height: 25px;
@@ -272,6 +254,19 @@ const CheckedIcon = styled.div`
   background-size: cover;
   background-position: center;
   opacity: 0.8;
+`;
+
+const WarningText = styled.div`
+  display: none;
+  @media screen and (max-width: 949px) {
+    margin: 0 auto;
+    padding: 20px;
+    display: block;
+    color: #ffffff;
+    font-size: 14px;
+    line-height: 30px;
+    text-align: center;
+  }
 `;
 
 const Loading = styled(ReactLoading)`
@@ -512,7 +507,7 @@ function CreateNewProject() {
                       <>
                         <Btn onClick={() => setShowOverlay((prev) => !prev)}>
                           {t("edit_main_photo")}
-                          <CheckedIcon />
+                          <CheckMainImgIcon />
                         </Btn>
                         <Btn
                           backgroundColor="#f5dfa9"
@@ -527,6 +522,9 @@ function CreateNewProject() {
                 </>
               )}
             </EditorContainer>
+            <WarningText>
+              for better user experience, please use desktop to open this page
+            </WarningText>
           </Container>
         </Wrapper>
       </DragDropContext>

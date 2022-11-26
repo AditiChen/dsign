@@ -2,13 +2,10 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
   width: 100vw;
-  height: 70px;
+  height: 50px;
   color: #c4c4c4;
   background-color: #3c3c3c;
-  @media screen and (min-width: 800px) and (max-width: 1199px) {
-    height: 60px;
-  }
-  @media screen and (min-width: 300px) and (max-width: 799px) {
+  @media screen and (max-width: 799px) {
     height: 40px;
   }
 `;

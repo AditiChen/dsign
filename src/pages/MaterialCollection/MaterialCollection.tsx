@@ -4,11 +4,10 @@ import { useTranslation } from "react-i18next";
 import ReactLoading from "react-loading";
 import { v4 as uuid } from "uuid";
 import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import Swal from "sweetalert2";
 import imageCompression from "browser-image-compression";
 
-import { db, storage } from "../../context/firebaseSDK";
+import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
 import SinglePhotoOverlay from "../../components/Overlays/singlePhotoOverlay";
 import upLoadImgToCloudStorage from "../../utils/upLoadImgToCloudStorage";
@@ -26,25 +25,18 @@ const Wrapper = styled.div`
   width: 100%;
   min-width: 100vw;
   height: 100%;
-  min-height: calc(100vh - 140px);
   position: relative;
   display: flex;
   flex-direction: column;
-  @media screen and (min-width: 800px) and (max-width: 1024px) {
-    min-height: calc(100vh - 120px);
-  }
-  @media screen and (max-width: 799px) {
-    min-height: calc(100vh - 90px);
-  }
 `;
 
 const HeaderContainer = styled.div`
   margin: 0 auto;
-  height: 120px;
+  height: 100px;
   display: flex;
   align-items: center;
   @media screen and (min-width: 800px) and (max-width: 1024px) {
-    height: 80px;
+    height: 70px;
   }
   @media screen and (max-width: 799px) {
     height: 50px;
@@ -53,20 +45,20 @@ const HeaderContainer = styled.div`
 
 const Title = styled.div`
   padding: 0 50px;
-  font-size: 30px;
+  font-size: 24px;
   text-align: center;
   @media screen and (min-width: 800px) and (max-width: 1024px) {
-    font-size: 24px;
+    font-size: 20px;
   }
   @media screen and (max-width: 799px) {
-    padding: 0 30px;
-    font-size: 20px;
+    padding: 4px 30px 0 30px;
+    font-size: 16px;
   }
 `;
 
 const AddFolderIcon = styled.label`
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   background-color: transparent;
   border: none;
   background-image: url(${uploadPhotoIcon});
@@ -77,8 +69,8 @@ const AddFolderIcon = styled.label`
     background-image: url(${uploadPhotoIconHover});
   }
   @media screen and (max-width: 799px) {
-    width: 30px;
-    height: 30px;
+    width: 24px;
+    height: 24px;
   }
 `;
 
@@ -96,23 +88,25 @@ const Content = styled.div`
 const BricksContainer = styled.div`
   margin: 0 auto;
   padding-bottom: 50px;
-  width: 1560px;
+  width: 1390px;
   height: 100%;
   position: relative;
   display: grid;
   grid-gap: 10px;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
   @media screen and (min-width: 1400px) and (max-width: 1699px) {
-    width: 1300px;
+    width: 1190px;
   }
   @media screen and (min-width: 1100px) and (max-width: 1399px) {
-    width: 1050px;
+    width: 990px;
   }
-  @media screen and (min-width: 820px) and (max-width: 1099px) {
-    width: 780px;
+  @media screen and (min-width: 800px) and (max-width: 1099px) {
+    width: 590px;
   }
-  @media screen and (min-width: 570px) and (max-width: 819px) {
-    width: 520px;
+  @media screen and (max-width: 799px) {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    grid-gap: 6px;
+    width: 450px;
   }
   @media screen and (max-width: 569px) {
     width: 300px;
@@ -120,49 +114,53 @@ const BricksContainer = styled.div`
 `;
 
 const Img = styled.div`
-  width: 240px;
-  height: 240px;
+  width: 180px;
+  height: 180px;
   background-image: ${(props: Prop) => props.url};
   background-size: cover;
   background-position: center;
+  @media screen and (max-width: 799px) {
+    width: 140px;
+    height: 140px;
+  }
 `;
 
 const ImgContainer = styled.div`
   margin: 5px auto;
-  width: 240px;
-  height: 240px;
+  width: 180px;
+  height: 180px;
   position: relative;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 0 5px #616161;
   &:hover {
     margin: 0;
-    width: 250px;
-    height: 250px;
+    width: 190px;
+    height: 190px;
     box-shadow: 0 0 10px #3c3c3c;
   }
   &:hover > ${Img} {
-    width: 250px;
-    height: 250px;
+    width: 190px;
+    height: 190px;
   }
   @media screen and (max-width: 799px) {
-    margin: 5px auto;
-    width: 240px;
-    height: 240px;
+    margin: 3px auto;
+    width: 140px;
+    height: 140px;
     &:hover {
-      width: 240px;
-      height: 240px;
+      width: 140px;
+      height: 140px;
     }
     &:hover > ${Img} {
-      width: 240px;
-      height: 240px;
+      width: 140px;
+      height: 140px;
     }
   }
 `;
 
 const TrashIcon = styled.div`
-  width: 30px;
-  height: 30px;
+  width: 26px;
+  height: 26px;
   position: absolute;
   bottom: 5px;
   right: 5px;
@@ -174,8 +172,8 @@ const TrashIcon = styled.div`
     background-image: url(${trashIconHover});
   }
   @media screen and (max-width: 799px) {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
 `;
 

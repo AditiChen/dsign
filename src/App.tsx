@@ -14,25 +14,23 @@ const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
   }
-
   body {
     font-family: 'Roboto','Noto Sans TC','Noto Sans JP', sans-serif;
     color:#3c3c3c;
-    &
   }
   #root {
      min-height: 100vh;
   }`;
 
 const BodyWrapper = styled.div`
-  padding-top: 70px;
-  height: 100%;
   width: 100vw;
-  @media screen and (min-width: 800px) and (max-width: 1199px) {
-    padding-top: 60px;
+  height: 100%;
+  min-height: calc(100vh - 110px);
+  @media screen and (min-width: 800px) and (max-width: 949px) {
+    min-height: calc(100vh - 100px);
   }
   @media screen and (max-width: 799px) {
-    padding-top: 50px;
+    min-height: calc(100vh - 90px);
   }
 `;
 

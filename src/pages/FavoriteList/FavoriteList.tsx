@@ -28,25 +28,18 @@ const Wrapper = styled.div`
   width: 100%;
   min-width: 100vw;
   height: 100%;
-  min-height: calc(100vh - 140px);
   position: relative;
   display: flex;
   flex-direction: column;
-  @media screen and (min-width: 800px) and (max-width: 1024px) {
-    min-height: calc(100vh - 120px);
-  }
-  @media screen and (max-width: 799px) {
-    min-height: calc(100vh - 90px);
-  }
 `;
 
 const HeaderContainer = styled.div`
   margin: 0 auto;
-  height: 120px;
+  height: 100px;
   display: flex;
   align-items: center;
   @media screen and (min-width: 800px) and (max-width: 1024px) {
-    height: 80px;
+    height: 70px;
   }
   @media screen and (max-width: 799px) {
     height: 50px;
@@ -55,13 +48,14 @@ const HeaderContainer = styled.div`
 
 const Title = styled.div`
   padding: 0 50px;
-  font-size: 30px;
+  font-size: 24px;
   text-align: center;
   @media screen and (min-width: 800px) and (max-width: 1024px) {
-    font-size: 24px;
+    font-size: 20px;
   }
   @media screen and (max-width: 799px) {
-    font-size: 20px;
+    padding: 4px 30px 0 30px;
+    font-size: 16px;
   }
 `;
 
