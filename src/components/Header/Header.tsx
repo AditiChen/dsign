@@ -1,7 +1,7 @@
 import i18next, { t as i18t } from "i18next";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
-import { useState, useContext, useRef } from "react";
+import { useState, useContext, useRef, Dispatch, SetStateAction } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
@@ -140,6 +140,14 @@ const LanguageOptionsContainer = styled.div`
   z-index: 1;
 `;
 
+const LanguageContainer = styled.div`
+  margin-left: 20px;
+  position: relative;
+  @media screen and (min-width: 800px) and (max-width: 1024px) {
+    margin-left: 20px;
+  }
+`;
+
 const Icon = styled.div`
   height: 35px;
   width: 35px;
@@ -171,7 +179,7 @@ const NotificationDot = styled.div`
   bottom: ${(props: Prop) => props.bottom};
   border-radius: 50%;
   background-image: linear-gradient(#89b07e, #4f8365);
-  @media screen and (min-width: 800px) and (max-width: 1024px) {
+  @media screen and (max-width: 1024px) {
     height: 10px;
     width: 10px;
   }
@@ -190,15 +198,22 @@ const LanguageHeader = styled.div`
   }
 `;
 
-const Language = styled.div`
+const LanguageOptionsText = styled.div`
   padding: 10px 0;
   font-size: 14px;
-  color: #3c3c3c;
+  color: ${(props: Prop) => props.$color};
   text-align: center;
   background-color: ${(props: Prop) => props.backgroundColor};
   &:hover {
-    background-color: #3c3c3c;
+    background-color: #787878;
     color: white;
+    cursor: pointer;
+  }
+  @media screen and (max-width: 799px) {
+    font-size: 12px;
+    &:nth-child(4) {
+      border-bottom: 1px solid #c4c4c4;
+    }
   }
 `;
 
@@ -228,37 +243,30 @@ const SignBtn = styled.button`
   }
 `;
 
-const MobileLanguageIcon = styled.div`
-  height: 26px;
-  width: 26px;
-  position: fixed;
-  right: 55px;
+const MobileMenuContainer = styled.div`
+  margin-right: 10px;
   display: none;
-  background-image: url(${languageIcon});
-  background-size: cover;
-  background-position: center;
+  position: fixed;
+  right: 10px;
   @media screen and (max-width: 799px) {
     display: block;
   }
 `;
 
 const MenuIcon = styled.div`
-  margin-right: 10px;
   height: 26px;
   width: 26px;
-  display: none;
-  position: fixed;
-  right: 10px;
   background-image: url(${menuIcon});
   background-size: cover;
   background-position: center;
-  @media screen and (max-width: 799px) {
-    display: block;
+  &:hover {
+    cursor: pointer;
   }
 `;
 
 const MobileContainer = styled.div`
-  max-width: ${(props: Prop) => props.maxWidth};
+  max-height: ${(props: Prop) => props.maxHeight};
+  width: 200px;
   position: fixed;
   right: 0px;
   top: 50px;
@@ -266,29 +274,59 @@ const MobileContainer = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transition: max-width 0.3s ease-in;
+  transition: max-height 0.3s ease-in;
   box-shadow: -1px 0 5px #3c3c3c;
+`;
+
+const MobileLanguageContext = styled.div`
+  padding: 15px 10px;
+  width: 100%;
+  height: 45px;
+  color: #c4c4c4;
+  font-size: 14px;
+  border-bottom: 1px solid #c4c4c4;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const MobileLanguageContainer = styled.div`
+  max-height: ${(props: Prop) => props.maxHeight};
+  overflow: hidden;
+  transition: max-height 0.3s ease-in;
+`;
+
+const MobileLanguageInnerContainer = styled.div`
+  height: 129px;
 `;
 
 const MobileContext = styled(Link)`
   padding: 15px 10px;
-  width: 200px;
-  font-size: 14px;
-  position: relative;
-  text-decoration: none;
+  width: 100%;
+  height: 45px;
   color: #c4c4c4;
+  font-size: 14px;
+  text-decoration: none;
+  position: relative;
   border-bottom: 1px solid #c4c4c4;
 `;
 
-function LanguageOptions({ isShowLanguages }: { isShowLanguages: boolean }) {
-  const [activeIndex, setActiveIndex] = useState(0);
-
+function LanguageOptions({
+  isShowLanguages,
+  activeIndex,
+  setActiveIndex,
+}: {
+  isShowLanguages: boolean;
+  activeIndex: number;
+  setActiveIndex: Dispatch<SetStateAction<number>>;
+}) {
   return (
     <LanguageOptionsContainer maxHeight={isShowLanguages ? "180px" : "0"}>
       <LanguageHeader>{i18t("languages")}</LanguageHeader>
       {languages.map((lng, index) => (
-        <Language
+        <LanguageOptionsText
           key={`${lng.code}`}
+          $color={activeIndex === index ? "#3c3c3c" : "#3c3c3c90"}
           backgroundColor={activeIndex === index ? "#d4d4d4" : "none"}
           onClick={() => {
             setActiveIndex(index);
@@ -296,7 +334,7 @@ function LanguageOptions({ isShowLanguages }: { isShowLanguages: boolean }) {
           }}
         >
           {lng.name}
-        </Language>
+        </LanguageOptionsText>
       ))}
     </LanguageOptionsContainer>
   );
@@ -311,6 +349,7 @@ function Header() {
   const [clickState, setClickState] = useState("");
   const [isShowLanguages, setIsShowLanguages] = useState(false);
   const [isShowMobileMenu, setIsShowMobileMenu] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
   const languageRef = useRef<HTMLDivElement>(null!);
   const mobileMenuRef = useRef<HTMLDivElement>(null!);
 
@@ -408,13 +447,19 @@ function Header() {
               />
             </>
           )}
-          <Icon
-            ref={languageRef}
-            img={`url(${languageIcon})`}
-            onClick={() => setIsShowLanguages((prev) => !prev)}
-          >
-            <LanguageOptions isShowLanguages={isShowLanguages} />
-          </Icon>
+          <LanguageContainer ref={languageRef}>
+            <Icon
+              img={`url(${languageIcon})`}
+              onClick={() => setIsShowLanguages((prev) => !prev)}
+            >
+              <LanguageOptions
+                isShowLanguages={isShowLanguages}
+                activeIndex={activeIndex}
+                setActiveIndex={setActiveIndex}
+              />
+            </Icon>
+          </LanguageContainer>
+
           {isLogin ? (
             <SignBtn
               onClick={() => {
@@ -437,17 +482,40 @@ function Header() {
             </SignBtn>
           )}
         </RightContainer>
-        <MobileLanguageIcon
-          ref={languageRef}
-          onClick={() => setIsShowLanguages((prev) => !prev)}
-        >
-          <LanguageOptions isShowLanguages={isShowLanguages} />
-        </MobileLanguageIcon>
-        <MenuIcon
-          ref={mobileMenuRef}
-          onClick={() => setIsShowMobileMenu((prev) => !prev)}
-        >
-          <MobileContainer maxWidth={isShowMobileMenu ? "250px" : "0"}>
+        <MobileMenuContainer ref={mobileMenuRef}>
+          <MenuIcon onClick={() => setIsShowMobileMenu((prev) => !prev)} />
+          <MobileContainer
+            maxHeight={isShowMobileMenu ? "450px" : "0"}
+            ref={languageRef}
+          >
+            <MobileLanguageContext
+              onClick={() => setIsShowLanguages((prev) => !prev)}
+            >
+              {i18t("languages")}
+            </MobileLanguageContext>
+
+            <MobileLanguageContainer
+              maxHeight={isShowLanguages ? "129px" : "0"}
+            >
+              <MobileLanguageInnerContainer>
+                {languages.map((lng, index) => (
+                  <LanguageOptionsText
+                    key={`${lng.code}`}
+                    $color={activeIndex === index ? "#ffffff" : "#c4c4c490"}
+                    backgroundColor={
+                      activeIndex === index ? "#64646490" : "#646464"
+                    }
+                    onClick={() => {
+                      setActiveIndex(index);
+                      i18next.changeLanguage(lng.code);
+                    }}
+                  >
+                    {lng.name}
+                  </LanguageOptionsText>
+                ))}
+              </MobileLanguageInnerContainer>
+            </MobileLanguageContainer>
+
             {isLogin ? (
               <>
                 <MobileContext to="profile">{t("profile")}</MobileContext>
@@ -507,7 +575,7 @@ function Header() {
               </SignBtn>
             )}
           </MobileContainer>
-        </MenuIcon>
+        </MobileMenuContainer>
       </Container>
     </Wrapper>
   );

@@ -24,11 +24,18 @@ const Wrapper = styled.div`
   padding-top: 95px;
   width: 100%;
   height: 100%;
+  min-height: calc(100vh - 110px);
   display: flex;
   position: relative;
   background-color: #787878;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     padding-top: 90px;
+  }
+  @media screen and (min-width: 800px) and (max-width: 949px) {
+    min-height: calc(100vh - 100px);
+  }
+  @media screen and (max-width: 799px) {
+    min-height: calc(100vh - 90px);
   }
 `;
 

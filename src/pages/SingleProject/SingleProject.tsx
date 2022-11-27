@@ -35,16 +35,9 @@ interface UserProjectType {
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
-  min-height: calc(100vh - 140px);
   display: flex;
   position: relative;
   background-color: #3c3c3c90;
-  @media screen and (min-width: 800px) and (max-width: 1024px) {
-    min-height: calc(100vh - 120px);
-  }
-  @media screen and (max-width: 799px) {
-    min-height: calc(100vh - 90px);
-  }
 `;
 
 const ArrowIcon = styled.div`
@@ -66,19 +59,36 @@ const ArrowIcon = styled.div`
     top: 80px;
     left: 35px;
   }
+  @media screen and (max-width: 949px) {
+    height: 12px;
+    width: 12px;
+    top: 60px;
+    left: 10px;
+  }
 `;
 
 const Container = styled.div`
   margin: 0 auto;
   width: 1200px;
   height: 100%;
-  min-height: 100%;
+  min-height: calc(100vh - 110px);
   display: flex;
   flex-direction: column;
   background-color: white;
   box-shadow: 0 0 20px black;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     width: 840px;
+  }
+  @media screen and (max-width: 949px) {
+    width: 600px;
+    min-height: calc(100vh - 100px);
+  }
+  @media screen and (max-width: 799px) {
+    min-height: calc(100vh - 90px);
+  }
+  @media screen and (max-width: 650px) {
+    width: 300px;
+    min-height: calc(100vh - 90px);
   }
 `;
 
@@ -93,6 +103,14 @@ const HeaderContainer = styled.div`
     padding: 8px 14px;
     height: 56px;
   }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    padding: 6px 10px;
+    height: 40px;
+  }
+  @media screen and (max-width: 649px) {
+    padding: 3px 5px;
+    height: 25px;
+  }
 `;
 
 const Title = styled.div`
@@ -100,6 +118,13 @@ const Title = styled.div`
   font-weight: 700;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     font-size: 20px;
+  }
+  @media screen and (max-width: 949px) {
+    font-weight: normal;
+    font-size: 15px;
+  }
+  @media screen and (max-width: 649px) {
+    font-size: 8px;
   }
 `;
 
@@ -114,6 +139,9 @@ const UserInfoContainer = styled.div`
   z-index: 2;
   top: 44px;
   right: 0;
+  @media screen and (max-width: 949px) {
+    display: none;
+  }
 `;
 
 const UserInfoInnerContainer = styled.div`
@@ -194,6 +222,10 @@ const Avatar = styled.div<{ img: string }>`
     &:hover > ${UserInfoContainer} {
       max-height: 105px;
     }
+  }
+  @media screen and (max-width: 949px) {
+    width: 18px;
+    height: 18px;
   }
 `;
 

@@ -15,9 +15,18 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   align-items: center;
+  border-bottom: 1px solid #b4b4b4;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     width: 840px;
     height: 532px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 600px;
+    height: 380px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 300px;
+    height: 185px;
   }
 `;
 
@@ -31,6 +40,14 @@ const BackgroundImg = styled.div`
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     width: 840px;
     height: 532px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 600px;
+    height: 380px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 300px;
+    height: 185px;
   }
 `;
 
@@ -47,6 +64,16 @@ const MiddleContainer = styled.div`
     padding: 65px 56px 40px 21px;
     width: 315px;
     left: 210px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    padding: 47px 40px 22px 15px;
+    width: 225px;
+    left: 150px;
+  }
+  @media screen and (max-width: 649px) {
+    padding: 24px 20px 14px 7px;
+    width: 112px;
+    left: 75px;
   }
 `;
 
@@ -71,6 +98,16 @@ const Context = styled.textarea`
     font-size: 14px;
     line-height: 17px;
   }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    padding: 4px;
+    font-size: 10px;
+    line-height: 12px;
+  }
+  @media screen and (max-width: 649px) {
+    padding: 2px;
+    font-size: 5px;
+    line-height: 6px;
+  }
 `;
 
 const RightImg = styled.div`
@@ -86,6 +123,17 @@ const RightImg = styled.div`
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     width: 315px;
     height: 452px;
+    right: 35px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 225px;
+    height: 322px;
+    right: 25px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 112px;
+    height: 141px;
+    right: 12px;
   }
 `;
 

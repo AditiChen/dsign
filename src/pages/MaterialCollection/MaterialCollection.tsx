@@ -81,8 +81,14 @@ const ContentContainer = styled.div`
 const Content = styled.div`
   width: 100%;
   padding: 0 50px;
-  font-size: 24px;
+  font-size: 18px;
   text-align: center;
+  @media screen and (min-width: 800px) and (max-width: 1024px) {
+    font-size: 14px;
+  }
+  @media screen and (max-width: 799px) {
+    font-size: 12px;
+  }
 `;
 
 const BricksContainer = styled.div`
@@ -104,12 +110,15 @@ const BricksContainer = styled.div`
     width: 590px;
   }
   @media screen and (max-width: 799px) {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     grid-gap: 6px;
-    width: 450px;
+    width: 570px;
   }
-  @media screen and (max-width: 569px) {
-    width: 300px;
+  @media screen and (max-width: 629px) {
+    width: 420px;
+  }
+  @media screen and (max-width: 470px) {
+    width: 280px;
   }
 `;
 
@@ -120,8 +129,8 @@ const Img = styled.div`
   background-size: cover;
   background-position: center;
   @media screen and (max-width: 799px) {
-    width: 140px;
-    height: 140px;
+    width: 130px;
+    height: 130px;
   }
 `;
 
@@ -145,15 +154,15 @@ const ImgContainer = styled.div`
   }
   @media screen and (max-width: 799px) {
     margin: 3px auto;
-    width: 140px;
-    height: 140px;
+    width: 130px;
+    height: 130px;
     &:hover {
-      width: 140px;
-      height: 140px;
+      width: 130px;
+      height: 130px;
     }
     &:hover > ${Img} {
-      width: 140px;
-      height: 140px;
+      width: 130px;
+      height: 130px;
     }
   }
 `;
@@ -178,7 +187,10 @@ const TrashIcon = styled.div`
 `;
 
 const Loading = styled(ReactLoading)`
-  margin: 100px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 function MaterialCollection() {

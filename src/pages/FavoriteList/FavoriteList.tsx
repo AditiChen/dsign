@@ -66,13 +66,13 @@ const ContentContainer = styled.div`
 const Content = styled.div`
   width: 100%;
   padding: 0 50px;
-  font-size: 24px;
+  font-size: 18px;
   text-align: center;
   @media screen and (min-width: 800px) and (max-width: 1024px) {
-    font-size: 18px;
+    font-size: 14px;
   }
   @media screen and (max-width: 799px) {
-    font-size: 14px;
+    font-size: 12px;
   }
 `;
 

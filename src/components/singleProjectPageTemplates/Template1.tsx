@@ -17,9 +17,18 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   align-items: center;
+  border-bottom: 1px solid #b4b4b4;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     width: 840px;
     height: 532px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 600px;
+    height: 380px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 300px;
+    height: 185px;
   }
 `;
 
@@ -34,6 +43,14 @@ const BackgroundImg = styled.div`
     width: 840px;
     height: 532px;
   }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 600px;
+    height: 380px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 300px;
+    height: 185px;
+  }
 `;
 
 const Trapezoid = styled.div`
@@ -47,6 +64,12 @@ const Trapezoid = styled.div`
   background-position: center;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     width: 347px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 248px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 124px;
   }
 `;
 
@@ -78,6 +101,24 @@ const Context = styled.textarea`
     right: 35px;
     bottom: 196px;
   }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    padding: 4px;
+    width: 135px;
+    height: 90px;
+    font-size: 10px;
+    line-height: 12px;
+    right: 25px;
+    bottom: 140px;
+  }
+  @media screen and (max-width: 649px) {
+    padding: 2px;
+    width: 67px;
+    height: 45px;
+    font-size: 5px;
+    line-height: 6px;
+    right: 12px;
+    bottom: 70px;
+  }
 `;
 
 const ImgContainer = styled.div`
@@ -88,6 +129,14 @@ const ImgContainer = styled.div`
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     right: 35px;
     bottom: 35px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    right: 25px;
+    bottom: 25px;
+  }
+  @media screen and (max-width: 649px) {
+    right: 12px;
+    bottom: 12px;
   }
 `;
 
@@ -101,6 +150,14 @@ const LeftImg = styled.div`
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     width: 210px;
     height: 140px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 150px;
+    height: 100px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 75px;
+    height: 50px;
   }
 `;
 
@@ -116,6 +173,16 @@ const RightImg = styled.div`
     margin-left: 21px;
     width: 140px;
     height: 140px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    margin-left: 15px;
+    width: 100px;
+    height: 100px;
+  }
+  @media screen and (max-width: 649px) {
+    margin-left: 12px;
+    width: 50px;
+    height: 50px;
   }
 `;
 

@@ -166,9 +166,19 @@ const CollectionContainer = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
-  @media screen and (min-width: 950px) and (max-width: 1449px) {
+  @media screen and (max-width: 1449px) {
     margin: 6px 0;
     padding: 14px;
+    grid-template-columns: repeat(8, 1fr);
+  }
+  @media screen and (max-width: 1339px) {
+    grid-template-columns: repeat(7, 1fr);
+  }
+  @media screen and (max-width: 1189px) {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  @media screen and (max-width: 1049px) {
+    grid-template-columns: repeat(5, 1fr);
   }
 `;
 
@@ -286,8 +296,9 @@ const Text = styled.div`
 
 const Loading = styled(ReactLoading)`
   position: absolute;
-  left: 425px;
-  top: 280px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-45%, -50%);
   z-index: 104;
 `;
 
@@ -392,7 +403,12 @@ function Overlay({
                   {progressing && (
                     <>
                       <LoadingBackground />
-                      <Loading type="spokes" color="#ffffff" />
+                      <Loading
+                        type="spokes"
+                        color="#ffffff"
+                        width="40px"
+                        height="40px"
+                      />
                     </>
                   )}
                   <Cropper

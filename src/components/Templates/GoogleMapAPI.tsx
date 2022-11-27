@@ -18,6 +18,14 @@ const Wrapper = styled.div`
     width: 840px;
     height: 532px;
   }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 600px;
+    height: 380px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 300px;
+    height: 185px;
+  }
 `;
 
 const InputContainer = styled.div`

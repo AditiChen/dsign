@@ -20,9 +20,18 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   background-color: #b4b4b490;
+  border-bottom: 1px solid #949494;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     width: 840px;
     height: 532px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 600px;
+    height: 380px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 300px;
+    height: 185px;
   }
 `;
 
@@ -38,6 +47,16 @@ const LeftContainer = styled.div`
     margin: 0 35px;
     padding: 42px 0;
     width: 420px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    margin: 0 25px;
+    padding: 30px 0;
+    width: 300px;
+  }
+  @media screen and (max-width: 649px) {
+    margin: 0 12px;
+    padding: 15px 0;
+    width: 150px;
   }
 `;
 
@@ -62,6 +81,18 @@ const Context = styled.textarea`
     font-size: 14px;
     line-height: 17px;
   }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    padding: 4px;
+    height: 150px;
+    font-size: 10px;
+    line-height: 12px;
+  }
+  @media screen and (max-width: 649px) {
+    padding: 2px;
+    height: 75px;
+    font-size: 5px;
+    line-height: 6px;
+  }
 `;
 
 const LeftImg = styled.div`
@@ -77,6 +108,14 @@ const LeftImg = styled.div`
     height: 210px;
     border-radius: 6px;
   }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    height: 150px;
+    border-radius: 4px;
+  }
+  @media screen and (max-width: 649px) {
+    height: 75px;
+    border-radius: 2px;
+  }
 `;
 
 const RightImg = styled.div`
@@ -89,6 +128,12 @@ const RightImg = styled.div`
   position: relative;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     width: 350px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 250px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 125px;
   }
 `;
 

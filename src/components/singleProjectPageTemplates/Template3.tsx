@@ -17,9 +17,18 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   align-items: center;
+  border-bottom: 1px solid #b4b4b4;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     width: 840px;
     height: 532px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 600px;
+    height: 380px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 300px;
+    height: 185px;
   }
 `;
 
@@ -34,6 +43,14 @@ const BackgroundImg = styled.div`
     width: 840px;
     height: 532px;
   }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 600px;
+    height: 380px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 300px;
+    height: 185px;
+  }
 `;
 
 const LeftCircle = styled.div`
@@ -47,6 +64,12 @@ const LeftCircle = styled.div`
   background-position: center;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     width: 298px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 212px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 106px;
   }
 `;
 
@@ -78,6 +101,24 @@ const Context = styled.textarea`
     left: 21px;
     bottom: 21px;
   }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    padding: 4px;
+    height: 74px;
+    width: 129px;
+    font-size: 10px;
+    line-height: 12px;
+    left: 15px;
+    bottom: 15px;
+  }
+  @media screen and (max-width: 649px) {
+    padding: 2px;
+    height: 37px;
+    width: 60px;
+    font-size: 5px;
+    line-height: 6px;
+    left: 7px;
+    bottom: 7px;
+  }
 `;
 
 const LeftImg = styled.div`
@@ -96,6 +137,18 @@ const LeftImg = styled.div`
     height: 230px;
     top: 49px;
     left: 35px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 165px;
+    height: 165px;
+    top: 35px;
+    left: 25px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 82px;
+    height: 82px;
+    top: 17px;
+    left: 12px;
   }
 `;
 
@@ -117,6 +170,20 @@ const RightImg = styled.div`
     height: 140px;
     right: 49px;
     bottom: 49px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    margin-left: 15px;
+    width: 100px;
+    height: 100px;
+    right: 35px;
+    bottom: 35px;
+  }
+  @media screen and (max-width: 649px) {
+    margin-left: 7px;
+    width: 50px;
+    height: 50px;
+    right: 17px;
+    bottom: 17px;
   }
 `;
 

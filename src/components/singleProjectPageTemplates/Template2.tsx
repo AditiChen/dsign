@@ -22,6 +22,14 @@ const Wrapper = styled.div`
     width: 840px;
     height: 532px;
   }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 600px;
+    height: 380px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 300px;
+    height: 185px;
+  }
 `;
 
 const HeaderContainer = styled.div`
@@ -34,13 +42,21 @@ const HeaderContainer = styled.div`
     padding: 14px;
     height: 154px;
   }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    padding: 10px;
+    height: 110px;
+  }
+  @media screen and (max-width: 649px) {
+    padding: 5px;
+    height: 55px;
+  }
 `;
 
 const Context = styled.textarea`
   margin-left: auto;
   padding: 10px;
-  height: 180px;
   width: 410px;
+  height: 180px;
   color: #ffffff;
   font-size: 20px;
   line-height: 24px;
@@ -55,10 +71,24 @@ const Context = styled.textarea`
   }
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     padding: 6px;
-    height: 126px;
     width: 287px;
+    height: 126px;
     font-size: 14px;
     line-height: 17px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    padding: 4px;
+    width: 205px;
+    height: 90px;
+    font-size: 10px;
+    line-height: 12px;
+  }
+  @media screen and (max-width: 649px) {
+    padding: 2px;
+    width: 102px;
+    height: 45px;
+    font-size: 5px;
+    line-height: 6px;
   }
 `;
 
@@ -73,6 +103,14 @@ const ImgContainer = styled.div`
     width: 840px;
     height: 378px;
   }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 600px;
+    height: 270px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 300px;
+    height: 135px;
+  }
 `;
 
 const AsideImg = styled.div`
@@ -84,6 +122,12 @@ const AsideImg = styled.div`
   background-position: center;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     width: 300px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 215px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 107px;
   }
 `;
 
@@ -98,6 +142,12 @@ const MiddleImgContainer = styled.div`
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     width: 224px;
   }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 160px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 80px;
+  }
 `;
 
 const MiddleImg = styled.div`
@@ -110,6 +160,14 @@ const MiddleImg = styled.div`
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     width: 224px;
     height: 185px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 160px;
+    height: 132px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 80px;
+    height: 66px;
   }
 `;
 
