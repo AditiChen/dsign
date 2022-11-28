@@ -83,7 +83,7 @@ const Context = styled.textarea`
   height: 100%;
   color: #ffffff;
   font-size: 20px;
-  line-height: 24px;
+  line-height: 26px;
   background-color: transparent;
   border: none;
   resize: none;
