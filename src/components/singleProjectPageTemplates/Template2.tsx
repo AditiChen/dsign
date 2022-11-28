@@ -17,7 +17,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: #696969;
-  border-bottom: 1px solid #b4b4b4;
+  border-top: 1px solid #b4b4b4;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     width: 840px;
     height: 532px;

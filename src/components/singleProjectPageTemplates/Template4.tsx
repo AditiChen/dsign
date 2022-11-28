@@ -21,7 +21,7 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   background-color: #b4b4b490;
-  border-bottom: 1px solid #949494;
+  border-top: 1px solid #949494;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     padding: 42px 35px;
     width: 840px;
