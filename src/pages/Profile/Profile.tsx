@@ -280,6 +280,7 @@ const Icon = styled.div`
   background-size: cover;
   &:hover {
     background-image: ${(props: Prop) => props.hoverImg};
+    cursor: pointer;
   }
   @media screen and (max-width: 1049px) {
     width: 20px;
