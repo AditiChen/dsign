@@ -35,9 +35,16 @@ interface UserProjectType {
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
+  min-height: calc(100vh - 110px);
   display: flex;
   position: relative;
   background-color: #3c3c3c90;
+  @media screen and (max-width: 949px) {
+    min-height: calc(100vh - 100px);
+  }
+  @media screen and (max-width: 799px) {
+    min-height: calc(100vh - 90px);
+  }
 `;
 
 const ArrowIcon = styled.div`
@@ -71,7 +78,6 @@ const Container = styled.div`
   margin: 0 auto;
   width: 1200px;
   height: 100%;
-  min-height: calc(100vh - 110px);
   display: flex;
   flex-direction: column;
   background-color: white;
@@ -81,14 +87,9 @@ const Container = styled.div`
   }
   @media screen and (max-width: 949px) {
     width: 600px;
-    min-height: calc(100vh - 100px);
-  }
-  @media screen and (max-width: 799px) {
-    min-height: calc(100vh - 90px);
   }
   @media screen and (max-width: 650px) {
     width: 300px;
-    min-height: calc(100vh - 90px);
   }
 `;
 
