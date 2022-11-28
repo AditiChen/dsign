@@ -260,7 +260,9 @@ const ProjectLeftContainer = styled.div`
 `;
 
 const ProjectTitle = styled.div`
+  padding-left: 10px;
   font-size: 24px;
+  color: #3c3c3c;
   @media screen and (max-width: 1049px) {
     font-size: 16px;
   }

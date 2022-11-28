@@ -99,6 +99,7 @@ const HeaderContainer = styled.div`
   height: 80px;
   display: flex;
   align-items: flex-end;
+  border-bottom: 1px solid #b4b4b4;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     padding: 8px 14px;
     height: 56px;
