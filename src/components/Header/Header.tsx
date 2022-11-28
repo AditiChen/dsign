@@ -274,7 +274,7 @@ const MobileContainer = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transition: max-height 0.3s ease-in;
+  transition: max-height 0.5s ease-in;
   box-shadow: -1px 0 5px #3c3c3c;
 `;
 

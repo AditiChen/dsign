@@ -512,9 +512,7 @@ function EditExistProject() {
                 </Btn>
               </FooterContainer>
             </EditorContainer>
-            <WarningText>
-              for better user experience, please use desktop to open this page
-            </WarningText>
+            <WarningText>{t("small_screen_warning")}</WarningText>
           </Container>
         </Wrapper>
       </DragDropContext>

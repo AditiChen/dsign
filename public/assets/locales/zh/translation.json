@@ -55,6 +55,7 @@
   "project_list": "作品列表",
   "go_to_create_project": "作品列表是空的喔，快去新增作品吧 :)",
   "delete_project_warning": "確定要刪除這個專案嗎?",
+  "small_screen_warning": "建立新專案功能僅提供電腦版網頁使用",
 
   "search_friend": "輸入Email或是名稱搜尋好友",
   "send_friend_request": "加好友",
@@ -78,5 +79,8 @@
   "empty_collection": "你的素材庫現在是空的喔，快去上傳照片吧！",
   "delete_photo_warning": "確定要刪除這張照片嗎？",
 
-  "empty_favorite_list": "你的最愛現在是空的喔，快去加些喜歡的專案吧！"
+  "empty_favorite_list": "你的最愛現在是空的喔，快去加些喜歡的專案吧！",
+
+  "introduction": "自我介紹",
+  "user_profile": "個人資訊"
 }

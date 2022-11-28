@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 import { doc, getDoc } from "firebase/firestore";
 import ReactLoading from "react-loading";
 
@@ -189,7 +190,6 @@ const MobileHeaderContainer = styled.div`
 const MobileSwitchStatusBtn = styled.div<{ color: string; border: string }>`
   display: none;
   @media screen and (max-width: 1049px) {
-    margin: 5px 0;
     color: ${(props) => props.color};
     font-size: 16px;
     font-weight: 600;
@@ -202,7 +202,7 @@ const MobileSwitchStatusBtn = styled.div<{ color: string; border: string }>`
       color: #3c3c3c;
     }
     & + & {
-      margin-left: 10px;
+      margin-left: 20px;
     }
   }
 `;
@@ -220,6 +220,7 @@ const Loading = styled(ReactLoading)`
 `;
 
 function OtherUserProfile() {
+  const { t } = useTranslation();
   const { userId, friendList } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [userProjects, setUserProjects] = useState<UserProjectsType[]>([]);
@@ -275,7 +276,7 @@ function OtherUserProfile() {
           </Avatar>
           <UserName>{userData && userData.name}</UserName>
           <UserEmail>{userData && userData.email}</UserEmail>
-          <IntroText>Introduction</IntroText>
+          <IntroText>{t("introduction")}</IntroText>
           <Introduction value={userData && userData.introduction} disabled />
         </UserInfoContainer>
         <BricksContainer>
@@ -300,14 +301,14 @@ function OtherUserProfile() {
             border={clickState === "profile" ? "1px solid #3c3c3c" : "none"}
             onClick={() => setClickState("profile")}
           >
-            User Profile
+            {t("user_profile")}
           </MobileSwitchStatusBtn>
           <MobileSwitchStatusBtn
             color={clickState === "project" ? "#3c3c3c" : "#b4b4b4"}
             border={clickState === "project" ? "1px solid #3c3c3c" : "none"}
             onClick={() => setClickState("project")}
           >
-            Project List
+            {t("project_list")}
           </MobileSwitchStatusBtn>
         </MobileHeaderContainer>
         <MobileBodyContainer>
@@ -322,7 +323,7 @@ function OtherUserProfile() {
               </Avatar>
               <UserName>{userData && userData.name}</UserName>
               <UserEmail>{userData && userData.email}</UserEmail>
-              <IntroText>Introduction</IntroText>
+              <IntroText>{t("introduction")}</IntroText>
               <Introduction
                 value={userData && userData.introduction}
                 disabled

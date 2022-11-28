@@ -55,6 +55,7 @@
   "project_list": "プロジェクト一覧",
   "go_to_create_project": "空っぽ",
   "delete_project_warning": "本当にこのプロジェクトを削除しますか？",
+  "small_screen_warning": "新規プロジェクト作成機能はPC版サイトでのみ利用可能",
 
   "search_friend": "メールアドレスまたはユーザー名を入力...",
   "send_friend_request": "友達追加",
@@ -78,5 +79,8 @@
   "empty_collection": "あなたのコレクションは空です、写真をアップロードしてください！",
   "delete_photo_warning": "本当にこの写真を削除してもいいのでしょうか？",
 
-  "empty_favorite_list": "お気に入りリストが空っぽなので、プロジェクトを追加しに行こう"
+  "empty_favorite_list": "お気に入りリストが空っぽなので、プロジェクトを追加しに行こう",
+
+  "introduction": "紹介",
+  "user_profile": "個人情報"
 }
