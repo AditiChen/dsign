@@ -32,7 +32,7 @@ const Wrapper = styled.div`
   width: 100%;
   min-width: 100vw;
   height: 100%;
-  min-height: calc(100vh - 140px);
+  min-height: calc(100vh - 110px);
   position: relative;
   display: flex;
   background-color: #787878;
@@ -54,6 +54,7 @@ const Container = styled.div`
   display: flex;
   @media screen and (max-width: 549px) {
     width: 90vw;
+    max-width: 350px;
   }
 `;
 
