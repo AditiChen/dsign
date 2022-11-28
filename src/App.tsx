@@ -1,3 +1,4 @@
+import "./stylesSheet/global.css";
 import { Suspense } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import styled, { createGlobalStyle } from "styled-components";
@@ -13,7 +14,6 @@ const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
   }
-
   body {
     font-family: 'Roboto','Noto Sans TC','Noto Sans JP', sans-serif;
     color:#3c3c3c;
@@ -21,6 +21,18 @@ const GlobalStyle = createGlobalStyle`
   #root {
      min-height: 100vh;
   }`;
+
+const BodyWrapper = styled.div`
+  width: 100vw;
+  height: 100%;
+  min-height: calc(100vh - 110px);
+  @media screen and (min-width: 800px) and (max-width: 949px) {
+    min-height: calc(100vh - 100px);
+  }
+  @media screen and (max-width: 799px) {
+    min-height: calc(100vh - 90px);
+  }
+`;
 
 const Loading = styled(ReactLoading)`
   margin: 50px auto;
@@ -37,7 +49,9 @@ function App() {
       <AuthContextProvider>
         <FriendContextProvider>
           {location.pathname !== "/" && <Header />}
-          <Outlet />
+          <BodyWrapper>
+            <Outlet />
+          </BodyWrapper>
           {location.pathname !== "/" && <Footer />}
         </FriendContextProvider>
       </AuthContextProvider>

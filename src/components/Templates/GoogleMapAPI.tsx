@@ -12,8 +12,20 @@ import ReactLoading from "react-loading";
 
 const Wrapper = styled.div`
   width: 1200px;
-  height: 700px;
+  height: 760px;
   position: relative;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 532px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 600px;
+    height: 380px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 300px;
+    height: 185px;
+  }
 `;
 
 const InputContainer = styled.div`
@@ -22,6 +34,9 @@ const InputContainer = styled.div`
   position: absolute;
   right: 0;
   top: 0;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 15px;
+  }
 `;
 const GoogleInput = styled.input`
   padding: 5px 10px;
@@ -30,18 +45,32 @@ const GoogleInput = styled.input`
   color: #3c3c3c;
   border: 1px solid #c3c3c3;
   border-radius: 5px;
+  &:focus {
+    outline: none;
+    background-color: #f9f9f9;
+  }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    height: 30px;
+    width: 280px;
+  }
 `;
 
 const ConfirmInputBtn = styled.button`
   margin-left: 10px;
   height: 40px;
-  width: 110px;
+  min-width: 110px;
   border: 1px solid #3c3c3c40;
   border-radius: 10px;
   &:hover {
     cursor: pointer;
     color: #ffffff;
     background-color: #616161;
+  }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    height: 30px;
+    min-width: 75px;
+    border-radius: 6px;
+    font-size: 8px;
   }
 `;
 

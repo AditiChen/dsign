@@ -39,6 +39,11 @@ const Wrapper = styled.div`
   border: 1px solid #3c3c3c60;
   border-radius: 10px;
   z-index: 20;
+  @media screen and (max-width: 399px) {
+    width: 280px;
+    right: 10px;
+    bottom: 50px;
+  }
 `;
 
 const CloseIcon = styled.div`
@@ -54,6 +59,12 @@ const CloseIcon = styled.div`
   &:hover {
     cursor: pointer;
     background-image: url(${closeIconHover});
+  }
+  @media screen and (max-width: 399px) {
+    width: 24px;
+    height: 24px;
+    right: 5px;
+    bottom: 540px;
   }
 `;
 
@@ -73,21 +84,32 @@ const AvatarContainer = styled.div`
   display: flex;
   align-items: center;
   box-shadow: 0 1px 3px #3c3c3c80;
+  @media screen and (max-width: 399px) {
+    height: 40px;
+  }
 `;
 
 const Avatar = styled.div`
   margin: 0 5px;
   width: 36px;
   height: 36px;
-  border-radius: 18px;
+  border-radius: 50%;
   background-image: ${(props: Prop) => props.img};
   background-position: center;
   background-size: cover;
+  @media screen and (max-width: 399px) {
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 const Name = styled.div`
   margin-left: 10px;
   font-size: 20px;
+  @media screen and (max-width: 399px) {
+    margin-left: 0;
+    font-size: 16px;
+  }
 `;
 
 const MessageContainer = styled.div`
@@ -98,6 +120,9 @@ const MessageContainer = styled.div`
   scrollbar-width: none;
   ::-webkit-scrollbar {
     display: none;
+  }
+  @media screen and (max-width: 399px) {
+    height: 420px;
   }
 `;
 
@@ -114,6 +139,12 @@ const SingleMessageLeft = styled.div`
   border: 1px solid #3c3c3c60;
   border-radius: 5px;
   background-color: #ffffff90;
+  @media screen and (max-width: 399px) {
+    margin-bottom: 8px;
+    padding: 8px;
+    width: 200px;
+    font-size: 14px;
+  }
 `;
 
 const SingleMessageRight = styled(SingleMessageLeft)`
@@ -127,6 +158,9 @@ const SendMessageContainer = styled.div`
   display: flex;
   align-items: center;
   box-shadow: 0 -1px 3px #3c3c3c60;
+  @media screen and (max-width: 399px) {
+    height: 40px;
+  }
 `;
 
 const MessageInput = styled.input`
@@ -145,6 +179,10 @@ const MessageInput = styled.input`
   &::placeholder {
     color: #616161;
   }
+  @media screen and (max-width: 399px) {
+    height: 30px;
+    width: 230px;
+  }
 `;
 
 const SendMessageIcon = styled.div`
@@ -157,6 +195,11 @@ const SendMessageIcon = styled.div`
   &:hover {
     cursor: pointer;
     background-image: url(${sendIconHover});
+  }
+  @media screen and (max-width: 399px) {
+    margin-left: 5px;
+    height: 24px;
+    width: 24px;
   }
 `;
 

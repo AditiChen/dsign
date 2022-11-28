@@ -35,41 +35,58 @@ interface Prop {
 }
 
 const Wrapper = styled.div`
-  padding: 130px 0 50px;
+  padding: 50px 0;
   width: 100%;
   min-width: 100vw;
   height: 100%;
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 110px);
   position: relative;
   display: flex;
   background-color: #787878;
+  @media screen and (max-width: 1049px) {
+    padding: 20px 5vw;
+    min-height: calc(100vh - 90px);
+  }
 `;
 
 const Container = styled.div`
   margin: 0 auto;
-  width: 80%;
-  max-width: 1500px;
+  width: 650px;
   height: 100%;
   display: flex;
-  @media screen and (max-width: 1300px) {
-    width: 1200px;
+  @media screen and (max-width: 1349px) {
+    margin-left: 32vw;
+  }
+  @media screen and (max-width: 1049px) {
+    display: none;
   }
 `;
 
+const InnerContainer = styled.div`
+  width: 100%;
+  position: relative;
+`;
+
 const UserInfoContainer = styled.div`
-  margin-left: 50px;
-  height: calc(100vh - 260px);
-  width: 15vw;
-  min-width: 300px;
   padding: 30px 20px;
-  position: fixed;
-  left: 0;
+  width: 300px;
+  height: calc(100vh - 260px);
+  min-height: 500px;
+  position: absolute;
+  left: -320px;
   display: flex;
   flex-direction: column;
   align-items: center;
   border-radius: 10px;
   background-color: #f0f0f0;
   box-shadow: 0 0 10px #3c3c3c;
+  @media screen and (max-width: 1049px) {
+    padding: 30px 20px;
+    width: 100%;
+    max-width: 280px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 `;
 
 const Avatar = styled.div`
@@ -81,6 +98,10 @@ const Avatar = styled.div`
   background-position: center;
   position: relative;
   box-shadow: 0 0 5px #3c3c3c;
+  @media screen and (max-width: 1049px) {
+    height: 150px;
+    width: 150px;
+  }
 `;
 
 const CameraIcon = styled.div`
@@ -96,14 +117,27 @@ const CameraIcon = styled.div`
     background-image: url(${cameraIconHover});
     cursor: pointer;
   }
+  @media screen and (max-width: 1049px) {
+    height: 18px;
+    width: 18px;
+  }
 `;
 
-const UserInfo = styled.div`
+const UserName = styled.div`
   margin-top: 20px;
-  font-size: ${(props: Prop) => props.size};
-  font-weight: ${(props: Prop) => props.weight};
-  & + & {
-    margin-top: 10px;
+  font-size: 24px;
+  font-weight: 600;
+  @media screen and (max-width: 1049px) {
+    margin-top: 15px;
+    font-size: 18px;
+  }
+`;
+
+const UserEmail = styled.div`
+  margin-top: 10px;
+  font-size: 20px;
+  @media screen and (max-width: 1049px) {
+    font-size: 16px;
   }
 `;
 
@@ -114,6 +148,10 @@ const IntroText = styled.div`
   font-size: 20px;
   color: #646464;
   border-bottom: 1px solid #969696;
+  @media screen and (max-width: 1049px) {
+    margin-top: 20px;
+    font-size: 14px;
+  }
 `;
 
 const Introduction = styled.textarea`
@@ -125,6 +163,10 @@ const Introduction = styled.textarea`
   resize: none;
   border: ${(props: Prop) => props.border};
   outline: none;
+  @media screen and (max-width: 1049px) {
+    padding: 5px 0;
+    font-size: 12px;
+  }
 `;
 
 const EditBtn = styled.button`
@@ -141,23 +183,32 @@ const EditBtn = styled.button`
     color: #ffffff;
     background-color: #616161;
   }
+  @media screen and (max-width: 1049px) {
+    height: 30px;
+    min-width: 80px;
+    font-size: 14px;
+    border-radius: 5px;
+  }
 `;
 
 const ProjectListContainer = styled.div`
   margin: 0 auto;
-  width: 45vw;
+  width: 600px;
   height: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
-  /* @media screen and (min-width: 1400px) and (max-width: 1699px) {
-    width: 800px;
-  } */
+  @media screen and (max-width: 1049px) {
+    width: 100%;
+  }
 `;
 
 const ProjectHeaderContainer = styled.div`
   padding-bottom: 20px;
   display: flex;
+  @media screen and (max-width: 1049px) {
+    padding-bottom: 15px;
+  }
 `;
 
 const Title = styled.div`
@@ -171,12 +222,14 @@ const Title = styled.div`
 const ProjectsContainer = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
 `;
 
 const SingleProjectContainer = styled.div`
   height: 200px;
   width: 100%;
   display: flex;
+  align-items: center;
   background-color: #f0f0f0;
   border-radius: 10px;
   overflow: hidden;
@@ -184,19 +237,35 @@ const SingleProjectContainer = styled.div`
   & + & {
     margin-top: 20px;
   }
+  @media screen and (max-width: 1049px) {
+    min-width: 300px;
+    max-width: 500px;
+    height: 150px;
+    border-radius: 5px;
+  }
 `;
 
 const ProjectLeftContainer = styled.div`
   padding: 20px;
   height: 200px;
-  width: 40%;
+  width: calc(100% - 190px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  @media screen and (max-width: 1049px) {
+    padding: 10px;
+    width: calc(100% - 145px);
+    height: 150px;
+  }
 `;
 
 const ProjectTitle = styled.div`
+  padding-left: 10px;
   font-size: 24px;
+  color: #3c3c3c;
+  @media screen and (max-width: 1049px) {
+    font-size: 16px;
+  }
 `;
 
 const ProjectIconContainer = styled.div`
@@ -213,34 +282,69 @@ const Icon = styled.div`
   background-size: cover;
   &:hover {
     background-image: ${(props: Prop) => props.hoverImg};
+    cursor: pointer;
+  }
+  @media screen and (max-width: 1049px) {
+    width: 20px;
+    height: 20px;
   }
 `;
 
-const ProjectRightContainer = styled.div`
-  height: 200px;
-  width: 60%;
-  overflow: scroll;
-  scrollbar-width: none;
-  ::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-const ProjectRightInnerContainer = styled.div`
-  height: 200px;
-  display: flex;
-  align-items: center;
-`;
-
-const PhotoUrl = styled.div`
+const CoverPhoto = styled.div`
   width: 180px;
   height: 180px;
   background-image: ${(props: Prop) => props.img};
   background-position: center;
   background-size: cover;
-  & + & {
-    margin-left: 10px;
+  @media screen and (max-width: 1049px) {
+    width: 140px;
+    height: 140px;
   }
+`;
+
+const MobileContainer = styled.div`
+  display: none;
+  @media screen and (max-width: 1049px) {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
+const MobileHeaderContainer = styled.div`
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+`;
+
+const MobileSwitchStatusBtn = styled.div<{ color: string; border: string }>`
+  display: none;
+  @media screen and (max-width: 1049px) {
+    color: ${(props) => props.color};
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 26px;
+    display: block;
+    border-bottom: ${(props) => props.border};
+    position: relative;
+    &:hover {
+      cursor: pointer;
+      color: #ffffff;
+    }
+    & + & {
+      margin-left: 20px;
+    }
+  }
+`;
+
+const MobileBodyContainer = styled.div`
+  margin-top: 20px;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Loading = styled(ReactLoading)`
@@ -251,7 +355,6 @@ function Profile() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const {
-    isLogin,
     isLoading,
     name,
     email,
@@ -259,27 +362,17 @@ function Profile() {
     userId,
     introduction,
     userProjects,
-    setSingleProjectId,
     setUserProjects,
   } = useContext(AuthContext);
   const [mainImgSrc, setMainImgSrc] = useState("");
   const [showOverlay, setShowOverlay] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [inputText, setInputText] = useState("");
+  const [clickState, setClickState] = useState("profile");
 
   useEffect(() => {
     setInputText(introduction);
   }, [introduction]);
-
-  function toSingleProjectPage(projectId: string) {
-    setSingleProjectId(projectId);
-    navigate("/singleProject");
-  }
-
-  function toEditExistProjectPage(projectId: string) {
-    setSingleProjectId(projectId);
-    navigate("/editExistProject");
-  }
 
   async function deleteProjectHandler(projectId: string) {
     const ans = await Swal.fire({
@@ -306,18 +399,7 @@ function Profile() {
   if (isLoading) {
     return (
       <Wrapper>
-        <Loading type="spinningBubbles" color="#3c3c3c" />
-      </Wrapper>
-    );
-  }
-
-  if (!isLogin) {
-    navigate("/login");
-    return (
-      <Wrapper>
-        <Container>
-          <ProjectTitle>{t("please_login")}</ProjectTitle>
-        </Container>
+        <Loading type="spinningBubbles" color="#ffffff" />
       </Wrapper>
     );
   }
@@ -326,92 +408,177 @@ function Profile() {
     <>
       <Wrapper>
         <Container>
-          <UserInfoContainer>
-            <Avatar url={`url(${avatar})`}>
-              <CameraIcon onClick={() => setShowOverlay((prev) => !prev)} />
-            </Avatar>
-            <UserInfo size="24px" weight="500">
-              {name}
-            </UserInfo>
-            <UserInfo size="20px">{email}</UserInfo>
-            <IntroText>Introduction</IntroText>
-            <Introduction
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              placeholder={t("type_content")}
-              disabled={!isEdit && true}
-              border={!isEdit ? "none" : "1px solid #787878"}
-              maxLength={150}
-            />
-            {isEdit ? (
-              <EditBtn onClick={() => updateIntro()}>Confirm Edit</EditBtn>
-            ) : (
-              <EditBtn onClick={() => setIsEdit(true)}>Edit</EditBtn>
+          <InnerContainer>
+            <UserInfoContainer>
+              <Avatar url={`url(${avatar})`}>
+                <CameraIcon onClick={() => setShowOverlay((prev) => !prev)} />
+              </Avatar>
+              <UserName>{name}</UserName>
+              <UserEmail>{email}</UserEmail>
+              <IntroText>{t("introduction")}</IntroText>
+              <Introduction
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                placeholder={t("type_content")}
+                disabled={!isEdit && true}
+                border={!isEdit ? "none" : "1px solid #787878"}
+                maxLength={150}
+              />
+              {isEdit ? (
+                <EditBtn onClick={() => updateIntro()}>Confirm Edit</EditBtn>
+              ) : (
+                <EditBtn onClick={() => setIsEdit(true)}>Edit</EditBtn>
+              )}
+            </UserInfoContainer>
+            <ProjectListContainer>
+              <ProjectHeaderContainer>
+                <Title>{t("project_list")}</Title>
+              </ProjectHeaderContainer>
+              {userProjects.length === 0 ? (
+                <ProjectTitle>{t("go_to_create_project")}</ProjectTitle>
+              ) : (
+                <ProjectsContainer>
+                  {userProjects.map((projectData) => (
+                    <SingleProjectContainer key={projectData.projectId}>
+                      <ProjectLeftContainer>
+                        <ProjectTitle>{projectData.title}</ProjectTitle>
+                        <ProjectIconContainer>
+                          <Icon
+                            img={`url(${viewIcon})`}
+                            hoverImg={`url(${viewIconHover})`}
+                            marginLift="0"
+                            onClick={() =>
+                              navigate(
+                                `/singleProject?id=${projectData.projectId}`
+                              )
+                            }
+                          />
+                          <Icon
+                            img={`url(${editIcon})`}
+                            hoverImg={`url(${editIconHover})`}
+                            marginLift="15px"
+                            onClick={() =>
+                              navigate(
+                                `/editExistProject?id=${projectData.projectId}`
+                              )
+                            }
+                          />
+                          <Icon
+                            img={`url(${trashIcon})`}
+                            hoverImg={`url(${trashIconHover})`}
+                            marginLift="auto"
+                            onClick={() =>
+                              deleteProjectHandler(projectData.projectId)
+                            }
+                          />
+                        </ProjectIconContainer>
+                      </ProjectLeftContainer>
+                      <CoverPhoto
+                        key={projectData.mainUrl}
+                        img={`url(${projectData.mainUrl})`}
+                      />
+                    </SingleProjectContainer>
+                  ))}
+                </ProjectsContainer>
+              )}
+            </ProjectListContainer>
+          </InnerContainer>
+        </Container>
+        <MobileContainer>
+          <MobileHeaderContainer>
+            <MobileSwitchStatusBtn
+              color={clickState === "profile" ? "#ffffff" : "#b4b4b4"}
+              border={clickState === "profile" ? "1px solid #ffffff" : "none"}
+              onClick={() => setClickState("profile")}
+            >
+              {t("user_profile")}
+            </MobileSwitchStatusBtn>
+            <MobileSwitchStatusBtn
+              color={clickState === "project" ? "#ffffff" : "#b4b4b4"}
+              border={clickState === "project" ? "1px solid #ffffff" : "none"}
+              onClick={() => setClickState("project")}
+            >
+              {t("project_list")}
+            </MobileSwitchStatusBtn>
+          </MobileHeaderContainer>
+          <MobileBodyContainer>
+            {clickState === "profile" && (
+              <UserInfoContainer>
+                <Avatar url={`url(${avatar})`}>
+                  <CameraIcon onClick={() => setShowOverlay((prev) => !prev)} />
+                </Avatar>
+                <UserName>{name}</UserName>
+                <UserEmail>{email}</UserEmail>
+                <IntroText>{t("introduction")}</IntroText>
+                <Introduction
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value)}
+                  placeholder={t("type_content")}
+                  disabled={!isEdit && true}
+                  border={!isEdit ? "none" : "1px solid #787878"}
+                  maxLength={150}
+                />
+                {isEdit ? (
+                  <EditBtn onClick={() => updateIntro()}>Confirm Edit</EditBtn>
+                ) : (
+                  <EditBtn onClick={() => setIsEdit(true)}>Edit</EditBtn>
+                )}
+              </UserInfoContainer>
             )}
-          </UserInfoContainer>
-          <ProjectListContainer>
-            <ProjectHeaderContainer>
-              <Title>{t("project_list")}</Title>
-            </ProjectHeaderContainer>
-            {userProjects.length === 0 ? (
-              <ProjectTitle>{t("go_to_create_project")}</ProjectTitle>
-            ) : (
-              <ProjectsContainer>
-                {userProjects.map((projectData) => (
-                  <SingleProjectContainer key={projectData.projectId}>
-                    <ProjectLeftContainer>
-                      <ProjectTitle>{projectData.title}</ProjectTitle>
-                      <ProjectIconContainer>
-                        <Icon
-                          img={`url(${viewIcon})`}
-                          hoverImg={`url(${viewIconHover})`}
-                          marginLift="0"
-                          onClick={() =>
-                            toSingleProjectPage(projectData.projectId)
-                          }
-                        />
-                        <Icon
-                          img={`url(${editIcon})`}
-                          hoverImg={`url(${editIconHover})`}
-                          marginLift="15px"
-                          onClick={() =>
-                            toEditExistProjectPage(projectData.projectId)
-                          }
-                        />
-                        <Icon
-                          img={`url(${trashIcon})`}
-                          hoverImg={`url(${trashIconHover})`}
-                          marginLift="auto"
-                          onClick={() =>
-                            deleteProjectHandler(projectData.projectId)
-                          }
-                        />
-                      </ProjectIconContainer>
-                    </ProjectLeftContainer>
-                    <ProjectRightContainer>
-                      <ProjectRightInnerContainer>
-                        {/* {projectData.pages[0].photos &&
-                          projectData.pages[0].photos.map(
-                            (singleUrl: string) => (
-                              <PhotoUrl
-                                key={singleUrl}
-                                img={`url(${singleUrl})`}
-                              />
-                            )
-                          )} */}
+            {clickState === "project" && (
+              <ProjectListContainer>
+                {userProjects.length === 0 ? (
+                  <ProjectTitle>{t("go_to_create_project")}</ProjectTitle>
+                ) : (
+                  <ProjectsContainer>
+                    {userProjects.map((projectData) => (
+                      <SingleProjectContainer key={projectData.projectId}>
+                        <ProjectLeftContainer>
+                          <ProjectTitle>{projectData.title}</ProjectTitle>
+                          <ProjectIconContainer>
+                            <Icon
+                              img={`url(${viewIcon})`}
+                              hoverImg={`url(${viewIconHover})`}
+                              marginLift="0"
+                              onClick={() =>
+                                navigate(
+                                  `/singleProject?id=${projectData.projectId}`
+                                )
+                              }
+                            />
+                            <Icon
+                              img={`url(${editIcon})`}
+                              hoverImg={`url(${editIconHover})`}
+                              marginLift="15px"
+                              onClick={() =>
+                                navigate(
+                                  `/editExistProject?id=${projectData.projectId}`
+                                )
+                              }
+                            />
+                            <Icon
+                              img={`url(${trashIcon})`}
+                              hoverImg={`url(${trashIconHover})`}
+                              marginLift="auto"
+                              onClick={() =>
+                                deleteProjectHandler(projectData.projectId)
+                              }
+                            />
+                          </ProjectIconContainer>
+                        </ProjectLeftContainer>
 
-                        <PhotoUrl
+                        <CoverPhoto
                           key={projectData.mainUrl}
                           img={`url(${projectData.mainUrl})`}
                         />
-                      </ProjectRightInnerContainer>
-                    </ProjectRightContainer>
-                  </SingleProjectContainer>
-                ))}
-              </ProjectsContainer>
+                      </SingleProjectContainer>
+                    ))}
+                  </ProjectsContainer>
+                )}
+              </ProjectListContainer>
             )}
-          </ProjectListContainer>
-        </Container>
+          </MobileBodyContainer>
+        </MobileContainer>
       </Wrapper>
       {showOverlay && (
         <SquareOverlay

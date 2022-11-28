@@ -35,6 +35,10 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   background-color: #b4b4b490;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 532px;
+  }
 `;
 
 const Text = styled.div`
@@ -44,6 +48,9 @@ const Text = styled.div`
   transform: translateX(-50%);
   font-size: 24px;
   z-index: 1;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    font-size: 18px;
+  }
 `;
 
 const Img = styled.div<{ url?: string; backgroundColor?: string }>`
@@ -54,6 +61,10 @@ const Img = styled.div<{ url?: string; backgroundColor?: string }>`
   background-size: cover;
   background-position: center;
   position: relative;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 532px;
+  }
 `;
 
 const UploadIcon = styled.div`
@@ -67,6 +78,10 @@ const UploadIcon = styled.div`
   background-image: url(${uploadPhotoIcon});
   background-size: cover;
   background-position: center;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 36px;
+    height: 36px;
+  }
 `;
 
 function Template7(props: InsertProp) {

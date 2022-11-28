@@ -27,7 +27,6 @@ interface FetchedProjectsType {
 }
 
 const Wrapper = styled.div`
-  padding-top: 80px;
   width: 100%;
   min-width: 100vw;
   height: 100%;
@@ -39,8 +38,15 @@ const Wrapper = styled.div`
 
 const CarouselContainer = styled.div`
   width: 100%;
-  height: 80vh;
+  height: 70vh;
+  max-height: 700px;
   position: relative;
+  @media screen and (min-width: 768px) and (max-width: 1024px) {
+    max-height: 500px;
+  }
+  @media screen and (min-width: 300px) and (max-width: 767px) {
+    max-height: 300px;
+  }
 `;
 
 const BricksContainer = styled.div`
@@ -59,11 +65,16 @@ const BricksContainer = styled.div`
     width: 960px;
   }
   @media screen and (min-width: 800px) and (max-width: 1099px) {
+    padding: 30px 0;
     width: 630px;
   }
-  @media screen and (max-width: 799px) {
+  @media screen and (min-width: 600px) and (max-width: 799px) {
+    width: 530px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+  @media screen and (max-width: 599px) {
     padding: 20px 0;
-    width: 330px;
+    width: 300px;
   }
 `;
 

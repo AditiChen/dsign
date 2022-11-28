@@ -3,6 +3,7 @@
   "collection_list": "Collection",
   "create": "Créer",
   "languages": "Langues",
+  "profile": "profil",
 
   "login": "Se connecter",
   "sign_up": "S'enregistrer",
@@ -54,6 +55,7 @@
   "project_list": "Liste des projets",
   "go_to_create_project": "C'est vide",
   "delete_project_warning": "Êtes-vous sûr de vouloir supprimer ce projet ?",
+  "small_screen_warning": "Pour une meilleure expérience utilisateur, veuillez utiliser le bureau pour ouvrir cette page.",
 
   "search_friend": "Entrez l'email ou le nom d'utilisateur",
   "send_friend_request": "Ajouter un ami",
@@ -77,5 +79,8 @@
   "empty_collection": "Votre collection est vide, téléchargez des photos !",
   "delete_photo_warning": "Êtes-vous sûr de vouloir supprimer cette photo ?",
 
-  "empty_favorite_list": "Votre liste de favoris est vide, allez-y pour ajouter des projets !"
+  "empty_favorite_list": "Votre liste de favoris est vide, allez-y pour ajouter des projets !",
+
+  "introduction": "Introduction",
+  "user_profile": "Profil de l'utilisateur"
 }

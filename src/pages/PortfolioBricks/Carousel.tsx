@@ -8,6 +8,12 @@ const CarouselContainer = styled.div`
   height: 100%;
   background-color: #000000;
   position: relative;
+  @media screen and (min-width: 800px) and (max-width: 1199px) {
+    padding: 30px 40px;
+  }
+  @media screen and (min-width: 300px) and (max-width: 799px) {
+    padding: 10px;
+  }
 `;
 
 const StoryContainer = styled.div<{ opacity: number; zIndex: number }>`
@@ -21,6 +27,14 @@ const StoryContainer = styled.div<{ opacity: number; zIndex: number }>`
   justify-content: space-evenly;
   opacity: ${(props) => props.opacity};
   z-index: ${(props) => props.zIndex};
+  @media screen and (min-width: 800px) and (max-width: 1199px) {
+    width: calc(100% - 80px);
+    height: calc(100% - 60px);
+  }
+  @media screen and (min-width: 300px) and (max-width: 799px) {
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+  }
 `;
 
 const QuoteContainer = styled.div`
@@ -29,6 +43,9 @@ const QuoteContainer = styled.div`
   flex-direction: column;
   @media screen and (min-width: 1200px) and (max-width: 1599px) {
     max-width: 40%;
+  }
+  @media screen and (min-width: 300px) and (max-width: 1199px) {
+    max-width: 45%;
   }
 `;
 
@@ -47,6 +64,16 @@ const Quote = styled.div`
     line-height: 55px;
     font-size: 40px;
   }
+  @media screen and (min-width: 700px) and (max-width: 1199px) {
+    padding-right: 20px;
+    line-height: 36px;
+    font-size: 26px;
+  }
+  @media screen and (min-width: 300px) and (max-width: 699px) {
+    padding-right: 10px;
+    line-height: 24px;
+    font-size: 16px;
+  }
 `;
 
 const Name = styled.div`
@@ -56,8 +83,16 @@ const Name = styled.div`
   color: #ffffff;
   font-family: "Caveat", cursive;
   @media screen and (min-width: 1200px) and (max-width: 1599px) {
-    font-size: 24px;
     line-height: 40px;
+    font-size: 24px;
+  }
+  @media screen and (min-width: 700px) and (max-width: 1199px) {
+    line-height: 30px;
+    font-size: 16px;
+  }
+  @media screen and (min-width: 300px) and (max-width: 699px) {
+    line-height: 25px;
+    font-size: 12px;
   }
 `;
 
@@ -71,11 +106,17 @@ const Photo = styled.img`
 
 const DocsContainer = styled.div`
   position: absolute;
-  bottom: 30px;
+  bottom: 25px;
   left: 50%;
   transform: translate(-50%);
   display: flex;
   align-items: center;
+  @media screen and (min-width: 800px) and (max-width: 1199px) {
+    bottom: 20px;
+  }
+  @media screen and (min-width: 300px) and (max-width: 799px) {
+    bottom: 15px;
+  }
 `;
 
 const Doc = styled.div<{ backgroundColor: string }>`
@@ -85,7 +126,21 @@ const Doc = styled.div<{ backgroundColor: string }>`
   border-radius: 50%;
   cursor: pointer;
   & + & {
-    margin-left: 20px;
+    margin-left: 15px;
+  }
+  @media screen and (min-width: 800px) and (max-width: 1199px) {
+    width: 8px;
+    height: 8px;
+    & + & {
+      margin-left: 12px;
+    }
+  }
+  @media screen and (min-width: 300px) and (max-width: 799px) {
+    width: 6px;
+    height: 6px;
+    & + & {
+      margin-left: 10px;
+    }
   }
 `;
 

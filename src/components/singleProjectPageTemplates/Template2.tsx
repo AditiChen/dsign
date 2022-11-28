@@ -1,11 +1,7 @@
 import styled from "styled-components";
 
 interface Prop {
-  border?: string;
   url?: string;
-  backgroundColor?: string;
-  top?: string;
-  left?: string;
 }
 
 interface InsertProp {
@@ -14,15 +10,26 @@ interface InsertProp {
 }
 
 const Wrapper = styled.div`
-  margin: 0 auto;
   width: 1200px;
   height: 760px;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #616161;
-  border-bottom: 1px solid #b4b4b4;
+  background-color: #696969;
+  border-top: 1px solid #b4b4b4;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 532px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 600px;
+    height: 380px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 300px;
+    height: 185px;
+  }
 `;
 
 const HeaderContainer = styled.div`
@@ -31,18 +38,29 @@ const HeaderContainer = styled.div`
   height: 220px;
   display: flex;
   align-items: center;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 14px;
+    height: 154px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    padding: 10px;
+    height: 110px;
+  }
+  @media screen and (max-width: 649px) {
+    padding: 5px;
+    height: 55px;
+  }
 `;
 
 const Context = styled.textarea`
   margin-left: auto;
   padding: 10px;
-  height: 180px;
   width: 410px;
+  height: 180px;
   color: #ffffff;
   font-size: 20px;
   line-height: 24px;
   background-color: transparent;
-  border: 1px solid #b4b4b4;
   border: none;
   resize: none;
   &::placeholder {
@@ -50,6 +68,27 @@ const Context = styled.textarea`
   }
   &:focus {
     outline: none;
+  }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 6px;
+    width: 287px;
+    height: 126px;
+    font-size: 14px;
+    line-height: 17px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    padding: 4px;
+    width: 205px;
+    height: 90px;
+    font-size: 10px;
+    line-height: 12px;
+  }
+  @media screen and (max-width: 649px) {
+    padding: 2px;
+    width: 102px;
+    height: 45px;
+    font-size: 5px;
+    line-height: 6px;
   }
 `;
 
@@ -60,15 +99,36 @@ const ImgContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   position: relative;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 378px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 600px;
+    height: 270px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 300px;
+    height: 135px;
+  }
 `;
 
 const AsideImg = styled.div`
   width: 430px;
   height: 100%;
+  position: relative;
   background-image: ${(props: Prop) => props.url};
-  background-color: ${(props: Prop) => props.backgroundColor};
   background-size: cover;
   background-position: center;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 300px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 215px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 107px;
+  }
 `;
 
 const MiddleImgContainer = styled.div`
@@ -79,15 +139,36 @@ const MiddleImgContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   position: relative;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 224px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 160px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 80px;
+  }
 `;
 
 const MiddleImg = styled.div`
   width: 320px;
   height: 265px;
+  position: relative;
   background-image: ${(props: Prop) => props.url};
-  background-color: ${(props: Prop) => props.backgroundColor};
   background-size: cover;
   background-position: center;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 224px;
+    height: 185px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 160px;
+    height: 132px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 80px;
+    height: 66px;
+  }
 `;
 
 function Template2(props: InsertProp) {

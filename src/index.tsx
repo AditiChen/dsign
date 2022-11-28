@@ -34,7 +34,7 @@ root.render(
         <Route path="favoriteList" element={<FavoriteList />} />
         <Route path="collection" element={<MaterialCollection />} />
         <Route path="login" element={<Login />} />
-        <Route path="*" element={<Navigate to="profile" replace />} />
+        <Route path="*" element={<Navigate to="portfolioBricks" replace />} />
       </Route>
     </Routes>
   </BrowserRouter>

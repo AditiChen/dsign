@@ -11,6 +11,8 @@ interface Prop {
   backgroundColor?: string;
   top?: string;
   left?: string;
+  mobileTop?: string;
+  mobileLeft?: string;
 }
 interface InsertProp {
   setPages: Dispatch<
@@ -40,6 +42,10 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   align-items: center;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 532px;
+  }
 `;
 
 const BackgroundImg = styled.div`
@@ -50,10 +56,14 @@ const BackgroundImg = styled.div`
   background-size: cover;
   background-position: center;
   opacity: 0.7;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 532px;
+  }
 `;
 
 const MiddleContainer = styled.div`
-  padding: 100px 80px 50px 30px;
+  padding: 95px 80px 55px 30px;
   width: 450px;
   height: 100%;
   position: absolute;
@@ -61,6 +71,11 @@ const MiddleContainer = styled.div`
   background-color: #616161;
   opacity: 0.9;
   box-shadow: 1px 0 3px #616161, -1px 0 3px #616161;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 65px 56px 40px 21px;
+    width: 315px;
+    left: 210px;
+  }
 `;
 
 const Context = styled.textarea`
@@ -79,6 +94,11 @@ const Context = styled.textarea`
   &:focus {
     outline: none;
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 6px;
+    font-size: 14px;
+    line-height: 17px;
+  }
 `;
 
 const RightImg = styled.div`
@@ -92,6 +112,10 @@ const RightImg = styled.div`
   right: 50px;
   z-index: 1;
   box-shadow: 0 0 5px #3c3c3c;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 315px;
+    height: 452px;
+  }
 `;
 
 const UploadIcon = styled.div`
@@ -104,6 +128,12 @@ const UploadIcon = styled.div`
   background-image: url(${uploadPhotoIcon});
   background-size: cover;
   background-position: center;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 36px;
+    height: 36px;
+    top: ${(props: Prop) => props.mobileTop};
+    left: ${(props: Prop) => props.mobileLeft};
+  }
 `;
 
 function Template0(props: InsertProp) {
@@ -151,7 +181,14 @@ function Template0(props: InsertProp) {
           backgroundColor={storageUrl[0] === "" ? "#b4b4b4" : ""}
           url={storageUrl[0] === "" ? "" : `url(${storageUrl[0]})`}
         >
-          {storageUrl[0] === "" && <UploadIcon top="350px" left="140px" />}
+          {storageUrl[0] === "" && (
+            <UploadIcon
+              top="350px"
+              left="140px"
+              mobileTop="240px"
+              mobileLeft="90px"
+            />
+          )}
         </BackgroundImg>
         <MiddleContainer>
           <Context
@@ -167,7 +204,14 @@ function Template0(props: InsertProp) {
           backgroundColor={storageUrl[1] === "" ? "#b4b4b4" : ""}
           url={storageUrl[1] === "" ? "" : `url(${storageUrl[1]})`}
         >
-          {storageUrl[1] === "" && <UploadIcon top="300px" left="200px" />}
+          {storageUrl[1] === "" && (
+            <UploadIcon
+              top="300px"
+              left="200px"
+              mobileTop="200px"
+              mobileLeft="140px"
+            />
+          )}
         </RightImg>
       </Wrapper>
       {showOverlay && (

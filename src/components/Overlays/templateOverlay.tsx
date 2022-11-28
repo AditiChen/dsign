@@ -14,7 +14,7 @@ import ReactLoading from "react-loading";
 import { Slider, Typography } from "@mui/material";
 import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 
-import { db, storage } from "../../context/firebaseSDK";
+import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
 import upLoadImgToCloudStorage from "../../utils/upLoadImgToCloudStorage";
 
@@ -54,8 +54,8 @@ const Backdrop = styled.div`
 `;
 
 const CloseIcon = styled.div`
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
   position: absolute;
   top: -15px;
   right: -15px;
@@ -66,11 +66,17 @@ const CloseIcon = styled.div`
   &:hover {
     background-image: url(${closeIconHover});
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 22px;
+    height: 22px;
+    top: -10px;
+    right: -10px;
+  }
 `;
 
 const ArrowIcon = styled.div`
-  height: 35px;
-  width: 35px;
+  height: 30px;
+  width: 30px;
   position: absolute;
   top: 30px;
   left: 50px;
@@ -80,6 +86,12 @@ const ArrowIcon = styled.div`
   &:hover {
     cursor: pointer;
     background-image: url(${arrowIconHover});
+  }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 20px;
+    height: 20px;
+    top: 16px;
+    left: 24px;
   }
 `;
 
@@ -98,12 +110,18 @@ const OverlayModal = styled.div`
   transform: translate(-50%, -50%);
   z-index: 102;
   background-color: white;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 35px;
+  }
 `;
 
 const CropperContainer = styled.div`
   width: 80%;
   height: 90%;
   position: relative;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 90%;
+  }
 `;
 
 const LoadingBackground = styled.div`
@@ -112,13 +130,6 @@ const LoadingBackground = styled.div`
   height: 100%;
   z-index: 103;
   position: absolute;
-`;
-
-const Loading = styled(ReactLoading)`
-  position: absolute;
-  left: 425px;
-  top: 280px;
-  z-index: 104;
 `;
 
 const NewPhotoContainer = styled.div`
@@ -132,6 +143,11 @@ const NewPhotoHeaderContainer = styled.div`
   font-size: 24px;
   line-height: 40px;
   align-items: center;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 0 14px;
+    font-size: 16px;
+    line-height: 30px;
+  }
 `;
 
 const CollectionContainer = styled.div`
@@ -150,6 +166,20 @@ const CollectionContainer = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+  @media screen and (max-width: 1449px) {
+    margin: 6px 0;
+    padding: 14px;
+    grid-template-columns: repeat(8, 1fr);
+  }
+  @media screen and (max-width: 1339px) {
+    grid-template-columns: repeat(7, 1fr);
+  }
+  @media screen and (max-width: 1189px) {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  @media screen and (max-width: 1049px) {
+    grid-template-columns: repeat(5, 1fr);
+  }
 `;
 
 const CollectionImg = styled.div<{ url: string }>`
@@ -166,6 +196,12 @@ const CollectionImg = styled.div<{ url: string }>`
     width: 155px;
     height: 155px;
     box-shadow: 0 0 5px #3c3c3c;
+  }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin: 6px auto;
+    width: 100px;
+    height: 100px;
+    border-radius: 6px;
   }
 `;
 
@@ -184,6 +220,14 @@ const UploadPic = styled.label`
     color: #ffffff;
     background-color: #616161;
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin-left: 7px;
+    padding: 0 10px;
+    height: 28px;
+    line-height: 28px;
+    font-size: 16px;
+    border-radius: 6px;
+  }
 `;
 
 const ControlContainer = styled.div`
@@ -191,6 +235,9 @@ const ControlContainer = styled.div`
   width: 80%;
   display: flex;
   align-items: center;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 90%;
+  }
 `;
 
 const SliderContainer = styled.div`
@@ -210,6 +257,12 @@ const Btn = styled.button`
     color: #ffffff;
     background-color: #616161;
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin-left: 14px;
+    height: 30px;
+    font-size: 12px;
+    border-radius: 6px;
+  }
 `;
 
 const ConfirmIcon = styled.div`
@@ -222,6 +275,10 @@ const ConfirmIcon = styled.div`
   &:hover {
     cursor: pointer;
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 18px;
+    height: 18px;
+  }
 `;
 
 const ConfirmedIcon = styled(ConfirmIcon)`
@@ -231,6 +288,18 @@ const ConfirmedIcon = styled(ConfirmIcon)`
 const Text = styled.div`
   margin-left: 10px;
   font-size: 18px;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin-left: 6px;
+    font-size: 12px;
+  }
+`;
+
+const Loading = styled(ReactLoading)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-45%, -50%);
+  z-index: 104;
 `;
 
 const portalElement = document.getElementById("overlays") as HTMLElement;
@@ -334,7 +403,12 @@ function Overlay({
                   {progressing && (
                     <>
                       <LoadingBackground />
-                      <Loading type="spokes" color="#ffffff" />
+                      <Loading
+                        type="spokes"
+                        color="#ffffff"
+                        width="40px"
+                        height="40px"
+                      />
                     </>
                   )}
                   <Cropper

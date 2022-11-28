@@ -1,12 +1,7 @@
 import styled from "styled-components";
-import { t } from "i18next";
 
 interface Prop {
-  border?: string;
   url?: string;
-  backgroundColor?: string;
-  top?: string;
-  left?: string;
 }
 
 interface InsertProp {
@@ -15,13 +10,24 @@ interface InsertProp {
 }
 
 const Wrapper = styled.div`
-  margin: 0 auto;
   width: 1200px;
   height: 760px;
   position: relative;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #b4b4b4;
+  border-top: 1px solid #b4b4b4;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 532px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 600px;
+    height: 380px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 300px;
+    height: 185px;
+  }
 `;
 
 const BackgroundImg = styled.div`
@@ -31,10 +37,22 @@ const BackgroundImg = styled.div`
   background-size: cover;
   background-position: center;
   opacity: 0.7;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 532px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 600px;
+    height: 380px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 300px;
+    height: 185px;
+  }
 `;
 
 const MiddleContainer = styled.div`
-  padding: 100px 80px 50px 30px;
+  padding: 95px 80px 55px 30px;
   width: 450px;
   height: 100%;
   position: absolute;
@@ -42,6 +60,21 @@ const MiddleContainer = styled.div`
   background-color: #616161;
   opacity: 0.9;
   box-shadow: 1px 0 3px #616161, -1px 0 3px #616161;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 65px 56px 40px 21px;
+    width: 315px;
+    left: 210px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    padding: 47px 40px 22px 15px;
+    width: 225px;
+    left: 150px;
+  }
+  @media screen and (max-width: 649px) {
+    padding: 24px 20px 14px 7px;
+    width: 112px;
+    left: 75px;
+  }
 `;
 
 const Context = styled.textarea`
@@ -60,6 +93,21 @@ const Context = styled.textarea`
   &:focus {
     outline: none;
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 6px;
+    font-size: 14px;
+    line-height: 17px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    padding: 4px;
+    font-size: 10px;
+    line-height: 12px;
+  }
+  @media screen and (max-width: 649px) {
+    padding: 2px;
+    font-size: 5px;
+    line-height: 6px;
+  }
 `;
 
 const RightImg = styled.div`
@@ -72,6 +120,21 @@ const RightImg = styled.div`
   right: 50px;
   z-index: 1;
   box-shadow: 0 0 5px #3c3c3c;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 315px;
+    height: 452px;
+    right: 35px;
+  }
+  @media screen and (min-width: 650px) and (max-width: 949px) {
+    width: 225px;
+    height: 322px;
+    right: 25px;
+  }
+  @media screen and (max-width: 649px) {
+    width: 112px;
+    height: 141px;
+    right: 12px;
+  }
 `;
 
 function Template0(props: InsertProp) {

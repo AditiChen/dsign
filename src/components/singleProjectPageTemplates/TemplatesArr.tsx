@@ -7,7 +7,6 @@ import Template5 from "./Template5";
 import Template6 from "./Template6";
 import Template7 from "./Template7";
 import Template8 from "./Template8";
-import GoogleMapInsert from "./GoogleMapAPI";
 
 const templatesArr = [
   Template0,
@@ -19,6 +18,5 @@ const templatesArr = [
   Template6,
   Template7,
   Template8,
-  GoogleMapInsert,
 ];
 export default templatesArr;

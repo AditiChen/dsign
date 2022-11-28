@@ -31,6 +31,7 @@ import deleteIconHover from "../../icons/delete-friend-icon-hover.png";
 
 interface Prop {
   size?: string;
+  mobileSize?: string;
   color?: string;
   url?: string;
   top?: string;
@@ -38,13 +39,18 @@ interface Prop {
 }
 
 const Wrapper = styled.div`
-  padding: 130px 0;
+  padding: 30px 0;
   width: 100%;
   min-width: 100vw;
   height: 100%;
-  min-height: calc(100vh - 80px);
   position: relative;
   display: flex;
+  @media screen and (min-width: 800px) and (max-width: 1024px) {
+    padding: 20px 0;
+  }
+  @media screen and (max-width: 799px) {
+    padding: 10px 0;
+  }
 `;
 
 const Container = styled.div`
@@ -62,6 +68,13 @@ const Separator = styled.div`
   margin: 20px auto 0;
   width: 70%;
   max-width: 800px;
+  @media screen and (max-width: 799px) {
+    width: 80%;
+  }
+  @media screen and (max-width: 499px) {
+    margin-top: 10px;
+    width: 90%;
+  }
 `;
 
 const SearchContainer = styled.div`
@@ -86,11 +99,16 @@ const SearchInput = styled.input`
   &::placeholder {
     color: #b4b4b4;
   }
+  @media screen and (max-width: 799px) {
+    height: 35px;
+    font-size: 12px;
+    padding: 5px 35px 5px 10px;
+  }
 `;
 
 const SearchIcon = styled.div`
-  height: 28px;
-  width: 28px;
+  height: 26px;
+  width: 26px;
   position: absolute;
   right: 15px;
   background-image: url(${searchIcon});
@@ -98,6 +116,11 @@ const SearchIcon = styled.div`
   background-position: center;
   &:hover {
     cursor: pointer;
+  }
+  @media screen and (max-width: 799px) {
+    height: 22px;
+    width: 22px;
+    right: 10px;
   }
 `;
 
@@ -121,6 +144,12 @@ const SwitchClickStatusBtn = styled.div<{ color: string; border: string }>`
   & + & {
     margin-left: 30px;
   }
+  @media screen and (max-width: 799px) {
+    font-size: 16px;
+    & + & {
+      margin-left: 10px;
+    }
+  }
 `;
 
 const NotificationDot = styled.div`
@@ -143,6 +172,9 @@ const FriendListContainer = styled.div`
   &:hover {
     box-shadow: 1px 1px 3px #3c3c3c50;
   }
+  @media screen and (max-width: 799px) {
+    padding: 10px;
+  }
 `;
 
 const Avatar = styled.div`
@@ -157,12 +189,19 @@ const Avatar = styled.div`
     border: 1px solid #d4d4d4;
     box-shadow: 1px 1px 3px #3c3c3c50;
   }
+  @media screen and (max-width: 799px) {
+    height: 60px;
+    width: 60px;
+  }
 `;
 
 const TextContainer = styled.div`
   margin-left: 20px;
   display: flex;
   flex-direction: column;
+  @media screen and (max-width: 799px) {
+    margin-left: 10px;
+  }
 `;
 
 const Text = styled.div`
@@ -170,6 +209,9 @@ const Text = styled.div`
   color: ${(props: Prop) => props.color};
   font-size: ${(props: Prop) => props.size};
   background-color: #f0f0f000;
+  @media screen and (max-width: 799px) {
+    font-size: ${(props: Prop) => props.mobileSize};
+  }
 `;
 
 const MessageIcon = styled.div`
@@ -184,11 +226,19 @@ const MessageIcon = styled.div`
     cursor: pointer;
     background-image: url(${messageIconHover});
   }
+  @media screen and (max-width: 799px) {
+    margin-top: 0;
+    height: 22px;
+    width: 22px;
+  }
 `;
 
 const BtnContainer = styled.div`
   margin-left: auto;
   display: flex;
+  @media screen and (max-width: 799px) {
+    flex-direction: column;
+  }
 `;
 
 const SendRequestBtn = styled.button`
@@ -206,6 +256,17 @@ const SendRequestBtn = styled.button`
   & + & {
     margin-left: 10px;
   }
+  @media screen and (max-width: 799px) {
+    padding: 0 5px;
+    width: 60px;
+    height: 30px;
+    font-size: 12px;
+    border-radius: 5px;
+    & + & {
+      margin-left: 0;
+      margin-top: 5px;
+    }
+  }
 `;
 
 const DeleteIcon = styled.div`
@@ -217,6 +278,10 @@ const DeleteIcon = styled.div`
   &:hover {
     cursor: pointer;
     background-image: url(${deleteIconHover});
+  }
+  @media screen and (max-width: 799px) {
+    height: 24px;
+    width: 24px;
   }
 `;
 
@@ -231,7 +296,6 @@ function FriendList() {
   const {
     friendRequests,
     friendDataList,
-    setClickedUserId,
     showMessageFrame,
     setShowMessageFrame,
     unreadMessages,
@@ -412,7 +476,7 @@ function FriendList() {
     return (
       <Wrapper>
         <Container>
-          <Loading />
+          <Loading type="cylon" color="#3c3c3c" />
         </Container>
       </Wrapper>
     );
@@ -443,8 +507,12 @@ function FriendList() {
             <FriendListContainer>
               <Avatar url={`url(${searchData.avatar})`} />
               <TextContainer>
-                <Text size="20px">{searchData.name}</Text>
-                <Text color="#616161">{searchData.email}</Text>
+                <Text size="20px" mobileSize="16px">
+                  {searchData.name}
+                </Text>
+                <Text color="#616161" mobileSize="12px">
+                  {searchData.email}
+                </Text>
               </TextContainer>
               <BtnContainer>
                 <SendRequestBtn onClick={() => sendRequest()}>
@@ -477,7 +545,9 @@ function FriendList() {
         </Separator>
         {clickState === "request" && friendRequests.length === 0 && (
           <Separator>
-            <Text size="20px"> {t("no_friend_request")}</Text>
+            <Text size="20px" mobileSize="16px">
+              {t("no_friend_request")}
+            </Text>
           </Separator>
         )}
         {clickState === "request" &&
@@ -487,8 +557,12 @@ function FriendList() {
               <FriendListContainer>
                 <Avatar url={`url(${request.avatar})`} />
                 <TextContainer>
-                  <Text size="20px">{request.name}</Text>
-                  <Text color="#616161">{request.email}</Text>
+                  <Text size="20px" mobileSize="16px">
+                    {request.name}
+                  </Text>
+                  <Text color="#616161" mobileSize="12px">
+                    {request.email}
+                  </Text>
                 </TextContainer>
                 <BtnContainer>
                   <SendRequestBtn
@@ -513,13 +587,16 @@ function FriendList() {
                 <Avatar
                   url={`url(${user.avatar})`}
                   onClick={() => {
-                    setClickedUserId(user.uid);
-                    navigate("/userProfile");
+                    navigate(`/userProfile?id=${user.uid}`);
                   }}
                 />
                 <TextContainer>
-                  <Text size="20px">{user.name}</Text>
-                  <Text color="#616161">{user.email}</Text>
+                  <Text size="20px" mobileSize="16px">
+                    {user.name}
+                  </Text>
+                  <Text color="#616161" mobileSize="12px">
+                    {user.email}
+                  </Text>
                   <MessageIcon
                     onClick={() => {
                       const chatroomId = unreadMessages.find(

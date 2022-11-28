@@ -23,16 +23,21 @@ import arrowIcon from "../../icons/arrow-icon-white.png";
 import arrowIconHover from "../../icons/arrow-icon-hover.png";
 
 const Wrapper = styled.div`
-  padding-top: 80px;
+  padding-top: 95px;
   width: 100%;
-  min-width: 100vw;
   height: 100%;
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 110px);
   display: flex;
   position: relative;
   background-color: #787878;
-  @media screen and (max-width: 1860px) {
-    padding-top: 200px;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding-top: 90px;
+  }
+  @media screen and (min-width: 800px) and (max-width: 949px) {
+    min-height: calc(100vh - 100px);
+  }
+  @media screen and (max-width: 799px) {
+    min-height: calc(100vh - 90px);
   }
 `;
 
@@ -40,16 +45,22 @@ const Container = styled.div`
   margin: 50px auto;
   width: 1300px;
   height: 100%;
-  min-height: calc(100vh - 260px);
+  min-height: calc(100vh - 240px);
   display: flex;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 900px;
+  }
+  @media screen and (max-width: 949px) {
+    margin: 30px auto;
+  }
 `;
 
 const ArrowIcon = styled.div`
-  height: 35px;
-  width: 35px;
-  position: absolute;
-  top: 90px;
-  left: 290px;
+  height: 24px;
+  width: 24px;
+  position: fixed;
+  top: 170px;
+  left: 40px;
   background-image: url(${arrowIcon});
   background-size: cover;
   background-position: center;
@@ -57,14 +68,15 @@ const ArrowIcon = styled.div`
     cursor: pointer;
     background-image: url(${arrowIconHover});
   }
-  @media screen and (max-width: 1860px) {
-    top: 230px;
-    left: 50px;
+  @media screen and (max-width: 1449px) {
+    height: 20px;
+    width: 20px;
+    top: 160px;
   }
-`;
-
-const Text = styled.div`
-  font-size: 24px;
+  @media screen and (max-width: 949px) {
+    top: 70px;
+    left: 30px;
+  }
 `;
 
 const EditorContainer = styled.div`
@@ -72,20 +84,28 @@ const EditorContainer = styled.div`
   padding: 50px;
   width: 100%;
   height: 100%;
-  min-height: 80vh;
+  min-height: 75vh;
   background-color: #f0f0f0;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   box-shadow: 0 0 20px #3c3c3c;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 30px;
+    border-radius: 14px;
+  }
+  @media screen and (max-width: 949px) {
+    display: none;
+  }
 `;
 
-const Input = styled.input`
+const Title = styled.input`
   margin-bottom: 40px;
   padding: 0 20px;
   width: 1200px;
   height: 60px;
+  color: #3c3c3c;
   font-size: 30px;
   font-weight: 700;
   background-color: #ffffff90;
@@ -95,6 +115,13 @@ const Input = styled.input`
     outline: none;
     background-color: #ffffff;
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 40px;
+    margin-bottom: 30px;
+    font-size: 20px;
+    border-radius: 6px;
+  }
 `;
 
 const SingleEditorContainer = styled.div`
@@ -103,6 +130,13 @@ const SingleEditorContainer = styled.div`
   height: 760px;
   & + & {
     margin-top: 80px;
+  }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 532px;
+  }
+  & + & {
+    margin-top: 40px;
   }
 `;
 
@@ -119,59 +153,83 @@ const CloseIcon = styled.div`
   &:hover {
     background-image: url(${closeIconHover});
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 30px;
+    height: 30px;
+    top: -15px;
+    right: -14px;
+  }
 `;
 
 const SelectContainer = styled.div`
-  padding: 20px;
-  width: 270px;
-  height: calc(100vh - 160px);
+  padding: 75px 0 10px 0;
+  width: 100vw;
   display: flex;
   position: fixed;
-  left: 0;
+  top: 0;
   flex-direction: column;
   align-items: center;
   background-color: #ffffff;
-  box-shadow: 0 -1px 3px black;
-  overflow: scroll;
-  scrollbar-width: none;
+  box-shadow: 1px 0 5px black;
   z-index: 5;
   ::-webkit-scrollbar {
     display: none;
   }
-  @media screen and (max-width: 1860px) {
-    padding-top: 100px;
-    top: 0;
-    width: 100vw;
-    height: 200px;
-    box-shadow: 1px 0 5px black;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    max-height: 150px;
+    transition: max-height 0.3s ease-in;
+    overflow: hidden;
+    &:hover {
+      max-height: 230px;
+    }
+  }
+  @media screen and (max-width: 949px) {
+    display: none;
   }
 `;
 
 const SelectInnerContainer = styled.div`
+  margin: 0 auto;
   height: 100%;
-  @media screen and (max-width: 1860px) {
-    margin: 0 auto;
-    display: flex;
+  width: 1300px;
+  overflow: hidden;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 150px;
+  }
+`;
+
+const SelectImgOverflowContainer = styled.div`
+  margin: auto;
+  display: flex;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    height: 100%;
+    flex-wrap: wrap;
   }
 `;
 
 const SelectImg = styled.div<{ img: string }>`
-  margin: 20px auto;
-  width: 200px;
-  height: 120px;
+  width: 120px;
+  height: 70px;
   background-image: ${(props) => props.img};
   background-size: cover;
   background-position: center;
+  border: 1px solid #d4d4d4;
   &:hover {
     cursor: pointer;
     box-shadow: 1px 1px 5px gray;
+    border: none;
   }
-  @media screen and (max-width: 1860px) {
-    margin: 0;
-    width: 130px;
-    height: 80px;
+  & + & {
+    margin-left: 10px;
+  }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    width: 110px;
+    height: 65px;
     & + & {
-      margin-left: 10px;
+      margin-left: 0;
     }
   }
 `;
@@ -179,6 +237,9 @@ const SelectImg = styled.div<{ img: string }>`
 const FooterContainer = styled.div`
   margin-top: 40px;
   display: flex;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin-top: 30px;
+  }
 `;
 
 const Btn = styled.button<{
@@ -199,6 +260,27 @@ const Btn = styled.button<{
   & + & {
     margin-left: 50px;
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    font-size: 16px;
+    height: 40px;
+    border-radius: 6px;
+    & + & {
+      margin-left: 20px;
+    }
+  }
+`;
+
+const WarningText = styled.div`
+  display: none;
+  @media screen and (max-width: 949px) {
+    margin: 0 auto;
+    padding: 20px;
+    display: block;
+    color: #ffffff;
+    font-size: 14px;
+    line-height: 30px;
+    text-align: center;
+  }
 `;
 
 const Loading = styled(ReactLoading)`
@@ -208,7 +290,7 @@ const Loading = styled(ReactLoading)`
 function EditExistProject() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { userId, setUserProjects, singleProjectId } = useContext(AuthContext);
+  const { userId, setUserProjects } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [pages, setPages] = useState<
     {
@@ -225,8 +307,10 @@ function EditExistProject() {
   const [showOverlay, setShowOverlay] = useState(false);
   const googleMap = templatesArr[9];
 
+  const urlString = new URL(window.location.href);
+  const singleProjectId = urlString.searchParams.get("id") as string;
+
   useEffect(() => {
-    if (singleProjectId === "") return;
     async function fetchData() {
       const projectDetail = await getSingleProject(singleProjectId);
       setPages(projectDetail[0].pages);
@@ -347,93 +431,88 @@ function EditExistProject() {
         <Wrapper>
           <SelectContainer>
             <SelectInnerContainer>
-              {templatesImgArr.map((pic, index) => (
-                <SelectImg
-                  key={uuid()}
-                  img={`url(${pic})`}
-                  onClick={() => {
-                    setPages((prev) => [
-                      ...prev,
-                      { key: uuid(), ...templateData[index] },
-                    ]);
-                  }}
-                />
-              ))}
+              <SelectImgOverflowContainer>
+                {templatesImgArr.map((pic, index) => (
+                  <SelectImg
+                    key={uuid()}
+                    img={`url(${pic})`}
+                    onClick={() => {
+                      setPages((prev) => [
+                        ...prev,
+                        { key: uuid(), ...templateData[index] },
+                      ]);
+                    }}
+                  />
+                ))}
+              </SelectImgOverflowContainer>
             </SelectInnerContainer>
           </SelectContainer>
           <Container>
             <ArrowIcon onClick={() => navigate(-1)} />
             <EditorContainer>
-              {pages.length === 0 ? (
-                <Text>{t("create_new_project")}</Text>
-              ) : (
-                <>
-                  <Input
-                    value={title}
-                    placeholder={t("project_title")}
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                  <Droppable droppableId="drop-id">
-                    {(droppableProvided, droppableSnapshot) => (
-                      <div
-                        {...droppableProvided.droppableProps}
-                        ref={droppableProvided.innerRef}
-                      >
-                        {pages.map((page, index) => {
-                          const Template = templatesArr[page.type];
-                          return (
-                            <Draggable
-                              draggableId={page.key}
-                              index={index}
-                              key={page.key}
+              <Title
+                value={title}
+                placeholder={t("project_title")}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+              <Droppable droppableId="drop-id">
+                {(droppableProvided, droppableSnapshot) => (
+                  <div
+                    {...droppableProvided.droppableProps}
+                    ref={droppableProvided.innerRef}
+                  >
+                    {pages.map((page, index) => {
+                      const Template = templatesArr[page.type];
+                      return (
+                        <Draggable
+                          draggableId={page.key}
+                          index={index}
+                          key={page.key}
+                        >
+                          {(provided, snapshot) => (
+                            <SingleEditorContainer
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
                             >
-                              {(provided, snapshot) => (
-                                <SingleEditorContainer
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                >
-                                  <Template
-                                    pages={pages}
-                                    setPages={setPages}
-                                    currentIndex={index}
-                                    position={position}
-                                    setPosition={setPosition}
-                                  />
-                                  <CloseIcon
-                                    onClick={() => deleteHandler(index)}
-                                  />
-                                </SingleEditorContainer>
-                              )}
-                            </Draggable>
-                          );
-                        })}
-                        {droppableProvided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                  <FooterContainer>
-                    <Btn onClick={() => setShowOverlay((prev) => !prev)}>
-                      {t("edit_main_photo")}
-                    </Btn>
-                    <Btn
-                      backgroundColor="#f5dfa9"
-                      backgroundColorHover="#9d8a62"
-                      onClick={() => confirmAllEdit()}
-                    >
-                      {t("confirm_edit")}
-                    </Btn>
-                    <Btn
-                      backgroundColor="#ffe8ee"
-                      backgroundColorHover="#81484f"
-                      onClick={() => navigate("/profile")}
-                    >
-                      {t("drop_edit")}
-                    </Btn>
-                  </FooterContainer>
-                </>
-              )}
+                              <Template
+                                pages={pages}
+                                setPages={setPages}
+                                currentIndex={index}
+                                position={position}
+                                setPosition={setPosition}
+                              />
+                              <CloseIcon onClick={() => deleteHandler(index)} />
+                            </SingleEditorContainer>
+                          )}
+                        </Draggable>
+                      );
+                    })}
+                    {droppableProvided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+              <FooterContainer>
+                <Btn onClick={() => setShowOverlay((prev) => !prev)}>
+                  {t("edit_main_photo")}
+                </Btn>
+                <Btn
+                  backgroundColor="#f5dfa9"
+                  backgroundColorHover="#9d8a62"
+                  onClick={() => confirmAllEdit()}
+                >
+                  {t("confirm_edit")}
+                </Btn>
+                <Btn
+                  backgroundColor="#ffe8ee"
+                  backgroundColorHover="#81484f"
+                  onClick={() => navigate("/profile")}
+                >
+                  {t("drop_edit")}
+                </Btn>
+              </FooterContainer>
             </EditorContainer>
+            <WarningText>{t("small_screen_warning")}</WarningText>
           </Container>
         </Wrapper>
       </DragDropContext>

@@ -32,10 +32,18 @@ const Wrapper = styled.div`
   width: 100%;
   min-width: 100vw;
   height: 100%;
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 110px);
   position: relative;
   display: flex;
   background-color: #787878;
+  @media screen and (min-width: 800px) and (max-width: 1024px) {
+    padding: 80px 0;
+    min-height: calc(100vh - 120px);
+  }
+  @media screen and (max-width: 799px) {
+    padding: 40px 0;
+    min-height: calc(100vh - 90px);
+  }
 `;
 
 const Container = styled.div`
@@ -44,6 +52,10 @@ const Container = styled.div`
   height: 100%;
   position: relative;
   display: flex;
+  @media screen and (max-width: 549px) {
+    width: 90vw;
+    max-width: 350px;
+  }
 `;
 
 const SignInContainer = styled.div`
@@ -62,6 +74,9 @@ const LoginContainer = styled.div`
   padding: 20px 30px;
   display: flex;
   flex-direction: column;
+  @media screen and (max-width: 549px) {
+    padding: 10px 15px;
+  }
 `;
 
 const SignStatus = styled.button`
@@ -81,8 +96,8 @@ const SignStatus = styled.button`
   &:hover {
     cursor: pointer;
   }
-  @media screen and (max-width: 1279px) {
-    margin-bottom: 24px;
+  @media screen and (max-width: 549px) {
+    margin-bottom: 15px;
     height: 40px;
     font-size: 16px;
   }
@@ -102,6 +117,13 @@ const Input = styled.input`
   &:focus {
     outline: none;
     background-color: #61616130;
+  }
+  @media screen and (max-width: 549px) {
+    height: 40px;
+    font-size: 14px;
+    & + & {
+      margin-top: 15px;
+    }
   }
 `;
 
@@ -126,6 +148,11 @@ const SignBtn = styled.button`
     color: #ffffff;
     background-color: #616161;
   }
+  @media screen and (max-width: 549px) {
+    margin-top: 15px;
+    height: 30px;
+    font-size: 14px;
+  }
 `;
 
 const LoginOptionsContainer = styled.div`
@@ -144,7 +171,7 @@ const LoginOptionsText = styled.div`
   left: 50%;
   transform: translateX(-50%);
   font-size: 20px;
-  @media screen and (max-width: 1279px) {
+  @media screen and (max-width: 549px) {
     height: 30px;
     padding: 0 10px;
     font-size: 14px;
@@ -155,7 +182,7 @@ const LoginOptionsLine = styled.div`
   width: 100%;
   height: 10px;
   border-bottom: 1px solid #787878;
-  @media screen and (max-width: 1279px) {
+  @media screen and (max-width: 549px) {
     height: 8px;
   }
 `;
@@ -166,6 +193,11 @@ const Icon = styled.div`
   width: 24px;
   background-position: center;
   background-size: cover;
+  @media screen and (max-width: 549px) {
+    margin-right: 10px;
+    height: 18px;
+    width: 18px;
+  }
 `;
 
 const GoogleIcon = styled(Icon)`
@@ -203,6 +235,12 @@ const OptionalLoginBtn = styled.button`
   }
   &:hover ${FbIcon} {
     background-image: url(${fbIconHover});
+  }
+  @media screen and (max-width: 549px) {
+    margin-top: 10px;
+    padding: 0 10px;
+    height: 30px;
+    font-size: 14px;
   }
 `;
 
@@ -355,7 +393,7 @@ function SignIn() {
   if (isLoading) {
     return (
       <Wrapper>
-        <Loading type="cylon" color="#3c3c3c" margin="50px auto" />
+        <Loading type="cylon" color="#ffffff" margin="50px auto" />
       </Wrapper>
     );
   }

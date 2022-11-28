@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { v4 as uuid } from "uuid";
 import { doc, setDoc } from "firebase/firestore";
@@ -21,16 +21,21 @@ import closeIconHover from "../../icons/close-icon-hover.png";
 import checkedIcon from "../../icons/checked-icon.png";
 
 const Wrapper = styled.div`
-  padding-top: 80px;
+  padding-top: 95px;
   width: 100%;
-  min-width: 100vw;
   height: 100%;
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 110px);
   display: flex;
   position: relative;
   background-color: #787878;
-  @media screen and (max-width: 1860px) {
-    padding-top: 200px;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding-top: 90px;
+  }
+  @media screen and (min-width: 800px) and (max-width: 949px) {
+    min-height: calc(100vh - 100px);
+  }
+  @media screen and (max-width: 799px) {
+    min-height: calc(100vh - 90px);
   }
 `;
 
@@ -38,8 +43,14 @@ const Container = styled.div`
   margin: 50px auto;
   width: 1300px;
   height: 100%;
-  min-height: calc(100vh - 260px);
+  min-height: calc(100vh - 240px);
   display: flex;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 900px;
+  }
+  @media screen and (max-width: 949px) {
+    margin: 30px auto;
+  }
 `;
 
 const EditorContainer = styled.div`
@@ -47,24 +58,35 @@ const EditorContainer = styled.div`
   padding: 50px;
   width: 100%;
   height: 100%;
-  min-height: 80vh;
+  min-height: 75vh;
   background-color: #f0f0f0;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   box-shadow: 0 0 20px #3c3c3c;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    padding: 30px;
+    border-radius: 14px;
+  }
+  @media screen and (max-width: 949px) {
+    display: none;
+  }
 `;
 
 const Text = styled.div`
   font-size: 24px;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    font-size: 20px;
+  }
 `;
 
-const Input = styled.input`
+const Title = styled.input`
   margin-bottom: 40px;
   padding: 0 20px;
   width: 1200px;
   height: 60px;
+  color: #3c3c3c;
   font-size: 30px;
   font-weight: 700;
   background-color: #ffffff90;
@@ -74,6 +96,13 @@ const Input = styled.input`
     outline: none;
     background-color: #ffffff;
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 40px;
+    margin-bottom: 30px;
+    font-size: 20px;
+    border-radius: 6px;
+  }
 `;
 
 const SingleEditorContainer = styled.div`
@@ -82,6 +111,13 @@ const SingleEditorContainer = styled.div`
   height: 760px;
   & + & {
     margin-top: 80px;
+  }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 532px;
+  }
+  & + & {
+    margin-top: 40px;
   }
 `;
 
@@ -98,59 +134,83 @@ const CloseIcon = styled.div`
   &:hover {
     background-image: url(${closeIconHover});
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 30px;
+    height: 30px;
+    top: -15px;
+    right: -14px;
+  }
 `;
 
 const SelectContainer = styled.div`
-  padding: 20px;
-  width: 270px;
-  height: calc(100vh - 160px);
+  padding: 75px 0 10px 0;
+  width: 100vw;
   display: flex;
   position: fixed;
-  left: 0;
+  top: 0;
   flex-direction: column;
   align-items: center;
   background-color: #ffffff;
-  box-shadow: 0 -1px 3px black;
-  overflow: scroll;
-  scrollbar-width: none;
+  box-shadow: 1px 0 5px black;
   z-index: 5;
   ::-webkit-scrollbar {
     display: none;
   }
-  @media screen and (max-width: 1860px) {
-    padding-top: 100px;
-    top: 0;
-    width: 100vw;
-    height: 200px;
-    box-shadow: 1px 0 5px black;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    max-height: 150px;
+    transition: max-height 0.3s ease-in;
+    overflow: hidden;
+    &:hover {
+      max-height: 230px;
+    }
+  }
+  @media screen and (max-width: 949px) {
+    display: none;
   }
 `;
 
 const SelectInnerContainer = styled.div`
+  margin: 0 auto;
   height: 100%;
-  @media screen and (max-width: 1860px) {
-    margin: 0 auto;
-    display: flex;
+  width: 1300px;
+  overflow: hidden;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    width: 840px;
+    height: 150px;
+  }
+`;
+
+const SelectImgOverflowContainer = styled.div`
+  margin: auto;
+  display: flex;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    height: 100%;
+    flex-wrap: wrap;
   }
 `;
 
 const SelectImg = styled.div<{ img: string }>`
-  margin: 20px auto;
-  width: 200px;
-  height: 120px;
+  width: 120px;
+  height: 70px;
   background-image: ${(props) => props.img};
   background-size: cover;
   background-position: center;
+  border: 1px solid #d4d4d4;
   &:hover {
     cursor: pointer;
     box-shadow: 1px 1px 5px gray;
+    border: none;
   }
-  @media screen and (max-width: 1860px) {
-    margin: 0;
-    width: 130px;
-    height: 80px;
+  & + & {
+    margin-left: 10px;
+  }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    width: 110px;
+    height: 65px;
     & + & {
-      margin-left: 10px;
+      margin-left: 0;
     }
   }
 `;
@@ -158,7 +218,11 @@ const SelectImg = styled.div<{ img: string }>`
 const FooterContainer = styled.div`
   margin-top: 40px;
   display: flex;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin-top: 30px;
+  }
 `;
+
 const Btn = styled.button<{
   backgroundColor?: string;
   backgroundColorHover?: string;
@@ -179,9 +243,17 @@ const Btn = styled.button<{
   & + & {
     margin-left: 50px;
   }
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    font-size: 16px;
+    height: 40px;
+    border-radius: 6px;
+    & + & {
+      margin-left: 20px;
+    }
+  }
 `;
 
-const CheckedIcon = styled.div`
+const CheckMainImgIcon = styled.div`
   margin-left: 10px;
   width: 25px;
   height: 25px;
@@ -189,6 +261,19 @@ const CheckedIcon = styled.div`
   background-size: cover;
   background-position: center;
   opacity: 0.8;
+`;
+
+const WarningText = styled.div`
+  display: none;
+  @media screen and (max-width: 949px) {
+    margin: 0 auto;
+    padding: 20px;
+    display: block;
+    color: #ffffff;
+    font-size: 14px;
+    line-height: 30px;
+    text-align: center;
+  }
 `;
 
 const Loading = styled(ReactLoading)`
@@ -213,6 +298,7 @@ function CreateNewProject() {
   const [title, setTitle] = useState("");
   const [mainImgSrc, setMainImgSrc] = useState("");
   const [showOverlay, setShowOverlay] = useState(false);
+  const selectAreaRef = useRef(null!);
   const googleMap = templatesArr[9];
 
   useEffect(() => {
@@ -344,18 +430,20 @@ function CreateNewProject() {
         <Wrapper>
           <SelectContainer>
             <SelectInnerContainer>
-              {templatesImgArr.map((pic, index) => (
-                <SelectImg
-                  key={uuid()}
-                  img={`url(${pic})`}
-                  onClick={() => {
-                    setPages((prev) => [
-                      ...prev,
-                      { key: uuid(), ...templateData[index] },
-                    ]);
-                  }}
-                />
-              ))}
+              <SelectImgOverflowContainer ref={selectAreaRef}>
+                {templatesImgArr.map((pic, index) => (
+                  <SelectImg
+                    key={uuid()}
+                    img={`url(${pic})`}
+                    onClick={() => {
+                      setPages((prev) => [
+                        ...prev,
+                        { key: uuid(), ...templateData[index] },
+                      ]);
+                    }}
+                  />
+                ))}
+              </SelectImgOverflowContainer>
             </SelectInnerContainer>
           </SelectContainer>
           <Container>
@@ -364,7 +452,7 @@ function CreateNewProject() {
                 <Text>{t("create_new_project")}</Text>
               ) : (
                 <>
-                  <Input
+                  <Title
                     value={title}
                     placeholder={t("project_title")}
                     onChange={(e) => setTitle(e.target.value)}
@@ -426,7 +514,7 @@ function CreateNewProject() {
                       <>
                         <Btn onClick={() => setShowOverlay((prev) => !prev)}>
                           {t("edit_main_photo")}
-                          <CheckedIcon />
+                          <CheckMainImgIcon />
                         </Btn>
                         <Btn
                           backgroundColor="#f5dfa9"
@@ -441,6 +529,7 @@ function CreateNewProject() {
                 </>
               )}
             </EditorContainer>
+            <WarningText>{t("small_screen_warning")}</WarningText>
           </Container>
         </Wrapper>
       </DragDropContext>

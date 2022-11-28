@@ -21,6 +21,14 @@ const Liked = styled.div<{ margin: string; $width: string; $height: string }>`
   &:hover {
     cursor: pointer;
   }
+  @media screen and (max-width: 1449px) {
+    width: 24px;
+    height: 24px;
+  }
+  @media screen and (max-width: 949px) {
+    width: 18px;
+    height: 18px;
+  }
 `;
 
 const Like = styled.div<{ margin: string; $width: string; $height: string }>`
@@ -32,6 +40,14 @@ const Like = styled.div<{ margin: string; $width: string; $height: string }>`
   background-position: center;
   &:hover {
     background-image: url(${likeIconHover});
+  }
+  @media screen and (max-width: 1449px) {
+    width: 24px;
+    height: 24px;
+  }
+  @media screen and (max-width: 949px) {
+    width: 18px;
+    height: 18px;
   }
 `;
 

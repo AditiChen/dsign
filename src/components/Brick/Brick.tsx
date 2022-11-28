@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../../context/authContext";
-import { FriendContext } from "../../context/friendContext";
 import { LikeIcon, LikedIcon } from "../IconButtons/LikeIcons";
 
 interface Prop {
@@ -11,6 +10,7 @@ interface Prop {
   url?: string;
   fontSize?: string;
 }
+
 const TitleContainer = styled.div`
   width: 100%;
   height: 0;
@@ -48,6 +48,9 @@ const ImgContainer = styled.div`
     width: 100%;
     height: 120px;
   }
+  @media screen and (max-width: 799px) {
+    height: 250px;
+  }
 `;
 
 const InfoContainer = styled.div`
@@ -56,6 +59,11 @@ const InfoContainer = styled.div`
   height: 50px;
   display: flex;
   align-items: center;
+  border-top: 1px solid #f0f0f0;
+  @media screen and (max-width: 799px) {
+    width: 250px;
+    height: 40px;
+  }
 `;
 
 const SingleProjectContainer = styled.div`
@@ -80,49 +88,22 @@ const SingleProjectContainer = styled.div`
   &:hover > ${InfoContainer} {
     width: 310px;
   }
+  @media screen and (max-width: 799px) {
+    width: 250px;
+    height: 290px;
+    &:hover {
+      width: 250px;
+      height: 290px;
+    }
+    &:hover > ${ImgContainer} {
+      width: 250px;
+      height: 250px;
+    }
+    &:hover > ${InfoContainer} {
+      width: 250px;
+    }
+  }
 `;
-
-// const UserInfoContainer = styled.div`
-//   max-height: 0px;
-//   background: linear-gradient(to bottom, #ffffff90, #ffffff);
-//   transform-origin: bottom;
-//   overflow: hidden;
-//   transition: max-height 0.3s ease-in;
-//   border-radius: 10px 10px 0 0;
-//   position: absolute;
-//   bottom: calc(-100% + 71px);
-//   left: -15px;
-// `;
-
-// const UserInfoInnerContainer = styled.div`
-//   padding: 20px 15px;
-//   max-height: 150px;
-//   width: 310px;
-// `;
-
-// const UserInfoHeaderContainer = styled.div`
-//   display: flex;
-//   align-items: center;
-// `;
-
-// const InfoAvatar = styled.div`
-//   width: 50px;
-//   height: 50px;
-//   border-radius: 25px;
-//   background-image: ${(props: Prop) => props.img};
-//   background-size: cover;
-//   background-position: center;
-//   &:hover {
-//     cursor: pointer;
-//   }
-// `;
-
-// const Intor = styled.div`
-//   margin: 10px 0;
-//   font-size: 18px;
-//   line-height: 22px;
-//   color: #616161;
-// `;
 
 const Avatar = styled.div`
   width: 36px;
@@ -132,14 +113,22 @@ const Avatar = styled.div`
   background-size: cover;
   background-position: center;
   position: relative;
+  border: 1px solid #b4b4b4;
   &:hover {
     cursor: pointer;
+  }
+  @media screen and (max-width: 799px) {
+    width: 30px;
+    height: 30px;
   }
 `;
 
 const Author = styled.div`
   margin-left: 10px;
-  font-size: ${(props: Prop) => props.fontSize};
+  font-size: 18px;
+  @media screen and (max-width: 799px) {
+    font-size: 16px;
+  }
 `;
 
 export default function Brick({
@@ -158,29 +147,21 @@ export default function Brick({
   title: string;
 }) {
   const navigate = useNavigate();
-  const { userId, setSingleProjectId, favoriteList, friendList } =
-    useContext(AuthContext);
-  const { setClickedUserId } = useContext(FriendContext);
-
-  function toSingleProjectPage() {
-    setSingleProjectId(projectId);
-    navigate("/singleProject");
-  }
+  const { userId, favoriteList } = useContext(AuthContext);
 
   function toProfileHandler() {
     if (uid === userId) {
       navigate("/profile");
       return;
     }
-    setClickedUserId(uid);
-    navigate("/userProfile");
+    navigate(`/userProfile?id=${uid}`);
   }
 
   return (
     <SingleProjectContainer key={projectId}>
       <ImgContainer
         img={`url(${mainUrl})`}
-        onClick={() => toSingleProjectPage()}
+        onClick={() => navigate(`/singleProject?id=${projectId}`)}
       >
         <TitleContainer>
           <TitleText>{title}</TitleText>
@@ -188,30 +169,7 @@ export default function Brick({
       </ImgContainer>
       <InfoContainer>
         <Avatar img={`url(${avatar})`} onClick={() => toProfileHandler()} />
-        {/* <UserInfoContainer>
-            <UserInfoInnerContainer>
-              <UserInfoHeaderContainer>
-                <InfoAvatar
-                  img={`url(${avatar})`}
-                  onClick={() => {
-                    setClickedUserId(uid);
-                    navigate("/userProfile");
-                  }}
-                />
-                <Author fontSize="24px">{name}</Author>
-                {friendList.indexOf(uid) === -1 &&
-                uid !== userId &&
-                userId !== "" ? (
-                  <FriendIcon requestId={uid} />
-                ) : (
-                  ""
-                )}
-              </UserInfoHeaderContainer>
-              <Intor>{introduction}</Intor>
-            </UserInfoInnerContainer>
-          </UserInfoContainer> */}
-        {/* </Avatar> */}
-        <Author fontSize="18px">{name}</Author>
+        <Author>{name}</Author>
         {favoriteList.indexOf(projectId) === -1 ? (
           <LikeIcon
             margin="0 0 0 auto"

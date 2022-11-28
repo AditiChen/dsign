@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { v4 as uuid } from "uuid";
@@ -11,6 +11,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 import Swal from "sweetalert2";
+import ReactLoading from "react-loading";
 
 import { AuthContext } from "../../context/authContext";
 import { db } from "../../context/firebaseSDK";
@@ -31,11 +32,15 @@ const Friend = styled.div`
   }
 `;
 
+const Loading = styled(ReactLoading)``;
+
 export default function FriendIcon({ requestId }: { requestId: string }) {
   const { t } = useTranslation();
   const { userId } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   async function addFriendHandler() {
+    setIsLoading(true);
     const requestRef = collection(db, "friendRequests");
     const q2 = query(
       requestRef,
@@ -53,6 +58,7 @@ export default function FriendIcon({ requestId }: { requestId: string }) {
         icon: "warning",
         confirmButtonColor: "#646464",
       });
+      setIsLoading(false);
       return;
     }
     const newDocId = uuid();
@@ -61,7 +67,9 @@ export default function FriendIcon({ requestId }: { requestId: string }) {
       to: requestId,
     });
     Swal.fire({ text: t("sen_request_successfully"), icon: "success" });
+    setIsLoading(false);
   }
-
+  if (isLoading)
+    return <Loading type="spokes" color="#3c3c3c" height={25} width={25} />;
   return <Friend onClick={() => addFriendHandler()} />;
 }
