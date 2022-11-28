@@ -15,7 +15,7 @@ import {
   arrayUnion,
   arrayRemove,
 } from "firebase/firestore";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import { AuthContext } from "../../context/authContext";
@@ -39,20 +39,17 @@ interface Prop {
 }
 
 const Wrapper = styled.div`
-  padding: 50px 0;
+  padding: 30px 0;
   width: 100%;
   min-width: 100vw;
   height: 100%;
-  min-height: calc(100vh - 140px);
   position: relative;
   display: flex;
   @media screen and (min-width: 800px) and (max-width: 1024px) {
-    padding: 40px 0;
-    min-height: calc(100vh - 120px);
+    padding: 20px 0;
   }
   @media screen and (max-width: 799px) {
     padding: 10px 0;
-    min-height: calc(100vh - 90px);
   }
 `;
 
@@ -72,6 +69,9 @@ const Separator = styled.div`
   width: 70%;
   max-width: 800px;
   @media screen and (max-width: 799px) {
+    width: 80%;
+  }
+  @media screen and (max-width: 499px) {
     margin-top: 10px;
     width: 90%;
   }
@@ -107,8 +107,8 @@ const SearchInput = styled.input`
 `;
 
 const SearchIcon = styled.div`
-  height: 28px;
-  width: 28px;
+  height: 26px;
+  width: 26px;
   position: absolute;
   right: 15px;
   background-image: url(${searchIcon});
@@ -118,8 +118,8 @@ const SearchIcon = styled.div`
     cursor: pointer;
   }
   @media screen and (max-width: 799px) {
-    height: 24px;
-    width: 24px;
+    height: 22px;
+    width: 22px;
     right: 10px;
   }
 `;
@@ -476,7 +476,7 @@ function FriendList() {
     return (
       <Wrapper>
         <Container>
-          <Loading />
+          <Loading type="cylon" color="#3c3c3c" />
         </Container>
       </Wrapper>
     );

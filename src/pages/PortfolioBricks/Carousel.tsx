@@ -64,15 +64,15 @@ const Quote = styled.div`
     line-height: 55px;
     font-size: 40px;
   }
-  @media screen and (min-width: 800px) and (max-width: 1199px) {
+  @media screen and (min-width: 700px) and (max-width: 1199px) {
     padding-right: 20px;
-    line-height: 45px;
-    font-size: 30px;
+    line-height: 36px;
+    font-size: 26px;
   }
-  @media screen and (min-width: 300px) and (max-width: 799px) {
+  @media screen and (min-width: 300px) and (max-width: 699px) {
     padding-right: 10px;
-    line-height: 35px;
-    font-size: 18px;
+    line-height: 24px;
+    font-size: 16px;
   }
 `;
 
@@ -86,13 +86,13 @@ const Name = styled.div`
     line-height: 40px;
     font-size: 24px;
   }
-  @media screen and (min-width: 800px) and (max-width: 1199px) {
-    line-height: 35px;
-    font-size: 18px;
+  @media screen and (min-width: 700px) and (max-width: 1199px) {
+    line-height: 30px;
+    font-size: 16px;
   }
-  @media screen and (min-width: 300px) and (max-width: 799px) {
+  @media screen and (min-width: 300px) and (max-width: 699px) {
     line-height: 25px;
-    font-size: 14px;
+    font-size: 12px;
   }
 `;
 
@@ -106,7 +106,7 @@ const Photo = styled.img`
 
 const DocsContainer = styled.div`
   position: absolute;
-  bottom: 30px;
+  bottom: 25px;
   left: 50%;
   transform: translate(-50%);
   display: flex;
@@ -126,13 +126,13 @@ const Doc = styled.div<{ backgroundColor: string }>`
   border-radius: 50%;
   cursor: pointer;
   & + & {
-    margin-left: 20px;
+    margin-left: 15px;
   }
   @media screen and (min-width: 800px) and (max-width: 1199px) {
     width: 8px;
     height: 8px;
     & + & {
-      margin-left: 15px;
+      margin-left: 12px;
     }
   }
   @media screen and (min-width: 300px) and (max-width: 799px) {

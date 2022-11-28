@@ -35,43 +35,56 @@ interface UserProjectsType {
 }
 
 const Wrapper = styled.div`
-  padding: 50px;
+  padding: 50px 5vw;
   width: 100%;
   min-width: 100vw;
   height: 100%;
   position: relative;
   display: flex;
+  @media screen and (max-width: 1049px) {
+    padding: 20px 5vw;
+  }
 `;
 
 const Container = styled.div`
-  padding-right: 80px;
   width: 100%;
   height: 100%;
   display: flex;
+  @media screen and (max-width: 1049px) {
+    display: none;
+  }
 `;
 
 const UserInfoContainer = styled.div`
-  margin-left: 50px;
+  padding: 50px 20px;
   height: calc(100vh - 260px);
   width: 15vw;
   min-width: 300px;
-  padding: 50px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   border: 1px solid #b4b4b4;
   border-radius: 10px;
+  @media screen and (max-width: 1049px) {
+    padding: 30px 20px;
+    width: 100%;
+    max-width: 280px;
+  }
 `;
 
 const Avatar = styled.div`
   height: 180px;
   width: 180px;
-  border-radius: 90px;
+  border-radius: 50%;
   background-image: ${(props: Prop) => props.url || "none"};
   background-size: cover;
   background-position: center;
   position: relative;
   box-shadow: 0 0 5px #3c3c3c;
+  @media screen and (max-width: 1049px) {
+    height: 150px;
+    width: 150px;
+  }
 `;
 
 const AddFriendIconContainer = styled.div`
@@ -80,12 +93,21 @@ const AddFriendIconContainer = styled.div`
   bottom: 0px;
 `;
 
-const UserInfo = styled.div`
+const UserName = styled.div`
   margin-top: 20px;
-  font-size: ${(props: Prop) => props.size};
-  font-weight: ${(props: Prop) => props.weight};
-  & + & {
-    margin-top: 10px;
+  font-size: 24px;
+  font-weight: 600;
+  @media screen and (max-width: 1049px) {
+    margin-top: 15px;
+    font-size: 18px;
+  }
+`;
+
+const UserEmail = styled.div`
+  margin-top: 10px;
+  font-size: 20px;
+  @media screen and (max-width: 1049px) {
+    font-size: 16px;
   }
 `;
 
@@ -96,6 +118,10 @@ const IntroText = styled.div`
   font-size: 20px;
   color: #646464;
   border-bottom: 1px solid #969696;
+  @media screen and (max-width: 1049px) {
+    margin-top: 20px;
+    font-size: 14px;
+  }
 `;
 
 const Introduction = styled.textarea`
@@ -108,33 +134,85 @@ const Introduction = styled.textarea`
   border: none;
   outline: none;
   background-color: transparent;
+  @media screen and (max-width: 1049px) {
+    padding: 5px 0;
+    font-size: 12px;
+  }
 `;
 
 const BricksContainer = styled.div`
-  margin: 0 auto;
-  padding-bottom: 50px;
+  margin-left: 40px;
   width: 1640px;
   height: 100%;
   position: relative;
   display: grid;
   grid-gap: 20px;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  @media screen and (min-width: 1850px) and (max-width: 2230px) {
+  @media screen and (max-width: 2230px) {
     width: 1300px;
   }
-  @media screen and (min-width: 1450px) and (max-width: 1849px) {
+  @media screen and (max-width: 1799px) {
     width: 970px;
   }
-  @media screen and (min-width: 1220px) and (max-width: 1449px) {
+  @media screen and (max-width: 1449px) {
+    margin-left: 20px;
     width: 640px;
   }
-  @media screen and (min-width: 800px) and (max-width: 1219px) {
-    width: 530px;
+  @media screen and (max-width: 1049px) {
+    margin-left: 0;
   }
   @media screen and (max-width: 799px) {
-    padding: 20px 0;
-    width: 330px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    width: 540px;
   }
+  @media screen and (max-width: 599px) {
+    width: 300px;
+  }
+`;
+
+const MobileContainer = styled.div`
+  display: none;
+  @media screen and (max-width: 1049px) {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
+const MobileHeaderContainer = styled.div`
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+`;
+
+const MobileSwitchStatusBtn = styled.div<{ color: string; border: string }>`
+  display: none;
+  @media screen and (max-width: 1049px) {
+    margin: 5px 0;
+    color: ${(props) => props.color};
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 26px;
+    display: block;
+    border-bottom: ${(props) => props.border};
+    position: relative;
+    &:hover {
+      cursor: pointer;
+      color: #3c3c3c;
+    }
+    & + & {
+      margin-left: 10px;
+    }
+  }
+`;
+
+const MobileBodyContainer = styled.div`
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Loading = styled(ReactLoading)`
@@ -145,6 +223,7 @@ function OtherUserProfile() {
   const { userId, friendList } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [userProjects, setUserProjects] = useState<UserProjectsType[]>([]);
+  const [clickState, setClickState] = useState("profile");
   const [userData, setUserData] = useState<{
     uid: string;
     name: string;
@@ -194,10 +273,8 @@ function OtherUserProfile() {
                 userId !== "" && <FriendIcon requestId={otherUserId} />}
             </AddFriendIconContainer>
           </Avatar>
-          <UserInfo size="24px" weight="600">
-            {userData && userData.name}
-          </UserInfo>
-          <UserInfo size="20px">{userData && userData.email}</UserInfo>
+          <UserName>{userData && userData.name}</UserName>
+          <UserEmail>{userData && userData.email}</UserEmail>
           <IntroText>Introduction</IntroText>
           <Introduction value={userData && userData.introduction} disabled />
         </UserInfoContainer>
@@ -216,6 +293,60 @@ function OtherUserProfile() {
             ))}
         </BricksContainer>
       </Container>
+      <MobileContainer>
+        <MobileHeaderContainer>
+          <MobileSwitchStatusBtn
+            color={clickState === "profile" ? "#3c3c3c" : "#b4b4b4"}
+            border={clickState === "profile" ? "1px solid #3c3c3c" : "none"}
+            onClick={() => setClickState("profile")}
+          >
+            User Profile
+          </MobileSwitchStatusBtn>
+          <MobileSwitchStatusBtn
+            color={clickState === "project" ? "#3c3c3c" : "#b4b4b4"}
+            border={clickState === "project" ? "1px solid #3c3c3c" : "none"}
+            onClick={() => setClickState("project")}
+          >
+            Project List
+          </MobileSwitchStatusBtn>
+        </MobileHeaderContainer>
+        <MobileBodyContainer>
+          {clickState === "profile" && (
+            <UserInfoContainer>
+              <Avatar url={userData && `url(${userData.avatar})`}>
+                <AddFriendIconContainer>
+                  {friendList.indexOf(otherUserId) === -1 &&
+                    otherUserId !== userId &&
+                    userId !== "" && <FriendIcon requestId={otherUserId} />}
+                </AddFriendIconContainer>
+              </Avatar>
+              <UserName>{userData && userData.name}</UserName>
+              <UserEmail>{userData && userData.email}</UserEmail>
+              <IntroText>Introduction</IntroText>
+              <Introduction
+                value={userData && userData.introduction}
+                disabled
+              />
+            </UserInfoContainer>
+          )}
+          {clickState === "project" && (
+            <BricksContainer>
+              {userProjects &&
+                userProjects.map((project) => (
+                  <Brick
+                    key={project.projectId}
+                    uid={project.uid}
+                    projectId={project.projectId}
+                    mainUrl={project.mainUrl}
+                    title={project.title}
+                    avatar={userData?.avatar || ""}
+                    name={userData?.name || ""}
+                  />
+                ))}
+            </BricksContainer>
+          )}
+        </MobileBodyContainer>
+      </MobileContainer>
     </Wrapper>
   );
 }
