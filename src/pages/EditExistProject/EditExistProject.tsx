@@ -6,7 +6,12 @@ import { doc, setDoc } from "firebase/firestore";
 import ReactLoading from "react-loading";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "react-beautiful-dnd";
 
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
@@ -408,8 +413,8 @@ function EditExistProject() {
     setPages(removeSelectedPageData);
   }
 
-  const onDragEnd = (e: any) => {
-    const { source, destination } = e;
+  const onDragEnd = (result: DropResult) => {
+    const { source, destination } = result;
     if (!destination) return;
     const newPagesOrder = [...pages];
     const [remove] = newPagesOrder.splice(source.index, 1);

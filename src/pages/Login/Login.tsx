@@ -278,6 +278,7 @@ function SignIn() {
   }
 
   async function signUpHandler() {
+    if (checkLoading) return;
     if (!inputName) {
       Swal.fire({
         text: t("check_input_name"),

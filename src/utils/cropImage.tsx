@@ -23,6 +23,11 @@ export function rotateSize(width: number, height: number, rotation: number) {
   };
 }
 
+interface ImageType {
+  height: number;
+  width: number;
+}
+
 export default async function getCroppedImg(
   imageSrc: string,
   pixelCrop: {
@@ -34,7 +39,7 @@ export default async function getCroppedImg(
   rotation = 0,
   flip = { horizontal: false, vertical: false }
 ) {
-  const image: any = await createImage(imageSrc);
+  const image = (await createImage(imageSrc)) as ImageType;
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 
@@ -62,7 +67,7 @@ export default async function getCroppedImg(
   ctx.translate(-image.width / 2, -image.height / 2);
 
   // draw rotated image
-  ctx.drawImage(image, 0, 0);
+  ctx.drawImage(image as CanvasImageSource, 0, 0);
 
   // croppedAreaPixels values are bounding box relative
   // extract the cropped image using these values
@@ -81,8 +86,11 @@ export default async function getCroppedImg(
   ctx.putImageData(data, 0, 0);
 
   return new Promise((resolve, reject) => {
-    canvas.toBlob((newFile: any) => {
-      resolve({ file: newFile, url: URL.createObjectURL(newFile) });
-    }, "image/jpeg");
+    canvas.toBlob(
+      (newFile: Blob | null) =>
+        newFile !== null &&
+        resolve({ file: newFile, url: URL.createObjectURL(newFile) }),
+      "image/jpeg"
+    );
   });
 }

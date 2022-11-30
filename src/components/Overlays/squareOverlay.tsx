@@ -231,8 +231,12 @@ const ControlContainer = styled.div`
 `;
 
 const SliderContainer = styled.div`
-  margin: 0 20px;
+  margin-right: 40px;
   width: 150px;
+  @media screen and (min-width: 950px) and (max-width: 1449px) {
+    margin-right: 30px;
+    width: 120px;
+  }
 `;
 
 const Btn = styled.button`
@@ -442,7 +446,9 @@ function SquareOverlay({
                       max={3}
                       step={0.1}
                       value={zoom}
-                      onChange={(e, newZoom: any) => setZoom(newZoom)}
+                      onChange={(e, newZoom: number | number[]) =>
+                        typeof newZoom === "number" && setZoom(newZoom)
+                      }
                     />
                   </SliderContainer>
                   <SliderContainer>
@@ -454,9 +460,10 @@ function SquareOverlay({
                       min={0}
                       max={360}
                       value={rotation}
-                      onChange={(e, newRotation: any) => {
-                        setRotation(newRotation);
-                      }}
+                      onChange={(e, newRotation: number | number[]) =>
+                        typeof newRotation === "number" &&
+                        setRotation(newRotation)
+                      }
                     />
                   </SliderContainer>
                   {isAddToCollection ? (

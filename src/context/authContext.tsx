@@ -195,8 +195,7 @@ export function AuthContextProvider({ children }: BodyProp) {
         insertEmail,
         password
       );
-      const { user }: any = UserCredentialImpl;
-      const { uid } = user;
+      const { uid } = UserCredentialImpl.user;
       const newName = insertName.replace(/\s/g, "");
       await setDoc(doc(db, "users", uid), {
         uid,
