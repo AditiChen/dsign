@@ -112,7 +112,7 @@ export function AuthContextProvider({ children }: BodyProp) {
 
   useEffect(() => {
     setIsLoading(true);
-    const unsubscribe = onAuthStateChanged(auth, async (user: any) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         const { uid } = user;
         const docSnap = await getDoc(doc(db, "users", uid));
@@ -162,21 +162,8 @@ export function AuthContextProvider({ children }: BodyProp) {
         insertEmail,
         password
       );
-      const { user }: any = UserCredentialImpl;
+      const { user } = UserCredentialImpl;
       const { uid } = user;
-      const userEmail = user.reloadUserInfo.email;
-      const docSnap = await getDoc(doc(db, "users", uid));
-      const data = docSnap.data() as {
-        uid: string;
-        name: string;
-        avatar: string;
-        email: string;
-        friendList: string[];
-        favoriteList: string[];
-        collection: string[];
-        introduction: string;
-      };
-
       setUserId(uid);
       const userProjectsData = await getUserProjects(uid);
       Swal.fire({
@@ -243,25 +230,27 @@ export function AuthContextProvider({ children }: BodyProp) {
     setIsLoading(true);
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
-    const credential = GoogleAuthProvider.credentialFromResult(result);
     const { uid, photoURL, displayName } = result.user;
-    const gmail = result.user.email;
-    await setDoc(doc(db, "users", uid), {
-      uid,
-      name: displayName,
-      email: gmail,
-      avatar: photoURL,
-      friendList: [],
-      favoriteList: [],
-      collection: [],
-      introduction: "",
-    });
-    if (!gmail || !photoURL || !displayName) return;
+    const docSnap = await getDoc(doc(db, "users", uid));
+    const data = docSnap.data() as UserDataType;
+    if (data === undefined) {
+      const gmail = result.user.email;
+      await setDoc(doc(db, "users", uid), {
+        uid,
+        name: displayName,
+        email: gmail,
+        avatar: photoURL,
+        friendList: [],
+        favoriteList: [],
+        collection: [],
+        introduction: "",
+      });
+    }
     setUserId(uid);
     setIsLogin(true);
-    setIsLoading(false);
     const userProjectsData = await getUserProjects(uid);
     setUserProjects(userProjectsData);
+    setIsLoading(false);
     navigate("/portfolioBricks");
   };
 
@@ -269,25 +258,27 @@ export function AuthContextProvider({ children }: BodyProp) {
     setIsLoading(true);
     const provider = new FacebookAuthProvider();
     const result = await signInWithPopup(auth, provider);
-    const credential = FacebookAuthProvider.credentialFromResult(result);
     const { uid, photoURL, displayName } = result.user;
-    const fbMail = result.user.email;
-    await setDoc(doc(db, "users", uid), {
-      uid,
-      name: displayName,
-      email: fbMail,
-      avatar: photoURL,
-      friendList: [],
-      favoriteList: [],
-      collection: [],
-      introduction: "",
-    });
-    if (!fbMail || !photoURL || !displayName) return;
+    const docSnap = await getDoc(doc(db, "users", uid));
+    const data = docSnap.data() as UserDataType;
+    if (data === undefined) {
+      const fbMail = result.user.email;
+      await setDoc(doc(db, "users", uid), {
+        uid,
+        name: displayName,
+        email: fbMail,
+        avatar: photoURL,
+        friendList: [],
+        favoriteList: [],
+        collection: [],
+        introduction: "",
+      });
+    }
     setUserId(uid);
     setIsLogin(true);
-    setIsLoading(false);
     const userProjectsData = await getUserProjects(uid);
     setUserProjects(userProjectsData);
+    setIsLoading(false);
     navigate("/portfolioBricks");
   };
 

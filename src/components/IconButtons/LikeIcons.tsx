@@ -39,6 +39,7 @@ const Like = styled.div<{ margin: string; $width: string; $height: string }>`
   background-size: cover;
   background-position: center;
   &:hover {
+    cursor: pointer;
     background-image: url(${likeIconHover});
   }
   @media screen and (max-width: 1449px) {

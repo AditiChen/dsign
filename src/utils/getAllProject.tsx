@@ -44,8 +44,11 @@ export default async function getAllProject() {
       pages: project.data().pages,
     });
   });
+  const newOrder = allFetchedProjects.sort(
+    (a, b) => Number(b.projectId) - Number(a.projectId)
+  );
   await Promise.all(
-    allFetchedProjects.map(async (project, index) => {
+    newOrder.map(async (project, index) => {
       const docSnap = await getDoc(doc(db, "users", project.uid));
       const { name, avatar, introduction } = docSnap.data() as {
         name: string;

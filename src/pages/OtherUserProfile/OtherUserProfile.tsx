@@ -59,6 +59,7 @@ const Container = styled.div`
 const UserInfoContainer = styled.div`
   padding: 50px 20px;
   height: calc(100vh - 260px);
+  min-height: 500px;
   width: 15vw;
   min-width: 300px;
   display: flex;
@@ -106,9 +107,9 @@ const UserName = styled.div`
 
 const UserEmail = styled.div`
   margin-top: 10px;
-  font-size: 20px;
+  font-size: 16px;
   @media screen and (max-width: 1049px) {
-    font-size: 16px;
+    font-size: 12px;
   }
 `;
 
@@ -155,9 +156,9 @@ const BricksContainer = styled.div`
   @media screen and (max-width: 1799px) {
     width: 970px;
   }
-  @media screen and (max-width: 1449px) {
+  @media screen and (max-width: 1430px) {
     margin-left: 20px;
-    width: 640px;
+    width: 650px;
   }
   @media screen and (max-width: 1049px) {
     margin-left: 0;

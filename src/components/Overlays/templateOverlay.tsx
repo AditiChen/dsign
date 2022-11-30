@@ -43,6 +43,9 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   z-index: 100;
+  @media screen and (max-width: 949px) {
+    display: none;
+  }
 `;
 
 const Backdrop = styled.div`
@@ -97,10 +100,8 @@ const ArrowIcon = styled.div`
 
 const OverlayModal = styled.div`
   padding: 50px;
-  width: 80vw;
-  max-width: 1300px;
+  width: 1200px;
   height: 80vh;
-  max-height: 800px;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -110,8 +111,11 @@ const OverlayModal = styled.div`
   transform: translate(-50%, -50%);
   z-index: 102;
   background-color: white;
-  @media screen and (min-width: 950px) and (max-width: 1449px) {
-    padding: 35px;
+  @media screen and (max-width: 1449px) {
+    width: 1000px;
+  }
+  @media screen and (max-width: 1249px) {
+    width: 800px;
   }
 `;
 
@@ -140,7 +144,7 @@ const NewPhotoHeaderContainer = styled.div`
   padding: 0 20px;
   height: 40px;
   width: 100%;
-  font-size: 24px;
+  font-size: 18px;
   line-height: 40px;
   align-items: center;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
@@ -154,11 +158,11 @@ const CollectionContainer = styled.div`
   margin: 10px 0;
   padding: 20px;
   width: 100%;
-  min-height: 200px;
+  min-height: 140px;
   max-height: 650px;
   display: grid;
   grid-gap: 10px;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   grid-auto-rows: minmax(4, auto);
   overflow: scroll;
   scrollbar-width: none;
@@ -167,25 +171,19 @@ const CollectionContainer = styled.div`
     display: none;
   }
   @media screen and (max-width: 1449px) {
+    grid-template-columns: repeat(6, 1fr);
     margin: 6px 0;
     padding: 14px;
-    grid-template-columns: repeat(8, 1fr);
   }
-  @media screen and (max-width: 1339px) {
-    grid-template-columns: repeat(7, 1fr);
-  }
-  @media screen and (max-width: 1189px) {
-    grid-template-columns: repeat(6, 1fr);
-  }
-  @media screen and (max-width: 1049px) {
+  @media screen and (max-width: 1249px) {
     grid-template-columns: repeat(5, 1fr);
   }
 `;
 
 const CollectionImg = styled.div<{ url: string }>`
   margin: 10px auto;
-  width: 150px;
-  height: 150px;
+  width: 100px;
+  height: 100px;
   background-image: ${(props) => props.url};
   background-size: cover;
   background-position: center;
@@ -193,8 +191,8 @@ const CollectionImg = styled.div<{ url: string }>`
   &:hover {
     margin: auto;
     cursor: pointer;
-    width: 155px;
-    height: 155px;
+    width: 105px;
+    height: 105px;
     box-shadow: 0 0 5px #3c3c3c;
   }
   @media screen and (min-width: 950px) and (max-width: 1449px) {
@@ -210,10 +208,10 @@ const UploadPic = styled.label`
   padding: 0 15px;
   height: 40px;
   line-height: 40px;
-  font-size: 20px;
+  font-size: 18px;
   text-align: center;
   border: 1px solid #3c3c3c40;
-  border-radius: 10px;
+  border-radius: 5px;
   background-color: #3c3c3c30;
   &:hover {
     cursor: pointer;
@@ -246,7 +244,8 @@ const SliderContainer = styled.div`
 `;
 
 const Btn = styled.button`
-  margin-left: 20px;
+  margin-left: 30px;
+  padding: 0 10px;
   height: 40px;
   font-size: 18px;
   border: 1px solid #3c3c3c40;
@@ -260,7 +259,7 @@ const Btn = styled.button`
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     margin-left: 14px;
     height: 30px;
-    font-size: 12px;
+    font-size: 14px;
     border-radius: 6px;
   }
 `;
@@ -290,7 +289,7 @@ const Text = styled.div`
   font-size: 18px;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     margin-left: 6px;
-    font-size: 12px;
+    font-size: 14px;
   }
 `;
 

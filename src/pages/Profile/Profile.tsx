@@ -32,6 +32,7 @@ interface Prop {
   marginLift?: string;
   weight?: string;
   border?: string;
+  cursor?: string;
 }
 
 const Wrapper = styled.div`
@@ -135,9 +136,9 @@ const UserName = styled.div`
 
 const UserEmail = styled.div`
   margin-top: 10px;
-  font-size: 20px;
+  font-size: 16px;
   @media screen and (max-width: 1049px) {
-    font-size: 16px;
+    font-size: 12px;
   }
 `;
 
@@ -155,11 +156,13 @@ const IntroText = styled.div`
 `;
 
 const Introduction = styled.textarea`
+  margin-bottom: 10px;
   padding: 10px 0;
   width: 100%;
   height: 100%;
-  max-height: calc(100% - 350px);
+  max-height: calc(100% - 360px);
   font-size: 18px;
+  line-height: 22px;
   resize: none;
   border: ${(props: Prop) => props.border};
   outline: none;
@@ -175,11 +178,12 @@ const EditBtn = styled.button`
   height: 40px;
   min-width: 120px;
   font-size: 18px;
+  position: relative;
   border: 1px solid #3c3c3c40;
   border-radius: 10px;
   background-color: #3c3c3c30;
   &:hover {
-    cursor: pointer;
+    cursor: ${(props: Prop) => props.cursor};
     color: #ffffff;
     background-color: #616161;
   }
@@ -213,10 +217,16 @@ const ProjectHeaderContainer = styled.div`
 
 const Title = styled.div`
   padding-left: 10px;
-  font-size: 30px;
+  font-size: 24px;
   color: #ffffff;
   font-weight: 500;
   text-align: center;
+  @media screen and (min-width: 800px) and (max-width: 1024px) {
+    font-size: 20px;
+  }
+  @media screen and (max-width: 799px) {
+    font-size: 16px;
+  }
 `;
 
 const ProjectsContainer = styled.div`
@@ -351,6 +361,12 @@ const Loading = styled(ReactLoading)`
   margin: 50px auto;
 `;
 
+const LoadingInBtn = styled(ReactLoading)`
+  position: absolute;
+  top: 10px;
+  right: -30px;
+`;
+
 function Profile() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -369,6 +385,7 @@ function Profile() {
   const [isEdit, setIsEdit] = useState(false);
   const [inputText, setInputText] = useState("");
   const [clickState, setClickState] = useState("profile");
+  const [isBtnLoading, setIsBtnLoading] = useState(false);
 
   useEffect(() => {
     setInputText(introduction);
@@ -390,10 +407,12 @@ function Profile() {
     setUserProjects(userProjectsData);
   }
   async function updateIntro() {
+    setIsBtnLoading(true);
     await updateDoc(doc(db, "users", userId), {
       introduction: inputText,
     });
     setIsEdit(false);
+    setIsBtnLoading(false);
   }
 
   if (isLoading) {
@@ -425,9 +444,24 @@ function Profile() {
                 maxLength={150}
               />
               {isEdit ? (
-                <EditBtn onClick={() => updateIntro()}>Confirm Edit</EditBtn>
+                <EditBtn
+                  onClick={() => updateIntro()}
+                  cursor={isBtnLoading ? " not-allowed" : "pointer"}
+                >
+                  Confirm Edit
+                  {isBtnLoading && (
+                    <LoadingInBtn
+                      type="spokes"
+                      width={20}
+                      height={20}
+                      color="#646464"
+                    />
+                  )}
+                </EditBtn>
               ) : (
-                <EditBtn onClick={() => setIsEdit(true)}>Edit</EditBtn>
+                <EditBtn onClick={() => setIsEdit(true)} cursor=" pointer">
+                  Edit
+                </EditBtn>
               )}
             </UserInfoContainer>
             <ProjectListContainer>
@@ -519,9 +553,24 @@ function Profile() {
                   maxLength={150}
                 />
                 {isEdit ? (
-                  <EditBtn onClick={() => updateIntro()}>Confirm Edit</EditBtn>
+                  <EditBtn
+                    onClick={() => updateIntro()}
+                    cursor={isBtnLoading ? " not-allowed" : "pointer"}
+                  >
+                    Confirm Edit
+                    {isBtnLoading && (
+                      <LoadingInBtn
+                        type="spokes"
+                        width={20}
+                        height={20}
+                        color="#646464"
+                      />
+                    )}
+                  </EditBtn>
                 ) : (
-                  <EditBtn onClick={() => setIsEdit(true)}>Edit</EditBtn>
+                  <EditBtn onClick={() => setIsEdit(true)} cursor="pointer">
+                    Edit
+                  </EditBtn>
                 )}
               </UserInfoContainer>
             )}

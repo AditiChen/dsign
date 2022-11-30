@@ -52,5 +52,11 @@
     "quote": "Color is my daylong obsession, joy, and torment.",
     "photo": "https://firebasestorage.googleapis.com/v0/b/d-sig-2f338.appspot.com/o/images%2Fartists%2Fclaude-monet.webp?alt=media&token=05560d7c-bc47-437f-ba32-494dad6ed9fd",
     "wikipedia": "https://en.wikipedia.org/wiki/Claude_Monet"
+  },
+  {
+    "name": "Alexander Calder",
+    "quote": "To an engineer, good enough means perfect. With an artist, there's no such thing as perfect.",
+    "photo": "https://firebasestorage.googleapis.com/v0/b/d-sig-2f338.appspot.com/o/images%2Fartists%2Falexander-calder.webp?alt=media&token=521d6fa0-0c43-4e86-8fcd-b0af49663fb7",
+    "wikipedia": "https://en.wikipedia.org/wiki/Alexander_Calder"
   }
 ]

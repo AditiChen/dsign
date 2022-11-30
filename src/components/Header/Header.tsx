@@ -1,7 +1,14 @@
 import i18next, { t as i18t } from "i18next";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
-import { useState, useContext, useRef, Dispatch, SetStateAction } from "react";
+import {
+  useState,
+  useContext,
+  useRef,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
@@ -93,19 +100,25 @@ const Logo = styled(Link)`
   }
 `;
 
-const Context = styled(Link)`
+const PageLink = styled(Link)`
   margin-left: 40px;
   padding-top: 10px;
   font-size: 18px;
   text-decoration: none;
   color: ${(props: Prop) => props.$color || "#c4c4c4"};
   border-bottom: ${(props: Prop) => props.border};
+  background-image: linear-gradient(180deg, transparent 95%, #c4c4c4 0);
+  background-repeat: no-repeat;
+  background-size: 0 100%;
+  transition: background-size 0.4s ease;
+  width: fit-content;
   & + & {
     margin-left: 32px;
   }
   &:hover {
     text-shadow: 0 0 2px #787878;
     cursor: pointer;
+    background-size: 100% 100%;
   }
   @media screen and (min-width: 800px) and (max-width: 1024px) {
     margin-left: 20px;
@@ -141,7 +154,7 @@ const LanguageOptionsContainer = styled.div`
 `;
 
 const LanguageContainer = styled.div`
-  margin-left: 20px;
+  margin-left: 25px;
   position: relative;
   @media screen and (min-width: 800px) and (max-width: 1024px) {
     margin-left: 20px;
@@ -314,11 +327,9 @@ const MobileContext = styled(Link)`
 function LanguageOptions({
   isShowLanguages,
   activeIndex,
-  setActiveIndex,
 }: {
   isShowLanguages: boolean;
   activeIndex: number;
-  setActiveIndex: Dispatch<SetStateAction<number>>;
 }) {
   return (
     <LanguageOptionsContainer maxHeight={isShowLanguages ? "180px" : "0"}>
@@ -329,7 +340,6 @@ function LanguageOptions({
           $color={activeIndex === index ? "#3c3c3c" : "#3c3c3c90"}
           backgroundColor={activeIndex === index ? "#d4d4d4" : "none"}
           onClick={() => {
-            setActiveIndex(index);
             i18next.changeLanguage(lng.code);
           }}
         >
@@ -349,12 +359,31 @@ function Header() {
   const [clickState, setClickState] = useState("");
   const [isShowLanguages, setIsShowLanguages] = useState(false);
   const [isShowMobileMenu, setIsShowMobileMenu] = useState(false);
+  const [isShowMobileLanguages, setIsShowMobileLanguages] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const languageRef = useRef<HTMLDivElement>(null!);
   const mobileMenuRef = useRef<HTMLDivElement>(null!);
+  const mobileLanguageRef = useRef<HTMLDivElement>(null!);
+
+  useEffect(() => {
+    const cookieValue = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("i18next="))
+      ?.split("=")[1];
+    const currentIndex = languages.findIndex(
+      (language) => language.code === cookieValue
+    );
+    setActiveIndex(currentIndex);
+  });
 
   useOnClickOutside(languageRef, () => setIsShowLanguages(false));
   useOnClickOutside(mobileMenuRef, () => setIsShowMobileMenu(false));
+  useOnClickOutside(mobileLanguageRef, () => setIsShowMobileLanguages(false));
+
+  useEffect(() => {
+    const urlString = new URL(window.location.href);
+    setClickState(urlString.pathname);
+  });
 
   async function logoutHandler() {
     const ans = await Swal.fire({
@@ -375,49 +404,49 @@ function Header() {
       <Container>
         <LeftContainer>
           <Logo
-            to="portfolioBricks"
+            to="/"
             onClick={() => {
-              setClickState("");
               setShowMessageFrame(false);
             }}
           />
           {isLogin && (
             <>
-              <Context
+              <PageLink
                 $color="#f5dfa9"
                 to="createNewProject"
-                border={clickState === "create" ? "1px solid #f5dfa9" : "none"}
+                border={
+                  clickState === "/createNewProject"
+                    ? "1px solid #f5dfa9"
+                    : "none"
+                }
                 onClick={() => {
-                  setClickState("create");
                   setShowMessageFrame(false);
                 }}
               >
                 {t("create")}
-              </Context>
-              <Context
+              </PageLink>
+              <PageLink
                 to="favoriteList"
                 border={
-                  clickState === "favorite" ? "1px solid #c4c4c4" : "none"
+                  clickState === "/favoriteList" ? "1px solid #c4c4c4" : "none"
                 }
                 onClick={() => {
-                  setClickState("favorite");
                   setShowMessageFrame(false);
                 }}
               >
                 {t("favorite_list")}
-              </Context>
-              <Context
+              </PageLink>
+              <PageLink
                 to="collection"
                 border={
-                  clickState === "collection" ? "1px solid #c4c4c4" : "none"
+                  clickState === "/collection" ? "1px solid #c4c4c4" : "none"
                 }
                 onClick={() => {
-                  setClickState("collection");
                   setShowMessageFrame(false);
                 }}
               >
                 {t("collection_list")}
-              </Context>
+              </PageLink>
             </>
           )}
         </LeftContainer>
@@ -427,7 +456,6 @@ function Header() {
               <Icon
                 img={`url(${friendsIcon})`}
                 onClick={() => {
-                  setClickState("");
                   navigate("/friendList");
                 }}
               >
@@ -440,7 +468,6 @@ function Header() {
                 img={avatar ? `url(${avatar})` : `url(${memberIcon})`}
                 borderRadius="18px"
                 onClick={() => {
-                  setClickState("");
                   setShowMessageFrame(false);
                   navigate("/profile");
                 }}
@@ -455,15 +482,12 @@ function Header() {
               <LanguageOptions
                 isShowLanguages={isShowLanguages}
                 activeIndex={activeIndex}
-                setActiveIndex={setActiveIndex}
               />
             </Icon>
           </LanguageContainer>
-
           {isLogin ? (
             <SignBtn
               onClick={() => {
-                setClickState("");
                 logoutHandler();
               }}
             >
@@ -474,7 +498,6 @@ function Header() {
               $color="#3c3c3c"
               backgroundColor="#f5dfa9"
               onClick={() => {
-                setClickState("");
                 navigate("/login");
               }}
             >
@@ -486,16 +509,16 @@ function Header() {
           <MenuIcon onClick={() => setIsShowMobileMenu((prev) => !prev)} />
           <MobileContainer
             maxHeight={isShowMobileMenu ? "450px" : "0"}
-            ref={languageRef}
+            ref={mobileLanguageRef}
           >
             <MobileLanguageContext
-              onClick={() => setIsShowLanguages((prev) => !prev)}
+              onClick={() => setIsShowMobileLanguages((prev) => !prev)}
             >
               {i18t("languages")}
             </MobileLanguageContext>
 
             <MobileLanguageContainer
-              maxHeight={isShowLanguages ? "129px" : "0"}
+              maxHeight={isShowMobileLanguages ? "129px" : "0"}
             >
               <MobileLanguageInnerContainer>
                 {languages.map((lng, index) => (
@@ -506,7 +529,6 @@ function Header() {
                       activeIndex === index ? "#64646490" : "#646464"
                     }
                     onClick={() => {
-                      setActiveIndex(index);
                       i18next.changeLanguage(lng.code);
                     }}
                   >
@@ -529,7 +551,6 @@ function Header() {
                 <MobileContext
                   to="createNewProject"
                   onClick={() => {
-                    setClickState("create");
                     setShowMessageFrame(false);
                   }}
                 >
@@ -538,7 +559,6 @@ function Header() {
                 <MobileContext
                   to="favoriteList"
                   onClick={() => {
-                    setClickState("favorite");
                     setShowMessageFrame(false);
                   }}
                 >
@@ -547,7 +567,6 @@ function Header() {
                 <MobileContext
                   to="collection"
                   onClick={() => {
-                    setClickState("collection");
                     setShowMessageFrame(false);
                   }}
                 >
@@ -555,7 +574,6 @@ function Header() {
                 </MobileContext>
                 <SignBtn
                   onClick={() => {
-                    setClickState("");
                     logoutHandler();
                   }}
                 >
@@ -567,7 +585,6 @@ function Header() {
                 $color="#3c3c3c"
                 backgroundColor="#f5dfa9"
                 onClick={() => {
-                  setClickState("");
                   navigate("/login");
                 }}
               >

@@ -50,8 +50,11 @@ export default async function getFriendsProjects(
       pages: project.data().pages,
     });
   });
+  const newOrder = fetchedFriendProjects.sort(
+    (a, b) => Number(b.projectId) - Number(a.projectId)
+  );
   await Promise.all(
-    fetchedFriendProjects.map(async (project, index) => {
+    newOrder.map(async (project, index) => {
       const docSnap = await getDoc(doc(db, "users", project.uid));
       const { name, avatar, introduction } = docSnap.data() as {
         name: string;

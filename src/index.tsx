@@ -4,7 +4,6 @@ import { Route, Routes, BrowserRouter, Navigate } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
 
 import App from "./App";
-import Landing from "./pages/Landing/Landing";
 import PortfolioBricks from "./pages/PortfolioBricks/PortfolioBricks";
 import Profile from "./pages/Profile/Profile";
 import FriendList from "./pages/FriendList/FriendList";
@@ -23,8 +22,7 @@ root.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />}>
-        <Route index element={<Landing />} />
-        <Route path="portfolioBricks" element={<PortfolioBricks />} />
+        <Route index element={<PortfolioBricks />} />
         <Route path="profile" element={<Profile />} />
         <Route path="singleProject" element={<SingleProject />} />
         <Route path="createNewProject" element={<CreateNewProject />} />
@@ -34,7 +32,7 @@ root.render(
         <Route path="favoriteList" element={<FavoriteList />} />
         <Route path="collection" element={<MaterialCollection />} />
         <Route path="login" element={<Login />} />
-        <Route path="*" element={<Navigate to="portfolioBricks" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>
   </BrowserRouter>

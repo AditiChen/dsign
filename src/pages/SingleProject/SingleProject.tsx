@@ -115,7 +115,7 @@ const HeaderContainer = styled.div`
 `;
 
 const Title = styled.div`
-  font-size: 30px;
+  font-size: 26px;
   font-weight: 700;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     font-size: 20px;

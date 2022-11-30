@@ -136,7 +136,7 @@ const SignBtn = styled.button`
   margin-left: auto;
   padding: 0 20px;
   height: 40px;
-  font-size: 20px;
+  font-size: 18px;
   border: 1px solid #3c3c3c40;
   border-radius: 10px;
   background-color: #3c3c3c30;
@@ -216,7 +216,8 @@ const OptionalLoginBtn = styled.button`
   display: flex;
   align-items: center;
   color: #4285f4;
-  font-size: 20px;
+  font-size: 18px;
+  line-height: 20px;
   background-color: transparent;
   border: 1px solid #3c3c3c40;
   border-radius: 20px;
@@ -268,26 +269,6 @@ function SignIn() {
     if (!inputEmail || !password) {
       Swal.fire({
         text: t("email_and_password_input_check"),
-        icon: "warning",
-        confirmButtonColor: "#646464",
-      });
-      return;
-    }
-    if (
-      inputEmail.search(
-        /^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/
-      )
-    ) {
-      Swal.fire({
-        text: t("email_format_check"),
-        icon: "warning",
-        confirmButtonColor: "#646464",
-      });
-      return;
-    }
-    if (password.length < 8) {
-      Swal.fire({
-        text: t("password_letter_check"),
         icon: "warning",
         confirmButtonColor: "#646464",
       });

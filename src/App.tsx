@@ -48,11 +48,12 @@ function App() {
       <GlobalStyle />
       <AuthContextProvider>
         <FriendContextProvider>
-          {location.pathname !== "/" && <Header />}
+          {/* {location.pathname !== "/" && <Header />} */}
+          <Header />
           <BodyWrapper>
             <Outlet />
           </BodyWrapper>
-          {location.pathname !== "/" && <Footer />}
+          <Footer />
         </FriendContextProvider>
       </AuthContextProvider>
     </Suspense>

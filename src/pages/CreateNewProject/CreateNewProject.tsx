@@ -19,6 +19,7 @@ import templateData from "../../components/Templates/TemplatesData.json";
 import closeIcon from "../../icons/close-icon.png";
 import closeIconHover from "../../icons/close-icon-hover.png";
 import checkedIcon from "../../icons/checked-icon.png";
+import uploadPhotoIcon from "../../icons/uploadPhoto-icon.png";
 
 const Wrapper = styled.div`
   padding-top: 95px;
@@ -87,7 +88,7 @@ const Title = styled.input`
   width: 1200px;
   height: 60px;
   color: #3c3c3c;
-  font-size: 30px;
+  font-size: 26px;
   font-weight: 700;
   background-color: #ffffff90;
   border: 1px solid #787878;
@@ -189,7 +190,7 @@ const SelectImgOverflowContainer = styled.div`
   }
 `;
 
-const SelectImg = styled.div<{ img: string }>`
+const SelectImg = styled.div<{ img: string; cursor?: string }>`
   width: 120px;
   height: 70px;
   background-image: ${(props) => props.img};
@@ -197,7 +198,7 @@ const SelectImg = styled.div<{ img: string }>`
   background-position: center;
   border: 1px solid #d4d4d4;
   &:hover {
-    cursor: pointer;
+    cursor: ${(props) => props.cursor || "pointer"};
     box-shadow: 1px 1px 5px gray;
     border: none;
   }
@@ -229,7 +230,7 @@ const Btn = styled.button<{
 }>`
   padding: 0 20px;
   height: 50px;
-  font-size: 22px;
+  font-size: 18px;
   display: flex;
   align-items: center;
   border: 1px solid #3c3c3c40;
@@ -253,14 +254,18 @@ const Btn = styled.button<{
   }
 `;
 
-const CheckMainImgIcon = styled.div`
+const UploadImgIcon = styled.div`
   margin-left: 10px;
   width: 25px;
   height: 25px;
-  background-image: url(${checkedIcon});
+  background-image: url(${uploadPhotoIcon});
   background-size: cover;
   background-position: center;
   opacity: 0.8;
+`;
+
+const CheckMainImgIcon = styled(UploadImgIcon)`
+  background-image: url(${checkedIcon});
 `;
 
 const WarningText = styled.div`
@@ -298,14 +303,23 @@ function CreateNewProject() {
   const [title, setTitle] = useState("");
   const [mainImgSrc, setMainImgSrc] = useState("");
   const [showOverlay, setShowOverlay] = useState(false);
+  const [hasGoogleMap, setHasGoogleMap] = useState(false);
   const selectAreaRef = useRef(null!);
   const googleMap = templatesArr[9];
 
   useEffect(() => {
-    const sessionStorageData = sessionStorage.getItem("pages");
-    if (sessionStorageData !== null) {
-      const parseData = JSON.parse(sessionStorageData);
-      setPages(parseData);
+    const sessionStoragePagesData = sessionStorage.getItem("pages");
+    const sessionStorageTitleData = sessionStorage.getItem("title");
+    const sessionStorageMainImgData = sessionStorage.getItem("mainImg");
+    if (sessionStoragePagesData !== null) {
+      const pagesParseData = JSON.parse(sessionStoragePagesData);
+      setPages(pagesParseData);
+    }
+    if (sessionStorageTitleData !== null) {
+      setTitle(sessionStorageTitleData);
+    }
+    if (sessionStorageMainImgData !== null) {
+      setMainImgSrc(sessionStorageMainImgData);
     }
   }, []);
 
@@ -321,6 +335,15 @@ function CreateNewProject() {
     window.sessionStorage.setItem("title", title);
     window.sessionStorage.setItem("mainImg", mainImgSrc);
   }, [pages, title, mainImgSrc]);
+
+  useEffect(() => {
+    const checkMapExist = pages.findIndex((page) => page.type === 9);
+    if (checkMapExist !== -1) {
+      setHasGoogleMap(true);
+      return;
+    }
+    setHasGoogleMap(false);
+  }, [pages]);
 
   useEffect(() => {
     if (position.lat === undefined && position.lng === undefined) return;
@@ -435,7 +458,11 @@ function CreateNewProject() {
                   <SelectImg
                     key={uuid()}
                     img={`url(${pic})`}
+                    cursor={
+                      index === 9 && hasGoogleMap ? "not-allowed" : "pointer"
+                    }
                     onClick={() => {
+                      if (index === 9 && hasGoogleMap) return;
                       setPages((prev) => [
                         ...prev,
                         { key: uuid(), ...templateData[index] },
@@ -505,6 +532,7 @@ function CreateNewProject() {
                           onClick={() => setShowOverlay((prev) => !prev)}
                         >
                           {t("upload_main_photo")}
+                          <UploadImgIcon />
                         </Btn>
                         <Btn onClick={() => confirmAllEdit()}>
                           {t("confirm_edit")}
