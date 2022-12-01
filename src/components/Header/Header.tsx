@@ -1,15 +1,8 @@
 import i18next, { t as i18t } from "i18next";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
-import {
-  useState,
-  useContext,
-  useRef,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-} from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useContext, useRef, Dispatch, SetStateAction } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import { AuthContext } from "../../context/authContext";
@@ -326,10 +319,12 @@ const MobileContext = styled(Link)`
 
 function LanguageOptions({
   isShowLanguages,
-  activeIndex,
+  activeLanguageIndex,
+  setActiveLanguageIndex,
 }: {
   isShowLanguages: boolean;
-  activeIndex: number;
+  activeLanguageIndex: number;
+  setActiveLanguageIndex: Dispatch<SetStateAction<number>>;
 }) {
   return (
     <LanguageOptionsContainer maxHeight={isShowLanguages ? "180px" : "0"}>
@@ -337,10 +332,11 @@ function LanguageOptions({
       {languages.map((lng, index) => (
         <LanguageOptionsText
           key={`${lng.code}`}
-          $color={activeIndex === index ? "#3c3c3c" : "#3c3c3c90"}
-          backgroundColor={activeIndex === index ? "#d4d4d4" : "none"}
+          $color={activeLanguageIndex === index ? "#3c3c3c" : "#3c3c3c90"}
+          backgroundColor={activeLanguageIndex === index ? "#d4d4d4" : "none"}
           onClick={() => {
             i18next.changeLanguage(lng.code);
+            setActiveLanguageIndex(index);
           }}
         >
           {lng.name}
@@ -350,22 +346,7 @@ function LanguageOptions({
   );
 }
 
-function Header() {
-  const { avatar, isLogin, logout } = useContext(AuthContext);
-  const { setShowMessageFrame, friendRequests, unreadMessages } =
-    useContext(FriendContext);
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-  const [clickState, setClickState] = useState("");
-  const [isShowLanguages, setIsShowLanguages] = useState(false);
-  const [isShowMobileMenu, setIsShowMobileMenu] = useState(false);
-  const [isShowMobileLanguages, setIsShowMobileLanguages] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const languageRef = useRef<HTMLDivElement>(null!);
-  const mobileMenuRef = useRef<HTMLDivElement>(null!);
-  const mobileLanguageRef = useRef<HTMLDivElement>(null!);
-
-  const urlString = new URL(window.location.href);
+function getCurrentLanguageFromCookie() {
   const cookieValue = document.cookie
     .split("; ")
     .find((row) => row.startsWith("i18next="))
@@ -373,14 +354,25 @@ function Header() {
   const currentLanguageIndex = languages.findIndex(
     (language) => language.code === cookieValue
   );
+  return currentLanguageIndex;
+}
 
-  useEffect(() => {
-    setActiveIndex(currentLanguageIndex);
-  }, [currentLanguageIndex]);
-
-  useEffect(() => {
-    setClickState(urlString.pathname);
-  }, [urlString.pathname]);
+function Header() {
+  const { avatar, isLogin, logout } = useContext(AuthContext);
+  const { setShowMessageFrame, friendRequests, unreadMessages } =
+    useContext(FriendContext);
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [isShowLanguages, setIsShowLanguages] = useState(false);
+  const [isShowMobileMenu, setIsShowMobileMenu] = useState(false);
+  const [isShowMobileLanguages, setIsShowMobileLanguages] = useState(false);
+  const [activeLanguageIndex, setActiveLanguageIndex] = useState(
+    getCurrentLanguageFromCookie
+  );
+  const languageRef = useRef<HTMLDivElement>(null!);
+  const mobileMenuRef = useRef<HTMLDivElement>(null!);
+  const mobileLanguageRef = useRef<HTMLDivElement>(null!);
 
   useOnClickOutside(languageRef, () => setIsShowLanguages(false));
   useOnClickOutside(mobileMenuRef, () => setIsShowMobileMenu(false));
@@ -416,7 +408,7 @@ function Header() {
                 $color="#f5dfa9"
                 to="createNewProject"
                 border={
-                  clickState === "/createNewProject"
+                  location.pathname === "/createNewProject"
                     ? "1px solid #f5dfa9"
                     : "none"
                 }
@@ -429,7 +421,9 @@ function Header() {
               <PageLink
                 to="favoriteList"
                 border={
-                  clickState === "/favoriteList" ? "1px solid #c4c4c4" : "none"
+                  location.pathname === "/favoriteList"
+                    ? "1px solid #c4c4c4"
+                    : "none"
                 }
                 onClick={() => {
                   setShowMessageFrame(false);
@@ -440,7 +434,9 @@ function Header() {
               <PageLink
                 to="collection"
                 border={
-                  clickState === "/collection" ? "1px solid #c4c4c4" : "none"
+                  location.pathname === "/collection"
+                    ? "1px solid #c4c4c4"
+                    : "none"
                 }
                 onClick={() => {
                   setShowMessageFrame(false);
@@ -482,7 +478,8 @@ function Header() {
             >
               <LanguageOptions
                 isShowLanguages={isShowLanguages}
-                activeIndex={activeIndex}
+                activeLanguageIndex={activeLanguageIndex}
+                setActiveLanguageIndex={setActiveLanguageIndex}
               />
             </Icon>
           </LanguageContainer>
@@ -525,12 +522,15 @@ function Header() {
                 {languages.map((lng, index) => (
                   <LanguageOptionsText
                     key={`${lng.code}`}
-                    $color={activeIndex === index ? "#ffffff" : "#c4c4c490"}
+                    $color={
+                      activeLanguageIndex === index ? "#ffffff" : "#c4c4c490"
+                    }
                     backgroundColor={
-                      activeIndex === index ? "#64646490" : "#646464"
+                      activeLanguageIndex === index ? "#64646490" : "#646464"
                     }
                     onClick={() => {
                       i18next.changeLanguage(lng.code);
+                      setActiveLanguageIndex(index);
                     }}
                   >
                     {lng.name}
