@@ -54,7 +54,7 @@ const Context = styled.textarea`
   width: 450px;
   height: 100%;
   font-size: 20px;
-  line-height: 24px;
+  line-height: 26px;
   background-color: transparent;
   border: 1px solid #3c3c3c;
   resize: none;
@@ -68,7 +68,7 @@ const Context = styled.textarea`
     padding: 6px;
     width: 315px;
     font-size: 14px;
-    line-height: 17px;
+    line-height: 18px;
   }
 `;
 
@@ -160,6 +160,7 @@ function Template5(props: InsertProp) {
       <Wrapper>
         <Context
           value={inputText}
+          maxLength={460}
           onChange={(e) => setInputText([e.target.value])}
           placeholder={t("type_content")}
         />

@@ -61,6 +61,9 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media screen and (max-width: 1499px) {
+    width: 1000px;
+  }
 `;
 
 const Separator = styled.div`
@@ -144,6 +147,9 @@ const SwitchClickStatusBtn = styled.div<{ color: string; border: string }>`
   & + & {
     margin-left: 30px;
   }
+  @media screen and (max-width: 1449px) {
+    font-size: 20px;
+  }
   @media screen and (max-width: 799px) {
     font-size: 16px;
     & + & {
@@ -184,6 +190,7 @@ const Avatar = styled.div`
   background-image: ${(props: Prop) => props.url};
   background-size: cover;
   background-position: center;
+  border: 1px solid #f0f0f0;
   &:hover {
     cursor: pointer;
     border: 1px solid #d4d4d4;
@@ -497,6 +504,7 @@ function FriendList() {
                 setInputValue(e.target.value);
               }}
               placeholder={t("search_friend")}
+              maxLength={30}
               value={inputValue}
             />
             <SearchIcon onClick={() => searchHandler()} />
@@ -545,7 +553,7 @@ function FriendList() {
         </Separator>
         {clickState === "request" && friendRequests.length === 0 && (
           <Separator>
-            <Text size="20px" mobileSize="16px">
+            <Text size="16px" mobileSize="12px">
               {t("no_friend_request")}
             </Text>
           </Separator>

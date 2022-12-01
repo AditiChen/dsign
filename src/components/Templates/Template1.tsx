@@ -84,7 +84,7 @@ const Context = styled.textarea`
   height: 180px;
   color: #ffffff;
   font-size: 20px;
-  line-height: 24px;
+  line-height: 26px;
   position: absolute;
   right: 50px;
   bottom: 280px;
@@ -102,7 +102,7 @@ const Context = styled.textarea`
     width: 189px;
     height: 126px;
     font-size: 14px;
-    line-height: 17px;
+    line-height: 18px;
     right: 35px;
     bottom: 196px;
   }

@@ -57,7 +57,7 @@ const Container = styled.div`
 `;
 
 const UserInfoContainer = styled.div`
-  padding: 50px 20px;
+  padding: 30px 20px;
   height: calc(100vh - 260px);
   min-height: 500px;
   width: 15vw;
@@ -67,10 +67,12 @@ const UserInfoContainer = styled.div`
   align-items: center;
   border: 1px solid #b4b4b4;
   border-radius: 10px;
+  @media screen and (max-width: 1449px) {
+    width: 280px;
+  }
   @media screen and (max-width: 1049px) {
-    padding: 30px 20px;
     width: 100%;
-    max-width: 280px;
+    max-width: 300px;
   }
 `;
 
@@ -83,7 +85,7 @@ const Avatar = styled.div`
   background-position: center;
   position: relative;
   box-shadow: 0 0 5px #3c3c3c;
-  @media screen and (max-width: 1049px) {
+  @media screen and (max-width: 1449px) {
     height: 150px;
     width: 150px;
   }
@@ -99,7 +101,7 @@ const UserName = styled.div`
   margin-top: 20px;
   font-size: 24px;
   font-weight: 600;
-  @media screen and (max-width: 1049px) {
+  @media screen and (max-width: 1449px) {
     margin-top: 15px;
     font-size: 18px;
   }
@@ -108,8 +110,8 @@ const UserName = styled.div`
 const UserEmail = styled.div`
   margin-top: 10px;
   font-size: 16px;
-  @media screen and (max-width: 1049px) {
-    font-size: 12px;
+  @media screen and (max-width: 1449px) {
+    font-size: 14px;
   }
 `;
 
@@ -120,9 +122,9 @@ const IntroText = styled.div`
   font-size: 20px;
   color: #646464;
   border-bottom: 1px solid #969696;
-  @media screen and (max-width: 1049px) {
+  @media screen and (max-width: 1449px) {
     margin-top: 20px;
-    font-size: 14px;
+    font-size: 16px;
   }
 `;
 
@@ -130,15 +132,17 @@ const Introduction = styled.textarea`
   padding: 10px 0;
   width: 100%;
   height: 100%;
-  max-height: calc(100% - 330px);
+  max-height: calc(100% - 360px);
   font-size: 18px;
+  line-height: 22px;
   resize: none;
   border: none;
   outline: none;
   background-color: transparent;
-  @media screen and (max-width: 1049px) {
+  @media screen and (max-width: 1449px) {
     padding: 5px 0;
-    font-size: 12px;
+    font-size: 14px;
+    max-height: calc(100% - 290px);
   }
 `;
 

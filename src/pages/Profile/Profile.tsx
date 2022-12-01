@@ -81,10 +81,13 @@ const UserInfoContainer = styled.div`
   border-radius: 10px;
   background-color: #f0f0f0;
   box-shadow: 0 0 10px #3c3c3c;
+  @media screen and (max-width: 1449px) {
+    width: 280px;
+    padding: 20px;
+  }
   @media screen and (max-width: 1049px) {
-    padding: 30px 20px;
     width: 100%;
-    max-width: 280px;
+    max-width: 300px;
     left: 50%;
     transform: translateX(-50%);
   }
@@ -99,7 +102,7 @@ const Avatar = styled.div`
   background-position: center;
   position: relative;
   box-shadow: 0 0 5px #3c3c3c;
-  @media screen and (max-width: 1049px) {
+  @media screen and (max-width: 1449px) {
     height: 150px;
     width: 150px;
   }
@@ -118,7 +121,7 @@ const CameraIcon = styled.div`
     background-image: url(${cameraIconHover});
     cursor: pointer;
   }
-  @media screen and (max-width: 1049px) {
+  @media screen and (max-width: 1449px) {
     height: 18px;
     width: 18px;
   }
@@ -128,7 +131,7 @@ const UserName = styled.div`
   margin-top: 20px;
   font-size: 24px;
   font-weight: 600;
-  @media screen and (max-width: 1049px) {
+  @media screen and (max-width: 1449px) {
     margin-top: 15px;
     font-size: 18px;
   }
@@ -137,8 +140,8 @@ const UserName = styled.div`
 const UserEmail = styled.div`
   margin-top: 10px;
   font-size: 16px;
-  @media screen and (max-width: 1049px) {
-    font-size: 12px;
+  @media screen and (max-width: 1449px) {
+    font-size: 14px;
   }
 `;
 
@@ -149,9 +152,9 @@ const IntroText = styled.div`
   font-size: 20px;
   color: #646464;
   border-bottom: 1px solid #969696;
-  @media screen and (max-width: 1049px) {
+  @media screen and (max-width: 1449px) {
     margin-top: 20px;
-    font-size: 14px;
+    font-size: 16px;
   }
 `;
 
@@ -166,17 +169,18 @@ const Introduction = styled.textarea`
   resize: none;
   border: ${(props: Prop) => props.border};
   outline: none;
-  @media screen and (max-width: 1049px) {
+  @media screen and (max-width: 1449px) {
     padding: 5px 0;
-    font-size: 12px;
+    font-size: 14px;
+    max-height: calc(100% - 290px);
   }
 `;
 
 const EditBtn = styled.button`
-  margin-top: auto;
   padding: 0 10px;
   height: 40px;
   min-width: 120px;
+  color: #3c3c3c;
   font-size: 18px;
   position: relative;
   border: 1px solid #3c3c3c40;
@@ -187,11 +191,15 @@ const EditBtn = styled.button`
     color: #ffffff;
     background-color: #616161;
   }
-  @media screen and (max-width: 1049px) {
+  @media screen and (max-width: 1449px) {
     height: 30px;
     min-width: 80px;
-    font-size: 14px;
+    font-size: 16px;
     border-radius: 5px;
+  }
+  @media screen and (max-width: 1049px) {
+    min-width: 80px;
+    font-size: 14px;
   }
 `;
 
@@ -222,7 +230,7 @@ const Title = styled.div`
   color: #ffffff;
   font-weight: 500;
   text-align: center;
-  @media screen and (min-width: 800px) and (max-width: 1024px) {
+  @media screen and (min-width: 800px) and (max-width: 1449px) {
     font-size: 20px;
   }
   @media screen and (max-width: 799px) {
@@ -234,7 +242,7 @@ const EmptyReminder = styled.div`
   padding-left: 10px;
   font-size: 18px;
   color: #ffffff;
-  @media screen and (min-width: 800px) and (max-width: 1024px) {
+  @media screen and (min-width: 800px) and (max-width: 1449px) {
     font-size: 14px;
   }
   @media screen and (max-width: 799px) {
@@ -285,6 +293,10 @@ const ProjectLeftContainer = styled.div`
 const ProjectTitle = styled.div`
   font-size: 22px;
   color: #3c3c3c;
+  word-wrap: break-word;
+  @media screen and (max-width: 1449px) {
+    font-size: 18px;
+  }
   @media screen and (max-width: 1049px) {
     font-size: 16px;
   }
@@ -345,7 +357,6 @@ const MobileSwitchStatusBtn = styled.div<{ color: string; border: string }>`
   @media screen and (max-width: 1049px) {
     color: ${(props) => props.color};
     font-size: 16px;
-    font-weight: 600;
     line-height: 26px;
     display: block;
     border-bottom: ${(props) => props.border};
@@ -377,6 +388,9 @@ const LoadingInBtn = styled(ReactLoading)`
   position: absolute;
   top: 10px;
   right: -30px;
+  @media screen and (max-width: 1449px) {
+    top: 3px;
+  }
 `;
 
 const DeleteLoading = styled(ReactLoading)`
@@ -459,7 +473,7 @@ function Profile() {
                 placeholder={t("type_content")}
                 disabled={!isEdit && true}
                 border={!isEdit ? "none" : "1px solid #787878"}
-                maxLength={150}
+                maxLength={115}
               />
               {isEdit ? (
                 <EditBtn

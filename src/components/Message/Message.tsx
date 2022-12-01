@@ -136,6 +136,7 @@ const SingleMessageLeft = styled.div`
   padding: 10px;
   width: 250px;
   font-size: 18px;
+  word-wrap: break-word;
   border: 1px solid #3c3c3c60;
   border-radius: 5px;
   background-color: #ffffff90;
@@ -399,6 +400,7 @@ function Message({
               setInputValue(e.target.value);
             }}
             value={inputValue}
+            maxLength={100}
           />
           <SendMessageIcon onClick={() => sendMessageHandler()} />
         </SendMessageContainer>

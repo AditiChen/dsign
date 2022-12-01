@@ -80,13 +80,13 @@ const LeftCircle = styled.div`
 
 const Context = styled.textarea`
   padding: 10px;
-  height: 150px;
-  width: 240px;
+  height: 155px;
+  width: 245px;
   color: #ffffff;
   font-size: 20px;
-  line-height: 24px;
+  line-height: 26px;
   position: absolute;
-  left: 30px;
+  left: 20px;
   bottom: 30px;
   background-color: transparent;
   border: 1px solid #b4b4b4;
@@ -102,8 +102,8 @@ const Context = styled.textarea`
     height: 105px;
     width: 168px;
     font-size: 14px;
-    line-height: 17px;
-    left: 21px;
+    line-height: 18px;
+    left: 14px;
     bottom: 21px;
   }
 `;
@@ -229,6 +229,7 @@ function Template3(props: InsertProp) {
         <LeftCircle />
         <Context
           value={inputText}
+          maxLength={55}
           onChange={(e) => setInputText([e.target.value])}
           placeholder={t("type_content")}
         />

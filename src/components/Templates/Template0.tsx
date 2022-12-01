@@ -84,7 +84,7 @@ const Context = styled.textarea`
   height: 100%;
   color: #ffffff;
   font-size: 20px;
-  line-height: 24px;
+  line-height: 26px;
   background-color: transparent;
   border: 1px solid #b4b4b4;
   resize: none;
@@ -97,7 +97,7 @@ const Context = styled.textarea`
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     padding: 6px;
     font-size: 14px;
-    line-height: 17px;
+    line-height: 18px;
   }
 `;
 
@@ -197,6 +197,7 @@ function Template0(props: InsertProp) {
         <MiddleContainer>
           <Context
             value={inputText}
+            maxLength={330}
             onChange={(e) => setInputText([e.target.value])}
             placeholder={t("type_content")}
           />
