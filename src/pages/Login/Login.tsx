@@ -15,7 +15,6 @@ import fbIconHover from "../../icons/fb-icon-hover.png";
 
 interface Prop {
   url?: string;
-  size?: string;
   background?: string;
   text?: string;
   focus?: string;
@@ -40,7 +39,7 @@ const Wrapper = styled.div`
     padding: 80px 0;
   }
   @media screen and (min-width: 800px) and (max-width: 1024px) {
-    min-height: calc(100vh - 120px);
+    min-height: calc(100vh - 100px);
   }
   @media screen and (max-width: 799px) {
     padding: 40px 0;
@@ -441,7 +440,7 @@ function SignIn() {
               />
               <Input
                 placeholder={t("input_password")}
-                key="password"
+                key="password1"
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -459,22 +458,26 @@ function SignIn() {
               <Input
                 placeholder={t("input_name")}
                 key="name"
+                maxLength={20}
                 onChange={(e) => setInputName(e.target.value)}
               />
               <Input
                 placeholder={t("input_email")}
                 key="email"
+                maxLength={30}
                 onChange={(e) => setInputEmail(e.target.value)}
               />
               <Input
                 placeholder={t("input_password")}
                 key="password"
                 type="password"
+                maxLength={20}
                 onChange={(e) => setPassword(e.target.value)}
               />
               <Input
                 placeholder={t("check_input_password")}
                 type="password"
+                maxLength={20}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
               <SignContainer>

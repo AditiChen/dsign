@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../../context/authContext";
@@ -66,6 +66,16 @@ const InfoContainer = styled.div`
   }
 `;
 
+const appear = keyframes`
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }`;
+
 const SingleProjectContainer = styled.div`
   margin: 0 auto 10px auto;
   width: 300px;
@@ -73,6 +83,7 @@ const SingleProjectContainer = styled.div`
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 0 5px #787878;
+  animation: ${appear} 0.5s ease-in-out;
   &:hover {
     margin-bottom: 0;
     width: 310px;

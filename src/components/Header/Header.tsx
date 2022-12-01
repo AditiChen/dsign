@@ -83,7 +83,7 @@ const Logo = styled(Link)`
   &:hover {
     cursor: pointer;
   }
-  @media screen and (min-width: 800px) and (max-width: 1024px) {
+  @media screen and (min-width: 800px) and (max-width: 949px) {
     width: 124px;
     height: 36px;
   }
@@ -113,7 +113,7 @@ const PageLink = styled(Link)`
     cursor: pointer;
     background-size: 100% 100%;
   }
-  @media screen and (min-width: 800px) and (max-width: 1024px) {
+  @media screen and (min-width: 800px) and (max-width: 949px) {
     margin-left: 20px;
     font-size: 16px;
     & + & {
@@ -149,7 +149,7 @@ const LanguageOptionsContainer = styled.div`
 const LanguageContainer = styled.div`
   margin-left: 28px;
   position: relative;
-  @media screen and (min-width: 800px) and (max-width: 1024px) {
+  @media screen and (min-width: 800px) and (max-width: 949px) {
     margin-left: 20px;
   }
 `;
@@ -168,7 +168,7 @@ const Icon = styled.div`
   & + & {
     margin-left: 30px;
   }
-  @media screen and (min-width: 800px) and (max-width: 1024px) {
+  @media screen and (min-width: 800px) and (max-width: 949px) {
     height: 30px;
     width: 30px;
     & + & {
@@ -185,7 +185,7 @@ const NotificationDot = styled.div`
   bottom: ${(props: Prop) => props.bottom};
   border-radius: 50%;
   background-image: linear-gradient(#89b07e, #4f8365);
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 949px) {
     height: 10px;
     width: 10px;
   }
@@ -236,7 +236,7 @@ const SignBtn = styled.button`
     box-shadow: 1px 1px 5px #616161;
     cursor: pointer;
   }
-  @media screen and (min-width: 800px) and (max-width: 1024px) {
+  @media screen and (min-width: 800px) and (max-width: 949px) {
     margin-left: 20px;
     padding: 0 10px;
     height: 30px;

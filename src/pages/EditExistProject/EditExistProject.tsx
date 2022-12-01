@@ -446,6 +446,7 @@ function EditExistProject() {
             <EditorContainer>
               <Title
                 value={title}
+                maxLength={60}
                 placeholder={t("project_title")}
                 onChange={(e) => setTitle(e.target.value)}
               />
