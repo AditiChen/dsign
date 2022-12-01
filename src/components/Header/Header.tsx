@@ -154,7 +154,7 @@ const LanguageOptionsContainer = styled.div`
 `;
 
 const LanguageContainer = styled.div`
-  margin-left: 25px;
+  margin-left: 28px;
   position: relative;
   @media screen and (min-width: 800px) and (max-width: 1024px) {
     margin-left: 20px;
@@ -365,25 +365,26 @@ function Header() {
   const mobileMenuRef = useRef<HTMLDivElement>(null!);
   const mobileLanguageRef = useRef<HTMLDivElement>(null!);
 
+  const urlString = new URL(window.location.href);
+  const cookieValue = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("i18next="))
+    ?.split("=")[1];
+  const currentLanguageIndex = languages.findIndex(
+    (language) => language.code === cookieValue
+  );
+
   useEffect(() => {
-    const cookieValue = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("i18next="))
-      ?.split("=")[1];
-    const currentIndex = languages.findIndex(
-      (language) => language.code === cookieValue
-    );
-    setActiveIndex(currentIndex);
-  }, [setActiveIndex]);
+    setActiveIndex(currentLanguageIndex);
+  }, [currentLanguageIndex]);
+
+  useEffect(() => {
+    setClickState(urlString.pathname);
+  }, [urlString.pathname]);
 
   useOnClickOutside(languageRef, () => setIsShowLanguages(false));
   useOnClickOutside(mobileMenuRef, () => setIsShowMobileMenu(false));
   useOnClickOutside(mobileLanguageRef, () => setIsShowMobileLanguages(false));
-
-  useEffect(() => {
-    const urlString = new URL(window.location.href);
-    setClickState(urlString.pathname);
-  }, [setClickState]);
 
   async function logoutHandler() {
     const ans = await Swal.fire({
