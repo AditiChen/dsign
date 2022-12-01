@@ -266,31 +266,40 @@ export function AuthContextProvider({ children }: BodyProp) {
 
   const facebookLoginHandler = useCallback(async () => {
     setIsLoading(true);
-    const provider = new FacebookAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-    const { uid, photoURL, displayName } = result.user;
-    const docSnap = await getDoc(doc(db, "users", uid));
-    const data = docSnap.data() as UserDataType;
-    if (data === undefined) {
-      const fbMail = result.user.email;
-      await setDoc(doc(db, "users", uid), {
-        uid,
-        name: displayName,
-        email: fbMail,
-        avatar: photoURL,
-        friendList: [],
-        favoriteList: [],
-        collection: [],
-        introduction: "",
+    try {
+      const provider = new FacebookAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const { uid, photoURL, displayName } = result.user;
+      const docSnap = await getDoc(doc(db, "users", uid));
+      const data = docSnap.data() as UserDataType;
+      if (data === undefined) {
+        const fbMail = result.user.email;
+        await setDoc(doc(db, "users", uid), {
+          uid,
+          name: displayName,
+          email: fbMail,
+          avatar: photoURL,
+          friendList: [],
+          favoriteList: [],
+          collection: [],
+          introduction: "",
+        });
+      }
+      setUserId(uid);
+      setIsLogin(true);
+      const userProjectsData = await getUserProjects(uid);
+      setUserProjects(userProjectsData);
+      navigate("/");
+    } catch (e) {
+      Swal.fire({
+        text: t("sign_up_failed"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
       });
+      navigate("/login");
     }
-    setUserId(uid);
-    setIsLogin(true);
-    const userProjectsData = await getUserProjects(uid);
-    setUserProjects(userProjectsData);
     setIsLoading(false);
-    navigate("/");
-  }, [navigate]);
+  }, [navigate, t]);
 
   const logout = useCallback(() => {
     signOut(auth);
