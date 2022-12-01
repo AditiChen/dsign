@@ -24,8 +24,8 @@ const Backdrop = styled.div`
 `;
 
 const CloseIcon = styled.div`
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   position: absolute;
   top: -15px;
   right: -15px;
@@ -37,14 +37,14 @@ const CloseIcon = styled.div`
     background-image: url(${closeIconHover});
   }
   @media screen and (max-width: 799px) {
-    width: 30px;
-    height: 30px;
+    width: 24px;
+    height: 24px;
   }
 `;
 
 const OverlayModal = styled.div`
-  max-width: 1300px;
-  max-height: 800px;
+  max-width: 60vw;
+  max-height: 60vh;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -61,8 +61,8 @@ const OverlayModal = styled.div`
 `;
 
 const Img = styled.img`
-  max-width: 1300px;
-  max-height: 800px;
+  max-width: 60vw;
+  max-height: 60vh;
   @media screen and (max-width: 1399px) {
     max-width: 95vw;
     max-height: 95vh;

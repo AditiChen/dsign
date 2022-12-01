@@ -2,6 +2,7 @@ import {
   useState,
   createContext,
   useEffect,
+  useCallback,
   useMemo,
   Dispatch,
   SetStateAction,
@@ -112,7 +113,7 @@ export function AuthContextProvider({ children }: BodyProp) {
 
   useEffect(() => {
     setIsLoading(true);
-    const unsubscribe = onAuthStateChanged(auth, async (user: any) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         const { uid } = user;
         const docSnap = await getDoc(doc(db, "users", uid));
@@ -154,144 +155,153 @@ export function AuthContextProvider({ children }: BodyProp) {
     };
   }, [userId]);
 
-  const emailSignInHandler = async (insertEmail: string, password: string) => {
+  const emailSignInHandler = useCallback(
+    async (insertEmail: string, password: string) => {
+      setIsLoading(true);
+      try {
+        const UserCredentialImpl = await signInWithEmailAndPassword(
+          auth,
+          insertEmail,
+          password
+        );
+        const { user } = UserCredentialImpl;
+        const { uid } = user;
+        setUserId(uid);
+        const userProjectsData = await getUserProjects(uid);
+        Swal.fire({
+          text: t("login_successfully"),
+          confirmButtonColor: "#646464",
+        });
+        setUserProjects(userProjectsData);
+        navigate("/");
+      } catch (e) {
+        Swal.fire({
+          text: t("login_failed"),
+          icon: "warning",
+          confirmButtonColor: "#646464",
+        });
+      }
+      setIsLoading(false);
+    },
+    [navigate, t]
+  );
+
+  const signUp = useCallback(
+    async (insertEmail: string, password: string, insertName: string) => {
+      setIsLoading(true);
+      try {
+        const UserCredentialImpl = await createUserWithEmailAndPassword(
+          auth,
+          insertEmail,
+          password
+        );
+        const { uid } = UserCredentialImpl.user;
+        const newName = insertName.replace(/\s/g, "");
+        await setDoc(doc(db, "users", uid), {
+          uid,
+          name: insertName,
+          email: insertEmail,
+          avatar: `https://source.boringavatars.com/marble/180/${newName}`,
+          friendList: [],
+          favoriteList: [],
+          collection: [],
+          introduction: "",
+        });
+        setUserId(uid);
+        setIsLogin(true);
+        Swal.fire({
+          text: t("sign_up_successfully"),
+          confirmButtonColor: "#646464",
+        });
+        navigate("/");
+      } catch (e) {
+        Swal.fire({
+          text: t("sign_up_failed"),
+          icon: "warning",
+          confirmButtonColor: "#646464",
+        });
+        navigate("/login");
+      }
+      setIsLoading(false);
+    },
+    [navigate, t]
+  );
+
+  const googleLoginHandler = useCallback(async () => {
     setIsLoading(true);
     try {
-      const UserCredentialImpl = await signInWithEmailAndPassword(
-        auth,
-        insertEmail,
-        password
-      );
-      const { user }: any = UserCredentialImpl;
-      const { uid } = user;
-      const userEmail = user.reloadUserInfo.email;
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const { uid, photoURL, displayName } = result.user;
       const docSnap = await getDoc(doc(db, "users", uid));
-      const data = docSnap.data() as {
-        uid: string;
-        name: string;
-        avatar: string;
-        email: string;
-        friendList: string[];
-        favoriteList: string[];
-        collection: string[];
-        introduction: string;
-      };
-
-      setUserId(uid);
-      const userProjectsData = await getUserProjects(uid);
-      Swal.fire({
-        text: t("login_successfully"),
-        confirmButtonColor: "#646464",
-      });
-      setUserProjects(userProjectsData);
-      navigate("/portfolioBricks");
-    } catch (e) {
-      Swal.fire({
-        text: t("login_failed"),
-        icon: "warning",
-        confirmButtonColor: "#646464",
-      });
-      console.log(e);
-    }
-    setIsLoading(false);
-  };
-
-  const signUp = async (
-    insertEmail: string,
-    password: string,
-    insertName: string
-  ) => {
-    setIsLoading(true);
-    try {
-      const UserCredentialImpl = await createUserWithEmailAndPassword(
-        auth,
-        insertEmail,
-        password
-      );
-      const { user }: any = UserCredentialImpl;
-      const { uid } = user;
-      const newName = insertName.replace(/\s/g, "");
-      await setDoc(doc(db, "users", uid), {
-        uid,
-        name: insertName,
-        email: insertEmail,
-        avatar: `https://source.boringavatars.com/marble/180/${newName}`,
-        friendList: [],
-        favoriteList: [],
-        collection: [],
-        introduction: "",
-      });
+      const data = docSnap.data() as UserDataType;
+      if (data === undefined) {
+        const gmail = result.user.email;
+        await setDoc(doc(db, "users", uid), {
+          uid,
+          name: displayName,
+          email: gmail,
+          avatar: photoURL,
+          friendList: [],
+          favoriteList: [],
+          collection: [],
+          introduction: "",
+        });
+      }
       setUserId(uid);
       setIsLogin(true);
-      Swal.fire({
-        text: t("sign_up_successfully"),
-        confirmButtonColor: "#646464",
-      });
-      navigate("/portfolioBricks");
+      const userProjectsData = await getUserProjects(uid);
+      setUserProjects(userProjectsData);
+      navigate("/");
     } catch (e) {
       Swal.fire({
         text: t("sign_up_failed"),
         icon: "warning",
         confirmButtonColor: "#646464",
       });
-      console.log(e);
+      navigate("/login");
     }
     setIsLoading(false);
-  };
+  }, [navigate, t]);
 
-  const googleLoginHandler = async () => {
+  const facebookLoginHandler = useCallback(async () => {
     setIsLoading(true);
-    const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    const { uid, photoURL, displayName } = result.user;
-    const gmail = result.user.email;
-    await setDoc(doc(db, "users", uid), {
-      uid,
-      name: displayName,
-      email: gmail,
-      avatar: photoURL,
-      friendList: [],
-      favoriteList: [],
-      collection: [],
-      introduction: "",
-    });
-    if (!gmail || !photoURL || !displayName) return;
-    setUserId(uid);
-    setIsLogin(true);
+    try {
+      const provider = new FacebookAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const { uid, photoURL, displayName } = result.user;
+      const docSnap = await getDoc(doc(db, "users", uid));
+      const data = docSnap.data() as UserDataType;
+      if (data === undefined) {
+        const fbMail = result.user.email;
+        await setDoc(doc(db, "users", uid), {
+          uid,
+          name: displayName,
+          email: fbMail,
+          avatar: photoURL,
+          friendList: [],
+          favoriteList: [],
+          collection: [],
+          introduction: "",
+        });
+      }
+      setUserId(uid);
+      setIsLogin(true);
+      const userProjectsData = await getUserProjects(uid);
+      setUserProjects(userProjectsData);
+      navigate("/");
+    } catch (e) {
+      Swal.fire({
+        text: t("sign_up_failed"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
+      navigate("/login");
+    }
     setIsLoading(false);
-    const userProjectsData = await getUserProjects(uid);
-    setUserProjects(userProjectsData);
-    navigate("/portfolioBricks");
-  };
+  }, [navigate, t]);
 
-  const facebookLoginHandler = async () => {
-    setIsLoading(true);
-    const provider = new FacebookAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-    const credential = FacebookAuthProvider.credentialFromResult(result);
-    const { uid, photoURL, displayName } = result.user;
-    const fbMail = result.user.email;
-    await setDoc(doc(db, "users", uid), {
-      uid,
-      name: displayName,
-      email: fbMail,
-      avatar: photoURL,
-      friendList: [],
-      favoriteList: [],
-      collection: [],
-      introduction: "",
-    });
-    if (!fbMail || !photoURL || !displayName) return;
-    setUserId(uid);
-    setIsLogin(true);
-    setIsLoading(false);
-    const userProjectsData = await getUserProjects(uid);
-    setUserProjects(userProjectsData);
-    navigate("/portfolioBricks");
-  };
-
-  const logout = () => {
+  const logout = useCallback(() => {
     signOut(auth);
     setName("");
     setUserId("");
@@ -305,7 +315,7 @@ export function AuthContextProvider({ children }: BodyProp) {
       text: t("logout_successfully"),
       confirmButtonColor: "#646464",
     });
-  };
+  }, [t]);
 
   const authProviderValue = useMemo(
     () => ({

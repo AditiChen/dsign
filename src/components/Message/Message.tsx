@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useContext, useEffect, useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { v4 as uuid } from "uuid";
 import ReactLoading from "react-loading";
 import {
@@ -16,6 +17,7 @@ import {
   arrayRemove,
   updateDoc,
 } from "firebase/firestore";
+import Swal from "sweetalert2";
 
 import { FriendContext } from "../../context/friendContext";
 import { db } from "../../context/firebaseSDK";
@@ -34,7 +36,7 @@ const Wrapper = styled.div`
   height: 500px;
   position: fixed;
   right: 5vw;
-  bottom: 90px;
+  bottom: 10px;
   background-color: #ffffff;
   border: 1px solid #3c3c3c60;
   border-radius: 10px;
@@ -42,7 +44,6 @@ const Wrapper = styled.div`
   @media screen and (max-width: 399px) {
     width: 280px;
     right: 10px;
-    bottom: 50px;
   }
 `;
 
@@ -51,7 +52,7 @@ const CloseIcon = styled.div`
   height: 30px;
   position: fixed;
   right: calc(5vw - 10px);
-  bottom: 572px;
+  bottom: 496px;
   background-image: url(${closeIcon});
   background-size: cover;
   background-position: center;
@@ -64,7 +65,6 @@ const CloseIcon = styled.div`
     width: 24px;
     height: 24px;
     right: 5px;
-    bottom: 540px;
   }
 `;
 
@@ -136,6 +136,7 @@ const SingleMessageLeft = styled.div`
   padding: 10px;
   width: 250px;
   font-size: 18px;
+  word-wrap: break-word;
   border: 1px solid #3c3c3c60;
   border-radius: 5px;
   background-color: #ffffff90;
@@ -219,6 +220,7 @@ function Message({
   };
   userId: string;
 }) {
+  const { t } = useTranslation();
   const { setShowMessageFrame } = useContext(FriendContext);
   const [isLoading, setIsLoading] = useState(false);
   const [chatroomId, setChatroomId] = useState("");
@@ -287,7 +289,7 @@ function Message({
     }
     checkRoomExist();
     setIsLoading(false);
-  }, [messageFriendDtl]);
+  }, [messageFriendDtl, userId]);
 
   useEffect(() => {
     if (chatroomId === "") return undefined;
@@ -310,14 +312,22 @@ function Message({
     });
     setIsLoading(false);
     return () => unsubscribe();
-  }, [chatroomId]);
+  }, [chatroomId, userId]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: 9999, behavior: "smooth" });
   }, [historyMessages]);
 
   async function sendMessageHandler() {
-    if (inputValue === "") return;
+    if (inputValue.trim() === "") {
+      Swal.fire({
+        text: t("empty_message"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
+      setInputValue("");
+      return;
+    }
     setInputValue("");
     const messageId = `${+new Date()}`;
     const docSnap = await getDoc(doc(db, `chatrooms/${chatroomId}`));
@@ -390,6 +400,7 @@ function Message({
               setInputValue(e.target.value);
             }}
             value={inputValue}
+            maxLength={100}
           />
           <SendMessageIcon onClick={() => sendMessageHandler()} />
         </SendMessageContainer>

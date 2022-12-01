@@ -67,7 +67,7 @@ const Context = styled.textarea`
   width: 410px;
   color: #ffffff;
   font-size: 20px;
-  line-height: 24px;
+  line-height: 26px;
   background-color: transparent;
   border: 1px solid #b4b4b4;
   resize: none;
@@ -82,7 +82,7 @@ const Context = styled.textarea`
     height: 126px;
     width: 287px;
     font-size: 14px;
-    line-height: 17px;
+    line-height: 18px;
   }
 `;
 
@@ -157,26 +157,30 @@ const UploadIcon = styled.div`
 `;
 
 function Template2(props: InsertProp) {
-  const [inputText, setInputText] = useState<string[]>([""]);
+  const { setPages, currentIndex, pages } = props;
+  const [inputText, setInputText] = useState<string[]>(
+    pages[currentIndex].content || [""]
+  );
   const [showOverlay, setShowOverlay] = useState(false);
-  const [storageUrl, setStorageUrl] = useState<string[]>(["", "", "", ""]);
+  const [storageUrl, setStorageUrl] = useState<string[]>(
+    pages[currentIndex].photos || ["", "", "", ""]
+  );
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [currentImgUrl, setCurrentImgUrl] = useState("");
   const [currentAaspect, setCurrentAspect] = useState(1 / 1);
   const [isAddToCollection, setIsAddToCollection] = useState(false);
-  const { setPages, currentIndex, pages } = props;
 
   useEffect(() => {
-    setInputText(pages[currentIndex].content || [""]);
-    setStorageUrl(pages[currentIndex].photos || ["", "", "", ""]);
-  }, []);
-
-  useEffect(() => {
+    if (
+      pages[currentIndex].content === inputText &&
+      pages[currentIndex].photos === storageUrl
+    )
+      return;
     const newPages = [...pages];
     newPages[currentIndex].content = inputText;
     newPages[currentIndex].photos = storageUrl;
     setPages(newPages);
-  }, [inputText, storageUrl]);
+  }, [currentIndex, inputText, pages, setPages, storageUrl]);
 
   const setNewPhotoUrl = (returnedUrl: string) => {
     const newUrl = [...storageUrl];
@@ -197,6 +201,7 @@ function Template2(props: InsertProp) {
         <HeaderContainer>
           <Context
             value={inputText}
+            maxLength={110}
             onChange={(e) => setInputText([e.target.value])}
             placeholder={t("type_content")}
           />

@@ -75,13 +75,13 @@ const LeftCircle = styled.div`
 
 const Context = styled.textarea`
   padding: 10px;
-  height: 150px;
-  width: 240px;
+  height: 155px;
+  width: 245px;
   color: #ffffff;
   font-size: 20px;
-  line-height: 24px;
+  line-height: 26px;
   position: absolute;
-  left: 30px;
+  left: 20px;
   bottom: 30px;
   background-color: transparent;
   border: none;
@@ -97,8 +97,8 @@ const Context = styled.textarea`
     height: 105px;
     width: 168px;
     font-size: 14px;
-    line-height: 17px;
-    left: 21px;
+    line-height: 18px;
+    left: 14px;
     bottom: 21px;
   }
   @media screen and (min-width: 650px) and (max-width: 949px) {
@@ -107,7 +107,7 @@ const Context = styled.textarea`
     width: 129px;
     font-size: 10px;
     line-height: 12px;
-    left: 15px;
+    left: 10px;
     bottom: 15px;
   }
   @media screen and (max-width: 649px) {
@@ -116,7 +116,7 @@ const Context = styled.textarea`
     width: 60px;
     font-size: 5px;
     line-height: 6px;
-    left: 7px;
+    left: 5px;
     bottom: 7px;
   }
 `;

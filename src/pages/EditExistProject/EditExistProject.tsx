@@ -6,7 +6,12 @@ import { doc, setDoc } from "firebase/firestore";
 import ReactLoading from "react-loading";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "react-beautiful-dnd";
 
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
@@ -106,7 +111,7 @@ const Title = styled.input`
   width: 1200px;
   height: 60px;
   color: #3c3c3c;
-  font-size: 30px;
+  font-size: 26px;
   font-weight: 700;
   background-color: #ffffff90;
   border: 1px solid #787878;
@@ -248,7 +253,7 @@ const Btn = styled.button<{
 }>`
   padding: 0 20px;
   height: 50px;
-  font-size: 22px;
+  font-size: 18px;
   border: 1px solid #3c3c3c40;
   border-radius: 10px;
   background-color: ${(props) => props.backgroundColor || "#3c3c3c30"};
@@ -325,18 +330,7 @@ function EditExistProject() {
       }
     }
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    if (position.lat === undefined && position.lng === undefined) return;
-    const mapIndex = pages.findIndex(
-      ({ type }) => templatesArr[type] === googleMap
-    );
-    if (mapIndex === -1) return;
-    const newPages = [...pages];
-    newPages[mapIndex].location = position;
-    setPages(newPages);
-  }, [position]);
+  }, [singleProjectId]);
 
   async function confirmAllEdit() {
     if (title === "") {
@@ -408,8 +402,8 @@ function EditExistProject() {
     setPages(removeSelectedPageData);
   }
 
-  const onDragEnd = (e: any) => {
-    const { source, destination } = e;
+  const onDragEnd = (result: DropResult) => {
+    const { source, destination } = result;
     if (!destination) return;
     const newPagesOrder = [...pages];
     const [remove] = newPagesOrder.splice(source.index, 1);
@@ -452,6 +446,7 @@ function EditExistProject() {
             <EditorContainer>
               <Title
                 value={title}
+                maxLength={60}
                 placeholder={t("project_title")}
                 onChange={(e) => setTitle(e.target.value)}
               />

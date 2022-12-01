@@ -32,6 +32,7 @@ interface Prop {
   marginLift?: string;
   weight?: string;
   border?: string;
+  cursor?: string;
 }
 
 const Wrapper = styled.div`
@@ -80,10 +81,13 @@ const UserInfoContainer = styled.div`
   border-radius: 10px;
   background-color: #f0f0f0;
   box-shadow: 0 0 10px #3c3c3c;
+  @media screen and (max-width: 1449px) {
+    width: 280px;
+    padding: 20px;
+  }
   @media screen and (max-width: 1049px) {
-    padding: 30px 20px;
     width: 100%;
-    max-width: 280px;
+    max-width: 300px;
     left: 50%;
     transform: translateX(-50%);
   }
@@ -98,7 +102,7 @@ const Avatar = styled.div`
   background-position: center;
   position: relative;
   box-shadow: 0 0 5px #3c3c3c;
-  @media screen and (max-width: 1049px) {
+  @media screen and (max-width: 1449px) {
     height: 150px;
     width: 150px;
   }
@@ -117,7 +121,7 @@ const CameraIcon = styled.div`
     background-image: url(${cameraIconHover});
     cursor: pointer;
   }
-  @media screen and (max-width: 1049px) {
+  @media screen and (max-width: 1449px) {
     height: 18px;
     width: 18px;
   }
@@ -127,7 +131,7 @@ const UserName = styled.div`
   margin-top: 20px;
   font-size: 24px;
   font-weight: 600;
-  @media screen and (max-width: 1049px) {
+  @media screen and (max-width: 1449px) {
     margin-top: 15px;
     font-size: 18px;
   }
@@ -135,9 +139,9 @@ const UserName = styled.div`
 
 const UserEmail = styled.div`
   margin-top: 10px;
-  font-size: 20px;
-  @media screen and (max-width: 1049px) {
-    font-size: 16px;
+  font-size: 16px;
+  @media screen and (max-width: 1449px) {
+    font-size: 14px;
   }
 `;
 
@@ -148,46 +152,54 @@ const IntroText = styled.div`
   font-size: 20px;
   color: #646464;
   border-bottom: 1px solid #969696;
-  @media screen and (max-width: 1049px) {
+  @media screen and (max-width: 1449px) {
     margin-top: 20px;
-    font-size: 14px;
+    font-size: 16px;
   }
 `;
 
 const Introduction = styled.textarea`
+  margin-bottom: 10px;
   padding: 10px 0;
   width: 100%;
   height: 100%;
-  max-height: calc(100% - 350px);
+  max-height: calc(100% - 360px);
   font-size: 18px;
+  line-height: 22px;
   resize: none;
   border: ${(props: Prop) => props.border};
   outline: none;
-  @media screen and (max-width: 1049px) {
+  @media screen and (max-width: 1449px) {
     padding: 5px 0;
-    font-size: 12px;
+    font-size: 14px;
+    max-height: calc(100% - 290px);
   }
 `;
 
 const EditBtn = styled.button`
-  margin-top: auto;
   padding: 0 10px;
   height: 40px;
   min-width: 120px;
+  color: #3c3c3c;
   font-size: 18px;
+  position: relative;
   border: 1px solid #3c3c3c40;
   border-radius: 10px;
   background-color: #3c3c3c30;
   &:hover {
-    cursor: pointer;
+    cursor: ${(props: Prop) => props.cursor};
     color: #ffffff;
     background-color: #616161;
   }
-  @media screen and (max-width: 1049px) {
+  @media screen and (max-width: 1449px) {
     height: 30px;
     min-width: 80px;
-    font-size: 14px;
+    font-size: 16px;
     border-radius: 5px;
+  }
+  @media screen and (max-width: 1049px) {
+    min-width: 80px;
+    font-size: 14px;
   }
 `;
 
@@ -206,6 +218,7 @@ const ProjectListContainer = styled.div`
 const ProjectHeaderContainer = styled.div`
   padding-bottom: 20px;
   display: flex;
+  align-items: center;
   @media screen and (max-width: 1049px) {
     padding-bottom: 15px;
   }
@@ -213,10 +226,28 @@ const ProjectHeaderContainer = styled.div`
 
 const Title = styled.div`
   padding-left: 10px;
-  font-size: 30px;
+  font-size: 24px;
   color: #ffffff;
   font-weight: 500;
   text-align: center;
+  @media screen and (min-width: 800px) and (max-width: 1449px) {
+    font-size: 20px;
+  }
+  @media screen and (max-width: 799px) {
+    font-size: 16px;
+  }
+`;
+
+const EmptyReminder = styled.div`
+  padding-left: 10px;
+  font-size: 18px;
+  color: #ffffff;
+  @media screen and (min-width: 800px) and (max-width: 1449px) {
+    font-size: 14px;
+  }
+  @media screen and (max-width: 799px) {
+    font-size: 12px;
+  }
 `;
 
 const ProjectsContainer = styled.div`
@@ -260,9 +291,12 @@ const ProjectLeftContainer = styled.div`
 `;
 
 const ProjectTitle = styled.div`
-  padding-left: 10px;
-  font-size: 24px;
+  font-size: 22px;
   color: #3c3c3c;
+  word-wrap: break-word;
+  @media screen and (max-width: 1449px) {
+    font-size: 18px;
+  }
   @media screen and (max-width: 1049px) {
     font-size: 16px;
   }
@@ -275,8 +309,8 @@ const ProjectIconContainer = styled.div`
 
 const Icon = styled.div`
   margin-left: ${(props: Prop) => props.marginLift};
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   background-image: ${(props: Prop) => props.img};
   background-position: center;
   background-size: cover;
@@ -323,7 +357,6 @@ const MobileSwitchStatusBtn = styled.div<{ color: string; border: string }>`
   @media screen and (max-width: 1049px) {
     color: ${(props) => props.color};
     font-size: 16px;
-    font-weight: 600;
     line-height: 26px;
     display: block;
     border-bottom: ${(props) => props.border};
@@ -351,6 +384,19 @@ const Loading = styled(ReactLoading)`
   margin: 50px auto;
 `;
 
+const LoadingInBtn = styled(ReactLoading)`
+  position: absolute;
+  top: 10px;
+  right: -30px;
+  @media screen and (max-width: 1449px) {
+    top: 3px;
+  }
+`;
+
+const DeleteLoading = styled(ReactLoading)`
+  margin-left: 20px;
+`;
+
 function Profile() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -369,6 +415,8 @@ function Profile() {
   const [isEdit, setIsEdit] = useState(false);
   const [inputText, setInputText] = useState("");
   const [clickState, setClickState] = useState("profile");
+  const [isBtnLoading, setIsBtnLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   useEffect(() => {
     setInputText(introduction);
@@ -384,22 +432,25 @@ function Profile() {
       denyButtonText: t("reject_yes_answer"),
     });
     if (ans.isConfirmed === true) return;
-
+    setDeleteLoading(true);
     await deleteDoc(doc(db, "projects", projectId));
     const userProjectsData = await getUserProjects(userId);
+    setDeleteLoading(false);
     setUserProjects(userProjectsData);
   }
   async function updateIntro() {
+    setIsBtnLoading(true);
     await updateDoc(doc(db, "users", userId), {
       introduction: inputText,
     });
     setIsEdit(false);
+    setIsBtnLoading(false);
   }
 
   if (isLoading) {
     return (
       <Wrapper>
-        <Loading type="spinningBubbles" color="#ffffff" />
+        <Loading type="cylon" color="#ffffff" />
       </Wrapper>
     );
   }
@@ -422,20 +473,43 @@ function Profile() {
                 placeholder={t("type_content")}
                 disabled={!isEdit && true}
                 border={!isEdit ? "none" : "1px solid #787878"}
-                maxLength={150}
+                maxLength={115}
               />
               {isEdit ? (
-                <EditBtn onClick={() => updateIntro()}>Confirm Edit</EditBtn>
+                <EditBtn
+                  onClick={() => updateIntro()}
+                  cursor={isBtnLoading ? " not-allowed" : "pointer"}
+                >
+                  Confirm Edit
+                  {isBtnLoading && (
+                    <LoadingInBtn
+                      type="spokes"
+                      width={20}
+                      height={20}
+                      color="#646464"
+                    />
+                  )}
+                </EditBtn>
               ) : (
-                <EditBtn onClick={() => setIsEdit(true)}>Edit</EditBtn>
+                <EditBtn onClick={() => setIsEdit(true)} cursor=" pointer">
+                  Edit
+                </EditBtn>
               )}
             </UserInfoContainer>
             <ProjectListContainer>
               <ProjectHeaderContainer>
                 <Title>{t("project_list")}</Title>
+                {deleteLoading && (
+                  <DeleteLoading
+                    type="spokes"
+                    width={25}
+                    height={25}
+                    color="#ffffff"
+                  />
+                )}
               </ProjectHeaderContainer>
               {userProjects.length === 0 ? (
-                <ProjectTitle>{t("go_to_create_project")}</ProjectTitle>
+                <EmptyReminder>{t("go_to_create_project")}</EmptyReminder>
               ) : (
                 <ProjectsContainer>
                   {userProjects.map((projectData) => (
@@ -519,9 +593,24 @@ function Profile() {
                   maxLength={150}
                 />
                 {isEdit ? (
-                  <EditBtn onClick={() => updateIntro()}>Confirm Edit</EditBtn>
+                  <EditBtn
+                    onClick={() => updateIntro()}
+                    cursor={isBtnLoading ? " not-allowed" : "pointer"}
+                  >
+                    Confirm Edit
+                    {isBtnLoading && (
+                      <LoadingInBtn
+                        type="spokes"
+                        width={20}
+                        height={20}
+                        color="#646464"
+                      />
+                    )}
+                  </EditBtn>
                 ) : (
-                  <EditBtn onClick={() => setIsEdit(true)}>Edit</EditBtn>
+                  <EditBtn onClick={() => setIsEdit(true)} cursor="pointer">
+                    Edit
+                  </EditBtn>
                 )}
               </UserInfoContainer>
             )}

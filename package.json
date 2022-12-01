@@ -17,7 +17,6 @@
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.12",
     "@react-google-maps/api": "^2.13.1",
-    "@react-three/drei": "^9.34.4",
     "@react-three/fiber": "^8.8.10",
     "@storybook/react": "^6.5.13",
     "@testing-library/jest-dom": "^5.16.5",

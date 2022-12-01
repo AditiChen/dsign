@@ -80,13 +80,13 @@ const LeftCircle = styled.div`
 
 const Context = styled.textarea`
   padding: 10px;
-  height: 150px;
-  width: 240px;
+  height: 155px;
+  width: 245px;
   color: #ffffff;
   font-size: 20px;
-  line-height: 24px;
+  line-height: 26px;
   position: absolute;
-  left: 30px;
+  left: 20px;
   bottom: 30px;
   background-color: transparent;
   border: 1px solid #b4b4b4;
@@ -102,8 +102,8 @@ const Context = styled.textarea`
     height: 105px;
     width: 168px;
     font-size: 14px;
-    line-height: 17px;
-    left: 21px;
+    line-height: 18px;
+    left: 14px;
     bottom: 21px;
   }
 `;
@@ -169,26 +169,30 @@ const UploadIcon = styled.div`
 `;
 
 function Template3(props: InsertProp) {
-  const [inputText, setInputText] = useState<string[]>([""]);
+  const { setPages, currentIndex, pages } = props;
+  const [inputText, setInputText] = useState<string[]>(
+    pages[currentIndex].content || [""]
+  );
   const [showOverlay, setShowOverlay] = useState(false);
-  const [storageUrl, setStorageUrl] = useState<string[]>(["", "", ""]);
+  const [storageUrl, setStorageUrl] = useState<string[]>(
+    pages[currentIndex].photos || ["", "", ""]
+  );
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [currentImgUrl, setCurrentImgUrl] = useState("");
   const [currentAaspect, setCurrentAspect] = useState(1 / 1);
   const [isAddToCollection, setIsAddToCollection] = useState(false);
-  const { setPages, currentIndex, pages } = props;
 
   useEffect(() => {
-    setInputText(pages[currentIndex].content || [""]);
-    setStorageUrl(pages[currentIndex].photos || ["", "", ""]);
-  }, []);
-
-  useEffect(() => {
+    if (
+      pages[currentIndex].content === inputText &&
+      pages[currentIndex].photos === storageUrl
+    )
+      return;
     const newPages = [...pages];
     newPages[currentIndex].content = inputText;
     newPages[currentIndex].photos = storageUrl;
     setPages(newPages);
-  }, [inputText, storageUrl]);
+  }, [currentIndex, inputText, pages, setPages, storageUrl]);
 
   const setNewPhotoUrl = (returnedUrl: string) => {
     const newUrl = [...storageUrl];
@@ -225,6 +229,7 @@ function Template3(props: InsertProp) {
         <LeftCircle />
         <Context
           value={inputText}
+          maxLength={55}
           onChange={(e) => setInputText([e.target.value])}
           placeholder={t("type_content")}
         />

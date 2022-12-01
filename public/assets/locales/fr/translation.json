@@ -74,6 +74,7 @@
   "friend_list": "Liste d'amis",
   "confirm_remove": "Êtes-vous sûr de vouloir supprimer cet ami ?",
   "delete_successfully": "Supprimer avec succès",
+  "empty_message": "vous envoyez un message vide",
 
   "your_collection": "votre collection",
   "empty_collection": "Votre collection est vide, téléchargez des photos !",

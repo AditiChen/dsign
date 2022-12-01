@@ -96,7 +96,7 @@ const Context = styled.textarea`
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     padding: 6px;
     font-size: 14px;
-    line-height: 17px;
+    line-height: 18px;
   }
   @media screen and (min-width: 650px) and (max-width: 949px) {
     padding: 4px;

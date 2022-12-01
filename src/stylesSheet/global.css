@@ -9,32 +9,35 @@
 .css-187mznn-MuiSlider-root {
   color: #616161 !important;
 }
+
 .css-eg0mwd-MuiSlider-thumb {
   width: 18px !important;
   height: 18px !important;
 }
+
 .css-eg0mwd-MuiSlider-thumb::after {
   width: 18px !important;
   height: 18px !important;
 }
 
 @media screen and (min-width: 950px) and (max-width: 1449px) {
-  .cHBpDo {
-    width: 120px !important;
-  }
   .css-187mznn-MuiSlider-root {
     padding: 8px 0 !important;
   }
+
   .css-ahj2mt-MuiTypography-root {
     font-size: 14px !important;
   }
+
   .css-187mznn-MuiSlider-root {
     height: 3px !important;
   }
+
   .css-eg0mwd-MuiSlider-thumb {
     width: 14px !important;
     height: 14px !important;
   }
+
   .css-eg0mwd-MuiSlider-thumb::after {
     width: 30px !important;
     height: 30px !important;

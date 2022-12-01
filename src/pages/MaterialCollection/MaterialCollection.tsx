@@ -214,10 +214,10 @@ function MaterialCollection() {
         userId,
         urlByUuid
       )) as string;
+      setProgressing(false);
       await updateDoc(doc(db, "users", userId), {
         collection: arrayUnion(downloadUrl),
       });
-      setProgressing(false);
     });
   };
 

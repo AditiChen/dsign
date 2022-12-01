@@ -1,13 +1,22 @@
 import { useRef, useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import artists from "./CarouselData.json";
+
+const bannerAnimation = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }`;
 
 const CarouselContainer = styled.div`
   padding: 50px 80px;
   width: 100%;
   height: 100%;
-  background-color: #000000;
+  background-image: linear-gradient(180deg, #000000 85%, #3c3c3c, #787878);
   position: relative;
+  animation: ${bannerAnimation} 1s ease-in;
   @media screen and (min-width: 800px) and (max-width: 1199px) {
     padding: 30px 40px;
   }
@@ -128,7 +137,7 @@ const Doc = styled.div<{ backgroundColor: string }>`
   & + & {
     margin-left: 15px;
   }
-  @media screen and (min-width: 800px) and (max-width: 1199px) {
+  @media screen and (min-width: 800px) and (max-width: 1449px) {
     width: 8px;
     height: 8px;
     & + & {

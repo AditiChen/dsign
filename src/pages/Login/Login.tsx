@@ -15,7 +15,6 @@ import fbIconHover from "../../icons/fb-icon-hover.png";
 
 interface Prop {
   url?: string;
-  size?: string;
   background?: string;
   text?: string;
   focus?: string;
@@ -36,9 +35,11 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   background-color: #787878;
-  @media screen and (min-width: 800px) and (max-width: 1024px) {
+  @media screen and (max-width: 1449px) {
     padding: 80px 0;
-    min-height: calc(100vh - 120px);
+  }
+  @media screen and (min-width: 800px) and (max-width: 1024px) {
+    min-height: calc(100vh - 100px);
   }
   @media screen and (max-width: 799px) {
     padding: 40px 0;
@@ -61,13 +62,15 @@ const Container = styled.div`
 const SignInContainer = styled.div`
   margin: 0 auto;
   height: 100%;
-  width: 100%;
-  max-width: 460px;
+  width: 460px;
   position: relative;
   border: 1px solid #b4b4b4;
   border-radius: 20px;
   background-color: #ffffff;
   box-shadow: 0 0 20px #3c3c3c;
+  @media screen and (max-width: 1449px) {
+    width: 400px;
+  }
 `;
 
 const LoginContainer = styled.div`
@@ -80,13 +83,13 @@ const LoginContainer = styled.div`
 `;
 
 const SignStatus = styled.button`
-  margin-bottom: 30px;
+  margin-bottom: 15px;
   padding: 0;
   width: 50%;
   height: 60px;
   font-size: 22px;
-  color: #313538;
   border: none;
+  color: #3c3c3c;
   border-bottom: ${(props: Prop) => props.buttonLine || "none"};
   border-radius: ${(props: Prop) => props.position || "0px 20px 0px 0px"};
   background-color: ${(props) => props.color || "#fff"};
@@ -96,18 +99,22 @@ const SignStatus = styled.button`
   &:hover {
     cursor: pointer;
   }
+  @media screen and (max-width: 1449px) {
+    height: 50px;
+    font-size: 20px;
+  }
   @media screen and (max-width: 549px) {
-    margin-bottom: 15px;
     height: 40px;
     font-size: 16px;
   }
 `;
 
 const Input = styled.input`
-  padding: 6px 10px;
+  padding: 7px 10px 5px;
   width: 100%;
   height: 50px;
   font-size: 18px;
+  color: #3c3c3c;
   background-color: #f0f0f090;
   border: 1px solid #646464;
   border-radius: 10px;
@@ -118,8 +125,15 @@ const Input = styled.input`
     outline: none;
     background-color: #61616130;
   }
-  @media screen and (max-width: 549px) {
+  @media screen and (max-width: 1449px) {
     height: 40px;
+    font-size: 16px;
+    border-radius: 8px;
+    & + & {
+      margin-top: 25px;
+    }
+  }
+  @media screen and (max-width: 549px) {
     font-size: 14px;
     & + & {
       margin-top: 15px;
@@ -136,7 +150,8 @@ const SignBtn = styled.button`
   margin-left: auto;
   padding: 0 20px;
   height: 40px;
-  font-size: 20px;
+  font-size: 18px;
+  color: #3c3c3c;
   border: 1px solid #3c3c3c40;
   border-radius: 10px;
   background-color: #3c3c3c30;
@@ -148,10 +163,17 @@ const SignBtn = styled.button`
     color: #ffffff;
     background-color: #616161;
   }
+  @media screen and (max-width: 1449px) {
+    margin-top: 25px;
+    height: 36px;
+    font-size: 16px;
+    border-radius: 8px;
+  }
   @media screen and (max-width: 549px) {
     margin-top: 15px;
     height: 30px;
     font-size: 14px;
+    border-radius: 6px;
   }
 `;
 
@@ -171,6 +193,9 @@ const LoginOptionsText = styled.div`
   left: 50%;
   transform: translateX(-50%);
   font-size: 20px;
+  @media screen and (max-width: 1449px) {
+    font-size: 18px;
+  }
   @media screen and (max-width: 549px) {
     height: 30px;
     padding: 0 10px;
@@ -216,7 +241,8 @@ const OptionalLoginBtn = styled.button`
   display: flex;
   align-items: center;
   color: #4285f4;
-  font-size: 20px;
+  font-size: 18px;
+  line-height: 20px;
   background-color: transparent;
   border: 1px solid #3c3c3c40;
   border-radius: 20px;
@@ -235,6 +261,13 @@ const OptionalLoginBtn = styled.button`
   }
   &:hover ${FbIcon} {
     background-image: url(${fbIconHover});
+  }
+  @media screen and (max-width: 1449px) {
+    height: 36px;
+    font-size: 16px;
+    & + & {
+      margin-top: 20px;
+    }
   }
   @media screen and (max-width: 549px) {
     margin-top: 10px;
@@ -273,30 +306,11 @@ function SignIn() {
       });
       return;
     }
-    if (
-      inputEmail.search(
-        /^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/
-      )
-    ) {
-      Swal.fire({
-        text: t("email_format_check"),
-        icon: "warning",
-        confirmButtonColor: "#646464",
-      });
-      return;
-    }
-    if (password.length < 8) {
-      Swal.fire({
-        text: t("password_letter_check"),
-        icon: "warning",
-        confirmButtonColor: "#646464",
-      });
-      return;
-    }
     emailSignInHandler(inputEmail, password);
   }
 
   async function signUpHandler() {
+    if (checkLoading) return;
     if (!inputName) {
       Swal.fire({
         text: t("check_input_name"),
@@ -426,7 +440,7 @@ function SignIn() {
               />
               <Input
                 placeholder={t("input_password")}
-                key="password"
+                key="password1"
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -444,22 +458,26 @@ function SignIn() {
               <Input
                 placeholder={t("input_name")}
                 key="name"
+                maxLength={20}
                 onChange={(e) => setInputName(e.target.value)}
               />
               <Input
                 placeholder={t("input_email")}
                 key="email"
+                maxLength={30}
                 onChange={(e) => setInputEmail(e.target.value)}
               />
               <Input
                 placeholder={t("input_password")}
                 key="password"
                 type="password"
+                maxLength={20}
                 onChange={(e) => setPassword(e.target.value)}
               />
               <Input
                 placeholder={t("check_input_password")}
                 type="password"
+                maxLength={20}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
               <SignContainer>

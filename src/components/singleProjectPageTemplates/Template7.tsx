@@ -69,7 +69,7 @@ const Context = styled.textarea`
   width: 100%;
   height: 320px;
   font-size: 20px;
-  line-height: 24px;
+  line-height: 26px;
   background-color: transparent;
   border: none;
   resize: none;
@@ -83,7 +83,7 @@ const Context = styled.textarea`
     padding: 6px;
     height: 224px;
     font-size: 14px;
-    line-height: 17px;
+    line-height: 18px;
   }
   @media screen and (min-width: 650px) and (max-width: 949px) {
     padding: 4px;

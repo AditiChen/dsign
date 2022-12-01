@@ -10,6 +10,30 @@ import {
 import { getLatLng, getGeocode } from "use-places-autocomplete";
 import ReactLoading from "react-loading";
 
+interface InsertProp {
+  setPages: Dispatch<
+    SetStateAction<
+      {
+        key: string;
+        type: number;
+        content?: string[];
+        photos?: string[];
+        location?: { lat?: number; lng?: number };
+      }[]
+    >
+  >;
+  pages: {
+    key: string;
+    type: number;
+    content?: string[];
+    photos?: string[];
+    location?: { lat?: number; lng?: number };
+  }[];
+  currentIndex: number;
+  position: { lat?: number; lng?: number };
+  setPosition: Dispatch<SetStateAction<{ lat?: number; lng?: number }>>;
+}
+
 const Wrapper = styled.div`
   width: 1200px;
   height: 760px;
@@ -104,18 +128,21 @@ export function GoogleMapAPI({
   );
 }
 
-function GoogleMapInsert({
-  position,
-  setPosition,
-}: {
-  position: { lat?: number; lng?: number };
-  setPosition: Dispatch<SetStateAction<{ lat?: number; lng?: number }>>;
-}) {
+const libraries = ["places"] as (
+  | "places"
+  | "drawing"
+  | "geometry"
+  | "localContext"
+  | "visualization"
+)[];
+
+function GoogleMapInsert(props: InsertProp) {
+  const { setPages, currentIndex, pages, position, setPosition } = props;
   const { t } = useTranslation();
   const locationRef = useRef<HTMLInputElement>(null);
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
-    libraries: ["places"],
+    libraries,
   });
 
   if (!isLoaded) {
@@ -132,8 +159,12 @@ function GoogleMapInsert({
       const result = await getGeocode({ address });
       const { lat, lng } = getLatLng(result[0]);
       setPosition({ lat, lng });
+      const newPages = [...pages];
+      newPages[currentIndex].location = { lat, lng };
+      setPages(newPages);
     }
   }
+
   return (
     <Wrapper>
       <GoogleMapAPI position={position} />
