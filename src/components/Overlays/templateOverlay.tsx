@@ -112,7 +112,7 @@ const OverlayModal = styled.div`
   z-index: 102;
   background-color: white;
   @media screen and (max-width: 1449px) {
-    width: 1000px;
+    width: 930px;
   }
   @media screen and (max-width: 1249px) {
     width: 800px;
@@ -243,7 +243,7 @@ const SliderContainer = styled.div`
   width: 150px;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     margin-right: 30px;
-    width: 120px;
+    width: 130px;
   }
 `;
 
@@ -317,7 +317,7 @@ function Overlay({
 }: OverlayProps) {
   const { t } = useTranslation();
   const { collection, userId } = useContext(AuthContext);
-  const [imgSrc, setImgSrc] = useState<string>("");
+  const [imgSrc, setImgSrc] = useState<string>(currentImgUrl);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
@@ -328,12 +328,6 @@ function Overlay({
     x: number;
     y: number;
   }>(null!);
-
-  useEffect(() => {
-    if (currentImgUrl) {
-      setImgSrc(currentImgUrl);
-    }
-  }, []);
 
   const zoomPercent = (value: number) => `${Math.round(value * 100)}%`;
 
@@ -364,6 +358,7 @@ function Overlay({
   );
 
   const showCroppedImage = useCallback(async () => {
+    if (progressing) return;
     setProgressing(true);
     const { file } = (await getCroppedImg(
       imgSrc,
@@ -385,7 +380,17 @@ function Overlay({
     setProgressing(false);
     setIsAddToCollection(false);
     setShowOverlay((prev) => !prev);
-  }, [croppedAreaPixels, rotation, imgSrc, setNewPhotoUrl, setShowOverlay]);
+  }, [
+    progressing,
+    imgSrc,
+    croppedAreaPixels,
+    rotation,
+    userId,
+    setNewPhotoUrl,
+    isAddToCollection,
+    setIsAddToCollection,
+    setShowOverlay,
+  ]);
 
   return (
     <>

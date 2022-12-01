@@ -36,8 +36,10 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   background-color: #787878;
-  @media screen and (min-width: 800px) and (max-width: 1024px) {
+  @media screen and (max-width: 1449px) {
     padding: 80px 0;
+  }
+  @media screen and (min-width: 800px) and (max-width: 1024px) {
     min-height: calc(100vh - 120px);
   }
   @media screen and (max-width: 799px) {
@@ -61,13 +63,15 @@ const Container = styled.div`
 const SignInContainer = styled.div`
   margin: 0 auto;
   height: 100%;
-  width: 100%;
-  max-width: 460px;
+  width: 460px;
   position: relative;
   border: 1px solid #b4b4b4;
   border-radius: 20px;
   background-color: #ffffff;
   box-shadow: 0 0 20px #3c3c3c;
+  @media screen and (max-width: 1449px) {
+    width: 400px;
+  }
 `;
 
 const LoginContainer = styled.div`
@@ -80,13 +84,13 @@ const LoginContainer = styled.div`
 `;
 
 const SignStatus = styled.button`
-  margin-bottom: 30px;
+  margin-bottom: 15px;
   padding: 0;
   width: 50%;
   height: 60px;
   font-size: 22px;
-  color: #313538;
   border: none;
+  color: #3c3c3c;
   border-bottom: ${(props: Prop) => props.buttonLine || "none"};
   border-radius: ${(props: Prop) => props.position || "0px 20px 0px 0px"};
   background-color: ${(props) => props.color || "#fff"};
@@ -96,18 +100,22 @@ const SignStatus = styled.button`
   &:hover {
     cursor: pointer;
   }
+  @media screen and (max-width: 1449px) {
+    height: 50px;
+    font-size: 20px;
+  }
   @media screen and (max-width: 549px) {
-    margin-bottom: 15px;
     height: 40px;
     font-size: 16px;
   }
 `;
 
 const Input = styled.input`
-  padding: 6px 10px;
+  padding: 7px 10px 5px;
   width: 100%;
   height: 50px;
   font-size: 18px;
+  color: #3c3c3c;
   background-color: #f0f0f090;
   border: 1px solid #646464;
   border-radius: 10px;
@@ -118,8 +126,15 @@ const Input = styled.input`
     outline: none;
     background-color: #61616130;
   }
-  @media screen and (max-width: 549px) {
+  @media screen and (max-width: 1449px) {
     height: 40px;
+    font-size: 16px;
+    border-radius: 8px;
+    & + & {
+      margin-top: 25px;
+    }
+  }
+  @media screen and (max-width: 549px) {
     font-size: 14px;
     & + & {
       margin-top: 15px;
@@ -137,6 +152,7 @@ const SignBtn = styled.button`
   padding: 0 20px;
   height: 40px;
   font-size: 18px;
+  color: #3c3c3c;
   border: 1px solid #3c3c3c40;
   border-radius: 10px;
   background-color: #3c3c3c30;
@@ -148,10 +164,17 @@ const SignBtn = styled.button`
     color: #ffffff;
     background-color: #616161;
   }
+  @media screen and (max-width: 1449px) {
+    margin-top: 25px;
+    height: 36px;
+    font-size: 16px;
+    border-radius: 8px;
+  }
   @media screen and (max-width: 549px) {
     margin-top: 15px;
     height: 30px;
     font-size: 14px;
+    border-radius: 6px;
   }
 `;
 
@@ -171,6 +194,9 @@ const LoginOptionsText = styled.div`
   left: 50%;
   transform: translateX(-50%);
   font-size: 20px;
+  @media screen and (max-width: 1449px) {
+    font-size: 18px;
+  }
   @media screen and (max-width: 549px) {
     height: 30px;
     padding: 0 10px;
@@ -236,6 +262,13 @@ const OptionalLoginBtn = styled.button`
   }
   &:hover ${FbIcon} {
     background-image: url(${fbIconHover});
+  }
+  @media screen and (max-width: 1449px) {
+    height: 36px;
+    font-size: 16px;
+    & + & {
+      margin-top: 20px;
+    }
   }
   @media screen and (max-width: 549px) {
     margin-top: 10px;

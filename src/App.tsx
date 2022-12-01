@@ -41,14 +41,12 @@ const Loading = styled(ReactLoading)`
 const loadingMarkup = <Loading />;
 
 function App() {
-  const location = useLocation();
   return (
     <Suspense fallback={loadingMarkup}>
       <Reset />
       <GlobalStyle />
       <AuthContextProvider>
         <FriendContextProvider>
-          {/* {location.pathname !== "/" && <Header />} */}
           <Header />
           <BodyWrapper>
             <Outlet />

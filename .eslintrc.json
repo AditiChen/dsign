@@ -35,7 +35,7 @@
   "rules": {
     "react/react-in-jsx-scope": ["off"],
     "react/jsx-uses-react": ["off"],
-    // "react/jsx-props-no-spreading": ["warn"],
+    "react/jsx-props-no-spreading": ["off"],
     "react/no-unescaped-entities": ["off"],
     "prettier/prettier": "warn",
     "react/jsx-filename-extension": [
@@ -50,14 +50,7 @@
     "react/prop-types": "off",
     "import/no-unresolved": 0,
     "import/extensions": 0,
-    // "no-console": "off",
-    "no-alert": "off",
-    // turn off props required default value
-    "react/require-default-props": "warn",
-    // turn off warning of suggestion dependency
-    "react-hooks/exhaustive-deps": "off",
-    // turn off props spread
-    "react/jsx-props-no-spreading": "off"
+    "react/require-default-props": "warn"
   },
 
   "globals": {

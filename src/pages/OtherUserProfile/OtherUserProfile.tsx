@@ -254,7 +254,7 @@ function OtherUserProfile() {
     }
     getData();
     setIsLoading(false);
-  }, []);
+  }, [otherUserId]);
 
   if (isLoading) {
     return (

@@ -374,7 +374,7 @@ function Header() {
       (language) => language.code === cookieValue
     );
     setActiveIndex(currentIndex);
-  });
+  }, [setActiveIndex]);
 
   useOnClickOutside(languageRef, () => setIsShowLanguages(false));
   useOnClickOutside(mobileMenuRef, () => setIsShowMobileMenu(false));
@@ -383,7 +383,7 @@ function Header() {
   useEffect(() => {
     const urlString = new URL(window.location.href);
     setClickState(urlString.pathname);
-  });
+  }, [setClickState]);
 
   async function logoutHandler() {
     const ans = await Swal.fire({

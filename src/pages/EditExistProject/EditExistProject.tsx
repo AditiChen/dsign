@@ -253,7 +253,7 @@ const Btn = styled.button<{
 }>`
   padding: 0 20px;
   height: 50px;
-  font-size: 22px;
+  font-size: 18px;
   border: 1px solid #3c3c3c40;
   border-radius: 10px;
   background-color: ${(props) => props.backgroundColor || "#3c3c3c30"};
@@ -330,18 +330,7 @@ function EditExistProject() {
       }
     }
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    if (position.lat === undefined && position.lng === undefined) return;
-    const mapIndex = pages.findIndex(
-      ({ type }) => templatesArr[type] === googleMap
-    );
-    if (mapIndex === -1) return;
-    const newPages = [...pages];
-    newPages[mapIndex].location = position;
-    setPages(newPages);
-  }, [position]);
+  }, [singleProjectId]);
 
   async function confirmAllEdit() {
     if (title === "") {

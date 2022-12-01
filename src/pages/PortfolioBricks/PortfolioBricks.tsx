@@ -103,7 +103,7 @@ function PortfolioBricks() {
       setIsLoading(false);
     }
     getProjects();
-  }, [userId]);
+  }, [friendList, userId]);
 
   useEffect(() => {
     if (userId !== "") return;
@@ -115,7 +115,7 @@ function PortfolioBricks() {
       setIsLoading(false);
     }
     getAllProjects();
-  }, []);
+  }, [userId]);
 
   return (
     <Wrapper>

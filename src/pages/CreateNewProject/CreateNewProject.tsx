@@ -350,17 +350,6 @@ function CreateNewProject() {
     setHasGoogleMap(false);
   }, [pages]);
 
-  useEffect(() => {
-    if (position.lat === undefined && position.lng === undefined) return;
-    const mapIndex = pages.findIndex(
-      ({ type }) => templatesArr[type] === googleMap
-    );
-    if (mapIndex === -1) return;
-    const newPages = [...pages];
-    newPages[mapIndex].location = position;
-    setPages(newPages);
-  }, [position]);
-
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
     if (!destination) return;

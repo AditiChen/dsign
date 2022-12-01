@@ -258,7 +258,7 @@ function SingleProject() {
       setIsLoading(false);
     }
     getData();
-  }, []);
+  }, [singleProjectId]);
 
   useEffect(() => {
     containerRef.current?.scrollTo({ top: 0, behavior: "smooth" });

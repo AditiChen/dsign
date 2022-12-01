@@ -210,6 +210,7 @@ const ProjectListContainer = styled.div`
 const ProjectHeaderContainer = styled.div`
   padding-bottom: 20px;
   display: flex;
+  align-items: center;
   @media screen and (max-width: 1049px) {
     padding-bottom: 15px;
   }
@@ -226,6 +227,18 @@ const Title = styled.div`
   }
   @media screen and (max-width: 799px) {
     font-size: 16px;
+  }
+`;
+
+const EmptyReminder = styled.div`
+  padding-left: 10px;
+  font-size: 18px;
+  color: #ffffff;
+  @media screen and (min-width: 800px) and (max-width: 1024px) {
+    font-size: 14px;
+  }
+  @media screen and (max-width: 799px) {
+    font-size: 12px;
   }
 `;
 
@@ -270,8 +283,7 @@ const ProjectLeftContainer = styled.div`
 `;
 
 const ProjectTitle = styled.div`
-  padding-left: 10px;
-  font-size: 24px;
+  font-size: 22px;
   color: #3c3c3c;
   @media screen and (max-width: 1049px) {
     font-size: 16px;
@@ -285,8 +297,8 @@ const ProjectIconContainer = styled.div`
 
 const Icon = styled.div`
   margin-left: ${(props: Prop) => props.marginLift};
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   background-image: ${(props: Prop) => props.img};
   background-position: center;
   background-size: cover;
@@ -367,6 +379,10 @@ const LoadingInBtn = styled(ReactLoading)`
   right: -30px;
 `;
 
+const DeleteLoading = styled(ReactLoading)`
+  margin-left: 20px;
+`;
+
 function Profile() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -386,6 +402,7 @@ function Profile() {
   const [inputText, setInputText] = useState("");
   const [clickState, setClickState] = useState("profile");
   const [isBtnLoading, setIsBtnLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   useEffect(() => {
     setInputText(introduction);
@@ -401,9 +418,10 @@ function Profile() {
       denyButtonText: t("reject_yes_answer"),
     });
     if (ans.isConfirmed === true) return;
-
+    setDeleteLoading(true);
     await deleteDoc(doc(db, "projects", projectId));
     const userProjectsData = await getUserProjects(userId);
+    setDeleteLoading(false);
     setUserProjects(userProjectsData);
   }
   async function updateIntro() {
@@ -418,7 +436,7 @@ function Profile() {
   if (isLoading) {
     return (
       <Wrapper>
-        <Loading type="spinningBubbles" color="#ffffff" />
+        <Loading type="cylon" color="#ffffff" />
       </Wrapper>
     );
   }
@@ -467,9 +485,17 @@ function Profile() {
             <ProjectListContainer>
               <ProjectHeaderContainer>
                 <Title>{t("project_list")}</Title>
+                {deleteLoading && (
+                  <DeleteLoading
+                    type="spokes"
+                    width={25}
+                    height={25}
+                    color="#ffffff"
+                  />
+                )}
               </ProjectHeaderContainer>
               {userProjects.length === 0 ? (
-                <ProjectTitle>{t("go_to_create_project")}</ProjectTitle>
+                <EmptyReminder>{t("go_to_create_project")}</EmptyReminder>
               ) : (
                 <ProjectsContainer>
                   {userProjects.map((projectData) => (

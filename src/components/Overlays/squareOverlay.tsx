@@ -112,7 +112,7 @@ const OverlayModal = styled.div`
   z-index: 102;
   background-color: white;
   @media screen and (max-width: 1449px) {
-    width: 1000px;
+    width: 930px;
   }
   @media screen and (max-width: 1249px) {
     width: 800px;
@@ -235,7 +235,7 @@ const SliderContainer = styled.div`
   width: 150px;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     margin-right: 30px;
-    width: 120px;
+    width: 130px;
   }
 `;
 
@@ -312,12 +312,12 @@ function SquareOverlay({
   setShowOverlay,
   mainImgSrc,
   setMainImgSrc,
-  shape = "rect",
-  usage = "",
+  shape,
+  usage,
 }: OverlayProps) {
   const { t } = useTranslation();
   const { collection } = useContext(AuthContext);
-  const [imgSrc, setImgSrc] = useState<string>("");
+  const [imgSrc, setImgSrc] = useState<string>(mainImgSrc);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
@@ -334,7 +334,7 @@ function SquareOverlay({
     if (mainImgSrc) {
       setImgSrc(mainImgSrc);
     }
-  }, []);
+  }, [mainImgSrc]);
 
   const zoomPercent = (value: number) => `${Math.round(value * 100)}%`;
 
@@ -365,6 +365,7 @@ function SquareOverlay({
   );
 
   const croppedImage = useCallback(async () => {
+    if (progressing) return;
     setProgressing(true);
     const { file } = (await getCroppedImg(
       imgSrc,
@@ -393,10 +394,13 @@ function SquareOverlay({
   }, [
     croppedAreaPixels,
     rotation,
-    zoom,
     imgSrc,
     setShowOverlay,
     isAddToCollection,
+    progressing,
+    setMainImgSrc,
+    usage,
+    userId,
   ]);
 
   return (
@@ -515,5 +519,10 @@ function SquareOverlay({
     </>
   );
 }
+
+SquareOverlay.defaultProps = {
+  shape: "rect",
+  usage: "",
+};
 
 export default SquareOverlay;

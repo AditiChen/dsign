@@ -85,23 +85,22 @@ const UploadIcon = styled.div`
 `;
 
 function Template7(props: InsertProp) {
+  const { setPages, currentIndex, pages } = props;
   const [showOverlay, setShowOverlay] = useState(false);
-  const [storageUrl, setStorageUrl] = useState<string[]>([""]);
+  const [storageUrl, setStorageUrl] = useState<string[]>(
+    pages[currentIndex].photos || [""]
+  );
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [currentImgUrl, setCurrentImgUrl] = useState("");
   const [currentAaspect, setCurrentAspect] = useState(1 / 1);
   const [isAddToCollection, setIsAddToCollection] = useState(false);
-  const { setPages, currentIndex, pages } = props;
 
   useEffect(() => {
-    setStorageUrl(pages[currentIndex].photos || [""]);
-  }, []);
-
-  useEffect(() => {
+    if (pages[currentIndex].photos === storageUrl) return;
     const newPages = [...pages];
     newPages[currentIndex].photos = storageUrl;
     setPages(newPages);
-  }, [storageUrl]);
+  }, [currentIndex, pages, setPages, storageUrl]);
 
   const setNewPhotoUrl = (returnedUrl: string) => {
     const newUrl = [...storageUrl];

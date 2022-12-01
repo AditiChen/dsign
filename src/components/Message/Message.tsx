@@ -288,7 +288,7 @@ function Message({
     }
     checkRoomExist();
     setIsLoading(false);
-  }, [messageFriendDtl]);
+  }, [messageFriendDtl, userId]);
 
   useEffect(() => {
     if (chatroomId === "") return undefined;
@@ -311,7 +311,7 @@ function Message({
     });
     setIsLoading(false);
     return () => unsubscribe();
-  }, [chatroomId]);
+  }, [chatroomId, userId]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: 9999, behavior: "smooth" });
