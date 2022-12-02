@@ -232,9 +232,23 @@ const ControlContainer = styled.div`
 const SliderContainer = styled.div`
   margin-right: 40px;
   width: 150px;
+  .spectrum-Slider-labelContainer_e4b6ba,
+  .spectrum-Slider-value_e4b6ba {
+    color: #3c3c3c;
+    font-family: "Roboto", "Noto Sans TC", "Noto Sans JP", sans-serif;
+  }
+  .spectrum-Slider-handle_e4b6ba {
+    border-color: #646464;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  .spectrum-Slider-track_e4b6ba {
+    --spectrum-slider-track-gradient: #b4b4b4;
+  }
+
   @media screen and (min-width: 950px) and (max-width: 1449px) {
-    margin-right: 30px;
-    width: 130px;
+    width: 140px;
   }
 `;
 
@@ -247,6 +261,7 @@ const Btn = styled.button`
   border: 1px solid #3c3c3c40;
   border-radius: 10px;
   background-color: #3c3c3c30;
+  font-family: "Roboto", "Noto Sans TC", "Noto Sans JP", sans-serif;
   &:hover {
     cursor: pointer;
     color: #ffffff;
@@ -439,7 +454,7 @@ function SquareOverlay({
                 <ControlContainer>
                   <SliderContainer>
                     <Provider theme={defaultTheme}>
-                      <View backgroundColor="gray-50">
+                      <View UNSAFE_style={{ backgroundColor: "white" }}>
                         <Slider
                           label={t("zoom_image")}
                           minValue={1}
@@ -455,7 +470,7 @@ function SquareOverlay({
                   </SliderContainer>
                   <SliderContainer>
                     <Provider theme={defaultTheme}>
-                      <View backgroundColor="gray-50">
+                      <View UNSAFE_style={{ backgroundColor: "white" }}>
                         <Slider
                           label={t("rotate_image")}
                           minValue={0}

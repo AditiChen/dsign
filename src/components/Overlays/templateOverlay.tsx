@@ -42,6 +42,7 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   z-index: 100;
+  font-family: "Roboto", "Noto Sans TC", "Noto Sans JP", sans-serif;
   @media screen and (max-width: 949px) {
     display: none;
   }
@@ -242,6 +243,7 @@ const SliderContainer = styled.div`
   .spectrum-Slider-labelContainer_e4b6ba,
   .spectrum-Slider-value_e4b6ba {
     color: #3c3c3c;
+    font-family: "Roboto", "Noto Sans TC", "Noto Sans JP", sans-serif;
   }
   .spectrum-Slider-handle_e4b6ba {
     border-color: #646464;
@@ -267,6 +269,7 @@ const Btn = styled.button`
   border: 1px solid #3c3c3c40;
   border-radius: 10px;
   background-color: #3c3c3c30;
+  font-family: "Roboto", "Noto Sans TC", "Noto Sans JP", sans-serif;
   &:hover {
     cursor: pointer;
     color: #ffffff;
