@@ -27,7 +27,7 @@ interface Prop {
 }
 
 const Wrapper = styled.div`
-  padding: 130px 0;
+  padding: 10vh 0;
   width: 100%;
   min-width: 100vw;
   height: 100%;
@@ -35,14 +35,11 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   background-color: #787878;
-  @media screen and (max-width: 1449px) {
-    padding: 80px 0;
-  }
   @media screen and (min-width: 800px) and (max-width: 1024px) {
     min-height: calc(100vh - 100px);
   }
   @media screen and (max-width: 799px) {
-    padding: 40px 0;
+    padding: 5vh 0;
     min-height: calc(100vh - 90px);
   }
 `;
@@ -443,6 +440,15 @@ function SignIn() {
                 key="password1"
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
+                onKeyPress={(e) => {
+                  if (
+                    inputEmail !== "" &&
+                    password !== "" &&
+                    e.key === "Enter"
+                  ) {
+                    signInHandler();
+                  }
+                }}
               />
               <SignContainer>
                 <SignBtn
@@ -479,6 +485,17 @@ function SignIn() {
                 type="password"
                 maxLength={20}
                 onChange={(e) => setConfirmPassword(e.target.value)}
+                onKeyPress={(e) => {
+                  if (
+                    inputName !== "" &&
+                    inputEmail !== "" &&
+                    password !== "" &&
+                    confirmPassword !== "" &&
+                    e.key === "Enter"
+                  ) {
+                    signInHandler();
+                  }
+                }}
               />
               <SignContainer>
                 <SignBtn
