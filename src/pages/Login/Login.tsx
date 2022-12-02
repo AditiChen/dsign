@@ -433,6 +433,7 @@ function SignIn() {
               <Input
                 placeholder={t("input_email")}
                 key="email"
+                autoFocus
                 onChange={(e) => setInputEmail(e.target.value)}
               />
               <Input
@@ -464,6 +465,7 @@ function SignIn() {
               <Input
                 placeholder={t("input_name")}
                 key="name"
+                autoFocus
                 maxLength={20}
                 onChange={(e) => setInputName(e.target.value)}
               />
