@@ -1,6 +1,5 @@
-import "./stylesSheet/global.css";
 import { Suspense } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import styled, { createGlobalStyle } from "styled-components";
 import { Reset } from "styled-reset";
 import ReactLoading from "react-loading";

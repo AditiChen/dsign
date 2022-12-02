@@ -11,7 +11,7 @@ import { createPortal } from "react-dom";
 import styled from "styled-components";
 import Cropper from "react-easy-crop";
 import ReactLoading from "react-loading";
-import { Slider, Typography } from "@mui/material";
+import { Slider, defaultTheme, Provider, View } from "@adobe/react-spectrum";
 import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 
 import { db } from "../../context/firebaseSDK";
@@ -173,7 +173,7 @@ const CollectionContainer = styled.div`
 `;
 
 const CollectionImg = styled.div<{ url: string }>`
-  margin: 10px auto;
+  margin: 5px auto;
   width: 100px;
   height: 100px;
   background-image: ${(props) => props.url};
@@ -188,7 +188,6 @@ const CollectionImg = styled.div<{ url: string }>`
     box-shadow: 0 0 5px #3c3c3c;
   }
   @media screen and (min-width: 950px) and (max-width: 1449px) {
-    margin: 6px auto;
     width: 100px;
     height: 100px;
     border-radius: 6px;
@@ -336,8 +335,6 @@ function SquareOverlay({
     }
   }, [mainImgSrc]);
 
-  const zoomPercent = (value: number) => `${Math.round(value * 100)}%`;
-
   const onUploadFile = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files.length > 0) {
       const reader = new FileReader();
@@ -440,35 +437,36 @@ function SquareOverlay({
                 </CropperContainer>
                 <ControlContainer>
                   <SliderContainer>
-                    <Typography>
-                      {t("zoom_image")}: {zoomPercent(zoom)}
-                    </Typography>
-                    <Slider
-                      valueLabelDisplay="auto"
-                      valueLabelFormat={zoomPercent}
-                      min={1}
-                      max={3}
-                      step={0.1}
-                      value={zoom}
-                      onChange={(e, newZoom: number | number[]) =>
-                        typeof newZoom === "number" && setZoom(newZoom)
-                      }
-                    />
+                    <Provider theme={defaultTheme}>
+                      <View backgroundColor="gray-50">
+                        <Slider
+                          label={t("zoom_image")}
+                          minValue={1}
+                          maxValue={3}
+                          isFilled
+                          width={150}
+                          step={0.1}
+                          value={zoom}
+                          onChange={setZoom}
+                        />
+                      </View>
+                    </Provider>
                   </SliderContainer>
                   <SliderContainer>
-                    <Typography>
-                      {t("rotate_image")}: {`${rotation} °`}
-                    </Typography>
-                    <Slider
-                      valueLabelDisplay="auto"
-                      min={0}
-                      max={360}
-                      value={rotation}
-                      onChange={(e, newRotation: number | number[]) =>
-                        typeof newRotation === "number" &&
-                        setRotation(newRotation)
-                      }
-                    />
+                    <Provider theme={defaultTheme}>
+                      <View backgroundColor="gray-50">
+                        <Slider
+                          label={t("rotate_image")}
+                          minValue={0}
+                          maxValue={360}
+                          isFilled
+                          width={150}
+                          step={5}
+                          value={rotation}
+                          onChange={setRotation}
+                        />
+                      </View>
+                    </Provider>
                   </SliderContainer>
                   {isAddToCollection ? (
                     <ConfirmedIcon
