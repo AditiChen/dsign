@@ -168,7 +168,7 @@ const MessageInput = styled.input`
   height: 36px;
   width: 285px;
   border-radius: 20px;
-  padding: 5px 45px 5px 15px;
+  padding: 5px 15px;
   border: solid 1px #d4d4d4;
   font-size: 18px;
   line-height: 30px;
