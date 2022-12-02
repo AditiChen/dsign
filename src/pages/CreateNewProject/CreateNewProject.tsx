@@ -280,7 +280,8 @@ const WarningText = styled.div`
     padding: 20px;
     display: block;
     color: #ffffff;
-    font-size: 14px;
+    font-size: 16px;
+    letter-spacing: 2px;
     line-height: 30px;
     text-align: center;
   }
@@ -310,7 +311,6 @@ function CreateNewProject() {
   const [showOverlay, setShowOverlay] = useState(false);
   const [hasGoogleMap, setHasGoogleMap] = useState(false);
   const selectAreaRef = useRef(null!);
-  const googleMap = templatesArr[9];
 
   useEffect(() => {
     const sessionStoragePagesData = sessionStorage.getItem("pages");

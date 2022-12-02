@@ -3,7 +3,6 @@ import {
   Dispatch,
   SetStateAction,
   useCallback,
-  useEffect,
   useContext,
 } from "react";
 import { useTranslation } from "react-i18next";
@@ -11,7 +10,7 @@ import { createPortal } from "react-dom";
 import styled from "styled-components";
 import Cropper from "react-easy-crop";
 import ReactLoading from "react-loading";
-import { Slider, Typography } from "@mui/material";
+import { Slider, defaultTheme, Provider, View } from "@adobe/react-spectrum";
 import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 
 import { db } from "../../context/firebaseSDK";
@@ -43,6 +42,7 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   z-index: 100;
+  font-family: "Roboto", "Noto Sans TC", "Noto Sans JP", sans-serif;
   @media screen and (max-width: 949px) {
     display: none;
   }
@@ -149,7 +149,7 @@ const NewPhotoHeaderContainer = styled.div`
   align-items: center;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     padding: 0 14px;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 30px;
   }
 `;
@@ -181,7 +181,7 @@ const CollectionContainer = styled.div`
 `;
 
 const CollectionImg = styled.div<{ url: string }>`
-  margin: 10px auto;
+  margin: 5px auto;
   width: 100px;
   height: 100px;
   background-image: ${(props) => props.url};
@@ -196,7 +196,6 @@ const CollectionImg = styled.div<{ url: string }>`
     box-shadow: 0 0 5px #3c3c3c;
   }
   @media screen and (min-width: 950px) and (max-width: 1449px) {
-    margin: 6px auto;
     width: 100px;
     height: 100px;
     border-radius: 6px;
@@ -223,7 +222,7 @@ const UploadPic = styled.label`
     padding: 0 10px;
     height: 28px;
     line-height: 28px;
-    font-size: 16px;
+    font-size: 14px;
     border-radius: 6px;
   }
 `;
@@ -241,9 +240,23 @@ const ControlContainer = styled.div`
 const SliderContainer = styled.div`
   margin-right: 40px;
   width: 150px;
+  .spectrum-Slider-labelContainer_e4b6ba,
+  .spectrum-Slider-value_e4b6ba {
+    color: #3c3c3c;
+    font-family: "Roboto", "Noto Sans TC", "Noto Sans JP", sans-serif;
+  }
+  .spectrum-Slider-handle_e4b6ba {
+    border-color: #646464;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  .spectrum-Slider-track_e4b6ba {
+    --spectrum-slider-track-gradient: #b4b4b4;
+  }
+
   @media screen and (min-width: 950px) and (max-width: 1449px) {
-    margin-right: 30px;
-    width: 130px;
+    width: 140px;
   }
 `;
 
@@ -251,10 +264,12 @@ const Btn = styled.button`
   margin-left: 30px;
   padding: 0 10px;
   height: 40px;
-  font-size: 18px;
+  font-size: 16px;
+  color: #3c3c3c;
   border: 1px solid #3c3c3c40;
   border-radius: 10px;
   background-color: #3c3c3c30;
+  font-family: "Roboto", "Noto Sans TC", "Noto Sans JP", sans-serif;
   &:hover {
     cursor: pointer;
     color: #ffffff;
@@ -270,8 +285,8 @@ const Btn = styled.button`
 
 const ConfirmIcon = styled.div`
   margin-left: auto;
-  width: 25px;
-  height: 25px;
+  width: 22px;
+  height: 22px;
   background-image: url(${confirmIcon});
   background-size: cover;
   background-position: center;
@@ -290,7 +305,7 @@ const ConfirmedIcon = styled(ConfirmIcon)`
 
 const Text = styled.div`
   margin-left: 10px;
-  font-size: 18px;
+  font-size: 16px;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     margin-left: 6px;
     font-size: 14px;
@@ -328,8 +343,6 @@ function Overlay({
     x: number;
     y: number;
   }>(null!);
-
-  const zoomPercent = (value: number) => `${Math.round(value * 100)}%`;
 
   const onUploadFile = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files.length > 0) {
@@ -433,35 +446,36 @@ function Overlay({
                 </CropperContainer>
                 <ControlContainer>
                   <SliderContainer>
-                    <Typography>
-                      {t("zoom_image")}: {zoomPercent(zoom)}
-                    </Typography>
-                    <Slider
-                      valueLabelDisplay="auto"
-                      valueLabelFormat={zoomPercent}
-                      min={1}
-                      max={3}
-                      step={0.1}
-                      value={zoom}
-                      onChange={(e, newZoom: number | number[]) =>
-                        typeof newZoom === "number" && setZoom(newZoom)
-                      }
-                    />
+                    <Provider theme={defaultTheme}>
+                      <View UNSAFE_style={{ backgroundColor: "white" }}>
+                        <Slider
+                          label={t("zoom_image")}
+                          minValue={1}
+                          maxValue={3}
+                          isFilled
+                          width={150}
+                          step={0.1}
+                          value={zoom}
+                          onChange={setZoom}
+                        />
+                      </View>
+                    </Provider>
                   </SliderContainer>
                   <SliderContainer>
-                    <Typography>
-                      {t("rotate_image")}: {`${rotation} °`}
-                    </Typography>
-                    <Slider
-                      valueLabelDisplay="auto"
-                      min={0}
-                      max={360}
-                      value={rotation}
-                      onChange={(e, newRotation: number | number[]) =>
-                        typeof newRotation === "number" &&
-                        setRotation(newRotation)
-                      }
-                    />
+                    <Provider theme={defaultTheme}>
+                      <View UNSAFE_style={{ backgroundColor: "white" }}>
+                        <Slider
+                          label={t("rotate_image")}
+                          minValue={0}
+                          maxValue={360}
+                          isFilled
+                          width={150}
+                          step={5}
+                          value={rotation}
+                          onChange={setRotation}
+                        />
+                      </View>
+                    </Provider>
                   </SliderContainer>
                   {isAddToCollection ? (
                     <ConfirmedIcon

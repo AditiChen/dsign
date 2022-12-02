@@ -282,7 +282,8 @@ const WarningText = styled.div`
     padding: 20px;
     display: block;
     color: #ffffff;
-    font-size: 14px;
+    font-size: 16px;
+    letter-spacing: 2px;
     line-height: 30px;
     text-align: center;
   }
@@ -310,7 +311,6 @@ function EditExistProject() {
   const [title, setTitle] = useState("");
   const [mainImgSrc, setMainImgSrc] = useState("");
   const [showOverlay, setShowOverlay] = useState(false);
-  const googleMap = templatesArr[9];
 
   const urlString = new URL(window.location.href);
   const singleProjectId = urlString.searchParams.get("id") as string;
