@@ -239,6 +239,20 @@ const ControlContainer = styled.div`
 const SliderContainer = styled.div`
   margin-right: 40px;
   width: 150px;
+  .spectrum-Slider-labelContainer_e4b6ba,
+  .spectrum-Slider-value_e4b6ba {
+    color: #3c3c3c;
+  }
+  .spectrum-Slider-handle_e4b6ba {
+    border-color: #646464;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  .spectrum-Slider-track_e4b6ba {
+    --spectrum-slider-track-gradient: #b4b4b4;
+  }
+
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     width: 140px;
   }
@@ -446,17 +460,18 @@ function Overlay({
                   </SliderContainer>
                   <SliderContainer>
                     <Provider theme={defaultTheme}>
-                      <Slider
-                        UNSAFE_style={{ backgroundColor: "white" }}
-                        label={t("rotate_image")}
-                        minValue={0}
-                        maxValue={360}
-                        isFilled
-                        width={150}
-                        step={5}
-                        value={rotation}
-                        onChange={setRotation}
-                      />
+                      <View UNSAFE_style={{ backgroundColor: "white" }}>
+                        <Slider
+                          label={t("rotate_image")}
+                          minValue={0}
+                          maxValue={360}
+                          isFilled
+                          width={150}
+                          step={5}
+                          value={rotation}
+                          onChange={setRotation}
+                        />
+                      </View>
                     </Provider>
                   </SliderContainer>
                   {isAddToCollection ? (
