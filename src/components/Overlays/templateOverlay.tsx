@@ -430,7 +430,7 @@ function Overlay({
                 <ControlContainer>
                   <SliderContainer>
                     <Provider theme={defaultTheme}>
-                      <View backgroundColor="gray-50">
+                      <View UNSAFE_style={{ backgroundColor: "white" }}>
                         <Slider
                           label={t("zoom_image")}
                           minValue={1}
@@ -446,18 +446,17 @@ function Overlay({
                   </SliderContainer>
                   <SliderContainer>
                     <Provider theme={defaultTheme}>
-                      <View backgroundColor="gray-50">
-                        <Slider
-                          label={t("rotate_image")}
-                          minValue={0}
-                          maxValue={360}
-                          isFilled
-                          width={150}
-                          step={5}
-                          value={rotation}
-                          onChange={setRotation}
-                        />
-                      </View>
+                      <Slider
+                        UNSAFE_style={{ backgroundColor: "white" }}
+                        label={t("rotate_image")}
+                        minValue={0}
+                        maxValue={360}
+                        isFilled
+                        width={150}
+                        step={5}
+                        value={rotation}
+                        onChange={setRotation}
+                      />
                     </Provider>
                   </SliderContainer>
                   {isAddToCollection ? (
