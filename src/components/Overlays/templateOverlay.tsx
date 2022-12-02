@@ -148,7 +148,7 @@ const NewPhotoHeaderContainer = styled.div`
   align-items: center;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     padding: 0 14px;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 30px;
   }
 `;
@@ -221,7 +221,7 @@ const UploadPic = styled.label`
     padding: 0 10px;
     height: 28px;
     line-height: 28px;
-    font-size: 16px;
+    font-size: 14px;
     border-radius: 6px;
   }
 `;
@@ -248,7 +248,8 @@ const Btn = styled.button`
   margin-left: 30px;
   padding: 0 10px;
   height: 40px;
-  font-size: 18px;
+  font-size: 16px;
+  color: #3c3c3c;
   border: 1px solid #3c3c3c40;
   border-radius: 10px;
   background-color: #3c3c3c30;
@@ -267,8 +268,8 @@ const Btn = styled.button`
 
 const ConfirmIcon = styled.div`
   margin-left: auto;
-  width: 25px;
-  height: 25px;
+  width: 22px;
+  height: 22px;
   background-image: url(${confirmIcon});
   background-size: cover;
   background-position: center;
@@ -287,7 +288,7 @@ const ConfirmedIcon = styled(ConfirmIcon)`
 
 const Text = styled.div`
   margin-left: 10px;
-  font-size: 18px;
+  font-size: 16px;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     margin-left: 6px;
     font-size: 14px;
