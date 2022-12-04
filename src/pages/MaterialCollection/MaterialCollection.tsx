@@ -3,13 +3,7 @@ import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import ReactLoading from "react-loading";
 import { v4 as uuid } from "uuid";
-import {
-  doc,
-  updateDoc,
-  arrayUnion,
-  arrayRemove,
-  setDoc,
-} from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import Swal from "sweetalert2";
 import imageCompression from "browser-image-compression";
 import {
@@ -29,6 +23,9 @@ import uploadPhotoIconHover from "../../icons/uploadPhoto-icon-hover.png";
 import trashIcon from "../../icons/trash-icon.png";
 import trashIconHover from "../../icons/trash-icon-hover.png";
 import folderIcon from "../../icons/folder-icon.png";
+import openFolderIcon from "../../icons/folderOpen-icon.png";
+import addFolderIcon from "../../icons/add-folder-icon.png";
+import addFolderIconHover from "../../icons/add-folder-icon-hover.png";
 
 interface Prop {
   url?: string;
@@ -41,6 +38,7 @@ const Wrapper = styled.div`
   min-height: calc(100vh - 110px);
   display: flex;
   background-color: #787878;
+  position: relative;
   @media screen and (min-width: 800px) and (max-width: 949px) {
     min-height: calc(100vh - 100px);
   }
@@ -50,7 +48,7 @@ const Wrapper = styled.div`
 `;
 
 const FoldersContainer = styled.div`
-  padding: 20px 0;
+  padding: 80px 0 20px;
   width: 150px;
   height: calc(100vh - 110px);
   background-color: #f0f0f0;
@@ -59,6 +57,31 @@ const FoldersContainer = styled.div`
   scrollbar-width: none;
   ::-webkit-scrollbar {
     display: none;
+  }
+`;
+
+const AddFolderContainer = styled.div`
+  padding-top: 10px;
+  width: 150px;
+  height: 60px;
+  position: fixed;
+  top: 60px;
+  left: 0;
+  background-color: #f0f0f0;
+  box-shadow: 1px 0 3px #646464;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const AddFolderIcon = styled.div`
+  width: 40px;
+  height: 40px;
+  background-image: url(${addFolderIcon});
+  background-size: cover;
+  background-position: center;
+  &:hover {
+    background-image: url(${addFolderIconHover});
   }
 `;
 
@@ -92,6 +115,11 @@ const FolderIcon = styled.div`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const OpenFolderIcon = styled(FolderIcon)`
+  width: 145px;
+  background-image: url(${openFolderIcon});
 `;
 
 const FolderName = styled.div`
@@ -192,6 +220,7 @@ const BricksInnerContainer = styled.div`
 const Img = styled.div`
   width: 180px;
   height: 180px;
+  background-color: #b4b4b4;
   background-image: ${(props: Prop) => props.url};
   background-size: cover;
   background-position: center;
@@ -276,6 +305,31 @@ function MaterialCollection() {
   const [progressing, setProgressing] = useState(false);
   const [currentFolderIndex, setCurrentFolderIndex] = useState(0);
 
+  async function addNewFolderHandler() {
+    const ans = await Swal.fire({
+      title: "enter your folder name",
+      inputLabel: "max length 15 letters",
+      input: "text",
+      confirmButtonColor: "#3c3c3c",
+      confirmButtonText: "create",
+      showCancelButton: true,
+    });
+    if (ans.isDismissed === true) return;
+    if (ans.value.length > 15) {
+      Swal.fire({
+        text: "folder name too long",
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
+      return;
+    }
+    const newPhotoArray = [...folders];
+    newPhotoArray.push({ folderName: ans.value, photos: [] });
+    await updateDoc(doc(db, "users", userId), {
+      folders: newPhotoArray,
+    });
+  }
+
   const onUploadImgFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files === null) return;
     const newFiles = Array.from(e.target.files);
@@ -299,6 +353,10 @@ function MaterialCollection() {
     });
   };
 
+  const getListStyle = (isDraggingOver: boolean) => ({
+    background: isDraggingOver ? "#b4b4b4" : "none",
+  });
+
   async function deleteHandler(url: string, photoIndex: number) {
     const ans = await Swal.fire({
       text: t("delete_photo_warning"),
@@ -309,32 +367,15 @@ function MaterialCollection() {
       denyButtonText: t("reject_yes_answer"),
     });
     if (ans.isConfirmed === true) return;
-
     const removePhotoArray = [...folders];
     removePhotoArray[currentFolderIndex].photos.splice(photoIndex, 1);
     await updateDoc(doc(db, "users", userId), {
       folders: removePhotoArray,
     });
   }
-  // const getListStyle = () => ({
-  //   whiteSpace: "nowrap",
-  //   overflow: "scroll",
-  // });
-
-  // const getItemStyle = (isDragging, draggableStyle) => ({
-  //   userSelect: "none",
-  //   padding: "16px",
-  //   width: 40,
-  //   display: "inline-block",
-  //   overflow: "scroll",
-  //   margin: "0 8px 0 0",
-  //   ...draggableStyle,
-  // });
 
   const onDragEnd = async (result: DropResult) => {
     const { source, destination } = result;
-    console.log({ source });
-    console.log({ destination });
     if (!destination) return;
     const originalFolderIndex = folders.findIndex(
       (name) => name.folderName === folders[currentFolderIndex].folderName
@@ -372,6 +413,9 @@ function MaterialCollection() {
       <DragDropContext onDragEnd={(e) => onDragEnd(e)}>
         <Wrapper>
           <FoldersContainer>
+            <AddFolderContainer>
+              <AddFolderIcon onClick={() => addNewFolderHandler()} />
+            </AddFolderContainer>
             <FoldersInnerContainer>
               {folders.map((folder, index) => (
                 <Droppable
@@ -383,10 +427,17 @@ function MaterialCollection() {
                       {...droppableProvided.droppableProps}
                       ref={droppableProvided.innerRef}
                       key={folder.folderName}
+                      style={getListStyle(droppableSnapshot.isDraggingOver)}
                     >
-                      <FolderIcon
-                        onClick={() => setCurrentFolderIndex(index)}
-                      />
+                      {folders[currentFolderIndex].folderName ===
+                      folder.folderName ? (
+                        <OpenFolderIcon />
+                      ) : (
+                        <FolderIcon
+                          onClick={() => setCurrentFolderIndex(index)}
+                        />
+                      )}
+
                       <FolderName>{folder.folderName}</FolderName>
                       {droppableProvided.placeholder}
                     </SingleFolderContainer>
@@ -408,67 +459,70 @@ function MaterialCollection() {
                 />
               </AddPhotosIcon>
             </HeaderContainer>
-            {folders.length !== 0 && currentFolderIndex !== -1 && (
-              <BricksContainer>
-                <Droppable
-                  droppableId="current"
-                  direction="horizontal"
-                  key={folders[currentFolderIndex]?.folderName}
-                >
-                  {(droppableProvided, droppableSnapshot) => (
-                    <div
-                      {...droppableProvided.droppableProps}
-                      ref={droppableProvided.innerRef}
-                    >
-                      <BricksInnerContainer>
-                        {folders &&
-                          folders[currentFolderIndex]?.photos.map(
-                            (photo, photoIndex) => (
-                              <Draggable
-                                draggableId={photo}
-                                index={photoIndex}
-                                key={photo}
-                              >
-                                {(provided, snapshot) => (
-                                  <ImgContainer
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                  >
-                                    <Img
-                                      url={`url(${photo})`}
-                                      onClick={() => {
-                                        setCurrentUrl(photo);
-                                        setShowOverlay(true);
-                                      }}
-                                    />
-                                    <TrashIcon
-                                      onClick={() =>
-                                        deleteHandler(photo, photoIndex)
-                                      }
-                                    />
-                                  </ImgContainer>
-                                )}
-                              </Draggable>
-                            )
-                          )}
-                        {progressing && (
-                          <ImgContainer>
-                            <PhotoLoading
-                              type="spin"
-                              color="#3c3c3c"
-                              height="40px"
-                              width="40px"
-                            />
-                          </ImgContainer>
+            <BricksContainer>
+              <Droppable
+                droppableId="current"
+                direction="horizontal"
+                key={folders[currentFolderIndex]?.folderName}
+              >
+                {(droppableProvided, droppableSnapshot) => (
+                  <div
+                    {...droppableProvided.droppableProps}
+                    ref={droppableProvided.innerRef}
+                  >
+                    <BricksInnerContainer>
+                      {folders &&
+                        folders[currentFolderIndex]?.photos.length === 0 && (
+                          <div>no photo</div>
                         )}
-                      </BricksInnerContainer>
-                      {droppableProvided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </BricksContainer>
-            )}
+                      {folders &&
+                        folders[currentFolderIndex]?.photos.length !== 0 &&
+                        folders[currentFolderIndex]?.photos.map(
+                          (photo, photoIndex) => (
+                            <Draggable
+                              draggableId={photo}
+                              index={photoIndex}
+                              key={photo}
+                            >
+                              {(provided, snapshot) => (
+                                <ImgContainer
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                >
+                                  <Img
+                                    url={`url(${photo})`}
+                                    onClick={() => {
+                                      setCurrentUrl(photo);
+                                      setShowOverlay(true);
+                                    }}
+                                  />
+                                  <TrashIcon
+                                    onClick={() =>
+                                      deleteHandler(photo, photoIndex)
+                                    }
+                                  />
+                                </ImgContainer>
+                              )}
+                            </Draggable>
+                          )
+                        )}
+                      {progressing && (
+                        <ImgContainer>
+                          <PhotoLoading
+                            type="spin"
+                            color="#3c3c3c"
+                            height="40px"
+                            width="40px"
+                          />
+                        </ImgContainer>
+                      )}
+                    </BricksInnerContainer>
+                    {droppableProvided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </BricksContainer>
           </FolderContentContainer>
         </Wrapper>
       </DragDropContext>
