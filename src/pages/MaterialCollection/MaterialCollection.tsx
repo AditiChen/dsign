@@ -257,7 +257,7 @@ const FolderTrashIcon = styled(TrashIcon)`
   width: 20px;
   height: 20px;
   right: 5px;
-  bottom: 26px;
+  top: 51px;
 `;
 
 const ImgContainer = styled.div`
@@ -321,7 +321,7 @@ function MaterialCollection() {
       title: "enter your folder name",
       inputLabel: "max length 15 letters",
       input: "text",
-      confirmButtonColor: "#3c3c3c",
+      confirmButtonColor: "#6d79aa",
       confirmButtonText: "create",
       showCancelButton: true,
     });
@@ -342,6 +342,14 @@ function MaterialCollection() {
   }
 
   async function deleteFolderHandler(folderIndex: number) {
+    if (folders[folderIndex].folderName === "Unsorted") {
+      Swal.fire({
+        text: "Can not delete default folder",
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
+      return;
+    }
     const ans = await Swal.fire({
       text: "are you sure you want to delete this folder including the photos inside?",
       icon: "warning",
@@ -414,6 +422,9 @@ function MaterialCollection() {
     const destinationFolderIndex = folders.findIndex(
       (name) => name.folderName === destination.droppableId
     );
+    if (originalFolderIndex === destinationFolderIndex) {
+      return;
+    }
     const newOrder = [...folders];
     const [remove] = newOrder[originalFolderIndex].photos.splice(
       source.index,

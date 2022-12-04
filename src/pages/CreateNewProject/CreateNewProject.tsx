@@ -561,7 +561,6 @@ function CreateNewProject() {
           setShowOverlay={setShowOverlay}
           mainImgSrc={mainImgSrc}
           setMainImgSrc={setMainImgSrc}
-          userId={userId}
         />
       )}
     </>

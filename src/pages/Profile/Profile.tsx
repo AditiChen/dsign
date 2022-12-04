@@ -674,7 +674,6 @@ function Profile() {
           setShowOverlay={setShowOverlay}
           mainImgSrc={mainImgSrc}
           setMainImgSrc={setMainImgSrc}
-          userId={userId}
           shape="round"
           usage="avatar"
         />

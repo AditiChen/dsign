@@ -27,7 +27,6 @@ import arrowIcon from "../../icons/arrow-icon.png";
 import arrowIconHover from "../../icons/arrow-icon-hover.png";
 
 interface OverlayProps {
-  userId: string;
   setShowOverlay: Dispatch<SetStateAction<boolean>>;
   mainImgSrc: string;
   setMainImgSrc: Dispatch<SetStateAction<string>>;
@@ -133,7 +132,7 @@ const NewPhotoContainer = styled.div`
 `;
 
 const NewPhotoHeaderContainer = styled.div`
-  padding: 0 20px;
+  padding: 0 20px 0 0;
   height: 40px;
   width: 100%;
   font-size: 18px;
@@ -147,7 +146,6 @@ const NewPhotoHeaderContainer = styled.div`
 `;
 
 const CollectionContainer = styled.div`
-  margin: 10px 0;
   padding: 20px;
   width: 100%;
   min-height: 140px;
@@ -164,11 +162,31 @@ const CollectionContainer = styled.div`
   }
   @media screen and (max-width: 1449px) {
     grid-template-columns: repeat(6, 1fr);
-    margin: 6px 0;
     padding: 14px;
   }
   @media screen and (max-width: 1249px) {
     grid-template-columns: repeat(5, 1fr);
+  }
+`;
+
+const CollectionFolderContainer = styled.div`
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+`;
+
+const FolderName = styled.div<{ backgroundColor: string; $color: string }>`
+  padding: 5px 12px;
+  font-size: 18px;
+  color: ${(props) => props.$color};
+  border: 1px solid #b4b4b4;
+  border-radius: 5px 5px 0 0;
+  background-color: ${(props) => props.backgroundColor};
+  border-bottom: none;
+  &:hover {
+    cursor: pointer;
   }
 `;
 
@@ -202,7 +220,7 @@ const UploadPic = styled.label`
   font-size: 18px;
   text-align: center;
   border: 1px solid #3c3c3c40;
-  border-radius: 10px;
+  border-radius: 5px;
   background-color: #3c3c3c30;
   &:hover {
     cursor: pointer;
@@ -236,6 +254,7 @@ const SliderContainer = styled.div`
   .spectrum-Slider-value_e4b6ba {
     color: #3c3c3c;
     font-family: "Roboto", "Noto Sans TC", "Noto Sans JP", sans-serif;
+    font-size: 16px;
   }
   .spectrum-Slider-handle_e4b6ba {
     border-color: #646464;
@@ -246,9 +265,11 @@ const SliderContainer = styled.div`
   .spectrum-Slider-track_e4b6ba {
     --spectrum-slider-track-gradient: #b4b4b4;
   }
-
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     width: 140px;
+    .spectrum-Slider-value_e4b6ba {
+      font-size: 14px;
+    }
   }
 `;
 
@@ -323,7 +344,6 @@ const Loading = styled(ReactLoading)`
 const portalElement = document.getElementById("overlays") as HTMLElement;
 
 function SquareOverlay({
-  userId,
   setShowOverlay,
   mainImgSrc,
   setMainImgSrc,
@@ -331,13 +351,14 @@ function SquareOverlay({
   usage,
 }: OverlayProps) {
   const { t } = useTranslation();
-  const { collection } = useContext(AuthContext);
+  const { folders, userId } = useContext(AuthContext);
   const [imgSrc, setImgSrc] = useState<string>(mainImgSrc);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
   const [progressing, setProgressing] = useState(false);
   const [isAddToCollection, setIsAddToCollection] = useState(false);
+  const [currentFolderIndex, setCurrentFolderIndex] = useState(0);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<{
     width: number;
     height: number;
@@ -392,8 +413,10 @@ function SquareOverlay({
       fileNameByTime
     )) as string;
     if (isAddToCollection) {
+      const newPhotoArray = [...folders];
+      newPhotoArray[0].photos.push(downloadUrl);
       await updateDoc(doc(db, "users", userId), {
-        collection: arrayUnion(downloadUrl),
+        folders: newPhotoArray,
       });
     }
     if (usage === "avatar") {
@@ -414,6 +437,7 @@ function SquareOverlay({
     setMainImgSrc,
     usage,
     userId,
+    folders,
   ]);
 
   return (
@@ -510,9 +534,24 @@ function SquareOverlay({
                       />
                     </UploadPic>
                   </NewPhotoHeaderContainer>
+                  <CollectionFolderContainer>
+                    {folders?.map((folder, index) => (
+                      <FolderName
+                        $color={
+                          currentFolderIndex === index ? "#3c3c3c" : "#b4b4b4"
+                        }
+                        backgroundColor={
+                          currentFolderIndex === index ? "#f0f0f0" : "#787878"
+                        }
+                        onClick={() => setCurrentFolderIndex(index)}
+                      >
+                        {folder.folderName}
+                      </FolderName>
+                    ))}
+                  </CollectionFolderContainer>
                   <CollectionContainer>
-                    {collection.length !== 0 &&
-                      collection.map((url) => (
+                    {folders[currentFolderIndex].photos.length !== 0 &&
+                      folders[currentFolderIndex].photos?.map((url) => (
                         <CollectionImg
                           key={url}
                           url={`url(${url})`}
@@ -520,7 +559,7 @@ function SquareOverlay({
                         />
                       ))}
                   </CollectionContainer>
-                  {collection.length === 0 && (
+                  {folders[currentFolderIndex].photos.length === 0 && (
                     <Text>{t("empty_collection")}</Text>
                   )}
                 </NewPhotoContainer>

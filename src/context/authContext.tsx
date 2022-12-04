@@ -217,7 +217,7 @@ export function AuthContextProvider({ children }: BodyProp) {
           friendList: [],
           favoriteList: [],
           collection: [],
-          folders: [{ folderName: "unsortedPhotos", photos: [] }],
+          folders: [{ folderName: "Unsorted", photos: [] }],
           introduction: "",
         });
         setUserId(uid);
@@ -258,7 +258,7 @@ export function AuthContextProvider({ children }: BodyProp) {
           friendList: [],
           favoriteList: [],
           collection: [],
-          folders: [{ folderName: "unsortedPhotos", photos: [] }],
+          folders: [{ folderName: "Unsorted", photos: [] }],
           introduction: "",
         });
       }
@@ -296,7 +296,7 @@ export function AuthContextProvider({ children }: BodyProp) {
           friendList: [],
           favoriteList: [],
           collection: [],
-          folders: [{ folderName: "unsortedPhotos", photos: [] }],
+          folders: [{ folderName: "Unsorted", photos: [] }],
           introduction: "",
         });
       }
@@ -326,6 +326,9 @@ export function AuthContextProvider({ children }: BodyProp) {
     setFriendList([]);
     setFavoriteList([]);
     setIsLogin(false);
+    window.sessionStorage.removeItem("pages");
+    window.sessionStorage.removeItem("title");
+    window.sessionStorage.removeItem("mainImg");
     Swal.fire({
       text: t("logout_successfully"),
       confirmButtonColor: "#646464",
