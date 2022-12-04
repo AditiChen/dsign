@@ -141,7 +141,7 @@ const NewPhotoContainer = styled.div`
 `;
 
 const NewPhotoHeaderContainer = styled.div`
-  padding: 0 20px;
+  padding: 0 20px 0 0;
   height: 40px;
   width: 100%;
   font-size: 18px;
@@ -154,8 +154,29 @@ const NewPhotoHeaderContainer = styled.div`
   }
 `;
 
+const CollectionFolderContainer = styled.div`
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+`;
+
+const FolderName = styled.div<{ backgroundColor: string; $color: string }>`
+  padding: 5px 12px;
+  font-size: 18px;
+  color: ${(props) => props.$color};
+  border: 1px solid #b4b4b4;
+  border-radius: 5px 5px 0 0;
+  background-color: ${(props) => props.backgroundColor};
+  border-bottom: none;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
 const CollectionContainer = styled.div`
-  margin: 10px 0;
+  margin-bottom: 10px;
   padding: 20px;
   width: 100%;
   min-height: 140px;
@@ -172,7 +193,6 @@ const CollectionContainer = styled.div`
   }
   @media screen and (max-width: 1449px) {
     grid-template-columns: repeat(6, 1fr);
-    margin: 6px 0;
     padding: 14px;
   }
   @media screen and (max-width: 1249px) {
@@ -184,6 +204,7 @@ const CollectionImg = styled.div<{ url: string }>`
   margin: 5px auto;
   width: 100px;
   height: 100px;
+  background-color: #b4b4b4;
   background-image: ${(props) => props.url};
   background-size: cover;
   background-position: center;
@@ -244,6 +265,7 @@ const SliderContainer = styled.div`
   .spectrum-Slider-value_e4b6ba {
     color: #3c3c3c;
     font-family: "Roboto", "Noto Sans TC", "Noto Sans JP", sans-serif;
+    font-size: 16px;
   }
   .spectrum-Slider-handle_e4b6ba {
     border-color: #646464;
@@ -254,17 +276,20 @@ const SliderContainer = styled.div`
   .spectrum-Slider-track_e4b6ba {
     --spectrum-slider-track-gradient: #b4b4b4;
   }
-
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     width: 140px;
+    .spectrum-Slider-value_e4b6ba {
+      font-size: 14px;
+    }
   }
 `;
 
-const Btn = styled.button`
+const Btn = styled.div`
   margin-left: 30px;
   padding: 0 10px;
   height: 40px;
   font-size: 16px;
+  line-height: 40px;
   color: #3c3c3c;
   border: 1px solid #3c3c3c40;
   border-radius: 10px;
@@ -278,6 +303,7 @@ const Btn = styled.button`
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     margin-left: 14px;
     height: 30px;
+    line-height: 30px;
     font-size: 14px;
     border-radius: 6px;
   }
@@ -331,12 +357,13 @@ function Overlay({
   setIsAddToCollection,
 }: OverlayProps) {
   const { t } = useTranslation();
-  const { collection, userId } = useContext(AuthContext);
+  const { userId, folders } = useContext(AuthContext);
   const [imgSrc, setImgSrc] = useState<string>(currentImgUrl);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
   const [progressing, setProgressing] = useState(false);
+  const [currentFolderIndex, setCurrentFolderIndex] = useState(0);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<{
     width: number;
     height: number;
@@ -386,8 +413,10 @@ function Overlay({
     )) as string;
     setNewPhotoUrl(downloadUrl);
     if (isAddToCollection) {
+      const newPhotoArray = [...folders];
+      newPhotoArray[0].photos.push(downloadUrl);
       await updateDoc(doc(db, "users", userId), {
-        collection: arrayUnion(downloadUrl),
+        folders: newPhotoArray,
       });
     }
     setProgressing(false);
@@ -403,6 +432,7 @@ function Overlay({
     isAddToCollection,
     setIsAddToCollection,
     setShowOverlay,
+    folders,
   ]);
 
   return (
@@ -503,9 +533,24 @@ function Overlay({
                       />
                     </UploadPic>
                   </NewPhotoHeaderContainer>
+                  <CollectionFolderContainer>
+                    {folders?.map((folder, index) => (
+                      <FolderName
+                        $color={
+                          currentFolderIndex === index ? "#3c3c3c" : "#b4b4b4"
+                        }
+                        backgroundColor={
+                          currentFolderIndex === index ? "#f0f0f0" : "#787878"
+                        }
+                        onClick={() => setCurrentFolderIndex(index)}
+                      >
+                        {folder.folderName}
+                      </FolderName>
+                    ))}
+                  </CollectionFolderContainer>
                   <CollectionContainer>
-                    {collection.length !== 0 &&
-                      collection.map((url) => (
+                    {folders[currentFolderIndex].photos.length !== 0 &&
+                      folders[currentFolderIndex].photos?.map((url) => (
                         <CollectionImg
                           key={url}
                           url={`url(${url})`}
@@ -513,8 +558,8 @@ function Overlay({
                         />
                       ))}
                   </CollectionContainer>
-                  {collection.length === 0 && (
-                    <Text>{t("empty_collection")}</Text>
+                  {folders[currentFolderIndex].photos.length === 0 && (
+                    <Text>{t("empty_folder")}</Text>
                   )}
                 </NewPhotoContainer>
               </CropperContainer>

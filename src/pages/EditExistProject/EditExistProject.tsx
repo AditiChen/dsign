@@ -516,7 +516,6 @@ function EditExistProject() {
           setShowOverlay={setShowOverlay}
           mainImgSrc={mainImgSrc}
           setMainImgSrc={setMainImgSrc}
-          userId={userId}
         />
       )}
     </>

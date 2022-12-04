@@ -34,7 +34,7 @@ interface UserDataType {
   introduction: string;
   friendList: string[];
   favoriteList: string[];
-  collection: string[];
+  folders: { folderName: string; photos: string[] }[];
 }
 interface UserProjectsType {
   uid: string;
@@ -62,10 +62,12 @@ interface AuthContextType {
   setFriendList: Dispatch<SetStateAction<string[]>>;
   favoriteList: string[];
   setFavoriteList: Dispatch<SetStateAction<string[]>>;
-  collection: string[];
-  setCollection: Dispatch<SetStateAction<string[]>>;
   userProjects: UserProjectsType[];
   setUserProjects: Dispatch<SetStateAction<UserProjectsType[]>>;
+  folders: { folderName: string; photos: string[] }[];
+  setFolders: Dispatch<
+    SetStateAction<{ folderName: string; photos: string[] }[]>
+  >;
   emailSignInHandler(email: string, password: string): void;
   signUp(email: string, password: string, name: string): void;
   googleLoginHandler(): void;
@@ -87,8 +89,8 @@ export const AuthContext = createContext<AuthContextType>({
   setFavoriteList: () => {},
   userProjects: [],
   setUserProjects: () => {},
-  collection: [],
-  setCollection: () => {},
+  folders: [],
+  setFolders: () => {},
   emailSignInHandler: () => {},
   signUp: () => {},
   googleLoginHandler: () => {},
@@ -108,7 +110,9 @@ export function AuthContextProvider({ children }: BodyProp) {
   const [introduction, setIntroduction] = useState("");
   const [friendList, setFriendList] = useState<string[]>([]);
   const [favoriteList, setFavoriteList] = useState<string[]>([]);
-  const [collection, setCollection] = useState<string[]>([]);
+  const [folders, setFolders] = useState<
+    { folderName: string; photos: string[] }[]
+  >([]);
   const [userProjects, setUserProjects] = useState<UserProjectsType[]>([]);
 
   useEffect(() => {
@@ -125,7 +129,7 @@ export function AuthContextProvider({ children }: BodyProp) {
         setIntroduction(data.introduction);
         setFriendList(data.friendList);
         setFavoriteList(data.favoriteList);
-        setCollection(data.collection);
+        setFolders(data.folders);
         setIsLogin(true);
         const userProjectsData = await getUserProjects(uid);
         setUserProjects(userProjectsData);
@@ -147,7 +151,7 @@ export function AuthContextProvider({ children }: BodyProp) {
       setIntroduction(data.introduction);
       setFriendList(data.friendList);
       setFavoriteList(data.favoriteList);
-      setCollection(data.collection);
+      setFolders(data.folders);
       setIsLogin(true);
     });
     return () => {
@@ -204,7 +208,7 @@ export function AuthContextProvider({ children }: BodyProp) {
           avatar: `https://source.boringavatars.com/marble/180/${newName}`,
           friendList: [],
           favoriteList: [],
-          collection: [],
+          folders: [{ folderName: "Unsorted", photos: [] }],
           introduction: "",
         });
         setUserId(uid);
@@ -244,7 +248,7 @@ export function AuthContextProvider({ children }: BodyProp) {
           avatar: photoURL,
           friendList: [],
           favoriteList: [],
-          collection: [],
+          folders: [{ folderName: "Unsorted", photos: [] }],
           introduction: "",
         });
       }
@@ -281,7 +285,7 @@ export function AuthContextProvider({ children }: BodyProp) {
           avatar: photoURL,
           friendList: [],
           favoriteList: [],
-          collection: [],
+          folders: [{ folderName: "Unsorted", photos: [] }],
           introduction: "",
         });
       }
@@ -311,6 +315,9 @@ export function AuthContextProvider({ children }: BodyProp) {
     setFriendList([]);
     setFavoriteList([]);
     setIsLogin(false);
+    window.sessionStorage.removeItem("pages");
+    window.sessionStorage.removeItem("title");
+    window.sessionStorage.removeItem("mainImg");
     Swal.fire({
       text: t("logout_successfully"),
       confirmButtonColor: "#646464",
@@ -330,8 +337,8 @@ export function AuthContextProvider({ children }: BodyProp) {
       setFriendList,
       favoriteList,
       setFavoriteList,
-      collection,
-      setCollection,
+      folders,
+      setFolders,
       signUp,
       emailSignInHandler,
       googleLoginHandler,
@@ -352,8 +359,8 @@ export function AuthContextProvider({ children }: BodyProp) {
       setFriendList,
       favoriteList,
       setFavoriteList,
-      collection,
-      setCollection,
+      folders,
+      setFolders,
       signUp,
       emailSignInHandler,
       googleLoginHandler,

@@ -77,8 +77,16 @@
   "empty_message": "訊息是空的喔！",
 
   "your_collection": "你的素材庫",
-  "empty_collection": "你的素材庫現在是空的喔，快去上傳照片吧！",
+  "empty_folder": "資料夾現在是空的喔，快去上傳照片吧！",
+  "create_folder": "確定新增",
+  "cancel_create_folder": "取消",
   "delete_photo_warning": "確定要刪除這張照片嗎？",
+  "folder_name": "請輸入資料夾名稱",
+  "folder_name_length": "最多15個字",
+  "folder_name_empty": "資料夾名稱不能是空！",
+  "folder_name_too_long": "資料夾名稱過長！",
+  "delete_default_folder_warning": "初始資料夾不能刪除喔～",
+  "delete_folder_warning": "確定要刪除資料夾及裡面的圖片嗎？",
 
   "empty_favorite_list": "你的最愛現在是空的喔，快去加些喜歡的專案吧！",
 
