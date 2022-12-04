@@ -26,6 +26,8 @@ import folderIcon from "../../icons/folder-icon.png";
 import openFolderIcon from "../../icons/folderOpen-icon.png";
 import addFolderIcon from "../../icons/add-folder-icon.png";
 import addFolderIconHover from "../../icons/add-folder-icon-hover.png";
+import closeIcon from "../../icons/close-icon.png";
+import closeIconHover from "../../icons/close-icon-hover.png";
 
 interface Prop {
   url?: string;
@@ -101,6 +103,7 @@ const SingleFolderContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
   & + & {
     margin-top: 20px;
   }
@@ -241,12 +244,20 @@ const TrashIcon = styled.div`
   background-size: cover;
   background-position: center;
   &:hover {
+    cursor: pointer;
     background-image: url(${trashIconHover});
   }
   @media screen and (max-width: 799px) {
     width: 20px;
     height: 20px;
   }
+`;
+
+const FolderTrashIcon = styled(TrashIcon)`
+  width: 20px;
+  height: 20px;
+  right: 5px;
+  bottom: 26px;
 `;
 
 const ImgContainer = styled.div`
@@ -299,7 +310,7 @@ const PhotoLoading = styled(ReactLoading)`
 
 function MaterialCollection() {
   const { t } = useTranslation();
-  const { userId, collection, folders, isLoading } = useContext(AuthContext);
+  const { userId, folders, isLoading } = useContext(AuthContext);
   const [showOverlay, setShowOverlay] = useState(false);
   const [currentUrl, setCurrentUrl] = useState("");
   const [progressing, setProgressing] = useState(false);
@@ -327,6 +338,23 @@ function MaterialCollection() {
     newPhotoArray.push({ folderName: ans.value, photos: [] });
     await updateDoc(doc(db, "users", userId), {
       folders: newPhotoArray,
+    });
+  }
+
+  async function deleteFolderHandler(folderIndex: number) {
+    const ans = await Swal.fire({
+      text: "are you sure you want to delete this folder including the photos inside?",
+      icon: "warning",
+      confirmButtonColor: "#646464",
+      confirmButtonText: t("reject_no_answer"),
+      showDenyButton: true,
+      denyButtonText: t("reject_yes_answer"),
+    });
+    if (ans.isConfirmed === true) return;
+    const removePhotoArray = [...folders];
+    removePhotoArray.splice(folderIndex, 1);
+    await updateDoc(doc(db, "users", userId), {
+      folders: removePhotoArray,
     });
   }
 
@@ -377,6 +405,9 @@ function MaterialCollection() {
   const onDragEnd = async (result: DropResult) => {
     const { source, destination } = result;
     if (!destination) return;
+    if (source.droppableId === destination.droppableId) {
+      return;
+    }
     const originalFolderIndex = folders.findIndex(
       (name) => name.folderName === folders[currentFolderIndex].folderName
     );
@@ -388,13 +419,6 @@ function MaterialCollection() {
       source.index,
       1
     );
-    if (source.droppableId === destination.droppableId) {
-      newOrder[currentFolderIndex].photos.splice(destination.index, 0, remove);
-      await updateDoc(doc(db, "users", userId), {
-        folders: newOrder,
-      });
-      return;
-    }
     newOrder[destinationFolderIndex].photos.push(remove);
     await updateDoc(doc(db, "users", userId), {
       folders: newOrder,
@@ -433,9 +457,14 @@ function MaterialCollection() {
                       folder.folderName ? (
                         <OpenFolderIcon />
                       ) : (
-                        <FolderIcon
-                          onClick={() => setCurrentFolderIndex(index)}
-                        />
+                        <>
+                          <FolderIcon
+                            onClick={() => setCurrentFolderIndex(index)}
+                          />
+                          <FolderTrashIcon
+                            onClick={() => deleteFolderHandler(index)}
+                          />
+                        </>
                       )}
 
                       <FolderName>{folder.folderName}</FolderName>
