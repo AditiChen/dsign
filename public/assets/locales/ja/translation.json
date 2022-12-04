@@ -77,8 +77,16 @@
   "empty_message": "空のテキスト",
 
   "your_collection": "あなたの収集",
-  "empty_collection": "あなたのコレクションは空です、写真をアップロードしてください！",
+  "empty_folder": "フォルダは空です、写真をアップロードしてください！",
+  "create_folder": "新規作成",
+  "cancel_create_folder": "取消",
   "delete_photo_warning": "本当にこの写真を削除してもいいのでしょうか？",
+  "folder_name": "フォルダー名を入力してください",
+  "folder_name_length": "15文字以内",
+  "folder_name_empty": "フォルダ名が空です",
+  "folder_name_too_long": "フォルダ名が長すぎる",
+  "delete_default_folder_warning": "デフォルトフォルダを削除できない",
+  "delete_folder_warning": "このフォルダーを完全に削除しますか？",
 
   "empty_favorite_list": "お気に入りリストが空っぽなので、プロジェクトを追加しに行こう",
 

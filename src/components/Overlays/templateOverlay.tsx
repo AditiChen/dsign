@@ -176,6 +176,7 @@ const FolderName = styled.div<{ backgroundColor: string; $color: string }>`
 `;
 
 const CollectionContainer = styled.div`
+  margin-bottom: 10px;
   padding: 20px;
   width: 100%;
   min-height: 140px;
@@ -558,7 +559,7 @@ function Overlay({
                       ))}
                   </CollectionContainer>
                   {folders[currentFolderIndex].photos.length === 0 && (
-                    <Text>{t("empty_collection")}</Text>
+                    <Text>{t("empty_folder")}</Text>
                   )}
                 </NewPhotoContainer>
               </CropperContainer>

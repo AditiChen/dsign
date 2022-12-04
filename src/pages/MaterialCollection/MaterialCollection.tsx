@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import ReactLoading from "react-loading";
@@ -174,6 +174,10 @@ const Title = styled.div`
   }
 `;
 
+const NoPhotoText = styled.div`
+  font-size: 18px;
+`;
+
 const AddPhotosIcon = styled.label`
   margin-right: 10px;
   margin-left: auto;
@@ -318,17 +322,26 @@ function MaterialCollection() {
 
   async function addNewFolderHandler() {
     const ans = await Swal.fire({
-      title: "enter your folder name",
-      inputLabel: "max length 15 letters",
+      text: t("folder_name"),
+      inputPlaceholder: t("folder_name_length"),
       input: "text",
       confirmButtonColor: "#6d79aa",
-      confirmButtonText: "create",
+      confirmButtonText: t("create_folder"),
       showCancelButton: true,
+      cancelButtonText: t("cancel_create_folder"),
     });
     if (ans.isDismissed === true) return;
+    if (ans.value.trim() === "") {
+      Swal.fire({
+        text: t("folder_name_empty"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
+      return;
+    }
     if (ans.value.length > 15) {
       Swal.fire({
-        text: "folder name too long",
+        text: t("folder_name_too_long"),
         icon: "warning",
         confirmButtonColor: "#646464",
       });
@@ -344,14 +357,14 @@ function MaterialCollection() {
   async function deleteFolderHandler(folderIndex: number) {
     if (folders[folderIndex].folderName === "Unsorted") {
       Swal.fire({
-        text: "Can not delete default folder",
+        text: t("delete_default_folder_warning"),
         icon: "warning",
         confirmButtonColor: "#646464",
       });
       return;
     }
     const ans = await Swal.fire({
-      text: "are you sure you want to delete this folder including the photos inside?",
+      text: t("delete_folder_warning"),
       icon: "warning",
       confirmButtonColor: "#646464",
       confirmButtonText: t("reject_no_answer"),
@@ -393,7 +406,7 @@ function MaterialCollection() {
     background: isDraggingOver ? "#b4b4b4" : "none",
   });
 
-  async function deleteHandler(url: string, photoIndex: number) {
+  async function deletePhotoHandler(url: string, photoIndex: number) {
     const ans = await Swal.fire({
       text: t("delete_photo_warning"),
       icon: "warning",
@@ -500,6 +513,9 @@ function MaterialCollection() {
               </AddPhotosIcon>
             </HeaderContainer>
             <BricksContainer>
+              {folders && folders[currentFolderIndex]?.photos.length === 0 && (
+                <NoPhotoText>{t("empty_folder")}</NoPhotoText>
+              )}
               <Droppable
                 droppableId="current"
                 direction="horizontal"
@@ -511,10 +527,6 @@ function MaterialCollection() {
                     ref={droppableProvided.innerRef}
                   >
                     <BricksInnerContainer>
-                      {folders &&
-                        folders[currentFolderIndex]?.photos.length === 0 && (
-                          <div>no photo</div>
-                        )}
                       {folders &&
                         folders[currentFolderIndex]?.photos.length !== 0 &&
                         folders[currentFolderIndex]?.photos.map(
@@ -539,7 +551,7 @@ function MaterialCollection() {
                                   />
                                   <TrashIcon
                                     onClick={() =>
-                                      deleteHandler(photo, photoIndex)
+                                      deletePhotoHandler(photo, photoIndex)
                                     }
                                   />
                                 </ImgContainer>

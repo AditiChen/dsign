@@ -77,8 +77,16 @@
   "empty_message": "Oops, you are sending empty message",
 
   "your_collection": "Your collection",
-  "empty_collection": "Your collection is empty, upload some photos!",
+  "empty_folder": "Your folder is empty, upload some photos!",
+  "create_folder": "Create",
+  "cancel_create_folder": "Cancel",
   "delete_photo_warning": "Are you sure that you want to remove this photo?",
+  "folder_name": "Enter your folder name",
+  "folder_name_length": "Max length 15 letters",
+  "folder_name_empty": "Folder name is empty!",
+  "folder_name_too_long": "Folder name is too long!",
+  "delete_default_folder_warning": "Can not delete default folder",
+  "delete_folder_warning": "Are you sure you want to delete this folder including the photos inside?",
 
   "empty_favorite_list": "Your favorite list is empty, go to add some projects!",
 

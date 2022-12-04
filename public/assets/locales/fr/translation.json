@@ -77,8 +77,16 @@
   "empty_message": "vous envoyez un message vide",
 
   "your_collection": "votre collection",
-  "empty_collection": "Votre collection est vide, téléchargez des photos !",
+  "empty_folder": "Votre dossier est vide, téléchargez des photos !",
+  "create_folder": "Créer",
+  "cancel_create_folder": "Annuler",
   "delete_photo_warning": "Êtes-vous sûr de vouloir supprimer cette photo ?",
+  "folder_name": "Entrez le nom de votre dossier",
+  "folder_name_length": "Longueur maximale de 15 lettres",
+  "folder_name_empty": "Le nom du dossier est vide!",
+  "folder_name_too_long": "Le nom du dossier est trop long!",
+  "delete_default_folder_warning": "Impossible de supprimer le dossier par défaut",
+  "delete_folder_warning": "Êtes-vous sûr de vouloir supprimer ce dossier et les photos qu'il contient?",
 
   "empty_favorite_list": "Votre liste de favoris est vide, allez-y pour ajouter des projets !",
 
