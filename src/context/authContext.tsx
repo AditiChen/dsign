@@ -34,7 +34,6 @@ interface UserDataType {
   introduction: string;
   friendList: string[];
   favoriteList: string[];
-  collection: string[];
   folders: { folderName: string; photos: string[] }[];
 }
 interface UserProjectsType {
@@ -63,8 +62,6 @@ interface AuthContextType {
   setFriendList: Dispatch<SetStateAction<string[]>>;
   favoriteList: string[];
   setFavoriteList: Dispatch<SetStateAction<string[]>>;
-  collection: string[];
-  setCollection: Dispatch<SetStateAction<string[]>>;
   userProjects: UserProjectsType[];
   setUserProjects: Dispatch<SetStateAction<UserProjectsType[]>>;
   folders: { folderName: string; photos: string[] }[];
@@ -92,8 +89,6 @@ export const AuthContext = createContext<AuthContextType>({
   setFavoriteList: () => {},
   userProjects: [],
   setUserProjects: () => {},
-  collection: [],
-  setCollection: () => {},
   folders: [],
   setFolders: () => {},
   emailSignInHandler: () => {},
@@ -115,7 +110,6 @@ export function AuthContextProvider({ children }: BodyProp) {
   const [introduction, setIntroduction] = useState("");
   const [friendList, setFriendList] = useState<string[]>([]);
   const [favoriteList, setFavoriteList] = useState<string[]>([]);
-  const [collection, setCollection] = useState<string[]>([]);
   const [folders, setFolders] = useState<
     { folderName: string; photos: string[] }[]
   >([]);
@@ -135,7 +129,6 @@ export function AuthContextProvider({ children }: BodyProp) {
         setIntroduction(data.introduction);
         setFriendList(data.friendList);
         setFavoriteList(data.favoriteList);
-        setCollection(data.collection);
         setFolders(data.folders);
         setIsLogin(true);
         const userProjectsData = await getUserProjects(uid);
@@ -158,7 +151,6 @@ export function AuthContextProvider({ children }: BodyProp) {
       setIntroduction(data.introduction);
       setFriendList(data.friendList);
       setFavoriteList(data.favoriteList);
-      setCollection(data.collection);
       setFolders(data.folders);
       setIsLogin(true);
     });
@@ -216,7 +208,6 @@ export function AuthContextProvider({ children }: BodyProp) {
           avatar: `https://source.boringavatars.com/marble/180/${newName}`,
           friendList: [],
           favoriteList: [],
-          collection: [],
           folders: [{ folderName: "Unsorted", photos: [] }],
           introduction: "",
         });
@@ -257,7 +248,6 @@ export function AuthContextProvider({ children }: BodyProp) {
           avatar: photoURL,
           friendList: [],
           favoriteList: [],
-          collection: [],
           folders: [{ folderName: "Unsorted", photos: [] }],
           introduction: "",
         });
@@ -295,7 +285,6 @@ export function AuthContextProvider({ children }: BodyProp) {
           avatar: photoURL,
           friendList: [],
           favoriteList: [],
-          collection: [],
           folders: [{ folderName: "Unsorted", photos: [] }],
           introduction: "",
         });
@@ -348,8 +337,6 @@ export function AuthContextProvider({ children }: BodyProp) {
       setFriendList,
       favoriteList,
       setFavoriteList,
-      collection,
-      setCollection,
       folders,
       setFolders,
       signUp,
@@ -372,8 +359,6 @@ export function AuthContextProvider({ children }: BodyProp) {
       setFriendList,
       favoriteList,
       setFavoriteList,
-      collection,
-      setCollection,
       folders,
       setFolders,
       signUp,
