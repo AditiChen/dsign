@@ -1,11 +1,23 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import ReactLoading from "react-loading";
 import { v4 as uuid } from "uuid";
-import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+import {
+  doc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+  setDoc,
+} from "firebase/firestore";
 import Swal from "sweetalert2";
 import imageCompression from "browser-image-compression";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "react-beautiful-dnd";
 
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
@@ -16,6 +28,7 @@ import uploadPhotoIcon from "../../icons/uploadPhoto-icon.png";
 import uploadPhotoIconHover from "../../icons/uploadPhoto-icon-hover.png";
 import trashIcon from "../../icons/trash-icon.png";
 import trashIconHover from "../../icons/trash-icon-hover.png";
+import folderIcon from "../../icons/folder-icon.png";
 
 interface Prop {
   url?: string;
@@ -25,14 +38,86 @@ const Wrapper = styled.div`
   width: 100%;
   min-width: 100vw;
   height: 100%;
-  position: relative;
+  min-height: calc(100vh - 110px);
+  display: flex;
+  background-color: #787878;
+  @media screen and (min-width: 800px) and (max-width: 949px) {
+    min-height: calc(100vh - 100px);
+  }
+  @media screen and (max-width: 799px) {
+    min-height: calc(100vh - 90px);
+  }
+`;
+
+const FoldersContainer = styled.div`
+  padding: 20px 0;
+  width: 150px;
+  height: calc(100vh - 110px);
+  background-color: #f0f0f0;
+  box-shadow: 0 -1px 3px #3c3c3c;
+  overflow: scroll;
+  scrollbar-width: none;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const FoldersInnerContainer = styled.div`
+  width: 100%;
+  height: fit-content;
   display: flex;
   flex-direction: column;
+  align-items: center;
+`;
+
+const SingleFolderContainer = styled.div`
+  width: 100%;
+  height: fit-content;
+  min-width: 80px;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  & + & {
+    margin-top: 20px;
+  }
+`;
+
+const FolderIcon = styled.div`
+  width: 80px;
+  height: 80px;
+  background-image: url(${folderIcon});
+  background-position: center;
+  background-size: cover;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const FolderName = styled.div`
+  width: 100%;
+  font-size: 18px;
+  text-align: center;
+  word-wrap: break-word;
+  & + & {
+    margin-left: 20px;
+  }
+`;
+
+const FolderContentContainer = styled.div`
+  margin: 0 auto;
+  padding: 50px 120px;
+  width: calc(100vw - 150px);
+  display: flex;
+  flex-direction: column;
+  @media screen and (max-width: 1449px) {
+    padding: 30px 120px;
+  }
 `;
 
 const HeaderContainer = styled.div`
-  margin: 0 auto;
-  height: 100px;
+  margin-bottom: 20px;
+  width: 100%;
   display: flex;
   align-items: center;
   @media screen and (min-width: 800px) and (max-width: 1024px) {
@@ -44,9 +129,11 @@ const HeaderContainer = styled.div`
 `;
 
 const Title = styled.div`
-  padding: 0 50px;
   font-size: 24px;
   text-align: center;
+  color: #ffffff;
+  font-weight: 600;
+  letter-spacing: 2px;
   @media screen and (min-width: 800px) and (max-width: 1024px) {
     font-size: 20px;
   }
@@ -56,9 +143,11 @@ const Title = styled.div`
   }
 `;
 
-const AddFolderIcon = styled.label`
-  width: 32px;
-  height: 32px;
+const AddPhotosIcon = styled.label`
+  margin-right: 10px;
+  margin-left: auto;
+  width: 40px;
+  height: 40px;
   background-color: transparent;
   border: none;
   background-image: url(${uploadPhotoIcon});
@@ -68,58 +157,36 @@ const AddFolderIcon = styled.label`
     cursor: pointer;
     background-image: url(${uploadPhotoIconHover});
   }
+  @media screen and (max-width: 1449px) {
+    width: 32px;
+    height: 32px;
+  }
   @media screen and (max-width: 799px) {
     width: 24px;
     height: 24px;
   }
 `;
 
-const ContentContainer = styled.div`
-  display: flex;
-`;
-
-const Content = styled.div`
-  width: 100%;
-  padding: 0 50px;
-  font-size: 18px;
-  text-align: center;
-  @media screen and (min-width: 800px) and (max-width: 1024px) {
-    font-size: 14px;
-  }
-  @media screen and (max-width: 799px) {
-    font-size: 12px;
-  }
-`;
-
 const BricksContainer = styled.div`
-  margin: 0 auto;
-  padding-bottom: 50px;
-  width: 1390px;
-  height: 100%;
-  position: relative;
+  padding: 20px;
+  width: 100%;
+  height: calc(100vh - 270px);
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  overflow: scroll;
+  scrollbar-width: none;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const BricksInnerContainer = styled.div`
+  width: 100%;
+  height: fit-content;
+  display: flex;
   display: grid;
   grid-gap: 10px;
   grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-  @media screen and (min-width: 1400px) and (max-width: 1699px) {
-    width: 1190px;
-  }
-  @media screen and (min-width: 1100px) and (max-width: 1399px) {
-    width: 990px;
-  }
-  @media screen and (min-width: 800px) and (max-width: 1099px) {
-    width: 590px;
-  }
-  @media screen and (max-width: 799px) {
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    grid-gap: 6px;
-    width: 570px;
-  }
-  @media screen and (max-width: 629px) {
-    width: 420px;
-  }
-  @media screen and (max-width: 470px) {
-    width: 280px;
-  }
 `;
 
 const Img = styled.div`
@@ -131,39 +198,6 @@ const Img = styled.div`
   @media screen and (max-width: 799px) {
     width: 130px;
     height: 130px;
-  }
-`;
-
-const ImgContainer = styled.div`
-  margin: 5px auto;
-  width: 180px;
-  height: 180px;
-  position: relative;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 0 5px #616161;
-  &:hover {
-    margin: 0;
-    width: 190px;
-    height: 190px;
-    box-shadow: 0 0 10px #3c3c3c;
-  }
-  &:hover > ${Img} {
-    width: 190px;
-    height: 190px;
-  }
-  @media screen and (max-width: 799px) {
-    margin: 3px auto;
-    width: 130px;
-    height: 130px;
-    &:hover {
-      width: 130px;
-      height: 130px;
-    }
-    &:hover > ${Img} {
-      width: 130px;
-      height: 130px;
-    }
   }
 `;
 
@@ -186,7 +220,48 @@ const TrashIcon = styled.div`
   }
 `;
 
+const ImgContainer = styled.div`
+  margin: 5px auto;
+  width: 180px;
+  height: 180px;
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 5px #616161;
+  &:hover {
+    margin: 0 auto;
+    width: 190px;
+    height: 190px;
+    box-shadow: 0 0 10px #3c3c3c;
+  }
+  &:hover > ${Img} {
+    width: 190px;
+    height: 190px;
+  }
+  &:active > ${Img} {
+    width: 190px;
+    height: 190px;
+  }
+  @media screen and (max-width: 799px) {
+    margin: 3px auto;
+    width: 130px;
+    height: 130px;
+    &:hover {
+      width: 130px;
+      height: 130px;
+    }
+    &:hover > ${Img} {
+      width: 130px;
+      height: 130px;
+    }
+  }
+`;
+
 const Loading = styled(ReactLoading)`
+  margin: 50px auto;
+`;
+
+const PhotoLoading = styled(ReactLoading)`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -195,10 +270,11 @@ const Loading = styled(ReactLoading)`
 
 function MaterialCollection() {
   const { t } = useTranslation();
-  const { userId, collection } = useContext(AuthContext);
+  const { userId, collection, folders, isLoading } = useContext(AuthContext);
   const [showOverlay, setShowOverlay] = useState(false);
   const [currentUrl, setCurrentUrl] = useState("");
   const [progressing, setProgressing] = useState(false);
+  const [currentFolderIndex, setCurrentFolderIndex] = useState(0);
 
   const onUploadImgFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files === null) return;
@@ -215,13 +291,15 @@ function MaterialCollection() {
         urlByUuid
       )) as string;
       setProgressing(false);
+      const newPhotoArray = [...folders];
+      newPhotoArray[currentFolderIndex].photos.push(downloadUrl);
       await updateDoc(doc(db, "users", userId), {
-        collection: arrayUnion(downloadUrl),
+        folders: newPhotoArray,
       });
     });
   };
 
-  async function deleteHandler(url: string) {
+  async function deleteHandler(url: string, photoIndex: number) {
     const ans = await Swal.fire({
       text: t("delete_photo_warning"),
       icon: "warning",
@@ -232,52 +310,168 @@ function MaterialCollection() {
     });
     if (ans.isConfirmed === true) return;
 
+    const removePhotoArray = [...folders];
+    removePhotoArray[currentFolderIndex].photos.splice(photoIndex, 1);
     await updateDoc(doc(db, "users", userId), {
-      collection: arrayRemove(url),
+      folders: removePhotoArray,
     });
   }
+  // const getListStyle = () => ({
+  //   whiteSpace: "nowrap",
+  //   overflow: "scroll",
+  // });
 
+  // const getItemStyle = (isDragging, draggableStyle) => ({
+  //   userSelect: "none",
+  //   padding: "16px",
+  //   width: 40,
+  //   display: "inline-block",
+  //   overflow: "scroll",
+  //   margin: "0 8px 0 0",
+  //   ...draggableStyle,
+  // });
+
+  const onDragEnd = async (result: DropResult) => {
+    const { source, destination } = result;
+    console.log({ source });
+    console.log({ destination });
+    if (!destination) return;
+    const originalFolderIndex = folders.findIndex(
+      (name) => name.folderName === folders[currentFolderIndex].folderName
+    );
+    const destinationFolderIndex = folders.findIndex(
+      (name) => name.folderName === destination.droppableId
+    );
+    const newOrder = [...folders];
+    const [remove] = newOrder[originalFolderIndex].photos.splice(
+      source.index,
+      1
+    );
+    if (source.droppableId === destination.droppableId) {
+      newOrder[currentFolderIndex].photos.splice(destination.index, 0, remove);
+      await updateDoc(doc(db, "users", userId), {
+        folders: newOrder,
+      });
+      return;
+    }
+    newOrder[destinationFolderIndex].photos.push(remove);
+    await updateDoc(doc(db, "users", userId), {
+      folders: newOrder,
+    });
+  };
+
+  if (isLoading) {
+    return (
+      <Wrapper>
+        <Loading type="cylon" color="#ffffff" />
+      </Wrapper>
+    );
+  }
   return (
     <>
-      <Wrapper>
-        <HeaderContainer>
-          <Title>{t("your_collection")}</Title>
-          <AddFolderIcon>
-            <input
-              type="file"
-              accept="image/*"
-              style={{ display: "none" }}
-              multiple
-              onChange={(e) => onUploadImgFiles(e)}
-            />
-          </AddFolderIcon>
-        </HeaderContainer>
-        {collection.length === 0 && (
-          <ContentContainer>
-            <Content>{t("empty_collection")}</Content>
-          </ContentContainer>
-        )}
-        <BricksContainer>
-          {collection.length !== 0 &&
-            collection.map((url) => (
-              <ImgContainer key={url}>
-                <Img
-                  url={`url(${url})`}
-                  onClick={() => {
-                    setCurrentUrl(url);
-                    setShowOverlay(true);
-                  }}
+      <DragDropContext onDragEnd={(e) => onDragEnd(e)}>
+        <Wrapper>
+          <FoldersContainer>
+            <FoldersInnerContainer>
+              {folders.map((folder, index) => (
+                <Droppable
+                  droppableId={folder.folderName}
+                  key={folder.folderName}
+                >
+                  {(droppableProvided, droppableSnapshot) => (
+                    <SingleFolderContainer
+                      {...droppableProvided.droppableProps}
+                      ref={droppableProvided.innerRef}
+                      key={folder.folderName}
+                    >
+                      <FolderIcon
+                        onClick={() => setCurrentFolderIndex(index)}
+                      />
+                      <FolderName>{folder.folderName}</FolderName>
+                      {droppableProvided.placeholder}
+                    </SingleFolderContainer>
+                  )}
+                </Droppable>
+              ))}
+            </FoldersInnerContainer>
+          </FoldersContainer>
+          <FolderContentContainer>
+            <HeaderContainer>
+              <Title>{folders[currentFolderIndex]?.folderName}</Title>
+              <AddPhotosIcon>
+                <input
+                  type="file"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  multiple
+                  onChange={(e) => onUploadImgFiles(e)}
                 />
-                <TrashIcon onClick={() => deleteHandler(url)} />
-              </ImgContainer>
-            ))}
-          {progressing && (
-            <ImgContainer>
-              <Loading type="spin" color="#3c3c3c" height="40px" width="40px" />
-            </ImgContainer>
-          )}
-        </BricksContainer>
-      </Wrapper>
+              </AddPhotosIcon>
+            </HeaderContainer>
+            {folders.length !== 0 && currentFolderIndex !== -1 && (
+              <BricksContainer>
+                <Droppable
+                  droppableId="current"
+                  direction="horizontal"
+                  key={folders[currentFolderIndex]?.folderName}
+                >
+                  {(droppableProvided, droppableSnapshot) => (
+                    <div
+                      {...droppableProvided.droppableProps}
+                      ref={droppableProvided.innerRef}
+                    >
+                      <BricksInnerContainer>
+                        {folders &&
+                          folders[currentFolderIndex]?.photos.map(
+                            (photo, photoIndex) => (
+                              <Draggable
+                                draggableId={photo}
+                                index={photoIndex}
+                                key={photo}
+                              >
+                                {(provided, snapshot) => (
+                                  <ImgContainer
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                  >
+                                    <Img
+                                      url={`url(${photo})`}
+                                      onClick={() => {
+                                        setCurrentUrl(photo);
+                                        setShowOverlay(true);
+                                      }}
+                                    />
+                                    <TrashIcon
+                                      onClick={() =>
+                                        deleteHandler(photo, photoIndex)
+                                      }
+                                    />
+                                  </ImgContainer>
+                                )}
+                              </Draggable>
+                            )
+                          )}
+                        {progressing && (
+                          <ImgContainer>
+                            <PhotoLoading
+                              type="spin"
+                              color="#3c3c3c"
+                              height="40px"
+                              width="40px"
+                            />
+                          </ImgContainer>
+                        )}
+                      </BricksInnerContainer>
+                      {droppableProvided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </BricksContainer>
+            )}
+          </FolderContentContainer>
+        </Wrapper>
+      </DragDropContext>
       {showOverlay && (
         <SinglePhotoOverlay setShowOverlay={setShowOverlay} url={currentUrl} />
       )}
