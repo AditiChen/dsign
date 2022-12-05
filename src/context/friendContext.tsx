@@ -80,7 +80,7 @@ export function FriendContextProvider({ children }: BodyProp) {
 
   useEffect(() => {
     if (userId === "") return undefined;
-    const unsub = onSnapshot(doc(db, "users", userId), async (returnedDoc) => {
+    const unsub = onSnapshot(doc(db, "users", userId), async () => {
       const result = friendList?.map(async (id: string) => {
         const docSnap = await getDoc(doc(db, "users", id));
         const data = docSnap.data() as FriendData;

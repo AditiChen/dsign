@@ -480,7 +480,7 @@ function CreateNewProject() {
                     onChange={(e) => setTitle(e.target.value)}
                   />
                   <Droppable droppableId="drop-id">
-                    {(droppableProvided, droppableSnapshot) => (
+                    {(droppableProvided) => (
                       <div
                         {...droppableProvided.droppableProps}
                         ref={droppableProvided.innerRef}
@@ -493,7 +493,7 @@ function CreateNewProject() {
                               index={index}
                               key={page.key}
                             >
-                              {(provided, snapshot) => (
+                              {(provided) => (
                                 <SingleEditorContainer
                                   ref={provided.innerRef}
                                   {...provided.draggableProps}

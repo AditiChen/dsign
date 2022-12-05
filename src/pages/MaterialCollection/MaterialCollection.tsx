@@ -26,6 +26,8 @@ import folderIcon from "../../icons/folder-icon.png";
 import openFolderIcon from "../../icons/folderOpen-icon.png";
 import addFolderIcon from "../../icons/add-folder-icon.png";
 import addFolderIconHover from "../../icons/add-folder-icon-hover.png";
+import pencilIcon from "../../icons/pencil-icon.png";
+import pencilIconHover from "../../icons/pencil-icon-hover.png";
 
 interface Prop {
   url?: string;
@@ -82,6 +84,7 @@ const AddFolderIcon = styled.div`
   background-position: center;
   &:hover {
     background-image: url(${addFolderIconHover});
+    cursor: pointer;
   }
 `;
 
@@ -172,11 +175,24 @@ const Title = styled.div`
   }
 `;
 
+const RenameFolderIcon = styled.div`
+  margin-left: 20px;
+  width: 24px;
+  height: 24px;
+  background-image: url(${pencilIcon});
+  background-size: cover;
+  background-position: center;
+  &:hover {
+    cursor: pointer;
+    background-image: url(${pencilIconHover});
+  }
+`;
+
 const NoPhotoText = styled.div`
   font-size: 18px;
 `;
 
-const AddPhotosIcon = styled.label`
+const UploadPhotosIcon = styled.label`
   margin-right: 10px;
   margin-left: auto;
   width: 40px;
@@ -318,7 +334,7 @@ function MaterialCollection() {
   const [progressing, setProgressing] = useState(false);
   const [currentFolderIndex, setCurrentFolderIndex] = useState(0);
 
-  async function addNewFolderHandler() {
+  async function addNewFolderHandler(state: string) {
     const ans = await Swal.fire({
       text: t("folder_name"),
       inputPlaceholder: t("folder_name_length"),
@@ -346,21 +362,20 @@ function MaterialCollection() {
       return;
     }
     const newPhotoArray = [...folders];
-    newPhotoArray.push({ folderName: ans.value, photos: [] });
+    if (state === "new") {
+      newPhotoArray.push({ folderName: ans.value, photos: [] });
+      await updateDoc(doc(db, "users", userId), {
+        folders: newPhotoArray,
+      });
+      return;
+    }
+    newPhotoArray[currentFolderIndex].folderName = ans.value;
     await updateDoc(doc(db, "users", userId), {
       folders: newPhotoArray,
     });
   }
 
   async function deleteFolderHandler(folderIndex: number) {
-    if (folders[folderIndex].folderName === "Unsorted") {
-      Swal.fire({
-        text: t("delete_default_folder_warning"),
-        icon: "warning",
-        confirmButtonColor: "#646464",
-      });
-      return;
-    }
     const ans = await Swal.fire({
       text: t("delete_folder_warning"),
       icon: "warning",
@@ -460,7 +475,7 @@ function MaterialCollection() {
         <Wrapper>
           <FoldersContainer>
             <AddFolderContainer>
-              <AddFolderIcon onClick={() => addNewFolderHandler()} />
+              <AddFolderIcon onClick={() => addNewFolderHandler("new")} />
             </AddFolderContainer>
             <FoldersInnerContainer>
               {folders.map((folder, index) => (
@@ -483,9 +498,11 @@ function MaterialCollection() {
                           <FolderIcon
                             onClick={() => setCurrentFolderIndex(index)}
                           />
-                          <FolderTrashIcon
-                            onClick={() => deleteFolderHandler(index)}
-                          />
+                          {folder.folderName !== "Unsorted" && (
+                            <FolderTrashIcon
+                              onClick={() => deleteFolderHandler(index)}
+                            />
+                          )}
                         </>
                       )}
 
@@ -500,7 +517,14 @@ function MaterialCollection() {
           <FolderContentContainer>
             <HeaderContainer>
               <Title>{folders[currentFolderIndex]?.folderName}</Title>
-              <AddPhotosIcon>
+              {folders[currentFolderIndex]?.folderName !== "Unsorted" && (
+                <RenameFolderIcon
+                  onClick={() => {
+                    addNewFolderHandler("exist");
+                  }}
+                />
+              )}
+              <UploadPhotosIcon>
                 <input
                   type="file"
                   accept="image/*"
@@ -508,7 +532,7 @@ function MaterialCollection() {
                   multiple
                   onChange={(e) => onUploadImgFiles(e)}
                 />
-              </AddPhotosIcon>
+              </UploadPhotosIcon>
             </HeaderContainer>
             <BricksContainer>
               {folders && folders[currentFolderIndex]?.photos.length === 0 && (
@@ -519,7 +543,7 @@ function MaterialCollection() {
                 direction="horizontal"
                 key={folders[currentFolderIndex]?.folderName}
               >
-                {(droppableProvided, droppableSnapshot) => (
+                {(droppableProvided) => (
                   <div
                     {...droppableProvided.droppableProps}
                     ref={droppableProvided.innerRef}
@@ -534,7 +558,7 @@ function MaterialCollection() {
                               index={photoIndex}
                               key={photo}
                             >
-                              {(provided, snapshot) => (
+                              {(provided) => (
                                 <ImgContainer
                                   ref={provided.innerRef}
                                   {...provided.draggableProps}
