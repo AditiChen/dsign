@@ -122,7 +122,7 @@ function PortfolioBricks() {
       <CarouselContainer>
         <Carousel />
       </CarouselContainer>
-      {isLoading ? (
+      {projects.length === 0 && isLoading ? (
         <Loading type="cylon" color="#3c3c3c" />
       ) : (
         <BricksContainer>
