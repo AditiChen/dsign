@@ -12,7 +12,7 @@ import styled from "styled-components";
 import Cropper from "react-easy-crop";
 import ReactLoading from "react-loading";
 import { Slider, defaultTheme, Provider, View } from "@adobe/react-spectrum";
-import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
@@ -538,6 +538,7 @@ function SquareOverlay({
                   <CollectionFolderContainer>
                     {folders?.map((folder, index) => (
                       <FolderName
+                        key={folder.folderName}
                         $color={
                           currentFolderIndex === index ? "#3c3c3c" : "#b4b4b4"
                         }

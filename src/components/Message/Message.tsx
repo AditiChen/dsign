@@ -21,6 +21,7 @@ import Swal from "sweetalert2";
 
 import { FriendContext } from "../../context/friendContext";
 import { db } from "../../context/firebaseSDK";
+import useOnClickOutside from "../../utils/useOnClickOutside";
 
 import closeIcon from "../../icons/close-icon.png";
 import closeIconHover from "../../icons/close-icon-hover.png";
@@ -233,6 +234,7 @@ function Message({
     }[]
   >([]);
   const scrollRef = useRef<HTMLDivElement>(null!);
+  const messageWindowRef = useRef<HTMLDivElement>(null!);
 
   useEffect(() => {
     setIsLoading(true);
@@ -358,8 +360,10 @@ function Message({
     setShowMessageFrame((prev) => !prev);
   }
 
+  useOnClickOutside(messageWindowRef, () => closeMessageFrame());
+
   return (
-    <Wrapper>
+    <Wrapper ref={messageWindowRef}>
       <CloseIcon onClick={() => closeMessageFrame()} />
       <Container>
         <AvatarContainer>

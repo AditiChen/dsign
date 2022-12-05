@@ -11,7 +11,8 @@ import styled from "styled-components";
 import Cropper from "react-easy-crop";
 import ReactLoading from "react-loading";
 import { Slider, defaultTheme, Provider, View } from "@adobe/react-spectrum";
-import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
+import Swal from "sweetalert2";
 
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
@@ -404,13 +405,22 @@ function Overlay({
       imgSrc,
       croppedAreaPixels,
       rotation
-    )) as { file: File; url: string };
+    )) as { file: File };
+    if (file === undefined) {
+      Swal.fire({
+        text: "there is something wrong, please try again later",
+        icon: "warning",
+        confirmButtonColor: "#646464",
+      });
+      return;
+    }
     const fileNameByTime = `${+new Date()}`;
     const downloadUrl = (await upLoadImgToCloudStorage(
       file,
       userId,
       fileNameByTime
     )) as string;
+
     setNewPhotoUrl(downloadUrl);
     if (isAddToCollection) {
       const newPhotoArray = [...folders];
@@ -536,6 +546,7 @@ function Overlay({
                   <CollectionFolderContainer>
                     {folders?.map((folder, index) => (
                       <FolderName
+                        key={folder.folderName}
                         $color={
                           currentFolderIndex === index ? "#3c3c3c" : "#b4b4b4"
                         }
