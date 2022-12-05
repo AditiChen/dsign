@@ -334,7 +334,7 @@ function MaterialCollection() {
   const [progressing, setProgressing] = useState(false);
   const [currentFolderIndex, setCurrentFolderIndex] = useState(0);
 
-  async function addNewFolderHandler(state: string) {
+  async function namingFolderHandler(state: string) {
     const ans = await Swal.fire({
       text: t("folder_name"),
       inputPlaceholder: t("folder_name_length"),
@@ -419,7 +419,7 @@ function MaterialCollection() {
     background: isDraggingOver ? "#b4b4b4" : "none",
   });
 
-  async function deletePhotoHandler(url: string, photoIndex: number) {
+  async function deletePhotoHandler(photoIndex: number) {
     const ans = await Swal.fire({
       text: t("delete_photo_warning"),
       icon: "warning",
@@ -475,7 +475,7 @@ function MaterialCollection() {
         <Wrapper>
           <FoldersContainer>
             <AddFolderContainer>
-              <AddFolderIcon onClick={() => addNewFolderHandler("new")} />
+              <AddFolderIcon onClick={() => namingFolderHandler("new")} />
             </AddFolderContainer>
             <FoldersInnerContainer>
               {folders.map((folder, index) => (
@@ -520,7 +520,7 @@ function MaterialCollection() {
               {folders[currentFolderIndex]?.folderName !== "Unsorted" && (
                 <RenameFolderIcon
                   onClick={() => {
-                    addNewFolderHandler("exist");
+                    namingFolderHandler("exist");
                   }}
                 />
               )}
@@ -573,7 +573,7 @@ function MaterialCollection() {
                                   />
                                   <TrashIcon
                                     onClick={() =>
-                                      deletePhotoHandler(photo, photoIndex)
+                                      deletePhotoHandler(photoIndex)
                                     }
                                   />
                                 </ImgContainer>
