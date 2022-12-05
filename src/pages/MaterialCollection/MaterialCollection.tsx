@@ -26,8 +26,6 @@ import folderIcon from "../../icons/folder-icon.png";
 import openFolderIcon from "../../icons/folderOpen-icon.png";
 import addFolderIcon from "../../icons/add-folder-icon.png";
 import addFolderIconHover from "../../icons/add-folder-icon-hover.png";
-import closeIcon from "../../icons/close-icon.png";
-import closeIconHover from "../../icons/close-icon-hover.png";
 
 interface Prop {
   url?: string;
