@@ -15,9 +15,7 @@ import ReactLoading from "react-loading";
 
 import { AuthContext } from "../../context/authContext";
 import { db } from "../../context/firebaseSDK";
-
-import addFriendIcon from "../../icons/add-friend-icon.png";
-import addFriendIconHover from "../../icons/add-friend-icon-hover.png";
+import { addFriendIcon, addFriendIconHover } from "../icons/icons";
 
 const Friend = styled.div`
   margin-left: auto;

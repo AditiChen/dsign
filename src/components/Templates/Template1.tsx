@@ -3,9 +3,8 @@ import { t } from "i18next";
 import { useState, Dispatch, SetStateAction, useEffect } from "react";
 
 import Overlay from "../Overlays/templateOverlay";
-
+import { uploadPhotoIcon } from "../icons/icons";
 import trapezoid from "./template1_trapezoid.png";
-import uploadPhotoIcon from "../../icons/uploadPhoto-icon.png";
 
 interface Prop {
   url?: string;

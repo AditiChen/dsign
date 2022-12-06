@@ -22,12 +22,13 @@ import { AuthContext } from "../../context/authContext";
 import { FriendContext } from "../../context/friendContext";
 import { db } from "../../context/firebaseSDK";
 import Message from "../../components/Message/Message";
-
-import searchIcon from "../../icons/search-icon.png";
-import messageIcon from "../../icons/chat-icon.png";
-import messageIconHover from "../../icons/chat-icon-hover.png";
-import deleteIcon from "../../icons/delete-friend-icon.png";
-import deleteIconHover from "../../icons/delete-friend-icon-hover.png";
+import {
+  searchIcon,
+  openMessageIcon,
+  openMessageIconHover,
+  deleteFriendIcon,
+  deleteFriendIconHover,
+} from "../../components/icons/icons";
 
 interface Prop {
   size?: string;
@@ -225,13 +226,13 @@ const MessageIcon = styled.div`
   margin-top: 5px;
   width: 30px;
   height: 30px;
-  background-image: url(${messageIcon});
+  background-image: url(${openMessageIcon});
   background-size: cover;
   background-position: center;
   position: relative;
   &:hover {
     cursor: pointer;
-    background-image: url(${messageIconHover});
+    background-image: url(${openMessageIconHover});
   }
   @media screen and (max-width: 799px) {
     margin-top: 0;
@@ -279,12 +280,12 @@ const SendRequestBtn = styled.button`
 const DeleteIcon = styled.div`
   height: 30px;
   width: 30px;
-  background-image: url(${deleteIcon});
+  background-image: url(${deleteFriendIcon});
   background-size: cover;
   background-position: center;
   &:hover {
     cursor: pointer;
-    background-image: url(${deleteIconHover});
+    background-image: url(${deleteFriendIconHover});
   }
   @media screen and (max-width: 799px) {
     height: 24px;

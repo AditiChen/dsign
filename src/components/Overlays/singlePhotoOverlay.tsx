@@ -2,8 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 
-import closeIcon from "../../icons/close-icon.png";
-import closeIconHover from "../../icons/close-icon-hover.png";
+import { closeIcon, closeIconHover } from "../icons/icons";
 
 const Wrapper = styled.div`
   margin: 0;

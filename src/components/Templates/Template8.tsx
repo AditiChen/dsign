@@ -3,8 +3,7 @@ import { t } from "i18next";
 import { useState, Dispatch, SetStateAction, useEffect } from "react";
 
 import Overlay from "../Overlays/templateOverlay";
-
-import uploadPhotoIcon from "../../icons/uploadPhoto-icon.png";
+import { uploadPhotoIcon } from "../icons/icons";
 
 interface InsertProp {
   setPages: Dispatch<

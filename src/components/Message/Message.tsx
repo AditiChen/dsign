@@ -22,11 +22,12 @@ import Swal from "sweetalert2";
 import { FriendContext } from "../../context/friendContext";
 import { db } from "../../context/firebaseSDK";
 import useOnClickOutside from "../../utils/useOnClickOutside";
-
-import closeIcon from "../../icons/close-icon.png";
-import closeIconHover from "../../icons/close-icon-hover.png";
-import sendIcon from "../../icons/send-icon.png";
-import sendIconHover from "../../icons/send-icon-hover.png";
+import {
+  closeIcon,
+  closeIconHover,
+  sendMessageIcon,
+  sendMessageIconHover,
+} from "../icons/icons";
 
 interface Prop {
   img?: string;
@@ -191,12 +192,12 @@ const SendMessageIcon = styled.div`
   margin-left: 10px;
   height: 30px;
   width: 30px;
-  background-image: url(${sendIcon});
+  background-image: url(${sendMessageIcon});
   background-size: cover;
   background-position: center;
   &:hover {
     cursor: pointer;
-    background-image: url(${sendIconHover});
+    background-image: url(${sendMessageIconHover});
   }
   @media screen and (max-width: 399px) {
     margin-left: 5px;

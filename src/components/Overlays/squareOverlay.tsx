@@ -18,13 +18,14 @@ import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
 import getCroppedImg from "../../utils/cropImage";
 import upLoadImgToCloudStorage from "../../utils/upLoadImgToCloudStorage";
-
-import closeIcon from "../../icons/close-icon.png";
-import closeIconHover from "../../icons/close-icon-hover.png";
-import confirmIcon from "../../icons/confirm-icon.png";
-import confirmedIcon from "../../icons/confirmed-icon.png";
-import arrowIcon from "../../icons/arrow-icon.png";
-import arrowIconHover from "../../icons/arrow-icon-hover.png";
+import {
+  closeIcon,
+  closeIconHover,
+  confirmIcon,
+  confirmedIcon,
+  arrowIcon,
+  arrowIconHover,
+} from "../icons/icons";
 
 interface OverlayProps {
   setShowOverlay: Dispatch<SetStateAction<boolean>>;

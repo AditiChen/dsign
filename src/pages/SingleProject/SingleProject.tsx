@@ -4,15 +4,13 @@ import { useJsApiLoader } from "@react-google-maps/api";
 import ReactLoading from "react-loading";
 import { useNavigate } from "react-router-dom";
 
-import templatesArr from "../../components/singleProjectPageTemplates/TemplatesArr";
+import templatesArr from "../../components/SingleProjectPageTemplates/TemplatesArr";
 import { GoogleMapAPI } from "../../components/Templates/GoogleMapAPI";
 import { AuthContext } from "../../context/authContext";
 import getSingleProject from "../../utils/getSingleProject";
 import { LikeIcon, LikedIcon } from "../../components/IconButtons/LikeIcons";
 import FriendIcon from "../../components/IconButtons/FriendIcon";
-
-import arrowIcon from "../../icons/arrow-icon-white.png";
-import arrowIconHover from "../../icons/arrow-icon-hover.png";
+import { arrowIconWhite, arrowIconHover } from "../../components/icons/icons";
 
 interface UserProjectType {
   uid: string;
@@ -53,7 +51,7 @@ const ArrowIcon = styled.div`
   position: fixed;
   top: 90px;
   left: 50px;
-  background-image: url(${arrowIcon});
+  background-image: url(${arrowIconWhite});
   background-size: cover;
   background-position: center;
   &:hover {

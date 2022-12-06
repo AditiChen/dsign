@@ -17,17 +17,18 @@ import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
 import SinglePhotoOverlay from "../../components/Overlays/singlePhotoOverlay";
 import upLoadImgToCloudStorage from "../../utils/upLoadImgToCloudStorage";
-
-import uploadPhotoIcon from "../../icons/uploadPhoto-icon.png";
-import uploadPhotoIconHover from "../../icons/uploadPhoto-icon-hover.png";
-import trashIcon from "../../icons/trash-icon.png";
-import trashIconHover from "../../icons/trash-icon-hover.png";
-import folderIcon from "../../icons/folder-icon.png";
-import openFolderIcon from "../../icons/folderOpen-icon.png";
-import addFolderIcon from "../../icons/add-folder-icon.png";
-import addFolderIconHover from "../../icons/add-folder-icon-hover.png";
-import pencilIcon from "../../icons/pencil-icon.png";
-import pencilIconHover from "../../icons/pencil-icon-hover.png";
+import {
+  addFolderIcon,
+  addFolderIconHover,
+  pencilIcon,
+  pencilIconHover,
+  folderIcon,
+  folderOpenIcon,
+  deleteIcon,
+  deleteIconHover,
+  uploadPhotoIcon,
+  uploadPhotoIconHover,
+} from "../../components/icons/icons";
 
 interface Prop {
   url?: string;
@@ -123,7 +124,7 @@ const FolderIcon = styled.div`
 
 const OpenFolderIcon = styled(FolderIcon)`
   width: 145px;
-  background-image: url(${openFolderIcon});
+  background-image: url(${folderOpenIcon});
 `;
 
 const FolderName = styled.div`
@@ -258,12 +259,12 @@ const TrashIcon = styled.div`
   bottom: 5px;
   right: 5px;
   opacity: 0.8;
-  background-image: url(${trashIcon});
+  background-image: url(${deleteIcon});
   background-size: cover;
   background-position: center;
   &:hover {
     cursor: pointer;
-    background-image: url(${trashIconHover});
+    background-image: url(${deleteIconHover});
   }
   @media screen and (max-width: 799px) {
     width: 20px;

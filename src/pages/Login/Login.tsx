@@ -7,11 +7,12 @@ import Swal from "sweetalert2";
 
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
-
-import googleIcon from "../../icons/google-icon.png";
-import googleIconHover from "../../icons/google-icon-hover.png";
-import fbIcon from "../../icons/fb-icon.png";
-import fbIconHover from "../../icons/fb-icon-hover.png";
+import {
+  googleIcon,
+  googleIconHover,
+  fbIcon,
+  fbIconHover,
+} from "../../components/icons/icons";
 
 interface Prop {
   url?: string;

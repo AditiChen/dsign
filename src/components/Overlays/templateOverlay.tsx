@@ -17,14 +17,15 @@ import Swal from "sweetalert2";
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
 import upLoadImgToCloudStorage from "../../utils/upLoadImgToCloudStorage";
-
 import getCroppedImg from "../../utils/cropImage";
-import closeIcon from "../../icons/close-icon.png";
-import closeIconHover from "../../icons/close-icon-hover.png";
-import confirmIcon from "../../icons/confirm-icon.png";
-import confirmedIcon from "../../icons/confirmed-icon.png";
-import arrowIcon from "../../icons/arrow-icon.png";
-import arrowIconHover from "../../icons/arrow-icon-hover.png";
+import {
+  closeIcon,
+  closeIconHover,
+  confirmIcon,
+  confirmedIcon,
+  arrowIcon,
+  arrowIconHover,
+} from "../icons/icons";
 
 interface OverlayProps {
   setShowOverlay: Dispatch<SetStateAction<boolean>>;
@@ -285,7 +286,7 @@ const SliderContainer = styled.div`
   }
 `;
 
-const Btn = styled.div`
+const Btn = styled.div<{ cursor?: string }>`
   margin-left: 30px;
   padding: 0 10px;
   height: 40px;
@@ -297,7 +298,7 @@ const Btn = styled.div`
   background-color: #3c3c3c30;
   font-family: "Roboto", "Noto Sans TC", "Noto Sans JP", sans-serif;
   &:hover {
-    cursor: pointer;
+    cursor: ${(props) => props.cursor || "pointer"};
     color: #ffffff;
     background-color: #616161;
   }
@@ -400,6 +401,7 @@ function Overlay({
 
   const showCroppedImage = useCallback(async () => {
     if (progressing) return;
+    if (croppedAreaPixels === null) return;
     setProgressing(true);
     const { file } = (await getCroppedImg(
       imgSrc,
@@ -525,7 +527,14 @@ function Overlay({
                     <ConfirmIcon onClick={() => setIsAddToCollection(true)} />
                   )}
                   <Text>{t("add_to_collection")}</Text>
-                  <Btn onClick={showCroppedImage}>{t("confirm_crop")}</Btn>
+                  <Btn
+                    onClick={showCroppedImage}
+                    cursor={
+                      croppedAreaPixels === null ? "not-allowed" : "pointer"
+                    }
+                  >
+                    {t("confirm_crop")}
+                  </Btn>
                 </ControlContainer>
               </>
             ) : (

@@ -20,11 +20,12 @@ import templatesImgArr from "../../components/Templates/TemplateImg";
 import templatesArr from "../../components/Templates/TemplatesArr";
 import SquareOverlay from "../../components/Overlays/squareOverlay";
 import templateData from "../../components/Templates/TemplatesData.json";
-
-import closeIcon from "../../icons/close-icon.png";
-import closeIconHover from "../../icons/close-icon-hover.png";
-import checkedIcon from "../../icons/checked-icon.png";
-import uploadPhotoIcon from "../../icons/uploadPhoto-icon.png";
+import {
+  closeIcon,
+  closeIconHover,
+  checkedIcon,
+  uploadPhotoIcon,
+} from "../../components/icons/icons";
 
 const Wrapper = styled.div`
   padding-top: 95px;

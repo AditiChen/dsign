@@ -10,15 +10,16 @@ import { db } from "../../context/firebaseSDK";
 import getUserProjects from "../../utils/getUserProjects";
 import SquareOverlay from "../../components/Overlays/squareOverlay";
 import { AuthContext } from "../../context/authContext";
-
-import viewIcon from "../../icons/view-icon.png";
-import viewIconHover from "../../icons/view-icon-hover.png";
-import editIcon from "../../icons/edit-icon.png";
-import editIconHover from "../../icons/edit-icon-hover.png";
-import trashIcon from "../../icons/trash-icon.png";
-import trashIconHover from "../../icons/trash-icon-hover.png";
-import cameraIcon from "../../icons/camera-icon.png";
-import cameraIconHover from "../../icons/camera-icon-hover.png";
+import {
+  editProjectIcon,
+  editProjectIconHover,
+  viewProjectIcon,
+  viewProjectIconHover,
+  deleteIcon,
+  deleteIconHover,
+  cameraIcon,
+  cameraIconHover,
+} from "../../components/icons/icons";
 
 interface Prop {
   url?: string;
@@ -518,8 +519,8 @@ function Profile() {
                         <ProjectTitle>{projectData.title}</ProjectTitle>
                         <ProjectIconContainer>
                           <Icon
-                            img={`url(${viewIcon})`}
-                            hoverImg={`url(${viewIconHover})`}
+                            img={`url(${viewProjectIcon})`}
+                            hoverImg={`url(${viewProjectIconHover})`}
                             marginLift="0"
                             onClick={() =>
                               navigate(
@@ -528,8 +529,8 @@ function Profile() {
                             }
                           />
                           <Icon
-                            img={`url(${editIcon})`}
-                            hoverImg={`url(${editIconHover})`}
+                            img={`url(${editProjectIcon})`}
+                            hoverImg={`url(${editProjectIconHover})`}
                             marginLift="15px"
                             onClick={() =>
                               navigate(
@@ -538,8 +539,8 @@ function Profile() {
                             }
                           />
                           <Icon
-                            img={`url(${trashIcon})`}
-                            hoverImg={`url(${trashIconHover})`}
+                            img={`url(${deleteIcon})`}
+                            hoverImg={`url(${deleteIconHover})`}
                             marginLift="auto"
                             onClick={() =>
                               deleteProjectHandler(projectData.projectId)
@@ -626,8 +627,8 @@ function Profile() {
                           <ProjectTitle>{projectData.title}</ProjectTitle>
                           <ProjectIconContainer>
                             <Icon
-                              img={`url(${viewIcon})`}
-                              hoverImg={`url(${viewIconHover})`}
+                              img={`url(${viewProjectIcon})`}
+                              hoverImg={`url(${viewProjectIconHover})`}
                               marginLift="0"
                               onClick={() =>
                                 navigate(
@@ -636,8 +637,8 @@ function Profile() {
                               }
                             />
                             <Icon
-                              img={`url(${editIcon})`}
-                              hoverImg={`url(${editIconHover})`}
+                              img={`url(${editProjectIcon})`}
+                              hoverImg={`url(${editProjectIconHover})`}
                               marginLift="15px"
                               onClick={() =>
                                 navigate(
@@ -646,8 +647,8 @@ function Profile() {
                               }
                             />
                             <Icon
-                              img={`url(${trashIcon})`}
-                              hoverImg={`url(${trashIconHover})`}
+                              img={`url(${deleteIcon})`}
+                              hoverImg={`url(${deleteIconHover})`}
                               marginLift="auto"
                               onClick={() =>
                                 deleteProjectHandler(projectData.projectId)
