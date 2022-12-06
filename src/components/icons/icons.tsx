@@ -1,3 +1,8 @@
+import languageIcon from "./language-icon.png";
+import logoIcon from "./logo.png";
+import memberIcon from "./user-icon.png";
+import friendsIcon from "./friends-icon.png";
+import menuIcon from "./menu-icon.png";
 import closeIcon from "./close-icon.png";
 import closeIconHover from "./close-icon-hover.png";
 import sendMessageIcon from "./send-icon.png";
@@ -40,6 +45,11 @@ import googleIcon from "./google-icon.png";
 import googleIconHover from "./google-icon-hover.png";
 
 export {
+  languageIcon,
+  logoIcon,
+  memberIcon,
+  friendsIcon,
+  menuIcon,
   closeIcon,
   closeIconHover,
   sendMessageIcon,

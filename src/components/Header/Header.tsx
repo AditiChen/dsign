@@ -8,12 +8,13 @@ import Swal from "sweetalert2";
 import { AuthContext } from "../../context/authContext";
 import { FriendContext } from "../../context/friendContext";
 import useOnClickOutside from "../../utils/useOnClickOutside";
-
-import languageIcon from "./language-icon.png";
-import logoIcon from "./Logo.png";
-import memberIcon from "./user-icon.png";
-import friendsIcon from "./friends-icon.png";
-import menuIcon from "./menu-icon.png";
+import {
+  languageIcon,
+  logoIcon,
+  memberIcon,
+  friendsIcon,
+  menuIcon,
+} from "../icons/icons";
 
 interface Prop {
   height?: string;
