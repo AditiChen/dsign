@@ -408,21 +408,12 @@ function Overlay({
       croppedAreaPixels,
       rotation
     )) as { file: File };
-    if (file === undefined) {
-      Swal.fire({
-        text: "there is something wrong, please try again later",
-        icon: "warning",
-        confirmButtonColor: "#646464",
-      });
-      return;
-    }
     const fileNameByTime = `${+new Date()}`;
     const downloadUrl = (await upLoadImgToCloudStorage(
       file,
       userId,
       fileNameByTime
     )) as string;
-
     setNewPhotoUrl(downloadUrl);
     if (isAddToCollection) {
       const newPhotoArray = [...folders];

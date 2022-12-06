@@ -1,13 +1,5 @@
 import styled from "styled-components";
-
-interface Prop {
-  url?: string;
-}
-
-interface InsertProp {
-  photoUrl: string[];
-  content: string[];
-}
+import { SingleProjectTemplateProps } from "../tsTypes";
 
 const Wrapper = styled.div`
   width: 1200px;
@@ -113,11 +105,11 @@ const ImgContainer = styled.div`
   }
 `;
 
-const AsideImg = styled.div`
+const AsideImg = styled.div<{ url?: string }>`
   width: 430px;
   height: 100%;
   position: relative;
-  background-image: ${(props: Prop) => props.url};
+  background-image: ${(props) => props.url};
   background-size: cover;
   background-position: center;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
@@ -150,11 +142,11 @@ const MiddleImgContainer = styled.div`
   }
 `;
 
-const MiddleImg = styled.div`
+const MiddleImg = styled.div<{ url?: string }>`
   width: 320px;
   height: 265px;
   position: relative;
-  background-image: ${(props: Prop) => props.url};
+  background-image: ${(props) => props.url};
   background-size: cover;
   background-position: center;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
@@ -171,7 +163,7 @@ const MiddleImg = styled.div`
   }
 `;
 
-function Template2(props: InsertProp) {
+function Template2(props: SingleProjectTemplateProps) {
   const { photoUrl, content } = props;
 
   return (

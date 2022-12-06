@@ -30,10 +30,6 @@ import {
   uploadPhotoIconHover,
 } from "../../components/icons/icons";
 
-interface Prop {
-  url?: string;
-}
-
 const Wrapper = styled.div`
   width: 100%;
   min-width: 100vw;
@@ -239,11 +235,11 @@ const BricksInnerContainer = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
 `;
 
-const Img = styled.div`
+const Img = styled.div<{ url?: string }>`
   width: 180px;
   height: 180px;
   background-color: #b4b4b4;
-  background-image: ${(props: Prop) => props.url};
+  background-image: ${(props) => props.url};
   background-size: cover;
   background-position: center;
   @media screen and (max-width: 799px) {
@@ -335,6 +331,17 @@ function MaterialCollection() {
   const [progressing, setProgressing] = useState(false);
   const [currentFolderIndex, setCurrentFolderIndex] = useState(0);
 
+  async function updateToFirestore(
+    newFolders: {
+      folderName: string;
+      photos: string[];
+    }[]
+  ) {
+    await updateDoc(doc(db, "users", userId), {
+      folders: newFolders,
+    });
+  }
+
   async function namingFolderHandler(state: string) {
     const ans = await Swal.fire({
       text: t("folder_name"),
@@ -365,15 +372,11 @@ function MaterialCollection() {
     const newPhotoArray = [...folders];
     if (state === "new") {
       newPhotoArray.push({ folderName: ans.value, photos: [] });
-      await updateDoc(doc(db, "users", userId), {
-        folders: newPhotoArray,
-      });
+      await updateToFirestore(newPhotoArray);
       return;
     }
     newPhotoArray[currentFolderIndex].folderName = ans.value;
-    await updateDoc(doc(db, "users", userId), {
-      folders: newPhotoArray,
-    });
+    await updateToFirestore(newPhotoArray);
   }
 
   async function deleteFolderHandler(folderIndex: number) {
@@ -388,9 +391,7 @@ function MaterialCollection() {
     if (ans.isConfirmed === true) return;
     const removePhotoArray = [...folders];
     removePhotoArray.splice(folderIndex, 1);
-    await updateDoc(doc(db, "users", userId), {
-      folders: removePhotoArray,
-    });
+    await updateToFirestore(removePhotoArray);
   }
 
   const onUploadImgFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -410,9 +411,7 @@ function MaterialCollection() {
       setProgressing(false);
       const newPhotoArray = [...folders];
       newPhotoArray[currentFolderIndex].photos.push(downloadUrl);
-      await updateDoc(doc(db, "users", userId), {
-        folders: newPhotoArray,
-      });
+      await updateToFirestore(newPhotoArray);
     });
   };
 
@@ -432,9 +431,7 @@ function MaterialCollection() {
     if (ans.isConfirmed === true) return;
     const removePhotoArray = [...folders];
     removePhotoArray[currentFolderIndex].photos.splice(photoIndex, 1);
-    await updateDoc(doc(db, "users", userId), {
-      folders: removePhotoArray,
-    });
+    await updateToFirestore(removePhotoArray);
   }
 
   const onDragEnd = async (result: DropResult) => {
@@ -458,9 +455,7 @@ function MaterialCollection() {
       1
     );
     newOrder[destinationFolderIndex].photos.push(remove);
-    await updateDoc(doc(db, "users", userId), {
-      folders: newOrder,
-    });
+    await updateToFirestore(newOrder);
   };
 
   if (isLoading) {

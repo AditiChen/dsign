@@ -1,15 +1,7 @@
 import styled from "styled-components";
 
 import leftCircle from "./template3_left_circle.png";
-
-interface Prop {
-  url?: string;
-}
-
-interface InsertProp {
-  photoUrl: string[];
-  content: string[];
-}
+import { SingleProjectTemplateProps } from "../tsTypes";
 
 const Wrapper = styled.div`
   width: 1200px;
@@ -32,10 +24,10 @@ const Wrapper = styled.div`
   }
 `;
 
-const BackgroundImg = styled.div`
+const BackgroundImg = styled.div<{ url?: string }>`
   width: 1200px;
   height: 760px;
-  background-image: ${(props: Prop) => props.url};
+  background-image: ${(props) => props.url};
   background-size: cover;
   background-position: center;
   opacity: 0.9;
@@ -121,10 +113,10 @@ const Context = styled.textarea`
   }
 `;
 
-const LeftImg = styled.div`
+const LeftImg = styled.div<{ url?: string }>`
   width: 330px;
   height: 330px;
-  background-image: ${(props: Prop) => props.url};
+  background-image: ${(props) => props.url};
   background-size: cover;
   background-position: center;
   position: absolute;
@@ -152,11 +144,11 @@ const LeftImg = styled.div`
   }
 `;
 
-const RightImg = styled.div`
+const RightImg = styled.div<{ url?: string }>`
   margin-left: 30px;
   width: 200px;
   height: 200px;
-  background-image: ${(props: Prop) => props.url};
+  background-image: ${(props) => props.url};
   background-size: cover;
   background-position: center;
   position: absolute;
@@ -187,7 +179,7 @@ const RightImg = styled.div`
   }
 `;
 
-function Template3(props: InsertProp) {
+function Template3(props: SingleProjectTemplateProps) {
   const { photoUrl, content } = props;
 
   return (

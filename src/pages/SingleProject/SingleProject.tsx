@@ -11,24 +11,7 @@ import getSingleProject from "../../utils/getSingleProject";
 import { LikeIcon, LikedIcon } from "../../components/IconButtons/LikeIcons";
 import FriendIcon from "../../components/IconButtons/FriendIcon";
 import { arrowIconWhite, arrowIconHover } from "../../components/icons/icons";
-
-interface UserProjectType {
-  uid: string;
-  name?: string;
-  avatar?: string;
-  introduction?: string;
-  mainUrl: string;
-  projectId: string;
-  title: string;
-  time: number;
-  pages: {
-    key: string;
-    type: number;
-    content?: string[];
-    photos?: string[];
-    location?: { lat?: number; lng?: number };
-  }[];
-}
+import { FetchedProjectsType } from "../../components/tsTypes";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -239,9 +222,9 @@ function SingleProject() {
     libraries: ["places"],
   });
   const { userId, favoriteList, friendList } = useContext(AuthContext);
-  const [singleProjectData, setSingleProjectData] = useState<UserProjectType[]>(
-    []
-  );
+  const [singleProjectData, setSingleProjectData] = useState<
+    FetchedProjectsType[]
+  >([]);
   const [isLoading, setIsLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null!);
 

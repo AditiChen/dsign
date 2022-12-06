@@ -29,10 +29,6 @@ import {
   sendMessageIconHover,
 } from "../icons/icons";
 
-interface Prop {
-  img?: string;
-}
-
 const Wrapper = styled.div`
   width: 350px;
   height: 500px;
@@ -91,12 +87,12 @@ const AvatarContainer = styled.div`
   }
 `;
 
-const Avatar = styled.div`
+const Avatar = styled.div<{ url?: string }>`
   margin: 0 5px;
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background-image: ${(props: Prop) => props.img};
+  background-image: ${(props) => props.url};
   background-position: center;
   background-size: cover;
   @media screen and (max-width: 399px) {
@@ -368,7 +364,7 @@ function Message({
       <CloseIcon onClick={() => closeMessageFrame()} />
       <Container>
         <AvatarContainer>
-          <Avatar img={`url(${messageFriendDtl.avatar})`} />
+          <Avatar url={`url(${messageFriendDtl.avatar})`} />
           <Name>{messageFriendDtl.name}</Name>
         </AvatarContainer>
         <MessageContainer ref={scrollRef}>

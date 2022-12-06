@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
-import { useRef, Dispatch, SetStateAction } from "react";
+import { useRef } from "react";
 import {
   GoogleMap,
   Marker,
@@ -9,30 +9,7 @@ import {
 } from "@react-google-maps/api";
 import { getLatLng, getGeocode } from "use-places-autocomplete";
 import ReactLoading from "react-loading";
-
-interface InsertProp {
-  setPages: Dispatch<
-    SetStateAction<
-      {
-        key: string;
-        type: number;
-        content?: string[];
-        photos?: string[];
-        location?: { lat?: number; lng?: number };
-      }[]
-    >
-  >;
-  pages: {
-    key: string;
-    type: number;
-    content?: string[];
-    photos?: string[];
-    location?: { lat?: number; lng?: number };
-  }[];
-  currentIndex: number;
-  position: { lat?: number; lng?: number };
-  setPosition: Dispatch<SetStateAction<{ lat?: number; lng?: number }>>;
-}
+import { CreateTemplateProps } from "../tsTypes";
 
 const Wrapper = styled.div`
   width: 1200px;
@@ -136,7 +113,7 @@ const libraries = ["places"] as (
   | "visualization"
 )[];
 
-function GoogleMapInsert(props: InsertProp) {
+function GoogleMapInsert(props: CreateTemplateProps) {
   const { setPages, currentIndex, pages, position, setPosition } = props;
   const { t } = useTranslation();
   const locationRef = useRef<HTMLInputElement>(null);

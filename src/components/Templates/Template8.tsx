@@ -4,28 +4,7 @@ import { useState, Dispatch, SetStateAction, useEffect } from "react";
 
 import Overlay from "../Overlays/templateOverlay";
 import { uploadPhotoIcon } from "../icons/icons";
-
-interface InsertProp {
-  setPages: Dispatch<
-    SetStateAction<
-      {
-        key: string;
-        type: number;
-        content?: string[];
-        photos?: string[];
-        location?: { lat?: number; lng?: number };
-      }[]
-    >
-  >;
-  pages: {
-    key: string;
-    type: number;
-    content?: string[];
-    photos?: string[];
-    location?: { lat?: number; lng?: number };
-  }[];
-  currentIndex: number;
-}
+import { CreateTemplateProps } from "../tsTypes";
 
 const Wrapper = styled.div`
   width: 1200px;
@@ -83,7 +62,7 @@ const UploadIcon = styled.div`
   }
 `;
 
-function Template7(props: InsertProp) {
+function Template7(props: CreateTemplateProps) {
   const { setPages, currentIndex, pages } = props;
   const [showOverlay, setShowOverlay] = useState(false);
   const [storageUrl, setStorageUrl] = useState<string[]>(

@@ -1,17 +1,5 @@
 import styled from "styled-components";
-
-interface Prop {
-  border?: string;
-  url?: string;
-  backgroundColor?: string;
-  top?: string;
-  left?: string;
-}
-
-interface InsertProp {
-  photoUrl: string[];
-  content: string[];
-}
+import { SingleProjectTemplateProps } from "../tsTypes";
 
 const Wrapper = styled.div`
   width: 1200px;
@@ -95,11 +83,11 @@ const Context = styled.textarea`
   }
 `;
 
-const LeftImg = styled.div`
+const LeftImg = styled.div<{ url?: string; backgroundColor?: string }>`
   width: 100%;
   height: 300px;
-  background-image: ${(props: Prop) => props.url};
-  background-color: ${(props: Prop) => props.backgroundColor};
+  background-image: ${(props) => props.url};
+  background-color: ${(props) => props.backgroundColor};
   background-size: cover;
   background-position: center;
   position: relative;
@@ -118,11 +106,11 @@ const LeftImg = styled.div`
   }
 `;
 
-const RightImg = styled.div`
+const RightImg = styled.div<{ url?: string; backgroundColor?: string }>`
   width: 500px;
   height: 100%;
-  background-image: ${(props: Prop) => props.url};
-  background-color: ${(props: Prop) => props.backgroundColor};
+  background-image: ${(props) => props.url};
+  background-color: ${(props) => props.backgroundColor};
   background-size: cover;
   background-position: center;
   position: relative;
@@ -137,7 +125,7 @@ const RightImg = styled.div`
   }
 `;
 
-function Template3(props: InsertProp) {
+function Template3(props: SingleProjectTemplateProps) {
   const { photoUrl, content } = props;
 
   return (

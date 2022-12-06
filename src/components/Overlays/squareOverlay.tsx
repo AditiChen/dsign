@@ -275,7 +275,7 @@ const SliderContainer = styled.div`
   }
 `;
 
-const Btn = styled.button`
+const Btn = styled.button<{ cursor?: string }>`
   margin-left: 30px;
   padding: 0 10px;
   height: 40px;
@@ -286,7 +286,7 @@ const Btn = styled.button`
   background-color: #3c3c3c30;
   font-family: "Roboto", "Noto Sans TC", "Noto Sans JP", sans-serif;
   &:hover {
-    cursor: pointer;
+    cursor: ${(props) => props.cursor || "pointer"};
     color: #ffffff;
     background-color: #616161;
   }
@@ -402,6 +402,7 @@ function SquareOverlay({
 
   const croppedImage = useCallback(async () => {
     if (progressing) return;
+    if (croppedAreaPixels === null) return;
     setProgressing(true);
     const { file } = (await getCroppedImg(
       imgSrc,
@@ -518,7 +519,14 @@ function SquareOverlay({
                     <ConfirmIcon onClick={() => setIsAddToCollection(true)} />
                   )}
                   <Text>Add to collection?</Text>
-                  <Btn onClick={croppedImage}>{t("confirm_crop")}</Btn>
+                  <Btn
+                    onClick={croppedImage}
+                    cursor={
+                      croppedAreaPixels === null ? "not-allowed" : "pointer"
+                    }
+                  >
+                    {t("confirm_crop")}
+                  </Btn>
                 </ControlContainer>
               </>
             ) : (

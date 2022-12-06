@@ -1,17 +1,5 @@
 import styled from "styled-components";
-
-interface Prop {
-  border?: string;
-  url?: string;
-  backgroundColor?: string;
-  top?: string;
-  left?: string;
-}
-
-interface InsertProp {
-  photoUrl: string[];
-  content: string[];
-}
+import { SingleProjectTemplateProps } from "../tsTypes";
 
 const Wrapper = styled.div`
   padding: 80px 50px;
@@ -104,12 +92,12 @@ const LeftImgContainer = styled.div`
   justify-content: space-between;
 `;
 
-const LeftImg = styled.div`
+const LeftImg = styled.div<{ url?: string; backgroundColor?: string }>`
   width: 200px;
   height: 200px;
   border-radius: 50%;
-  background-image: ${(props: Prop) => props.url};
-  background-color: ${(props: Prop) => props.backgroundColor};
+  background-image: ${(props) => props.url};
+  background-color: ${(props) => props.backgroundColor};
   background-size: cover;
   background-position: center;
   position: relative;
@@ -127,12 +115,12 @@ const LeftImg = styled.div`
   }
 `;
 
-const RightImg = styled.div`
+const RightImg = styled.div<{ url?: string; backgroundColor?: string }>`
   width: 600px;
   height: 600px;
   border-radius: 50%;
-  background-image: ${(props: Prop) => props.url};
-  background-color: ${(props: Prop) => props.backgroundColor};
+  background-image: ${(props) => props.url};
+  background-color: ${(props) => props.backgroundColor};
   background-size: cover;
   background-position: center;
   position: relative;
@@ -150,7 +138,7 @@ const RightImg = styled.div`
   }
 `;
 
-function Template7(props: InsertProp) {
+function Template7(props: SingleProjectTemplateProps) {
   const { photoUrl, content } = props;
 
   return (

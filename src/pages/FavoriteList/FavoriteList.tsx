@@ -6,23 +6,7 @@ import ReactLoading from "react-loading";
 import { AuthContext } from "../../context/authContext";
 import getFavoriteProjects from "../../utils/getFavoriteProjects";
 import Brick from "../../components/Brick/Brick";
-
-interface FetchedProjectsType {
-  uid: string;
-  name?: string;
-  avatar?: string;
-  mainUrl: string;
-  projectId: string;
-  introduction: string;
-  title: string;
-  time: number;
-  pages: {
-    type: number;
-    content?: string[];
-    url?: string[];
-    location?: { lat?: number; lng?: number };
-  }[];
-}
+import { FetchedProjectsType } from "../../components/tsTypes";
 
 const Wrapper = styled.div`
   width: 100%;

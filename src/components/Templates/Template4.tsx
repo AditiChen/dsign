@@ -1,37 +1,10 @@
 import styled from "styled-components";
 import { t } from "i18next";
-import { useState, Dispatch, SetStateAction, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import Overlay from "../Overlays/templateOverlay";
 import { uploadPhotoIcon } from "../icons/icons";
-
-interface Prop {
-  url?: string;
-  backgroundColor?: string;
-  top?: string;
-  left?: string;
-}
-interface InsertProp {
-  setPages: Dispatch<
-    SetStateAction<
-      {
-        key: string;
-        type: number;
-        content?: string[];
-        photos?: string[];
-        location?: { lat?: number; lng?: number };
-      }[]
-    >
-  >;
-  pages: {
-    key: string;
-    type: number;
-    content?: string[];
-    photos?: string[];
-    location?: { lat?: number; lng?: number };
-  }[];
-  currentIndex: number;
-}
+import { CreateTemplateProps } from "../tsTypes";
 
 const Wrapper = styled.div`
   padding: 60px 50px;
@@ -55,11 +28,11 @@ const ImgContainer = styled.div`
   justify-content: space-between;
 `;
 
-const Img = styled.div`
+const Img = styled.div<{ url?: string; backgroundColor?: string }>`
   width: 330px;
   height: 300px;
-  background-image: ${(props: Prop) => props.url};
-  background-color: ${(props: Prop) => props.backgroundColor};
+  background-image: ${(props) => props.url};
+  background-color: ${(props) => props.backgroundColor};
   background-size: cover;
   background-position: center;
   position: relative;
@@ -112,7 +85,7 @@ const UploadIcon = styled.div`
   }
 `;
 
-function Template4(props: InsertProp) {
+function Template4(props: CreateTemplateProps) {
   const { setPages, currentIndex, pages } = props;
   const [inputText, setInputText] = useState<string[]>(
     pages[currentIndex].content || [""]

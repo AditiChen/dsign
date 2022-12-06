@@ -21,21 +21,6 @@ import {
   cameraIconHover,
 } from "../../components/icons/icons";
 
-interface Prop {
-  url?: string;
-  size?: string;
-  background?: string;
-  text?: string;
-  focus?: string;
-  position?: string;
-  img?: string;
-  hoverImg?: string;
-  marginLift?: string;
-  weight?: string;
-  border?: string;
-  cursor?: string;
-}
-
 const Wrapper = styled.div`
   padding: 50px 0;
   width: 100%;
@@ -94,11 +79,11 @@ const UserInfoContainer = styled.div`
   }
 `;
 
-const Avatar = styled.div`
+const Avatar = styled.div<{ url?: string }>`
   height: 180px;
   width: 180px;
   border-radius: 90px;
-  background-image: ${(props: Prop) => props.url || "none"};
+  background-image: ${(props) => props.url || "none"};
   background-size: cover;
   background-position: center;
   position: relative;
@@ -159,7 +144,7 @@ const IntroText = styled.div`
   }
 `;
 
-const Introduction = styled.textarea`
+const Introduction = styled.textarea<{ border?: string }>`
   margin-bottom: 10px;
   padding: 10px 0;
   width: 100%;
@@ -168,7 +153,7 @@ const Introduction = styled.textarea`
   font-size: 18px;
   line-height: 22px;
   resize: none;
-  border: ${(props: Prop) => props.border};
+  border: ${(props) => props.border};
   outline: none;
   @media screen and (max-width: 1449px) {
     padding: 5px 0;
@@ -177,7 +162,7 @@ const Introduction = styled.textarea`
   }
 `;
 
-const EditBtn = styled.button`
+const EditBtn = styled.button<{ cursor?: string }>`
   padding: 0 10px;
   height: 40px;
   min-width: 120px;
@@ -188,7 +173,7 @@ const EditBtn = styled.button`
   border-radius: 10px;
   background-color: #3c3c3c30;
   &:hover {
-    cursor: ${(props: Prop) => props.cursor};
+    cursor: ${(props) => props.cursor};
     color: #ffffff;
     background-color: #616161;
   }
@@ -308,15 +293,19 @@ const ProjectIconContainer = styled.div`
   align-items: center;
 `;
 
-const Icon = styled.div`
-  margin-left: ${(props: Prop) => props.marginLift};
+const Icon = styled.div<{
+  marginLift?: string;
+  img?: string;
+  hoverImg?: string;
+}>`
+  margin-left: ${(props) => props.marginLift};
   width: 28px;
   height: 28px;
-  background-image: ${(props: Prop) => props.img};
+  background-image: ${(props) => props.img};
   background-position: center;
   background-size: cover;
   &:hover {
-    background-image: ${(props: Prop) => props.hoverImg};
+    background-image: ${(props) => props.hoverImg};
     cursor: pointer;
   }
   @media screen and (max-width: 1049px) {
@@ -325,10 +314,10 @@ const Icon = styled.div`
   }
 `;
 
-const CoverPhoto = styled.div`
+const CoverPhoto = styled.div<{ url?: string }>`
   width: 180px;
   height: 180px;
-  background-image: ${(props: Prop) => props.img};
+  background-image: ${(props) => props.url};
   background-position: center;
   background-size: cover;
   @media screen and (max-width: 1049px) {
@@ -550,7 +539,7 @@ function Profile() {
                       </ProjectLeftContainer>
                       <CoverPhoto
                         key={projectData.mainUrl}
-                        img={`url(${projectData.mainUrl})`}
+                        url={`url(${projectData.mainUrl})`}
                       />
                     </SingleProjectContainer>
                   ))}
@@ -659,7 +648,7 @@ function Profile() {
 
                         <CoverPhoto
                           key={projectData.mainUrl}
-                          img={`url(${projectData.mainUrl})`}
+                          url={`url(${projectData.mainUrl})`}
                         />
                       </SingleProjectContainer>
                     ))}

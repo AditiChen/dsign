@@ -1,17 +1,5 @@
 import styled from "styled-components";
-
-interface Prop {
-  border?: string;
-  url?: string;
-  backgroundColor?: string;
-  top?: string;
-  left?: string;
-}
-
-interface InsertProp {
-  photoUrl: string[];
-  content: string[];
-}
+import { SingleProjectTemplateProps } from "../tsTypes";
 
 const Wrapper = styled.div`
   padding: 60px 50px;
@@ -94,11 +82,11 @@ const ImgContainer = styled.div`
   }
 `;
 
-const Img = styled.div`
+const Img = styled.div<{ url?: string; backgroundColor?: string }>`
   width: 295px;
   height: 100%;
-  background-image: ${(props: Prop) => props.url};
-  background-color: ${(props: Prop) => props.backgroundColor};
+  background-image: ${(props) => props.url};
+  background-color: ${(props) => props.backgroundColor};
   background-size: cover;
   background-position: center;
   position: relative;
@@ -117,7 +105,7 @@ const Img = styled.div`
   }
 `;
 
-function Template5(props: InsertProp) {
+function Template5(props: SingleProjectTemplateProps) {
   const { photoUrl, content } = props;
 
   return (

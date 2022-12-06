@@ -8,23 +8,7 @@ import getOtherUsersProject from "../../utils/getOtherUsersProject";
 import getAllProject from "../../utils/getAllProject";
 import Brick from "../../components/Brick/Brick";
 import Carousel from "./Carousel";
-
-interface FetchedProjectsType {
-  uid: string;
-  name?: string;
-  avatar?: string;
-  mainUrl: string;
-  projectId: string;
-  introduction: string;
-  title: string;
-  time: number;
-  pages: {
-    type: number;
-    content?: string[];
-    url?: string[];
-    location?: { lat?: number; lng?: number };
-  }[];
-}
+import { FetchedProjectsType } from "../../components/tsTypes";
 
 const Wrapper = styled.div`
   width: 100%;

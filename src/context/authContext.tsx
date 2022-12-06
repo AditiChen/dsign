@@ -23,32 +23,9 @@ import Swal from "sweetalert2";
 
 import { db, auth } from "./firebaseSDK";
 import getUserProjects from "../utils/getUserProjects";
+import { UserDataType, UserProjectsType } from "../components/tsTypes";
 
 type BodyProp = { children: React.ReactNode };
-
-interface UserDataType {
-  uid: string;
-  name: string;
-  email: string;
-  avatar: string;
-  introduction: string;
-  friendList: string[];
-  favoriteList: string[];
-  folders: { folderName: string; photos: string[] }[];
-}
-interface UserProjectsType {
-  uid: string;
-  mainUrl: string;
-  projectId: string;
-  title: string;
-  time: number;
-  pages: {
-    type: number;
-    content?: string[];
-    url?: string[];
-    location?: { lat?: number; lng?: number };
-  }[];
-}
 
 interface AuthContextType {
   isLogin: boolean;

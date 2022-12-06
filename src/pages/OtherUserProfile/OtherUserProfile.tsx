@@ -9,31 +9,7 @@ import getUserProjects from "../../utils/getUserProjects";
 import { AuthContext } from "../../context/authContext";
 import Brick from "../../components/Brick/Brick";
 import FriendIcon from "../../components/IconButtons/FriendIcon";
-
-interface Prop {
-  url?: string;
-  size?: string;
-  background?: string;
-  text?: string;
-  focus?: string;
-  position?: string;
-  img?: string;
-  weight?: string;
-}
-
-interface UserProjectsType {
-  uid: string;
-  mainUrl: string;
-  projectId: string;
-  title: string;
-  time: number;
-  pages: {
-    type: number;
-    content?: string[];
-    url?: string[];
-    location?: { lat?: number; lng?: number };
-  }[];
-}
+import { UserProjectsType } from "../../components/tsTypes";
 
 const Wrapper = styled.div`
   padding: 50px 5vw;
@@ -76,11 +52,11 @@ const UserInfoContainer = styled.div`
   }
 `;
 
-const Avatar = styled.div`
+const Avatar = styled.div<{ url?: string }>`
   height: 180px;
   width: 180px;
   border-radius: 50%;
-  background-image: ${(props: Prop) => props.url || "none"};
+  background-image: ${(props) => props.url || "none"};
   background-size: cover;
   background-position: center;
   position: relative;
