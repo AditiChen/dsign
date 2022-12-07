@@ -57,6 +57,15 @@ const FoldersContainer = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+  @media screen and (max-width: 949px) {
+    padding: 70px 0 20px;
+    height: calc(100vh - 100px);
+  }
+  @media screen and (max-width: 799px) {
+    padding: 60px 0 20px;
+    width: 120px;
+    height: calc(100vh - 90px);
+  }
 `;
 
 const AddFolderContainer = styled.div`
@@ -71,6 +80,13 @@ const AddFolderContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media screen and (max-width: 949px) {
+    top: 50px;
+  }
+  @media screen and (max-width: 799px) {
+    width: 120px;
+    height: 50px;
+  }
 `;
 
 const AddFolderIcon = styled.div`
@@ -82,6 +98,10 @@ const AddFolderIcon = styled.div`
   &:hover {
     background-image: url(${addFolderIconHover});
     cursor: pointer;
+  }
+  @media screen and (max-width: 799px) {
+    width: 30px;
+    height: 30px;
   }
 `;
 
@@ -116,11 +136,18 @@ const FolderIcon = styled.div`
   &:hover {
     cursor: pointer;
   }
+  @media screen and (max-width: 799px) {
+    width: 60px;
+    height: 60px;
+  }
 `;
 
 const OpenFolderIcon = styled(FolderIcon)`
   width: 145px;
   background-image: url(${folderOpenIcon});
+  @media screen and (max-width: 799px) {
+    width: 110px;
+  }
 `;
 
 const FolderName = styled.div`
@@ -131,6 +158,9 @@ const FolderName = styled.div`
   & + & {
     margin-left: 20px;
   }
+  @media screen and (max-width: 799px) {
+    font-size: 14px;
+  }
 `;
 
 const FolderContentContainer = styled.div`
@@ -140,7 +170,13 @@ const FolderContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   @media screen and (max-width: 1449px) {
-    padding: 30px 120px;
+    padding: 30px 80px;
+  }
+  @media screen and (max-width: 1024px) {
+    padding: 30px 50px;
+  }
+  @media screen and (max-width: 799px) {
+    padding: 10px 0;
   }
 `;
 
@@ -149,11 +185,8 @@ const HeaderContainer = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  @media screen and (min-width: 800px) and (max-width: 1024px) {
-    height: 70px;
-  }
   @media screen and (max-width: 799px) {
-    height: 50px;
+    margin-bottom: 10px;
   }
 `;
 
@@ -167,7 +200,6 @@ const Title = styled.div`
     font-size: 20px;
   }
   @media screen and (max-width: 799px) {
-    padding: 4px 30px 0 30px;
     font-size: 16px;
   }
 `;
@@ -182,6 +214,10 @@ const RenameFolderIcon = styled.div`
   &:hover {
     cursor: pointer;
     background-image: url(${pencilIconHover});
+  }
+  @media screen and (max-width: 799px) {
+    width: 20px;
+    height: 20px;
   }
 `;
 
@@ -224,6 +260,12 @@ const BricksContainer = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+  @media screen and (max-width: 949px) {
+    height: calc(100vh - 220px);
+  }
+  @media screen and (max-width: 799px) {
+    height: calc(100vh - 200px);
+  }
 `;
 
 const BricksInnerContainer = styled.div`
@@ -233,6 +275,9 @@ const BricksInnerContainer = styled.div`
   display: grid;
   grid-gap: 10px;
   grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  @media screen and (max-width: 799px) {
+    grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+  }
 `;
 
 const Img = styled.div<{ url?: string }>`
@@ -273,6 +318,10 @@ const FolderTrashIcon = styled(TrashIcon)`
   height: 20px;
   right: 5px;
   top: 51px;
+  @media screen and (max-width: 799px) {
+    width: 16px;
+    height: 16px;
+  }
 `;
 
 const ImgContainer = styled.div`
@@ -465,6 +514,7 @@ function MaterialCollection() {
       </Wrapper>
     );
   }
+
   return (
     <>
       <DragDropContext onDragEnd={(e) => onDragEnd(e)}>

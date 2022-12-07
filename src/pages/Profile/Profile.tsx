@@ -437,6 +437,87 @@ function Profile() {
     setIsBtnLoading(false);
   }
 
+  const renderDesktopProjectList = () => (
+    <ProjectsContainer>
+      {userProjects.map((projectData) => (
+        <SingleProjectContainer key={projectData.projectId}>
+          <ProjectLeftContainer>
+            <ProjectTitle>{projectData.title}</ProjectTitle>
+            <ProjectIconContainer>
+              <Icon
+                img={`url(${viewProjectIcon})`}
+                hoverImg={`url(${viewProjectIconHover})`}
+                marginLift="0"
+                onClick={() =>
+                  navigate(`/singleProject?id=${projectData.projectId}`)
+                }
+              />
+              <Icon
+                img={`url(${editProjectIcon})`}
+                hoverImg={`url(${editProjectIconHover})`}
+                marginLift="15px"
+                onClick={() =>
+                  navigate(`/editExistProject?id=${projectData.projectId}`)
+                }
+              />
+              <Icon
+                img={`url(${deleteIcon})`}
+                hoverImg={`url(${deleteIconHover})`}
+                marginLift="auto"
+                onClick={() => deleteProjectHandler(projectData.projectId)}
+              />
+            </ProjectIconContainer>
+          </ProjectLeftContainer>
+          <CoverPhoto
+            key={projectData.mainUrl}
+            url={`url(${projectData.mainUrl})`}
+          />
+        </SingleProjectContainer>
+      ))}
+    </ProjectsContainer>
+  );
+
+  const renderMobileProjectList = () => (
+    <ProjectsContainer>
+      {userProjects.map((projectData) => (
+        <SingleProjectContainer key={projectData.projectId}>
+          <ProjectLeftContainer>
+            <ProjectTitle>{projectData.title}</ProjectTitle>
+            <ProjectIconContainer>
+              <Icon
+                img={`url(${viewProjectIcon})`}
+                hoverImg={`url(${viewProjectIconHover})`}
+                marginLift="0"
+                onClick={() =>
+                  navigate(`/singleProject?id=${projectData.projectId}`)
+                }
+              />
+              <Icon
+                img={`url(${editProjectIcon})`}
+                hoverImg={`url(${editProjectIconHover})`}
+                marginLift="15px"
+                onClick={() =>
+                  navigate(`/editExistProject?id=${projectData.projectId}`)
+                }
+              />
+              <Icon
+                img={`url(${deleteIcon})`}
+                hoverImg={`url(${deleteIconHover})`}
+                marginLift="auto"
+                onClick={() => deleteProjectHandler(projectData.projectId)}
+              />
+            </ProjectIconContainer>
+          </ProjectLeftContainer>
+
+          <CoverPhoto
+            key={projectData.mainUrl}
+            url={`url(${projectData.mainUrl})`}
+          />
+        </SingleProjectContainer>
+      ))}
+    </ProjectsContainer>
+  );
+
   if (isLoading) {
     return (
       <Wrapper>
@@ -465,7 +546,7 @@ function Profile() {
                 border={!isEdit ? "none" : "1px solid #787878"}
                 maxLength={115}
               />
-              {isEdit ? (
+              {isEdit && (
                 <EditBtn
                   onClick={() => updateIntro()}
                   cursor={isBtnLoading ? " not-allowed" : "pointer"}
@@ -480,7 +561,8 @@ function Profile() {
                     />
                   )}
                 </EditBtn>
-              ) : (
+              )}
+              {!isEdit && (
                 <EditBtn onClick={() => setIsEdit(true)} cursor=" pointer">
                   Edit
                 </EditBtn>
@@ -501,49 +583,7 @@ function Profile() {
               {userProjects.length === 0 ? (
                 <EmptyReminder>{t("go_to_create_project")}</EmptyReminder>
               ) : (
-                <ProjectsContainer>
-                  {userProjects.map((projectData) => (
-                    <SingleProjectContainer key={projectData.projectId}>
-                      <ProjectLeftContainer>
-                        <ProjectTitle>{projectData.title}</ProjectTitle>
-                        <ProjectIconContainer>
-                          <Icon
-                            img={`url(${viewProjectIcon})`}
-                            hoverImg={`url(${viewProjectIconHover})`}
-                            marginLift="0"
-                            onClick={() =>
-                              navigate(
-                                `/singleProject?id=${projectData.projectId}`
-                              )
-                            }
-                          />
-                          <Icon
-                            img={`url(${editProjectIcon})`}
-                            hoverImg={`url(${editProjectIconHover})`}
-                            marginLift="15px"
-                            onClick={() =>
-                              navigate(
-                                `/editExistProject?id=${projectData.projectId}`
-                              )
-                            }
-                          />
-                          <Icon
-                            img={`url(${deleteIcon})`}
-                            hoverImg={`url(${deleteIconHover})`}
-                            marginLift="auto"
-                            onClick={() =>
-                              deleteProjectHandler(projectData.projectId)
-                            }
-                          />
-                        </ProjectIconContainer>
-                      </ProjectLeftContainer>
-                      <CoverPhoto
-                        key={projectData.mainUrl}
-                        url={`url(${projectData.mainUrl})`}
-                      />
-                    </SingleProjectContainer>
-                  ))}
-                </ProjectsContainer>
+                renderDesktopProjectList()
               )}
             </ProjectListContainer>
           </InnerContainer>
@@ -582,7 +622,7 @@ function Profile() {
                   border={!isEdit ? "none" : "1px solid #787878"}
                   maxLength={150}
                 />
-                {isEdit ? (
+                {isEdit && (
                   <EditBtn
                     onClick={() => updateIntro()}
                     cursor={isBtnLoading ? " not-allowed" : "pointer"}
@@ -597,7 +637,8 @@ function Profile() {
                       />
                     )}
                   </EditBtn>
-                ) : (
+                )}
+                {!isEdit && (
                   <EditBtn onClick={() => setIsEdit(true)} cursor="pointer">
                     Edit
                   </EditBtn>
@@ -609,50 +650,7 @@ function Profile() {
                 {userProjects.length === 0 ? (
                   <ProjectTitle>{t("go_to_create_project")}</ProjectTitle>
                 ) : (
-                  <ProjectsContainer>
-                    {userProjects.map((projectData) => (
-                      <SingleProjectContainer key={projectData.projectId}>
-                        <ProjectLeftContainer>
-                          <ProjectTitle>{projectData.title}</ProjectTitle>
-                          <ProjectIconContainer>
-                            <Icon
-                              img={`url(${viewProjectIcon})`}
-                              hoverImg={`url(${viewProjectIconHover})`}
-                              marginLift="0"
-                              onClick={() =>
-                                navigate(
-                                  `/singleProject?id=${projectData.projectId}`
-                                )
-                              }
-                            />
-                            <Icon
-                              img={`url(${editProjectIcon})`}
-                              hoverImg={`url(${editProjectIconHover})`}
-                              marginLift="15px"
-                              onClick={() =>
-                                navigate(
-                                  `/editExistProject?id=${projectData.projectId}`
-                                )
-                              }
-                            />
-                            <Icon
-                              img={`url(${deleteIcon})`}
-                              hoverImg={`url(${deleteIconHover})`}
-                              marginLift="auto"
-                              onClick={() =>
-                                deleteProjectHandler(projectData.projectId)
-                              }
-                            />
-                          </ProjectIconContainer>
-                        </ProjectLeftContainer>
-
-                        <CoverPhoto
-                          key={projectData.mainUrl}
-                          url={`url(${projectData.mainUrl})`}
-                        />
-                      </SingleProjectContainer>
-                    ))}
-                  </ProjectsContainer>
+                  renderMobileProjectList()
                 )}
               </ProjectListContainer>
             )}

@@ -284,9 +284,7 @@ function SingleProject() {
                       singleProjectData[0]?.uid !== userId &&
                       userId !== "" ? (
                         <FriendIcon requestId={singleProjectData[0]?.uid} />
-                      ) : (
-                        ""
-                      )}
+                      ) : null}
                     </UserInfoHeaderContainer>
                     <Intor>{singleProjectData[0]?.introduction}</Intor>
                   </UserInfoInnerContainer>
@@ -316,9 +314,7 @@ function SingleProject() {
                       <GoogleMapAPI
                         key={`${index + 1}`}
                         position={
-                          (singleProjectData &&
-                            singleProjectData[0]?.pages[index].location) ||
-                          {}
+                          singleProjectData[0]?.pages[index].location || {}
                         }
                       />
                     );
@@ -326,16 +322,8 @@ function SingleProject() {
                   return (
                     <Template
                       key={`${index + 1}`}
-                      photoUrl={
-                        (singleProjectData &&
-                          singleProjectData[0]?.pages[index].photos) ||
-                        []
-                      }
-                      content={
-                        (singleProjectData &&
-                          singleProjectData[0]?.pages[index].content) ||
-                        []
-                      }
+                      photoUrl={singleProjectData[0]?.pages[index].photos || []}
+                      content={singleProjectData[0]?.pages[index].content || []}
                     />
                   );
                 })}
