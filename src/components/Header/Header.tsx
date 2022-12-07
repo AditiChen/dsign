@@ -371,9 +371,9 @@ function Header() {
   const [activeLanguageIndex, setActiveLanguageIndex] = useState(
     getCurrentLanguageFromCookie
   );
-  const languageRef = useRef<HTMLDivElement>(null!);
-  const mobileMenuRef = useRef<HTMLDivElement>(null!);
-  const mobileLanguageRef = useRef<HTMLDivElement>(null!);
+  const languageRef = useRef<HTMLDivElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const mobileLanguageRef = useRef<HTMLDivElement>(null);
 
   useOnClickOutside(languageRef, () => setIsShowLanguages(false));
   useOnClickOutside(mobileMenuRef, () => setIsShowMobileMenu(false));
@@ -420,19 +420,6 @@ function Header() {
                 {t("create")}
               </PageLink>
               <PageLink
-                to="favoriteList"
-                border={
-                  location.pathname === "/favoriteList"
-                    ? "1px solid #c4c4c4"
-                    : "none"
-                }
-                onClick={() => {
-                  setShowMessageFrame(false);
-                }}
-              >
-                {t("favorite_list")}
-              </PageLink>
-              <PageLink
                 to="collection"
                 border={
                   location.pathname === "/collection"
@@ -444,6 +431,19 @@ function Header() {
                 }}
               >
                 {t("collection_list")}
+              </PageLink>
+              <PageLink
+                to="favoriteList"
+                border={
+                  location.pathname === "/favoriteList"
+                    ? "1px solid #c4c4c4"
+                    : "none"
+                }
+                onClick={() => {
+                  setShowMessageFrame(false);
+                }}
+              >
+                {t("favorite_list")}
               </PageLink>
             </>
           )}
@@ -559,14 +559,6 @@ function Header() {
                   {t("create")}
                 </MobileContext>
                 <MobileContext
-                  to="favoriteList"
-                  onClick={() => {
-                    setShowMessageFrame(false);
-                  }}
-                >
-                  {t("favorite_list")}
-                </MobileContext>
-                <MobileContext
                   to="collection"
                   onClick={() => {
                     setShowMessageFrame(false);
@@ -574,6 +566,15 @@ function Header() {
                 >
                   {t("collection_list")}
                 </MobileContext>
+                <MobileContext
+                  to="favoriteList"
+                  onClick={() => {
+                    setShowMessageFrame(false);
+                  }}
+                >
+                  {t("favorite_list")}
+                </MobileContext>
+
                 <SignBtn
                   onClick={() => {
                     logoutHandler();

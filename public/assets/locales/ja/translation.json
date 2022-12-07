@@ -78,8 +78,8 @@
 
   "your_collection": "あなたの収集",
   "empty_folder": "フォルダは空です、写真をアップロードしてください！",
-  "create_folder": "新規作成",
-  "cancel_create_folder": "取消",
+  "name_folder": "確認",
+  "cancel_name_folder": "取消",
   "delete_photo_warning": "本当にこの写真を削除してもいいのでしょうか？",
   "folder_name": "フォルダー名を入力してください",
   "folder_name_length": "15文字以内",

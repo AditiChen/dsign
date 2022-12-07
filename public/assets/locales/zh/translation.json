@@ -1,5 +1,5 @@
 {
-  "favorite_list": "收藏列表",
+  "favorite_list": "我的最愛",
   "collection_list": "素材庫",
   "create": "建立新專案",
   "languages": "語言",
@@ -78,8 +78,8 @@
 
   "your_collection": "你的素材庫",
   "empty_folder": "資料夾現在是空的喔，快去上傳照片吧！",
-  "create_folder": "確定新增",
-  "cancel_create_folder": "取消",
+  "name_folder": "確定",
+  "cancel_name_folder": "取消",
   "delete_photo_warning": "確定要刪除這張照片嗎？",
   "folder_name": "請輸入資料夾名稱",
   "folder_name_length": "最多15個字",

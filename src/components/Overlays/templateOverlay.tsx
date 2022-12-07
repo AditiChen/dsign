@@ -8,6 +8,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
+import produce from "immer";
 import Cropper from "react-easy-crop";
 import ReactLoading from "react-loading";
 import { Slider, defaultTheme, Provider, View } from "@adobe/react-spectrum";
@@ -158,6 +159,7 @@ const NewPhotoHeaderContainer = styled.div`
 `;
 
 const CollectionFolderContainer = styled.div`
+  margin-top: 5px;
   width: 100%;
   height: fit-content;
   display: flex;
@@ -429,8 +431,9 @@ function Overlay({
     )) as string;
     setNewPhotoUrl(downloadUrl);
     if (isAddToCollection) {
-      const newPhotoArray = [...folders];
-      newPhotoArray[0].photos.push(downloadUrl);
+      const newPhotoArray = produce(folders, (draft) => {
+        draft[0].photos.push(downloadUrl);
+      });
       await updateDoc(doc(db, "users", userId), {
         folders: newPhotoArray,
       });
@@ -539,7 +542,7 @@ function Overlay({
               type="file"
               accept="image/*"
               style={{ display: "none" }}
-              onChange={(e) => onUploadFile(e)}
+              onChange={onUploadFile}
             />
           </UploadPic>
         </NewPhotoHeaderContainer>
@@ -555,7 +558,7 @@ function Overlay({
             >
               {folder.folderName}
               <FolderIcon
-                $width={currentFolderIndex === index ? "39px" : "26px"}
+                $width={currentFolderIndex === index ? "42px" : "26px"}
                 opacity={currentFolderIndex === index ? 1 : 0.7}
                 img={
                   currentFolderIndex === index

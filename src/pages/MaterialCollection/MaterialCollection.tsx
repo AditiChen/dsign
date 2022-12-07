@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import ReactLoading from "react-loading";
 import { v4 as uuid } from "uuid";
+import produce from "immer";
 import { doc, updateDoc } from "firebase/firestore";
 import Swal from "sweetalert2";
 import imageCompression from "browser-image-compression";
@@ -143,7 +144,8 @@ const FolderIcon = styled.div`
 `;
 
 const OpenFolderIcon = styled(FolderIcon)`
-  width: 145px;
+  width: 140px;
+  height: 75px;
   background-image: url(${folderOpenIcon});
   @media screen and (max-width: 799px) {
     width: 110px;
@@ -397,9 +399,9 @@ function MaterialCollection() {
       inputPlaceholder: t("folder_name_length"),
       input: "text",
       confirmButtonColor: "#6d79aa",
-      confirmButtonText: t("create_folder"),
+      confirmButtonText: t("name_folder"),
       showCancelButton: true,
-      cancelButtonText: t("cancel_create_folder"),
+      cancelButtonText: t("cancel_name_folder"),
     });
     if (ans.isDismissed === true) return;
     if (ans.value.trim() === "") {
@@ -418,14 +420,17 @@ function MaterialCollection() {
       });
       return;
     }
-    const newPhotoArray = [...folders];
     if (state === "new") {
-      newPhotoArray.push({ folderName: ans.value, photos: [] });
-      await updateToFirestore(newPhotoArray);
+      const newFolders = produce(folders, (draft) => {
+        draft.push({ folderName: ans.value, photos: [] });
+      });
+      await updateToFirestore(newFolders);
       return;
     }
-    newPhotoArray[currentFolderIndex].folderName = ans.value;
-    await updateToFirestore(newPhotoArray);
+    produce(folders, async (draft) => {
+      draft[currentFolderIndex].folderName = ans.value;
+      await updateToFirestore(draft);
+    });
   }
 
   async function deleteFolderHandler(folderIndex: number) {
@@ -438,35 +443,39 @@ function MaterialCollection() {
       denyButtonText: t("reject_yes_answer"),
     });
     if (ans.isConfirmed === true) return;
-    const removePhotoArray = [...folders];
-    removePhotoArray.splice(folderIndex, 1);
-    await updateToFirestore(removePhotoArray);
+    const newOrder = produce(folders, (draft) => {
+      draft.splice(folderIndex, 1);
+    });
+    await updateToFirestore(newOrder);
   }
 
-  const onUploadImgFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onUploadImgFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files === null) return;
     const newFiles = Array.from(e.target.files);
-    newFiles.forEach(async (file: File) => {
-      setProgressing(true);
-      const compressedFile = await imageCompression(file, {
-        maxSizeMB: 1,
+    const newPhotos = await Promise.all(
+      newFiles.map(async (file: File) => {
+        setProgressing(true);
+        const compressedFile = await imageCompression(file, {
+          maxSizeMB: 1,
+        });
+        const urlByUuid = `${uuid()}`;
+        const downloadUrl = (await upLoadImgToCloudStorage(
+          compressedFile,
+          userId,
+          urlByUuid
+        )) as string;
+        return downloadUrl;
+      })
+    );
+    const newOrder = produce(folders, (draft) => {
+      newPhotos.forEach((photo) => {
+        draft[currentFolderIndex].photos.push(photo);
       });
-      const urlByUuid = `${uuid()}`;
-      const downloadUrl = (await upLoadImgToCloudStorage(
-        compressedFile,
-        userId,
-        urlByUuid
-      )) as string;
-      setProgressing(false);
-      const newPhotoArray = [...folders];
-      newPhotoArray[currentFolderIndex].photos.push(downloadUrl);
-      await updateToFirestore(newPhotoArray);
     });
+    setProgressing(false);
+    await updateToFirestore(newOrder);
+    e.target.value = "";
   };
-
-  const getListStyle = (isDraggingOver: boolean) => ({
-    background: isDraggingOver ? "#b4b4b4" : "none",
-  });
 
   async function deletePhotoHandler(photoIndex: number) {
     const ans = await Swal.fire({
@@ -478,10 +487,15 @@ function MaterialCollection() {
       denyButtonText: t("reject_yes_answer"),
     });
     if (ans.isConfirmed === true) return;
-    const removePhotoArray = [...folders];
-    removePhotoArray[currentFolderIndex].photos.splice(photoIndex, 1);
-    await updateToFirestore(removePhotoArray);
+    const newOrder = produce(folders, (draft) => {
+      draft[currentFolderIndex].photos.splice(photoIndex, 1);
+    });
+    await updateToFirestore(newOrder);
   }
+
+  const getListStyle = (isDraggingOver: boolean) => ({
+    background: isDraggingOver ? "#b4b4b4" : "none",
+  });
 
   const onDragEnd = async (result: DropResult) => {
     const { source, destination } = result;
@@ -498,14 +512,105 @@ function MaterialCollection() {
     if (originalFolderIndex === destinationFolderIndex) {
       return;
     }
-    const newOrder = [...folders];
-    const [remove] = newOrder[originalFolderIndex].photos.splice(
-      source.index,
-      1
-    );
-    newOrder[destinationFolderIndex].photos.push(remove);
+    const newOrder = produce(folders, (draft) => {
+      const [remove] = draft[originalFolderIndex].photos.splice(
+        source.index,
+        1
+      );
+      draft[destinationFolderIndex].photos.push(remove);
+    });
     await updateToFirestore(newOrder);
   };
+
+  const renderFolderList = () => (
+    <FoldersInnerContainer>
+      {folders.map((folder, index) => (
+        <Droppable droppableId={folder.folderName} key={folder.folderName}>
+          {(droppableProvided, droppableSnapshot) => (
+            <SingleFolderContainer
+              {...droppableProvided.droppableProps}
+              ref={droppableProvided.innerRef}
+              key={folder.folderName}
+              style={getListStyle(droppableSnapshot.isDraggingOver)}
+            >
+              {folders[currentFolderIndex].folderName === folder.folderName ? (
+                <OpenFolderIcon />
+              ) : (
+                <>
+                  <FolderIcon onClick={() => setCurrentFolderIndex(index)} />
+                  {folder.folderName !== "Unsorted" && (
+                    <FolderTrashIcon
+                      onClick={() => deleteFolderHandler(index)}
+                    />
+                  )}
+                </>
+              )}
+              <FolderName>{folder.folderName}</FolderName>
+              {droppableProvided.placeholder}
+            </SingleFolderContainer>
+          )}
+        </Droppable>
+      ))}
+    </FoldersInnerContainer>
+  );
+
+  const renderImgBricks = () => (
+    <BricksContainer>
+      {folders && folders[currentFolderIndex]?.photos.length === 0 && (
+        <NoPhotoText>{t("empty_folder")}</NoPhotoText>
+      )}
+      <Droppable
+        droppableId="current"
+        direction="horizontal"
+        key={folders[currentFolderIndex]?.folderName}
+      >
+        {(droppableProvided) => (
+          <div
+            {...droppableProvided.droppableProps}
+            ref={droppableProvided.innerRef}
+          >
+            <BricksInnerContainer>
+              {folders &&
+                folders[currentFolderIndex]?.photos.length !== 0 &&
+                folders[currentFolderIndex]?.photos.map((photo, photoIndex) => (
+                  <Draggable draggableId={photo} index={photoIndex} key={photo}>
+                    {(provided) => (
+                      <ImgContainer
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <Img
+                          url={`url(${photo})`}
+                          onClick={() => {
+                            setCurrentUrl(photo);
+                            setShowOverlay(true);
+                          }}
+                        />
+                        <TrashIcon
+                          onClick={() => deletePhotoHandler(photoIndex)}
+                        />
+                      </ImgContainer>
+                    )}
+                  </Draggable>
+                ))}
+              {progressing && (
+                <ImgContainer>
+                  <PhotoLoading
+                    type="spin"
+                    color="#3c3c3c"
+                    height="40px"
+                    width="40px"
+                  />
+                </ImgContainer>
+              )}
+            </BricksInnerContainer>
+            {droppableProvided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </BricksContainer>
+  );
 
   if (isLoading) {
     return (
@@ -517,48 +622,13 @@ function MaterialCollection() {
 
   return (
     <>
-      <DragDropContext onDragEnd={(e) => onDragEnd(e)}>
+      <DragDropContext onDragEnd={onDragEnd}>
         <Wrapper>
           <FoldersContainer>
             <AddFolderContainer>
               <AddFolderIcon onClick={() => namingFolderHandler("new")} />
             </AddFolderContainer>
-            <FoldersInnerContainer>
-              {folders.map((folder, index) => (
-                <Droppable
-                  droppableId={folder.folderName}
-                  key={folder.folderName}
-                >
-                  {(droppableProvided, droppableSnapshot) => (
-                    <SingleFolderContainer
-                      {...droppableProvided.droppableProps}
-                      ref={droppableProvided.innerRef}
-                      key={folder.folderName}
-                      style={getListStyle(droppableSnapshot.isDraggingOver)}
-                    >
-                      {folders[currentFolderIndex].folderName ===
-                      folder.folderName ? (
-                        <OpenFolderIcon />
-                      ) : (
-                        <>
-                          <FolderIcon
-                            onClick={() => setCurrentFolderIndex(index)}
-                          />
-                          {folder.folderName !== "Unsorted" && (
-                            <FolderTrashIcon
-                              onClick={() => deleteFolderHandler(index)}
-                            />
-                          )}
-                        </>
-                      )}
-
-                      <FolderName>{folder.folderName}</FolderName>
-                      {droppableProvided.placeholder}
-                    </SingleFolderContainer>
-                  )}
-                </Droppable>
-              ))}
-            </FoldersInnerContainer>
+            {renderFolderList()}
           </FoldersContainer>
           <FolderContentContainer>
             <HeaderContainer>
@@ -576,73 +646,11 @@ function MaterialCollection() {
                   accept="image/*"
                   style={{ display: "none" }}
                   multiple
-                  onChange={(e) => onUploadImgFiles(e)}
+                  onChange={onUploadImgFiles}
                 />
               </UploadPhotosIcon>
             </HeaderContainer>
-            <BricksContainer>
-              {folders && folders[currentFolderIndex]?.photos.length === 0 && (
-                <NoPhotoText>{t("empty_folder")}</NoPhotoText>
-              )}
-              <Droppable
-                droppableId="current"
-                direction="horizontal"
-                key={folders[currentFolderIndex]?.folderName}
-              >
-                {(droppableProvided) => (
-                  <div
-                    {...droppableProvided.droppableProps}
-                    ref={droppableProvided.innerRef}
-                  >
-                    <BricksInnerContainer>
-                      {folders &&
-                        folders[currentFolderIndex]?.photos.length !== 0 &&
-                        folders[currentFolderIndex]?.photos.map(
-                          (photo, photoIndex) => (
-                            <Draggable
-                              draggableId={photo}
-                              index={photoIndex}
-                              key={photo}
-                            >
-                              {(provided) => (
-                                <ImgContainer
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                >
-                                  <Img
-                                    url={`url(${photo})`}
-                                    onClick={() => {
-                                      setCurrentUrl(photo);
-                                      setShowOverlay(true);
-                                    }}
-                                  />
-                                  <TrashIcon
-                                    onClick={() =>
-                                      deletePhotoHandler(photoIndex)
-                                    }
-                                  />
-                                </ImgContainer>
-                              )}
-                            </Draggable>
-                          )
-                        )}
-                      {progressing && (
-                        <ImgContainer>
-                          <PhotoLoading
-                            type="spin"
-                            color="#3c3c3c"
-                            height="40px"
-                            width="40px"
-                          />
-                        </ImgContainer>
-                      )}
-                    </BricksInnerContainer>
-                    {droppableProvided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </BricksContainer>
+            {renderImgBricks()}
           </FolderContentContainer>
         </Wrapper>
       </DragDropContext>

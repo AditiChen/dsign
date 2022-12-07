@@ -226,7 +226,7 @@ function SingleProject() {
     FetchedProjectsType[]
   >([]);
   const [isLoading, setIsLoading] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null!);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const urlString = new URL(window.location.href);
   const singleProjectId = urlString.searchParams.get("id") as string;
@@ -281,10 +281,10 @@ function SingleProject() {
                       />
                       <Author>{singleProjectData[0]?.name}</Author>
                       {friendList.indexOf(singleProjectData[0]?.uid) === -1 &&
-                      singleProjectData[0]?.uid !== userId &&
-                      userId !== "" ? (
-                        <FriendIcon requestId={singleProjectData[0]?.uid} />
-                      ) : null}
+                        singleProjectData[0]?.uid !== userId &&
+                        userId !== "" && (
+                          <FriendIcon requestId={singleProjectData[0]?.uid} />
+                        )}
                     </UserInfoHeaderContainer>
                     <Intor>{singleProjectData[0]?.introduction}</Intor>
                   </UserInfoInnerContainer>

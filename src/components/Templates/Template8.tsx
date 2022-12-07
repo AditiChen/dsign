@@ -1,6 +1,7 @@
-import styled from "styled-components";
+import { useState, useEffect } from "react";
 import { t } from "i18next";
-import { useState, Dispatch, SetStateAction, useEffect } from "react";
+import styled from "styled-components";
+import produce from "immer";
 
 import Overlay from "../Overlays/templateOverlay";
 import { uploadPhotoIcon } from "../icons/icons";
@@ -75,17 +76,18 @@ function Template7(props: CreateTemplateProps) {
 
   useEffect(() => {
     if (pages[currentIndex].photos === storageUrl) return;
-    const newPages = [...pages];
-    newPages[currentIndex].photos = storageUrl;
+    const newPages = produce(pages, (draft) => {
+      draft[currentIndex].photos = storageUrl;
+    });
     setPages(newPages);
   }, [currentIndex, pages, setPages, storageUrl]);
 
   const setNewPhotoUrl = (returnedUrl: string) => {
-    const newUrl = [...storageUrl];
-    newUrl[currentImgIndex] = returnedUrl;
+    const newUrl = produce(storageUrl, (draft) => {
+      draft[currentImgIndex] = returnedUrl;
+    });
     setStorageUrl(newUrl);
   };
-
   function upLoadNewPhoto(index: number, aspect: number) {
     setCurrentImgUrl(storageUrl[index]);
     setShowOverlay((prev) => !prev);

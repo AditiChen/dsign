@@ -9,6 +9,7 @@ import {
 } from "@react-google-maps/api";
 import { getLatLng, getGeocode } from "use-places-autocomplete";
 import ReactLoading from "react-loading";
+import produce from "immer";
 import { CreateTemplateProps } from "../tsTypes";
 
 const Wrapper = styled.div`
@@ -136,8 +137,9 @@ function GoogleMapInsert(props: CreateTemplateProps) {
       const result = await getGeocode({ address });
       const { lat, lng } = getLatLng(result[0]);
       setPosition({ lat, lng });
-      const newPages = [...pages];
-      newPages[currentIndex].location = { lat, lng };
+      const newPages = produce(pages, (draft) => {
+        draft[currentIndex].location = { lat, lng };
+      });
       setPages(newPages);
     }
   }

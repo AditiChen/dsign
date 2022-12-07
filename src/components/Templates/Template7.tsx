@@ -1,6 +1,7 @@
-import styled from "styled-components";
-import { t } from "i18next";
 import { useState, useEffect } from "react";
+import { t } from "i18next";
+import styled from "styled-components";
+import produce from "immer";
 
 import Overlay from "../Overlays/templateOverlay";
 import { uploadPhotoIcon } from "../icons/icons";
@@ -131,15 +132,17 @@ function Template7(props: CreateTemplateProps) {
       pages[currentIndex].photos === storageUrl
     )
       return;
-    const newPages = [...pages];
-    newPages[currentIndex].content = inputText;
-    newPages[currentIndex].photos = storageUrl;
+    const newPages = produce(pages, (draft) => {
+      draft[currentIndex].content = inputText;
+      draft[currentIndex].photos = storageUrl;
+    });
     setPages(newPages);
-  }, [currentIndex, inputText, pages, setPages, storageUrl]);
+  }, [inputText, storageUrl, currentIndex, setPages, pages]);
 
   const setNewPhotoUrl = (returnedUrl: string) => {
-    const newUrl = [...storageUrl];
-    newUrl[currentImgIndex] = returnedUrl;
+    const newUrl = produce(storageUrl, (draft) => {
+      draft[currentImgIndex] = returnedUrl;
+    });
     setStorageUrl(newUrl);
   };
 

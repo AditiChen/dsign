@@ -230,8 +230,8 @@ function Message({
       time?: Timestamp;
     }[]
   >([]);
-  const scrollRef = useRef<HTMLDivElement>(null!);
-  const messageWindowRef = useRef<HTMLDivElement>(null!);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const messageWindowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setIsLoading(true);

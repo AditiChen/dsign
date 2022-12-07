@@ -311,7 +311,7 @@ function CreateNewProject() {
   const [mainImgSrc, setMainImgSrc] = useState("");
   const [showOverlay, setShowOverlay] = useState(false);
   const [hasGoogleMap, setHasGoogleMap] = useState(false);
-  const selectAreaRef = useRef(null!);
+  const selectAreaRef = useRef(null);
 
   useEffect(() => {
     const sessionStoragePagesData = sessionStorage.getItem("pages");
@@ -525,7 +525,7 @@ function CreateNewProject() {
 
   return (
     <>
-      <DragDropContext onDragEnd={(e) => onDragEnd(e)}>
+      <DragDropContext onDragEnd={onDragEnd}>
         <Wrapper>
           <SelectContainer>
             <SelectInnerContainer>

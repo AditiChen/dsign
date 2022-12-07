@@ -423,7 +423,7 @@ function EditExistProject() {
 
   return (
     <>
-      <DragDropContext onDragEnd={(e) => onDragEnd(e)}>
+      <DragDropContext onDragEnd={onDragEnd}>
         <Wrapper>
           <SelectContainer>
             <SelectInnerContainer>
