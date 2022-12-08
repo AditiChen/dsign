@@ -468,9 +468,7 @@ function MaterialCollection() {
       })
     );
     const newOrder = produce(folders, (draft) => {
-      newPhotos.forEach((photo) => {
-        draft[currentFolderIndex].photos.push(photo);
-      });
+      draft[currentFolderIndex].photos.push(...newPhotos);
     });
     setProgressing(false);
     await updateToFirestore(newOrder);

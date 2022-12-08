@@ -4,9 +4,9 @@ import { useJsApiLoader } from "@react-google-maps/api";
 import ReactLoading from "react-loading";
 import { useNavigate } from "react-router-dom";
 
+import { AuthContext } from "../../context/authContext";
 import templatesArr from "../../components/SingleProjectPageTemplates/TemplatesArr";
 import { GoogleMapAPI } from "../../components/Templates/GoogleMapAPI";
-import { AuthContext } from "../../context/authContext";
 import getSingleProject from "../../utils/getSingleProject";
 import { LikeIcon, LikedIcon } from "../../components/IconButtons/LikeIcons";
 import FriendIcon from "../../components/IconButtons/FriendIcon";

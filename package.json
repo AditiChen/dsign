@@ -14,7 +14,6 @@
     "@adobe/react-spectrum": "^3.23.0",
     "@firebase/auth": "^0.20.11",
     "@react-google-maps/api": "^2.13.1",
-    "@storybook/react": "^6.5.13",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/user-event": "^13.5.0",
     "browser-image-compression": "^2.0.0",

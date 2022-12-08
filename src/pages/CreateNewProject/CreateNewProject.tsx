@@ -334,8 +334,6 @@ function CreateNewProject() {
       window.sessionStorage.removeItem("pages");
       window.sessionStorage.removeItem("title");
       window.sessionStorage.removeItem("mainImg");
-      setMainImgSrc("");
-      setTitle("");
       return;
     }
     const toJsonFormat = JSON.stringify(pages);
