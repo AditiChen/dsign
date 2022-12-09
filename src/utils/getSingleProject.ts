@@ -7,28 +7,13 @@ import {
   doc,
 } from "firebase/firestore";
 import { db } from "../context/firebaseSDK";
+import { FetchedProjectsType } from "../components/tsTypes";
 
 export default async function getSingleProject(projectId: string) {
   const usersRef = collection(db, "projects");
   const q = query(usersRef, where("projectId", "==", projectId));
   const querySnapshot = await getDocs(q);
-  const fetchedProjects: {
-    uid: string;
-    name?: string;
-    avatar?: string;
-    introduction?: string;
-    mainUrl: string;
-    projectId: string;
-    title: string;
-    time: number;
-    pages: {
-      key: string;
-      type: number;
-      content?: string[];
-      photos?: string[];
-      location?: { lat?: number; lng?: number };
-    }[];
-  }[] = [];
+  const fetchedProjects: FetchedProjectsType[] = [];
   querySnapshot.forEach((project) => {
     fetchedProjects.push({
       name: "",

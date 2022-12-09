@@ -1,37 +1,11 @@
-import styled from "styled-components";
+import { useState, useEffect } from "react";
 import { t } from "i18next";
-import { useState, Dispatch, SetStateAction, useEffect } from "react";
+import styled from "styled-components";
+import produce from "immer";
 
 import Overlay from "../Overlays/templateOverlay";
-
-import uploadPhotoIcon from "../../icons/uploadPhoto-icon.png";
-
-interface Prop {
-  url?: string;
-  backgroundColor?: string;
-}
-
-interface InsertProp {
-  setPages: Dispatch<
-    SetStateAction<
-      {
-        key: string;
-        type: number;
-        content?: string[];
-        photos?: string[];
-        location?: { lat?: number; lng?: number };
-      }[]
-    >
-  >;
-  pages: {
-    key: string;
-    type: number;
-    content?: string[];
-    photos?: string[];
-    location?: { lat?: number; lng?: number };
-  }[];
-  currentIndex: number;
-}
+import { uploadPhotoIcon } from "../icons/icons";
+import { CreateTemplateProps } from "../tsTypes";
 
 const Wrapper = styled.div`
   width: 1200px;
@@ -99,12 +73,12 @@ const ImgContainer = styled.div`
   }
 `;
 
-const AsideImg = styled.div`
+const AsideImg = styled.div<{ url?: string; backgroundColor?: string }>`
   width: 430px;
   height: 100%;
   position: relative;
-  background-image: ${(props: Prop) => props.url};
-  background-color: ${(props: Prop) => props.backgroundColor};
+  background-image: ${(props) => props.url};
+  background-color: ${(props) => props.backgroundColor};
   background-size: cover;
   background-position: center;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
@@ -125,12 +99,12 @@ const MiddleImgContainer = styled.div`
   }
 `;
 
-const MiddleImg = styled.div`
+const MiddleImg = styled.div<{ url?: string; backgroundColor?: string }>`
   width: 320px;
   height: 265px;
   position: relative;
-  background-image: ${(props: Prop) => props.url};
-  background-color: ${(props: Prop) => props.backgroundColor};
+  background-image: ${(props) => props.url};
+  background-color: ${(props) => props.backgroundColor};
   background-size: cover;
   background-position: center;
   @media screen and (min-width: 950px) and (max-width: 1449px) {
@@ -156,7 +130,7 @@ const UploadIcon = styled.div`
   }
 `;
 
-function Template2(props: InsertProp) {
+function Template2(props: CreateTemplateProps) {
   const { setPages, currentIndex, pages } = props;
   const [inputText, setInputText] = useState<string[]>(
     pages[currentIndex].content || [""]
@@ -176,15 +150,17 @@ function Template2(props: InsertProp) {
       pages[currentIndex].photos === storageUrl
     )
       return;
-    const newPages = [...pages];
-    newPages[currentIndex].content = inputText;
-    newPages[currentIndex].photos = storageUrl;
+    const newPages = produce(pages, (draft) => {
+      draft[currentIndex].content = inputText;
+      draft[currentIndex].photos = storageUrl;
+    });
     setPages(newPages);
-  }, [currentIndex, inputText, pages, setPages, storageUrl]);
+  }, [inputText, storageUrl, currentIndex, setPages, pages]);
 
   const setNewPhotoUrl = (returnedUrl: string) => {
-    const newUrl = [...storageUrl];
-    newUrl[currentImgIndex] = returnedUrl;
+    const newUrl = produce(storageUrl, (draft) => {
+      draft[currentImgIndex] = returnedUrl;
+    });
     setStorageUrl(newUrl);
   };
 

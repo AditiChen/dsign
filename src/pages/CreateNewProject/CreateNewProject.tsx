@@ -20,11 +20,12 @@ import templatesImgArr from "../../components/Templates/TemplateImg";
 import templatesArr from "../../components/Templates/TemplatesArr";
 import SquareOverlay from "../../components/Overlays/squareOverlay";
 import templateData from "../../components/Templates/TemplatesData.json";
-
-import closeIcon from "../../icons/close-icon.png";
-import closeIconHover from "../../icons/close-icon-hover.png";
-import checkedIcon from "../../icons/checked-icon.png";
-import uploadPhotoIcon from "../../icons/uploadPhoto-icon.png";
+import {
+  closeIcon,
+  closeIconHover,
+  checkedIcon,
+  uploadPhotoIcon,
+} from "../../components/icons/icons";
 
 const Wrapper = styled.div`
   padding-top: 95px;
@@ -310,7 +311,7 @@ function CreateNewProject() {
   const [mainImgSrc, setMainImgSrc] = useState("");
   const [showOverlay, setShowOverlay] = useState(false);
   const [hasGoogleMap, setHasGoogleMap] = useState(false);
-  const selectAreaRef = useRef(null!);
+  const selectAreaRef = useRef(null);
 
   useEffect(() => {
     const sessionStoragePagesData = sessionStorage.getItem("pages");
@@ -433,6 +434,85 @@ function CreateNewProject() {
     navigate("/profile");
   }
 
+  const renderMainImgBtnWithPhoto = () => (
+    <>
+      <Btn
+        backgroundColor="#f5dfa9"
+        backgroundColorHover="#9d8a62"
+        onClick={() => setShowOverlay((prev) => !prev)}
+      >
+        {t("upload_main_photo")}
+        <UploadImgIcon />
+      </Btn>
+      <Btn onClick={() => confirmAllEdit()}>{t("confirm_edit")}</Btn>
+    </>
+  );
+
+  const renderUploadMainImgBtn = () => (
+    <>
+      <Btn onClick={() => setShowOverlay((prev) => !prev)}>
+        {t("edit_main_photo")}
+        <CheckMainImgIcon />
+      </Btn>
+      <Btn
+        backgroundColor="#f5dfa9"
+        backgroundColorHover="#9d8a62"
+        onClick={() => confirmAllEdit()}
+      >
+        {t("confirm_edit")}
+      </Btn>
+    </>
+  );
+
+  const renderCollectionPhotos = () => (
+    <>
+      <Title
+        value={title}
+        maxLength={60}
+        placeholder={t("project_title")}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+      <Droppable droppableId="drop-id">
+        {(droppableProvided) => (
+          <div
+            {...droppableProvided.droppableProps}
+            ref={droppableProvided.innerRef}
+          >
+            {pages.map((page, index) => {
+              const Template = templatesArr[page.type];
+              return (
+                <Draggable draggableId={page.key} index={index} key={page.key}>
+                  {(provided) => (
+                    <SingleEditorContainer
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <Template
+                        pages={pages}
+                        setPages={setPages}
+                        currentIndex={index}
+                        position={position}
+                        setPosition={setPosition}
+                      />
+                      <CloseIcon onClick={() => deleteHandler(index)} />
+                    </SingleEditorContainer>
+                  )}
+                </Draggable>
+              );
+            })}
+            {droppableProvided.placeholder}
+          </div>
+        )}
+      </Droppable>
+      <FooterContainer>
+        {mainImgSrc === ""
+          ? renderMainImgBtnWithPhoto()
+          : renderUploadMainImgBtn()}
+      </FooterContainer>
+    </>
+  );
+
   if (isLoading) {
     return (
       <Wrapper>
@@ -443,7 +523,7 @@ function CreateNewProject() {
 
   return (
     <>
-      <DragDropContext onDragEnd={(e) => onDragEnd(e)}>
+      <DragDropContext onDragEnd={onDragEnd}>
         <Wrapper>
           <SelectContainer>
             <SelectInnerContainer>
@@ -472,84 +552,7 @@ function CreateNewProject() {
               {pages.length === 0 ? (
                 <Text>{t("create_new_project")}</Text>
               ) : (
-                <>
-                  <Title
-                    value={title}
-                    maxLength={60}
-                    placeholder={t("project_title")}
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                  <Droppable droppableId="drop-id">
-                    {(droppableProvided) => (
-                      <div
-                        {...droppableProvided.droppableProps}
-                        ref={droppableProvided.innerRef}
-                      >
-                        {pages.map((page, index) => {
-                          const Template = templatesArr[page.type];
-                          return (
-                            <Draggable
-                              draggableId={page.key}
-                              index={index}
-                              key={page.key}
-                            >
-                              {(provided) => (
-                                <SingleEditorContainer
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                >
-                                  <Template
-                                    pages={pages}
-                                    setPages={setPages}
-                                    currentIndex={index}
-                                    position={position}
-                                    setPosition={setPosition}
-                                  />
-                                  <CloseIcon
-                                    onClick={() => deleteHandler(index)}
-                                  />
-                                </SingleEditorContainer>
-                              )}
-                            </Draggable>
-                          );
-                        })}
-                        {droppableProvided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                  <FooterContainer>
-                    {mainImgSrc === "" ? (
-                      <>
-                        <Btn
-                          backgroundColor="#f5dfa9"
-                          backgroundColorHover="#9d8a62"
-                          onClick={() => setShowOverlay((prev) => !prev)}
-                        >
-                          {t("upload_main_photo")}
-                          <UploadImgIcon />
-                        </Btn>
-                        <Btn onClick={() => confirmAllEdit()}>
-                          {t("confirm_edit")}
-                        </Btn>
-                      </>
-                    ) : (
-                      <>
-                        <Btn onClick={() => setShowOverlay((prev) => !prev)}>
-                          {t("edit_main_photo")}
-                          <CheckMainImgIcon />
-                        </Btn>
-                        <Btn
-                          backgroundColor="#f5dfa9"
-                          backgroundColorHover="#9d8a62"
-                          onClick={() => confirmAllEdit()}
-                        >
-                          {t("confirm_edit")}
-                        </Btn>
-                      </>
-                    )}
-                  </FooterContainer>
-                </>
+                renderCollectionPhotos()
               )}
             </EditorContainer>
             <WarningText>{t("small_screen_warning")}</WarningText>

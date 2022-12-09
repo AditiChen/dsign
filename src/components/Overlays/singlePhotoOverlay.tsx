@@ -2,8 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 
-import closeIcon from "../../icons/close-icon.png";
-import closeIconHover from "../../icons/close-icon-hover.png";
+import { closeIcon, closeIconHover } from "../icons/icons";
 
 const Wrapper = styled.div`
   margin: 0;
@@ -39,6 +38,8 @@ const CloseIcon = styled.div`
   @media screen and (max-width: 799px) {
     width: 24px;
     height: 24px;
+    top: -12px;
+    right: -12px;
   }
 `;
 
@@ -54,7 +55,7 @@ const OverlayModal = styled.div`
   transform: translate(-50%, -50%);
   z-index: 102;
   background-color: white;
-  @media screen and (max-width: 1399px) {
+  @media screen and (max-width: 799px) {
     max-width: 90vw;
     max-height: 90vh;
   }
@@ -63,9 +64,9 @@ const OverlayModal = styled.div`
 const Img = styled.img`
   max-width: 60vw;
   max-height: 60vh;
-  @media screen and (max-width: 1399px) {
-    max-width: 95vw;
-    max-height: 95vh;
+  @media screen and (max-width: 799px) {
+    max-width: 90vw;
+    max-height: 90vh;
   }
 `;
 

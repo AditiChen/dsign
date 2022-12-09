@@ -1,15 +1,7 @@
 import styled from "styled-components";
 
 import trapezoid from "./template1_trapezoid.png";
-
-interface Prop {
-  url?: string;
-}
-
-interface InsertProp {
-  photoUrl: string[];
-  content: string[];
-}
+import { SingleProjectTemplateProps } from "../tsTypes";
 
 const Wrapper = styled.div`
   width: 1200px;
@@ -32,10 +24,10 @@ const Wrapper = styled.div`
   }
 `;
 
-const BackgroundImg = styled.div`
+const BackgroundImg = styled.div<{ url?: string }>`
   width: 1200px;
   height: 760px;
-  background-image: ${(props: Prop) => props.url};
+  background-image: ${(props) => props.url};
   background-size: cover;
   background-position: center;
   opacity: 0.9;
@@ -140,10 +132,10 @@ const ImgContainer = styled.div`
   }
 `;
 
-const LeftImg = styled.div`
+const LeftImg = styled.div<{ url?: string }>`
   width: 300px;
   height: 200px;
-  background-image: ${(props: Prop) => props.url};
+  background-image: ${(props) => props.url};
   background-size: cover;
   background-position: center;
   box-shadow: 0 0 5px #3c3c3c;
@@ -161,11 +153,11 @@ const LeftImg = styled.div`
   }
 `;
 
-const RightImg = styled.div`
+const RightImg = styled.div<{ url?: string }>`
   margin-left: 30px;
   width: 200px;
   height: 200px;
-  background-image: ${(props: Prop) => props.url};
+  background-image: ${(props) => props.url};
   background-size: cover;
   background-position: center;
   box-shadow: 0 0 5px #3c3c3c;
@@ -186,7 +178,7 @@ const RightImg = styled.div`
   }
 `;
 
-function Template1(props: InsertProp) {
+function Template1(props: SingleProjectTemplateProps) {
   const { photoUrl, content } = props;
 
   return (

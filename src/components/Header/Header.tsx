@@ -8,12 +8,13 @@ import Swal from "sweetalert2";
 import { AuthContext } from "../../context/authContext";
 import { FriendContext } from "../../context/friendContext";
 import useOnClickOutside from "../../utils/useOnClickOutside";
-
-import languageIcon from "./language-icon.png";
-import logoIcon from "./Logo.png";
-import memberIcon from "./user-icon.png";
-import friendsIcon from "./friends-icon.png";
-import menuIcon from "./menu-icon.png";
+import {
+  languageIcon,
+  logoIcon,
+  memberIcon,
+  friendsIcon,
+  menuIcon,
+} from "../icons/icons";
 
 interface Prop {
   height?: string;
@@ -370,9 +371,9 @@ function Header() {
   const [activeLanguageIndex, setActiveLanguageIndex] = useState(
     getCurrentLanguageFromCookie
   );
-  const languageRef = useRef<HTMLDivElement>(null!);
-  const mobileMenuRef = useRef<HTMLDivElement>(null!);
-  const mobileLanguageRef = useRef<HTMLDivElement>(null!);
+  const languageRef = useRef<HTMLDivElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const mobileLanguageRef = useRef<HTMLDivElement>(null);
 
   useOnClickOutside(languageRef, () => setIsShowLanguages(false));
   useOnClickOutside(mobileMenuRef, () => setIsShowMobileMenu(false));
@@ -419,19 +420,6 @@ function Header() {
                 {t("create")}
               </PageLink>
               <PageLink
-                to="favoriteList"
-                border={
-                  location.pathname === "/favoriteList"
-                    ? "1px solid #c4c4c4"
-                    : "none"
-                }
-                onClick={() => {
-                  setShowMessageFrame(false);
-                }}
-              >
-                {t("favorite_list")}
-              </PageLink>
-              <PageLink
                 to="collection"
                 border={
                   location.pathname === "/collection"
@@ -443,6 +431,19 @@ function Header() {
                 }}
               >
                 {t("collection_list")}
+              </PageLink>
+              <PageLink
+                to="favoriteList"
+                border={
+                  location.pathname === "/favoriteList"
+                    ? "1px solid #c4c4c4"
+                    : "none"
+                }
+                onClick={() => {
+                  setShowMessageFrame(false);
+                }}
+              >
+                {t("favorite_list")}
               </PageLink>
             </>
           )}
@@ -558,14 +559,6 @@ function Header() {
                   {t("create")}
                 </MobileContext>
                 <MobileContext
-                  to="favoriteList"
-                  onClick={() => {
-                    setShowMessageFrame(false);
-                  }}
-                >
-                  {t("favorite_list")}
-                </MobileContext>
-                <MobileContext
                   to="collection"
                   onClick={() => {
                     setShowMessageFrame(false);
@@ -573,6 +566,15 @@ function Header() {
                 >
                   {t("collection_list")}
                 </MobileContext>
+                <MobileContext
+                  to="favoriteList"
+                  onClick={() => {
+                    setShowMessageFrame(false);
+                  }}
+                >
+                  {t("favorite_list")}
+                </MobileContext>
+
                 <SignBtn
                   onClick={() => {
                     logoutHandler();

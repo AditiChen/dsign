@@ -78,8 +78,8 @@
 
   "your_collection": "votre collection",
   "empty_folder": "Votre dossier est vide, téléchargez des photos !",
-  "create_folder": "Créer",
-  "cancel_create_folder": "Annuler",
+  "name_folder": "Confirmer",
+  "cancel_name_folder": "Annuler",
   "delete_photo_warning": "Êtes-vous sûr de vouloir supprimer cette photo ?",
   "folder_name": "Entrez le nom de votre dossier",
   "folder_name_length": "Longueur maximale de 15 lettres",

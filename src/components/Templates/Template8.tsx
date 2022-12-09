@@ -1,32 +1,11 @@
-import styled from "styled-components";
+import { useState, useEffect } from "react";
 import { t } from "i18next";
-import { useState, Dispatch, SetStateAction, useEffect } from "react";
+import styled from "styled-components";
+import produce from "immer";
 
 import Overlay from "../Overlays/templateOverlay";
-
-import uploadPhotoIcon from "../../icons/uploadPhoto-icon.png";
-
-interface InsertProp {
-  setPages: Dispatch<
-    SetStateAction<
-      {
-        key: string;
-        type: number;
-        content?: string[];
-        photos?: string[];
-        location?: { lat?: number; lng?: number };
-      }[]
-    >
-  >;
-  pages: {
-    key: string;
-    type: number;
-    content?: string[];
-    photos?: string[];
-    location?: { lat?: number; lng?: number };
-  }[];
-  currentIndex: number;
-}
+import { uploadPhotoIcon } from "../icons/icons";
+import { CreateTemplateProps } from "../tsTypes";
 
 const Wrapper = styled.div`
   width: 1200px;
@@ -84,7 +63,7 @@ const UploadIcon = styled.div`
   }
 `;
 
-function Template7(props: InsertProp) {
+function Template7(props: CreateTemplateProps) {
   const { setPages, currentIndex, pages } = props;
   const [showOverlay, setShowOverlay] = useState(false);
   const [storageUrl, setStorageUrl] = useState<string[]>(
@@ -97,17 +76,18 @@ function Template7(props: InsertProp) {
 
   useEffect(() => {
     if (pages[currentIndex].photos === storageUrl) return;
-    const newPages = [...pages];
-    newPages[currentIndex].photos = storageUrl;
+    const newPages = produce(pages, (draft) => {
+      draft[currentIndex].photos = storageUrl;
+    });
     setPages(newPages);
   }, [currentIndex, pages, setPages, storageUrl]);
 
   const setNewPhotoUrl = (returnedUrl: string) => {
-    const newUrl = [...storageUrl];
-    newUrl[currentImgIndex] = returnedUrl;
+    const newUrl = produce(storageUrl, (draft) => {
+      draft[currentImgIndex] = returnedUrl;
+    });
     setStorageUrl(newUrl);
   };
-
   function upLoadNewPhoto(index: number, aspect: number) {
     setCurrentImgUrl(storageUrl[index]);
     setShowOverlay((prev) => !prev);

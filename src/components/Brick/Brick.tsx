@@ -5,12 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
 import { LikeIcon, LikedIcon } from "../IconButtons/LikeIcons";
 
-interface Prop {
-  img?: string;
-  url?: string;
-  fontSize?: string;
-}
-
 const TitleContainer = styled.div`
   width: 100%;
   height: 0;
@@ -37,11 +31,11 @@ const TitleText = styled.div`
   text-overflow: ellipsis;
 `;
 
-const ImgContainer = styled.div`
+const ImgContainer = styled.div<{ url?: string }>`
   width: 100%;
   height: 300px;
   background-color: lightgray;
-  background-image: ${(props: Prop) => props.img};
+  background-image: ${(props) => props.url};
   background-size: cover;
   background-position: center;
   position: relative;
@@ -117,11 +111,11 @@ const SingleProjectContainer = styled.div`
   }
 `;
 
-const Avatar = styled.div`
+const Avatar = styled.div<{ url?: string }>`
   width: 36px;
   height: 36px;
   border-radius: 18px;
-  background-image: ${(props: Prop) => props.img};
+  background-image: ${(props) => props.url};
   background-size: cover;
   background-position: center;
   position: relative;
@@ -172,7 +166,7 @@ export default function Brick({
   return (
     <SingleProjectContainer key={projectId}>
       <ImgContainer
-        img={`url(${mainUrl})`}
+        url={`url(${mainUrl})`}
         onClick={() => navigate(`/singleProject?id=${projectId}`)}
       >
         <TitleContainer>
@@ -180,7 +174,7 @@ export default function Brick({
         </TitleContainer>
       </ImgContainer>
       <InfoContainer>
-        <Avatar img={`url(${avatar})`} onClick={() => toProfileHandler()} />
+        <Avatar url={`url(${avatar})`} onClick={() => toProfileHandler()} />
         <Author>{name}</Author>
         {favoriteList.indexOf(projectId) === -1 ? (
           <LikeIcon

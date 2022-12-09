@@ -78,8 +78,8 @@
 
   "your_collection": "Your collection",
   "empty_folder": "Your folder is empty, upload some photos!",
-  "create_folder": "Create",
-  "cancel_create_folder": "Cancel",
+  "name_folder": "Confirm",
+  "cancel_name_folder": "Cancel",
   "delete_photo_warning": "Are you sure that you want to remove this photo?",
   "folder_name": "Enter your folder name",
   "folder_name_length": "Max length 15 letters",

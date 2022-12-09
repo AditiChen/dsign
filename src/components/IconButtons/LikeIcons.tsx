@@ -6,10 +6,7 @@ import Swal from "sweetalert2";
 
 import { AuthContext } from "../../context/authContext";
 import { db } from "../../context/firebaseSDK";
-
-import likeIcon from "../../icons/like-icon.png";
-import likeIconHover from "../../icons/like-icon-hover.png";
-import likedIcon from "../../icons/liked-icon.png";
+import { likeIcon, likeIconHover, likedIcon } from "../icons/icons";
 
 const Liked = styled.div<{ margin: string; $width: string; $height: string }>`
   margin: ${(props) => props.margin};

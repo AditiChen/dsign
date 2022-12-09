@@ -8,23 +8,26 @@ import {
 import { useTranslation } from "react-i18next";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
+import produce from "immer";
 import Cropper from "react-easy-crop";
 import ReactLoading from "react-loading";
 import { Slider, defaultTheme, Provider, View } from "@adobe/react-spectrum";
 import { doc, updateDoc } from "firebase/firestore";
-import Swal from "sweetalert2";
 
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
 import upLoadImgToCloudStorage from "../../utils/upLoadImgToCloudStorage";
-
 import getCroppedImg from "../../utils/cropImage";
-import closeIcon from "../../icons/close-icon.png";
-import closeIconHover from "../../icons/close-icon-hover.png";
-import confirmIcon from "../../icons/confirm-icon.png";
-import confirmedIcon from "../../icons/confirmed-icon.png";
-import arrowIcon from "../../icons/arrow-icon.png";
-import arrowIconHover from "../../icons/arrow-icon-hover.png";
+import {
+  closeIcon,
+  closeIconHover,
+  confirmIcon,
+  confirmedIcon,
+  arrowIcon,
+  arrowIconHover,
+  folderIcon,
+  folderOpenIcon,
+} from "../icons/icons";
 
 interface OverlayProps {
   setShowOverlay: Dispatch<SetStateAction<boolean>>;
@@ -156,6 +159,7 @@ const NewPhotoHeaderContainer = styled.div`
 `;
 
 const CollectionFolderContainer = styled.div`
+  margin-top: 5px;
   width: 100%;
   height: fit-content;
   display: flex;
@@ -164,9 +168,11 @@ const CollectionFolderContainer = styled.div`
 `;
 
 const FolderName = styled.div<{ backgroundColor: string; $color: string }>`
-  padding: 5px 12px;
+  padding: 5px 10px;
   font-size: 18px;
   color: ${(props) => props.$color};
+  display: flex;
+  line-height: 25px;
   border: 1px solid #b4b4b4;
   border-radius: 5px 5px 0 0;
   background-color: ${(props) => props.backgroundColor};
@@ -174,6 +180,16 @@ const FolderName = styled.div<{ backgroundColor: string; $color: string }>`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const FolderIcon = styled.div<{ img: string; $width: string; opacity: number }>`
+  margin-left: 5px;
+  height: 24px;
+  width: ${(props) => props.$width};
+  opacity: ${(props) => props.opacity};
+  background-image: ${(props) => props.img};
+  background-size: cover;
+  background-position: center;
 `;
 
 const CollectionContainer = styled.div`
@@ -285,7 +301,7 @@ const SliderContainer = styled.div`
   }
 `;
 
-const Btn = styled.div`
+const Btn = styled.div<{ cursor?: string }>`
   margin-left: 30px;
   padding: 0 10px;
   height: 40px;
@@ -297,7 +313,7 @@ const Btn = styled.div`
   background-color: #3c3c3c30;
   font-family: "Roboto", "Noto Sans TC", "Noto Sans JP", sans-serif;
   &:hover {
-    cursor: pointer;
+    cursor: ${(props) => props.cursor || "pointer"};
     color: #ffffff;
     background-color: #616161;
   }
@@ -400,31 +416,24 @@ function Overlay({
 
   const showCroppedImage = useCallback(async () => {
     if (progressing) return;
+    if (croppedAreaPixels === null) return;
     setProgressing(true);
     const { file } = (await getCroppedImg(
       imgSrc,
       croppedAreaPixels,
       rotation
     )) as { file: File };
-    if (file === undefined) {
-      Swal.fire({
-        text: "there is something wrong, please try again later",
-        icon: "warning",
-        confirmButtonColor: "#646464",
-      });
-      return;
-    }
     const fileNameByTime = `${+new Date()}`;
     const downloadUrl = (await upLoadImgToCloudStorage(
       file,
       userId,
       fileNameByTime
     )) as string;
-
     setNewPhotoUrl(downloadUrl);
     if (isAddToCollection) {
-      const newPhotoArray = [...folders];
-      newPhotoArray[0].photos.push(downloadUrl);
+      const newPhotoArray = produce(folders, (draft) => {
+        draft[0].photos.push(downloadUrl);
+      });
       await updateDoc(doc(db, "users", userId), {
         folders: newPhotoArray,
       });
@@ -445,6 +454,138 @@ function Overlay({
     folders,
   ]);
 
+  const renderCropImgModal = () => (
+    <>
+      <ArrowIcon
+        onClick={() => {
+          setImgSrc("");
+          setProgressing(false);
+        }}
+      />
+      <CropperContainer>
+        {progressing && (
+          <>
+            <LoadingBackground />
+            <Loading type="spokes" color="#ffffff" width="40px" height="40px" />
+          </>
+        )}
+        <Cropper
+          image={imgSrc}
+          crop={crop}
+          rotation={rotation}
+          zoom={zoom}
+          aspect={currentAaspect}
+          onCropChange={setCrop}
+          onRotationChange={setRotation}
+          onCropComplete={onCropComplete}
+          onZoomChange={setZoom}
+        />
+      </CropperContainer>
+      <ControlContainer>
+        <SliderContainer>
+          <Provider theme={defaultTheme}>
+            <View UNSAFE_style={{ backgroundColor: "white" }}>
+              <Slider
+                label={t("zoom_image")}
+                minValue={1}
+                maxValue={3}
+                isFilled
+                width={150}
+                step={0.1}
+                value={zoom}
+                onChange={setZoom}
+              />
+            </View>
+          </Provider>
+        </SliderContainer>
+        <SliderContainer>
+          <Provider theme={defaultTheme}>
+            <View UNSAFE_style={{ backgroundColor: "white" }}>
+              <Slider
+                label={t("rotate_image")}
+                minValue={0}
+                maxValue={360}
+                isFilled
+                width={150}
+                step={5}
+                value={rotation}
+                onChange={setRotation}
+              />
+            </View>
+          </Provider>
+        </SliderContainer>
+        {isAddToCollection && (
+          <ConfirmedIcon onClick={() => setIsAddToCollection(false)} />
+        )}
+        {!isAddToCollection && (
+          <ConfirmIcon onClick={() => setIsAddToCollection(true)} />
+        )}
+        <Text>{t("add_to_collection")}</Text>
+        <Btn
+          onClick={showCroppedImage}
+          cursor={croppedAreaPixels === null ? "not-allowed" : "pointer"}
+        >
+          {t("confirm_crop")}
+        </Btn>
+      </ControlContainer>
+    </>
+  );
+
+  const renderSelectImgModal = () => (
+    <CropperContainer>
+      <NewPhotoContainer>
+        <NewPhotoHeaderContainer>
+          {t("choose_photo")}
+          <UploadPic>
+            {t("upload_image")}
+            <input
+              type="file"
+              accept="image/*"
+              style={{ display: "none" }}
+              onChange={onUploadFile}
+            />
+          </UploadPic>
+        </NewPhotoHeaderContainer>
+        <CollectionFolderContainer>
+          {folders?.map((folder, index) => (
+            <FolderName
+              key={folder.folderName}
+              $color={currentFolderIndex === index ? "#3c3c3c" : "#b4b4b4"}
+              backgroundColor={
+                currentFolderIndex === index ? "#f0f0f0" : "#787878"
+              }
+              onClick={() => setCurrentFolderIndex(index)}
+            >
+              {folder.folderName}
+              <FolderIcon
+                $width={currentFolderIndex === index ? "42px" : "26px"}
+                opacity={currentFolderIndex === index ? 1 : 0.7}
+                img={
+                  currentFolderIndex === index
+                    ? `url(${folderOpenIcon})`
+                    : `url(${folderIcon})`
+                }
+              />
+            </FolderName>
+          ))}
+        </CollectionFolderContainer>
+        <CollectionContainer>
+          {folders[currentFolderIndex].photos.length !== 0 &&
+            folders[currentFolderIndex].photos?.map((url) => (
+              <CollectionImg
+                key={url}
+                url={`url(${url})`}
+                onClick={() => setImgSrc(url)}
+              />
+            ))}
+        </CollectionContainer>
+        {folders[currentFolderIndex].photos.length === 0 && (
+          <Text>{t("empty_folder")}</Text>
+        )}
+      </NewPhotoContainer>
+    </CropperContainer>
+  );
+
   return (
     <>
       {createPortal(
@@ -452,129 +593,7 @@ function Overlay({
           <Backdrop onClick={() => setShowOverlay((prev) => !prev)} />
           <OverlayModal>
             <CloseIcon onClick={() => setShowOverlay((prev) => !prev)} />
-            {imgSrc ? (
-              <>
-                <ArrowIcon
-                  onClick={() => {
-                    setImgSrc("");
-                    setProgressing(false);
-                  }}
-                />
-                <CropperContainer>
-                  {progressing && (
-                    <>
-                      <LoadingBackground />
-                      <Loading
-                        type="spokes"
-                        color="#ffffff"
-                        width="40px"
-                        height="40px"
-                      />
-                    </>
-                  )}
-                  <Cropper
-                    image={imgSrc}
-                    crop={crop}
-                    rotation={rotation}
-                    zoom={zoom}
-                    aspect={currentAaspect}
-                    onCropChange={setCrop}
-                    onRotationChange={setRotation}
-                    onCropComplete={onCropComplete}
-                    onZoomChange={setZoom}
-                  />
-                </CropperContainer>
-                <ControlContainer>
-                  <SliderContainer>
-                    <Provider theme={defaultTheme}>
-                      <View UNSAFE_style={{ backgroundColor: "white" }}>
-                        <Slider
-                          label={t("zoom_image")}
-                          minValue={1}
-                          maxValue={3}
-                          isFilled
-                          width={150}
-                          step={0.1}
-                          value={zoom}
-                          onChange={setZoom}
-                        />
-                      </View>
-                    </Provider>
-                  </SliderContainer>
-                  <SliderContainer>
-                    <Provider theme={defaultTheme}>
-                      <View UNSAFE_style={{ backgroundColor: "white" }}>
-                        <Slider
-                          label={t("rotate_image")}
-                          minValue={0}
-                          maxValue={360}
-                          isFilled
-                          width={150}
-                          step={5}
-                          value={rotation}
-                          onChange={setRotation}
-                        />
-                      </View>
-                    </Provider>
-                  </SliderContainer>
-                  {isAddToCollection ? (
-                    <ConfirmedIcon
-                      onClick={() => setIsAddToCollection(false)}
-                    />
-                  ) : (
-                    <ConfirmIcon onClick={() => setIsAddToCollection(true)} />
-                  )}
-                  <Text>{t("add_to_collection")}</Text>
-                  <Btn onClick={showCroppedImage}>{t("confirm_crop")}</Btn>
-                </ControlContainer>
-              </>
-            ) : (
-              <CropperContainer>
-                <NewPhotoContainer>
-                  <NewPhotoHeaderContainer>
-                    {t("choose_photo")}
-                    <UploadPic>
-                      {t("upload_image")}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        style={{ display: "none" }}
-                        onChange={(e) => onUploadFile(e)}
-                      />
-                    </UploadPic>
-                  </NewPhotoHeaderContainer>
-                  <CollectionFolderContainer>
-                    {folders?.map((folder, index) => (
-                      <FolderName
-                        key={folder.folderName}
-                        $color={
-                          currentFolderIndex === index ? "#3c3c3c" : "#b4b4b4"
-                        }
-                        backgroundColor={
-                          currentFolderIndex === index ? "#f0f0f0" : "#787878"
-                        }
-                        onClick={() => setCurrentFolderIndex(index)}
-                      >
-                        {folder.folderName}
-                      </FolderName>
-                    ))}
-                  </CollectionFolderContainer>
-                  <CollectionContainer>
-                    {folders[currentFolderIndex].photos.length !== 0 &&
-                      folders[currentFolderIndex].photos?.map((url) => (
-                        <CollectionImg
-                          key={url}
-                          url={`url(${url})`}
-                          onClick={() => setImgSrc(url)}
-                        />
-                      ))}
-                  </CollectionContainer>
-                  {folders[currentFolderIndex].photos.length === 0 && (
-                    <Text>{t("empty_folder")}</Text>
-                  )}
-                </NewPhotoContainer>
-              </CropperContainer>
-            )}
+            {imgSrc ? renderCropImgModal() : renderSelectImgModal()}
           </OverlayModal>
         </Wrapper>,
         portalElement

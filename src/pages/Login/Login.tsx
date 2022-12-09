@@ -7,24 +7,12 @@ import Swal from "sweetalert2";
 
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
-
-import googleIcon from "../../icons/google-icon.png";
-import googleIconHover from "../../icons/google-icon-hover.png";
-import fbIcon from "../../icons/fb-icon.png";
-import fbIconHover from "../../icons/fb-icon-hover.png";
-
-interface Prop {
-  url?: string;
-  background?: string;
-  text?: string;
-  focus?: string;
-  position?: string;
-  buttonLine?: string;
-  img?: string;
-  hoverImg?: string;
-  margin?: string;
-  checkLoading?: boolean;
-}
+import {
+  googleIcon,
+  googleIconHover,
+  fbIcon,
+  fbIconHover,
+} from "../../components/icons/icons";
 
 const Wrapper = styled.div`
   padding: 10vh 0;
@@ -79,7 +67,11 @@ const LoginContainer = styled.div`
   }
 `;
 
-const SignStatus = styled.button`
+const SignStatus = styled.button<{
+  buttonLine?: string;
+  position?: string;
+  $color?: string;
+}>`
   margin-bottom: 15px;
   padding: 0;
   width: 50%;
@@ -87,9 +79,9 @@ const SignStatus = styled.button`
   font-size: 22px;
   border: none;
   color: #3c3c3c;
-  border-bottom: ${(props: Prop) => props.buttonLine || "none"};
-  border-radius: ${(props: Prop) => props.position || "0px 20px 0px 0px"};
-  background-color: ${(props) => props.color || "#fff"};
+  border-bottom: ${(props) => props.buttonLine || "none"};
+  border-radius: ${(props) => props.position || "0px 20px 0px 0px"};
+  background-color: ${(props) => props.$color || "#fff"};
   & + & {
     border-left: 1px solid #b4b4b4;
   }
@@ -142,7 +134,7 @@ const SignContainer = styled.div`
   display: flex;
 `;
 
-const SignBtn = styled.button`
+const SignBtn = styled.button<{ checkLoading?: boolean }>`
   margin-top: 30px;
   margin-left: auto;
   padding: 0 20px;
@@ -155,8 +147,7 @@ const SignBtn = styled.button`
   display: flex;
   align-items: center;
   &:hover {
-    cursor: ${(props: Prop) =>
-      props.checkLoading ? "not-allowed" : "pointer"};
+    cursor: ${(props) => (props.checkLoading ? "not-allowed" : "pointer")};
     color: #ffffff;
     background-color: #616161;
   }
@@ -274,8 +265,8 @@ const OptionalLoginBtn = styled.button`
   }
 `;
 
-const Loading = styled(ReactLoading)`
-  margin: ${(props: Prop) => props.margin};
+const Loading = styled(ReactLoading)<{ margin?: string }>`
+  margin: ${(props) => props.margin};
 `;
 
 function SignIn() {
@@ -415,7 +406,7 @@ function SignIn() {
         <SignInContainer>
           <SignStatus
             onClick={() => setSignIn(true)}
-            color={signIn ? "" : "#3c3c3c30"}
+            $color={signIn ? "" : "#3c3c3c30"}
             position="20px 0px 0px 0px"
             buttonLine={signIn ? "" : "1px solid #b4b4b4"}
           >
@@ -423,7 +414,7 @@ function SignIn() {
           </SignStatus>
           <SignStatus
             onClick={() => setSignIn(false)}
-            color={signIn ? "#3c3c3c30" : ""}
+            $color={signIn ? "#3c3c3c30" : ""}
             buttonLine={signIn ? "1px solid #b4b4b4" : ""}
           >
             {t("sign_up")}

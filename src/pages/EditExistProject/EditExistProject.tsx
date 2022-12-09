@@ -22,10 +22,12 @@ import templatesArr from "../../components/Templates/TemplatesArr";
 import SquareOverlay from "../../components/Overlays/squareOverlay";
 import templateData from "../../components/Templates/TemplatesData.json";
 
-import closeIcon from "../../icons/close-icon.png";
-import closeIconHover from "../../icons/close-icon-hover.png";
-import arrowIcon from "../../icons/arrow-icon-white.png";
-import arrowIconHover from "../../icons/arrow-icon-hover.png";
+import {
+  closeIcon,
+  closeIconHover,
+  arrowIconWhite,
+  arrowIconHover,
+} from "../../components/icons/icons";
 
 const Wrapper = styled.div`
   padding-top: 95px;
@@ -66,7 +68,7 @@ const ArrowIcon = styled.div`
   position: fixed;
   top: 170px;
   left: 40px;
-  background-image: url(${arrowIcon});
+  background-image: url(${arrowIconWhite});
   background-size: cover;
   background-position: center;
   &:hover {
@@ -421,7 +423,7 @@ function EditExistProject() {
 
   return (
     <>
-      <DragDropContext onDragEnd={(e) => onDragEnd(e)}>
+      <DragDropContext onDragEnd={onDragEnd}>
         <Wrapper>
           <SelectContainer>
             <SelectInnerContainer>

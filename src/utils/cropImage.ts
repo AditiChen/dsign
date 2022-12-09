@@ -40,7 +40,6 @@ export default async function getCroppedImg(
   const image = (await createImage(imageSrc)) as ImageType;
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
-
   if (!ctx) {
     return null;
   }
@@ -61,7 +60,6 @@ export default async function getCroppedImg(
   ctx.translate(-image.width / 2, -image.height / 2);
 
   ctx.drawImage(image as CanvasImageSource, 0, 0);
-
   const data = ctx.getImageData(
     pixelCrop.x,
     pixelCrop.y,

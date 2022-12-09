@@ -22,15 +22,12 @@ import Swal from "sweetalert2";
 import { FriendContext } from "../../context/friendContext";
 import { db } from "../../context/firebaseSDK";
 import useOnClickOutside from "../../utils/useOnClickOutside";
-
-import closeIcon from "../../icons/close-icon.png";
-import closeIconHover from "../../icons/close-icon-hover.png";
-import sendIcon from "../../icons/send-icon.png";
-import sendIconHover from "../../icons/send-icon-hover.png";
-
-interface Prop {
-  img?: string;
-}
+import {
+  closeIcon,
+  closeIconHover,
+  sendMessageIcon,
+  sendMessageIconHover,
+} from "../icons/icons";
 
 const Wrapper = styled.div`
   width: 350px;
@@ -90,12 +87,12 @@ const AvatarContainer = styled.div`
   }
 `;
 
-const Avatar = styled.div`
+const Avatar = styled.div<{ url?: string }>`
   margin: 0 5px;
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background-image: ${(props: Prop) => props.img};
+  background-image: ${(props) => props.url};
   background-position: center;
   background-size: cover;
   @media screen and (max-width: 399px) {
@@ -191,12 +188,12 @@ const SendMessageIcon = styled.div`
   margin-left: 10px;
   height: 30px;
   width: 30px;
-  background-image: url(${sendIcon});
+  background-image: url(${sendMessageIcon});
   background-size: cover;
   background-position: center;
   &:hover {
     cursor: pointer;
-    background-image: url(${sendIconHover});
+    background-image: url(${sendMessageIconHover});
   }
   @media screen and (max-width: 399px) {
     margin-left: 5px;
@@ -233,8 +230,8 @@ function Message({
       time?: Timestamp;
     }[]
   >([]);
-  const scrollRef = useRef<HTMLDivElement>(null!);
-  const messageWindowRef = useRef<HTMLDivElement>(null!);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const messageWindowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setIsLoading(true);
@@ -367,7 +364,7 @@ function Message({
       <CloseIcon onClick={() => closeMessageFrame()} />
       <Container>
         <AvatarContainer>
-          <Avatar img={`url(${messageFriendDtl.avatar})`} />
+          <Avatar url={`url(${messageFriendDtl.avatar})`} />
           <Name>{messageFriendDtl.name}</Name>
         </AvatarContainer>
         <MessageContainer ref={scrollRef}>

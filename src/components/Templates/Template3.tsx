@@ -1,42 +1,13 @@
-import styled from "styled-components";
+import { useState, useEffect } from "react";
 import { t } from "i18next";
-import { useState, Dispatch, SetStateAction, useEffect } from "react";
+import styled from "styled-components";
+import produce from "immer";
 
 import Overlay from "../Overlays/templateOverlay";
 
 import leftCircle from "./template3_left_circle.png";
-import uploadPhotoIcon from "../../icons/uploadPhoto-icon.png";
-
-interface Prop {
-  url?: string;
-  backgroundColor?: string;
-  top?: string;
-  left?: string;
-  mobileTop?: string;
-  mobileLeft?: string;
-}
-
-interface InsertProp {
-  setPages: Dispatch<
-    SetStateAction<
-      {
-        key: string;
-        type: number;
-        content?: string[];
-        photos?: string[];
-        location?: { lat?: number; lng?: number };
-      }[]
-    >
-  >;
-  pages: {
-    key: string;
-    type: number;
-    content?: string[];
-    photos?: string[];
-    location?: { lat?: number; lng?: number };
-  }[];
-  currentIndex: number;
-}
+import { uploadPhotoIcon } from "../icons/icons";
+import { CreateTemplateProps } from "../tsTypes";
 
 const Wrapper = styled.div`
   width: 1200px;
@@ -50,11 +21,11 @@ const Wrapper = styled.div`
   }
 `;
 
-const BackgroundImg = styled.div`
+const BackgroundImg = styled.div<{ url?: string; backgroundColor?: string }>`
   width: 1200px;
   height: 760px;
-  background-image: ${(props: Prop) => props.url};
-  background-color: ${(props: Prop) => props.backgroundColor};
+  background-image: ${(props) => props.url};
+  background-color: ${(props) => props.backgroundColor};
   background-size: cover;
   background-position: center;
   opacity: 0.9;
@@ -108,11 +79,11 @@ const Context = styled.textarea`
   }
 `;
 
-const LeftImg = styled.div`
+const LeftImg = styled.div<{ url?: string; backgroundColor?: string }>`
   width: 330px;
   height: 330px;
-  background-image: ${(props: Prop) => props.url};
-  background-color: ${(props: Prop) => props.backgroundColor};
+  background-image: ${(props) => props.url};
+  background-color: ${(props) => props.backgroundColor};
   background-size: cover;
   background-position: center;
   position: absolute;
@@ -128,12 +99,12 @@ const LeftImg = styled.div`
   }
 `;
 
-const RightImg = styled.div`
+const RightImg = styled.div<{ url?: string; backgroundColor?: string }>`
   margin-left: 30px;
   width: 200px;
   height: 200px;
-  background-image: ${(props: Prop) => props.url};
-  background-color: ${(props: Prop) => props.backgroundColor};
+  background-image: ${(props) => props.url};
+  background-color: ${(props) => props.backgroundColor};
   background-size: cover;
   background-position: center;
   position: absolute;
@@ -150,11 +121,16 @@ const RightImg = styled.div`
   }
 `;
 
-const UploadIcon = styled.div`
+const UploadIcon = styled.div<{
+  top?: string;
+  left?: string;
+  mobileTop?: string;
+  mobileLeft?: string;
+}>`
   width: 50px;
   height: 50px;
-  top: ${(props: Prop) => props.top};
-  left: ${(props: Prop) => props.left};
+  top: ${(props) => props.top};
+  left: ${(props) => props.left};
   z-index: 2;
   position: absolute;
   background-image: url(${uploadPhotoIcon});
@@ -163,12 +139,12 @@ const UploadIcon = styled.div`
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     width: 36px;
     height: 36px;
-    top: ${(props: Prop) => props.mobileTop};
-    left: ${(props: Prop) => props.mobileLeft};
+    top: ${(props) => props.mobileTop};
+    left: ${(props) => props.mobileLeft};
   }
 `;
 
-function Template3(props: InsertProp) {
+function Template3(props: CreateTemplateProps) {
   const { setPages, currentIndex, pages } = props;
   const [inputText, setInputText] = useState<string[]>(
     pages[currentIndex].content || [""]
@@ -188,15 +164,17 @@ function Template3(props: InsertProp) {
       pages[currentIndex].photos === storageUrl
     )
       return;
-    const newPages = [...pages];
-    newPages[currentIndex].content = inputText;
-    newPages[currentIndex].photos = storageUrl;
+    const newPages = produce(pages, (draft) => {
+      draft[currentIndex].content = inputText;
+      draft[currentIndex].photos = storageUrl;
+    });
     setPages(newPages);
-  }, [currentIndex, inputText, pages, setPages, storageUrl]);
+  }, [inputText, storageUrl, currentIndex, setPages, pages]);
 
   const setNewPhotoUrl = (returnedUrl: string) => {
-    const newUrl = [...storageUrl];
-    newUrl[currentImgIndex] = returnedUrl;
+    const newUrl = produce(storageUrl, (draft) => {
+      draft[currentImgIndex] = returnedUrl;
+    });
     setStorageUrl(newUrl);
   };
 

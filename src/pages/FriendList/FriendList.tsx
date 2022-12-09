@@ -22,21 +22,13 @@ import { AuthContext } from "../../context/authContext";
 import { FriendContext } from "../../context/friendContext";
 import { db } from "../../context/firebaseSDK";
 import Message from "../../components/Message/Message";
-
-import searchIcon from "../../icons/search-icon.png";
-import messageIcon from "../../icons/chat-icon.png";
-import messageIconHover from "../../icons/chat-icon-hover.png";
-import deleteIcon from "../../icons/delete-friend-icon.png";
-import deleteIconHover from "../../icons/delete-friend-icon-hover.png";
-
-interface Prop {
-  size?: string;
-  mobileSize?: string;
-  color?: string;
-  url?: string;
-  top?: string;
-  right?: string;
-}
+import {
+  searchIcon,
+  openMessageIcon,
+  openMessageIconHover,
+  deleteFriendIcon,
+  deleteFriendIconHover,
+} from "../../components/icons/icons";
 
 const Wrapper = styled.div`
   padding: 30px 0;
@@ -158,12 +150,12 @@ const SwitchClickStatusBtn = styled.div<{ color: string; border: string }>`
   }
 `;
 
-const NotificationDot = styled.div`
+const NotificationDot = styled.div<{ top?: string; right?: string }>`
   height: 10px;
   width: 10px;
   position: absolute;
-  top: ${(props: Prop) => props.top};
-  right: ${(props: Prop) => props.right};
+  top: ${(props) => props.top};
+  right: ${(props) => props.right};
   border-radius: 50%;
   background-image: linear-gradient(#89b07e, #4f8365);
 `;
@@ -183,11 +175,11 @@ const FriendListContainer = styled.div`
   }
 `;
 
-const Avatar = styled.div`
+const Avatar = styled.div<{ url?: string }>`
   height: 100px;
   width: 100px;
   border-radius: 50px;
-  background-image: ${(props: Prop) => props.url};
+  background-image: ${(props) => props.url};
   background-size: cover;
   background-position: center;
   border: 1px solid #f0f0f0;
@@ -211,13 +203,17 @@ const TextContainer = styled.div`
   }
 `;
 
-const Text = styled.div`
+const Text = styled.div<{
+  $color?: string;
+  $size?: string;
+  mobileSize?: string;
+}>`
   margin-bottom: 5px;
-  color: ${(props: Prop) => props.color};
-  font-size: ${(props: Prop) => props.size};
+  color: ${(props) => props.$color};
+  font-size: ${(props) => props.$size};
   background-color: #f0f0f000;
   @media screen and (max-width: 799px) {
-    font-size: ${(props: Prop) => props.mobileSize};
+    font-size: ${(props) => props.mobileSize};
   }
 `;
 
@@ -225,13 +221,13 @@ const MessageIcon = styled.div`
   margin-top: 5px;
   width: 30px;
   height: 30px;
-  background-image: url(${messageIcon});
+  background-image: url(${openMessageIcon});
   background-size: cover;
   background-position: center;
   position: relative;
   &:hover {
     cursor: pointer;
-    background-image: url(${messageIconHover});
+    background-image: url(${openMessageIconHover});
   }
   @media screen and (max-width: 799px) {
     margin-top: 0;
@@ -279,12 +275,12 @@ const SendRequestBtn = styled.button`
 const DeleteIcon = styled.div`
   height: 30px;
   width: 30px;
-  background-image: url(${deleteIcon});
+  background-image: url(${deleteFriendIcon});
   background-size: cover;
   background-position: center;
   &:hover {
     cursor: pointer;
-    background-image: url(${deleteIconHover});
+    background-image: url(${deleteFriendIconHover});
   }
   @media screen and (max-width: 799px) {
     height: 24px;
@@ -515,7 +511,7 @@ function FriendList() {
             <FriendListContainer>
               <Avatar url={`url(${searchData.avatar})`} />
               <TextContainer>
-                <Text size="20px" mobileSize="16px">
+                <Text $size="20px" mobileSize="16px">
                   {searchData.name}
                 </Text>
                 <Text color="#616161" mobileSize="12px">
@@ -553,7 +549,7 @@ function FriendList() {
         </Separator>
         {clickState === "request" && friendRequests.length === 0 && (
           <Separator>
-            <Text size="16px" mobileSize="12px">
+            <Text $size="16px" mobileSize="12px">
               {t("no_friend_request")}
             </Text>
           </Separator>
@@ -565,7 +561,7 @@ function FriendList() {
               <FriendListContainer>
                 <Avatar url={`url(${request.avatar})`} />
                 <TextContainer>
-                  <Text size="20px" mobileSize="16px">
+                  <Text $size="20px" mobileSize="16px">
                     {request.name}
                   </Text>
                   <Text color="#616161" mobileSize="12px">
@@ -599,7 +595,7 @@ function FriendList() {
                   }}
                 />
                 <TextContainer>
-                  <Text size="20px" mobileSize="16px">
+                  <Text $size="20px" mobileSize="16px">
                     {user.name}
                   </Text>
                   <Text color="#616161" mobileSize="12px">

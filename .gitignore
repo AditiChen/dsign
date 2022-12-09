@@ -14,8 +14,13 @@
 # environment
 .env
 
+# vscode
+.vscode/
+
 # production
 /build
+
+.firebase/
 
 # misc
 .DS_Store

@@ -8,23 +8,7 @@ import {
 } from "firebase/firestore";
 
 import { db } from "../context/firebaseSDK";
-
-interface FetchedProjectsType {
-  uid: string;
-  name?: string;
-  avatar?: string;
-  mainUrl: string;
-  projectId: string;
-  introduction: string;
-  title: string;
-  time: number;
-  pages: {
-    type: number;
-    content?: string[];
-    url?: string[];
-    location?: { lat?: number; lng?: number };
-  }[];
-}
+import { FetchedProjectsType } from "../components/tsTypes";
 
 export default async function getAllProject() {
   const usersRef = collection(db, "projects");

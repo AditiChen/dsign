@@ -4,33 +4,14 @@ import { useJsApiLoader } from "@react-google-maps/api";
 import ReactLoading from "react-loading";
 import { useNavigate } from "react-router-dom";
 
-import templatesArr from "../../components/singleProjectPageTemplates/TemplatesArr";
-import { GoogleMapAPI } from "../../components/Templates/GoogleMapAPI";
 import { AuthContext } from "../../context/authContext";
+import templatesArr from "../../components/SingleProjectPageTemplates/TemplatesArr";
+import { GoogleMapAPI } from "../../components/Templates/GoogleMapAPI";
 import getSingleProject from "../../utils/getSingleProject";
 import { LikeIcon, LikedIcon } from "../../components/IconButtons/LikeIcons";
 import FriendIcon from "../../components/IconButtons/FriendIcon";
-
-import arrowIcon from "../../icons/arrow-icon-white.png";
-import arrowIconHover from "../../icons/arrow-icon-hover.png";
-
-interface UserProjectType {
-  uid: string;
-  name?: string;
-  avatar?: string;
-  introduction?: string;
-  mainUrl: string;
-  projectId: string;
-  title: string;
-  time: number;
-  pages: {
-    key: string;
-    type: number;
-    content?: string[];
-    photos?: string[];
-    location?: { lat?: number; lng?: number };
-  }[];
-}
+import { arrowIconWhite, arrowIconHover } from "../../components/icons/icons";
+import { FetchedProjectsType } from "../../components/tsTypes";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -53,7 +34,7 @@ const ArrowIcon = styled.div`
   position: fixed;
   top: 90px;
   left: 50px;
-  background-image: url(${arrowIcon});
+  background-image: url(${arrowIconWhite});
   background-size: cover;
   background-position: center;
   &:hover {
@@ -241,11 +222,11 @@ function SingleProject() {
     libraries: ["places"],
   });
   const { userId, favoriteList, friendList } = useContext(AuthContext);
-  const [singleProjectData, setSingleProjectData] = useState<UserProjectType[]>(
-    []
-  );
+  const [singleProjectData, setSingleProjectData] = useState<
+    FetchedProjectsType[]
+  >([]);
   const [isLoading, setIsLoading] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null!);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const urlString = new URL(window.location.href);
   const singleProjectId = urlString.searchParams.get("id") as string;
@@ -300,12 +281,10 @@ function SingleProject() {
                       />
                       <Author>{singleProjectData[0]?.name}</Author>
                       {friendList.indexOf(singleProjectData[0]?.uid) === -1 &&
-                      singleProjectData[0]?.uid !== userId &&
-                      userId !== "" ? (
-                        <FriendIcon requestId={singleProjectData[0]?.uid} />
-                      ) : (
-                        ""
-                      )}
+                        singleProjectData[0]?.uid !== userId &&
+                        userId !== "" && (
+                          <FriendIcon requestId={singleProjectData[0]?.uid} />
+                        )}
                     </UserInfoHeaderContainer>
                     <Intor>{singleProjectData[0]?.introduction}</Intor>
                   </UserInfoInnerContainer>
@@ -335,9 +314,7 @@ function SingleProject() {
                       <GoogleMapAPI
                         key={`${index + 1}`}
                         position={
-                          (singleProjectData &&
-                            singleProjectData[0]?.pages[index].location) ||
-                          {}
+                          singleProjectData[0]?.pages[index].location || {}
                         }
                       />
                     );
@@ -345,16 +322,8 @@ function SingleProject() {
                   return (
                     <Template
                       key={`${index + 1}`}
-                      photoUrl={
-                        (singleProjectData &&
-                          singleProjectData[0]?.pages[index].photos) ||
-                        []
-                      }
-                      content={
-                        (singleProjectData &&
-                          singleProjectData[0]?.pages[index].content) ||
-                        []
-                      }
+                      photoUrl={singleProjectData[0]?.pages[index].photos || []}
+                      content={singleProjectData[0]?.pages[index].content || []}
                     />
                   );
                 })}
