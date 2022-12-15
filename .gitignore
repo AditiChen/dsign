@@ -21,7 +21,10 @@
 /build
 
 #firebase
-.firebase/
+/.firebase
+
+#storybook
+/storybook-static
 
 # misc
 .DS_Store
