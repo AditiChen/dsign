@@ -1,46 +1,36 @@
-# Getting Started with Create React App
+# About D-sign
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[Website URL](https://d-sig-2f338.web.app/)
 
-## Available Scripts
+The main purpose of this website is to allow users to post their ideas with google map or several designed templates, compress and crop images before uploading to firebase storage, categorize materials in the collection, able to add new friends and send messages to each other.
 
-In the project directory, you can run:
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and hosted by [Firebase Hosting](https://firebase.google.com/docs/hosting).
 
-### `npm start`
+## Test accounts
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Account1: shu@gmail.com
+Password: test12345
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Account2: ams@gmail.com
+Password: test12345
 
-### `npm test`
+Account2: apple@test.com
+Password: test12345
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Technique
 
-### `npm run build`
+- Reduced potential type error by using [TypeScript](https://www.typescriptlang.org/).
+- Uniformed coding style to [ESLint Airbnb](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb) rule.
+- Managed project by Git Flow for clarifying version control.
+- Used [immer](https://github.com/immerjs/immer) to ensure the data is rewrote immutably.
+- Implemented [i18next](https://github.com/i18next/next-i18next) to provide different languages of the interface.
+- Built email, Google and Facebook login functions through [Firebase Authentication](https://firebase.google.com/docs/auth).
+- Provided [image editor](https://github.com/ValentinH/react-easy-crop) such as crop, rotate, zoom in and out to customize every image and automatically changed the cropping shape to fit the image containers in the templates.
+- [Compressed files](https://github.com/Donaldcwl/browser-image-compression) to below 1 MB before uploading to [Firebase Cloud Storage](https://firebase.google.com/docs/storage) in order to avoid overlong loading time.
+- Dealt with CORS problem while reediting the stored photo in the Firebase Cloud Storage by [gcloud CLI](https://cloud.google.com/sdk/docs/install) and [gsutil](https://cloud.google.com/storage/docs/gsutil_install).
+- Offered [google map](https://github.com/JustFly1984/react-google-maps-api) as one of the templates to store the location for the project.
+- Allowed users to categorize materials into different folders by [drag and drop](https://github.com/atlassian/react-beautiful-dnd) the file.
+- Subscribe friend request and message to show notification instantly.
+- Automatically deployed in [GitHub Actions](https://github.com/features/actions) after sending the pull request.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+![function map](https://firebasestorage.googleapis.com/v0/b/d-sig-2f338.appspot.com/o/images%2Ffunction%20map.jpg?alt=media&token=2a1ac99c-91c2-4a0f-94fe-fb6613e65959)
