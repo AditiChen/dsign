@@ -8,7 +8,9 @@ jobs:
     if: "${{ github.event.pull_request.head.repo.full_name == github.repository }}"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - run: npm install
       - run: CI='' npm run build
         env:
@@ -21,7 +23,7 @@ jobs:
       - uses: chromaui/action@v1
         with:
           projectToken: "${{ secrets.REACT_APP_CHROMATIC_PROJECT_TOKEN }}"
-          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          token: "${{ secrets.GITHUB_TOKEN }}"
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
