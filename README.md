@@ -8,14 +8,12 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Test accounts
 
-Account1: shu@gmail.com
+Account1: shu@gmail.com\
 Password: test12345
 
-Account2: ams@gmail.com
+Account2: ams@gmail.com\
 Password: test12345
 
-Account2: apple@test.com
-Password: test12345
 
 ## Technique
 
@@ -33,4 +31,45 @@ Password: test12345
 - Subscribe friend request and message to show notification instantly.
 - Automatically deployed in [GitHub Actions](https://github.com/features/actions) after sending the pull request.
 
-![function map](https://firebasestorage.googleapis.com/v0/b/d-sig-2f338.appspot.com/o/images%2Ffunction%20map.jpg?alt=media&token=2a1ac99c-91c2-4a0f-94fe-fb6613e65959)
+## Function map
+
+![function map](https://user-images.githubusercontent.com/104111575/207782030-6012fc65-9caa-4b95-a029-5d1bb6c84b9d.png)
+
+## Features demp
+
+### Change language of interface
+
+https://user-images.githubusercontent.com/104111575/207790652-3b9cd7f7-7adf-4804-9228-480a6f615f8c.mov
+
+### Arrange template order
+
+https://user-images.githubusercontent.com/104111575/207788735-c6d5ea2c-b90d-42f6-b867-e919a215d7bf.mov
+
+### Crop image
+
+https://user-images.githubusercontent.com/104111575/207787516-79bf020a-5345-41e8-83da-c0213e0ac0ae.mov
+
+### Add google map
+
+https://user-images.githubusercontent.com/104111575/207788032-7a9d5527-f43f-40b5-9cab-cf6bd69c9075.mov
+
+
+### Upload multiple images
+
+https://user-images.githubusercontent.com/104111575/207789172-f0f21883-78eb-411f-8118-24970b761169.mov
+
+
+### Categorize materials
+
+https://user-images.githubusercontent.com/104111575/207789733-1a1d8d54-fa1e-4c8f-bb00-087d97fd762a.mov
+
+
+### Message to your friend
+
+https://user-images.githubusercontent.com/104111575/207787052-1d42745a-f507-4332-afc2-c85cd46e3780.mov
+
+
+### Favorite list
+
+https://user-images.githubusercontent.com/104111575/207785643-2a968d21-4d02-442f-b4e9-0e2d8e15874b.mov
+
