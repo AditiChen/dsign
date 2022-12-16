@@ -1,6 +1,7 @@
 # About D-sign
 
 [Website URL](https://d-sig-2f338.web.app/)
+[Storybook](https://639b03e6a901b48808fffd8b-pswhnvdycj.chromatic.com/?path=/story/components-templates-template0--template)
 
 The main purpose of this website is to allow users to post their ideas with google map or several designed templates, compress and crop images before uploading to firebase storage, categorize materials in the collection, able to add new friends and send messages to each other.
 
@@ -28,6 +29,7 @@ Password: test12345
 - Offered [google map](https://github.com/JustFly1984/react-google-maps-api) as one of the templates to store the location for the project.
 - Allowed users to categorize materials into different folders by [drag and drop](https://github.com/atlassian/react-beautiful-dnd) the file.
 - Subscribe friend request and message to show notification instantly.
+- Managed component UI documents in [Storybook](https://storybook.js.org/docs/react/get-started/introduction) and deployed to [Chromatic](https://www.chromatic.com/) for visual testing.
 - Automatically deployed in [GitHub Actions](https://github.com/features/actions) after sending the pull request.
 
 ## Function map
