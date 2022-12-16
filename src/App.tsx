@@ -9,7 +9,7 @@ import { FriendContextProvider } from "./context/friendContext";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 
-const GlobalStyle = createGlobalStyle`
+export const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
   }

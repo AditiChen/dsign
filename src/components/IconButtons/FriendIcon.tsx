@@ -17,7 +17,7 @@ import { AuthContext } from "../../context/authContext";
 import { db } from "../../context/firebaseSDK";
 import { addFriendIcon, addFriendIconHover } from "../icons/icons";
 
-const Friend = styled.div`
+export const Friend = styled.div`
   margin-left: auto;
   width: 30px;
   height: 30px;

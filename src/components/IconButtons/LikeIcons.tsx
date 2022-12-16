@@ -8,7 +8,11 @@ import { AuthContext } from "../../context/authContext";
 import { db } from "../../context/firebaseSDK";
 import { likeIcon, likeIconHover, likedIcon } from "../icons/icons";
 
-const Liked = styled.div<{ margin: string; $width: string; $height: string }>`
+export const Liked = styled.div<{
+  margin: string;
+  $width: string;
+  $height: string;
+}>`
   margin: ${(props) => props.margin};
   width: ${(props) => props.$width};
   height: ${(props) => props.$height};
@@ -28,7 +32,11 @@ const Liked = styled.div<{ margin: string; $width: string; $height: string }>`
   }
 `;
 
-const Like = styled.div<{ margin: string; $width: string; $height: string }>`
+export const Like = styled.div<{
+  margin: string;
+  $width: string;
+  $height: string;
+}>`
   margin: ${(props) => props.margin};
   width: ${(props) => props.$width};
   height: ${(props) => props.$height};

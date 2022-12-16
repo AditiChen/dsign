@@ -14,7 +14,6 @@ Password: test12345
 Account2: ams@gmail.com\
 Password: test12345
 
-
 ## Technique
 
 - Reduced potential type error by using [TypeScript](https://www.typescriptlang.org/).
@@ -35,7 +34,7 @@ Password: test12345
 
 ![function map](https://user-images.githubusercontent.com/104111575/207782030-6012fc65-9caa-4b95-a029-5d1bb6c84b9d.png)
 
-## Features demp
+## Features demo
 
 ### Change language of interface
 
@@ -53,23 +52,18 @@ https://user-images.githubusercontent.com/104111575/207787516-79bf020a-5345-41e8
 
 https://user-images.githubusercontent.com/104111575/207788032-7a9d5527-f43f-40b5-9cab-cf6bd69c9075.mov
 
-
 ### Upload multiple images
 
 https://user-images.githubusercontent.com/104111575/207789172-f0f21883-78eb-411f-8118-24970b761169.mov
-
 
 ### Categorize materials
 
 https://user-images.githubusercontent.com/104111575/207789733-1a1d8d54-fa1e-4c8f-bb00-087d97fd762a.mov
 
-
 ### Message to your friend
 
 https://user-images.githubusercontent.com/104111575/207787052-1d42745a-f507-4332-afc2-c85cd46e3780.mov
 
-
 ### Favorite list
 
 https://user-images.githubusercontent.com/104111575/207785643-2a968d21-4d02-442f-b4e9-0e2d8e15874b.mov
-
