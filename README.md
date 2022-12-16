@@ -1,7 +1,7 @@
 # About D-sign
 
 [Website URL](https://d-sig-2f338.web.app/)\
-[Storybook](https://639b03e6a901b48808fffd8b-pswhnvdycj.chromatic.com/?path=/story/components-templates-template0--template)
+[Storybook URL](https://639b03e6a901b48808fffd8b-pswhnvdycj.chromatic.com/?path=/story/components-templates-template0--template)
 
 The main purpose of this website is to allow users to post their ideas with google map or several designed templates, compress and crop images before uploading to firebase storage, categorize materials in the collection, able to add new friends and send messages to each other.
 
