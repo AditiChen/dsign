@@ -133,6 +133,7 @@ const CropperContainer = styled.div`
 
 const NewPhotoContainer = styled.div`
   width: 100%;
+  height: 100%;
 `;
 
 const NewPhotoHeaderContainer = styled.div`
@@ -150,21 +151,25 @@ const NewPhotoHeaderContainer = styled.div`
 `;
 
 const CollectionContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+  border: 1px solid #b4b4b4;
+  scrollbar-width: none;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const CollectionInnerContainer = styled.div`
   margin-bottom: 10px;
   padding: 20px;
   width: 100%;
-  min-height: 140px;
-  max-height: 650px;
+  height: fit-content;
   display: grid;
   grid-gap: 10px;
   grid-template-columns: repeat(7, 1fr);
   grid-auto-rows: minmax(4, auto);
-  overflow: scroll;
-  scrollbar-width: none;
-  border: 1px solid #b4b4b4;
-  ::-webkit-scrollbar {
-    display: none;
-  }
   @media screen and (max-width: 1449px) {
     grid-template-columns: repeat(6, 1fr);
     padding: 14px;
@@ -212,6 +217,7 @@ const CollectionImg = styled.div<{ url: string }>`
   margin: 5px auto;
   width: 100px;
   height: 100px;
+  background-color: #b4b4b4;
   background-image: ${(props) => props.url};
   background-size: cover;
   background-position: center;
@@ -572,14 +578,16 @@ function SquareOverlay({
           ))}
         </CollectionFolderContainer>
         <CollectionContainer>
-          {folders[currentFolderIndex].photos.length !== 0 &&
-            folders[currentFolderIndex].photos?.map((url) => (
-              <CollectionImg
-                key={url}
-                url={`url(${url})`}
-                onClick={() => setImgSrc(url)}
-              />
-            ))}
+          <CollectionInnerContainer>
+            {folders[currentFolderIndex].photos.length !== 0 &&
+              folders[currentFolderIndex].photos?.map((url) => (
+                <CollectionImg
+                  key={url}
+                  url={`url(${url})`}
+                  onClick={() => setImgSrc(url)}
+                />
+              ))}
+          </CollectionInnerContainer>
         </CollectionContainer>
         {folders[currentFolderIndex].photos.length === 0 && (
           <Text>{t("empty_folder")}</Text>

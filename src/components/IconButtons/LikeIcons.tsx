@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../../context/authContext";
 import { db } from "../../context/firebaseSDK";
@@ -69,15 +70,21 @@ export function LikeIcon({
   height: string;
 }) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { userId } = useContext(AuthContext);
 
   async function likeProjectHandler() {
     if (userId === "") {
-      Swal.fire({
+      const ans = await Swal.fire({
         text: t("please_login"),
         icon: "warning",
-        confirmButtonColor: "#646464",
+        confirmButtonColor: "#6d79aa",
+        confirmButtonText: t("to_login_page"),
+        showCancelButton: true,
+        cancelButtonText: t("login_later"),
       });
+      if (ans.isDismissed === true) return;
+      navigate("login");
       return;
     }
     await updateDoc(doc(db, "users", userId), {

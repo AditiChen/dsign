@@ -52,6 +52,8 @@
   "upLoad_successfully": "專案建立成功!",
 
   "please_login": "請先登入",
+  "to_login_page": "去登入頁面",
+  "login_later": "先不用",
   "project_list": "作品列表",
   "go_to_create_project": "作品列表是空的喔，快去新增作品吧 :)",
   "delete_project_warning": "確定要刪除這個專案嗎?",
@@ -86,9 +88,12 @@
   "folder_name_empty": "資料夾名稱不能是空！",
   "folder_name_too_long": "資料夾名稱過長！",
   "delete_folder_warning": "確定要刪除資料夾及裡面的圖片嗎？",
+  "maximum_ten_files": "一次最多只能上傳十張圖片：）",
 
   "empty_favorite_list": "你的最愛現在是空的喔，快去加些喜歡的專案吧！",
 
   "introduction": "自我介紹",
-  "user_profile": "個人資訊"
+  "user_profile": "個人資訊",
+  "edit_introduction": "編輯自我介紹",
+  "confirm_introduction": "更新自我介紹"
 }

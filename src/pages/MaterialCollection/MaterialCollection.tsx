@@ -440,6 +440,7 @@ function MaterialCollection() {
       confirmButtonColor: "#646464",
       confirmButtonText: t("reject_no_answer"),
       showDenyButton: true,
+      denyButtonColor: "tomato",
       denyButtonText: t("reject_yes_answer"),
     });
     if (ans.isConfirmed === true) return;
@@ -451,6 +452,15 @@ function MaterialCollection() {
 
   const onUploadImgFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files === null) return;
+    if (e.target.files.length > 10) {
+      await Swal.fire({
+        text: t("maximum_ten_files"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+        confirmButtonText: t("ok"),
+      });
+      return;
+    }
     const newFiles = Array.from(e.target.files);
     const newPhotos = await Promise.all(
       newFiles.map(async (file: File) => {
@@ -482,6 +492,7 @@ function MaterialCollection() {
       confirmButtonColor: "#646464",
       confirmButtonText: t("reject_no_answer"),
       showDenyButton: true,
+      denyButtonColor: "tomato",
       denyButtonText: t("reject_yes_answer"),
     });
     if (ans.isConfirmed === true) return;

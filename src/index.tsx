@@ -1,7 +1,6 @@
 import "./i18n";
 import ReactDOM from "react-dom/client";
 import { Route, Routes, BrowserRouter, Navigate } from "react-router-dom";
-import reportWebVitals from "./reportWebVitals";
 
 import App from "./App";
 import PortfolioBricks from "./pages/PortfolioBricks/PortfolioBricks";
@@ -37,5 +36,3 @@ root.render(
     </Routes>
   </BrowserRouter>
 );
-
-reportWebVitals();

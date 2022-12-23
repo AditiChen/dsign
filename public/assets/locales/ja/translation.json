@@ -52,6 +52,8 @@
   "upLoad_successfully": "アップロード成功!",
 
   "please_login": "ログインしてください",
+  "to_login_page": "ログインページへ",
+  "login_later": "あとで",
   "project_list": "プロジェクト一覧",
   "go_to_create_project": "空っぽ",
   "delete_project_warning": "本当にこのプロジェクトを削除しますか？",
@@ -86,9 +88,12 @@
   "folder_name_empty": "フォルダ名が空です",
   "folder_name_too_long": "フォルダ名が長すぎる",
   "delete_folder_warning": "このフォルダーを完全に削除しますか？",
+  "maximum_ten_files": "一度に最大10ファイルまでアップロード可能",
 
   "empty_favorite_list": "お気に入りリストが空っぽなので、プロジェクトを追加しに行こう",
 
   "introduction": "紹介",
-  "user_profile": "個人情報"
+  "user_profile": "個人情報",
+  "edit_introduction": "編集",
+  "confirm_introduction": "アップデート紹介"
 }

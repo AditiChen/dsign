@@ -509,7 +509,12 @@ function FriendList() {
         {hasSearchValue && (
           <Separator>
             <FriendListContainer>
-              <Avatar url={`url(${searchData.avatar})`} />
+              <Avatar
+                url={`url(${searchData.avatar})`}
+                onClick={() => {
+                  navigate(`/userProfile?id=${searchData.uid}`);
+                }}
+              />
               <TextContainer>
                 <Text $size="20px" mobileSize="16px">
                   {searchData.name}

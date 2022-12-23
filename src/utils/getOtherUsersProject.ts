@@ -52,7 +52,6 @@ export default async function getOtherUsersProject(
       otherUserFetchedProjects[index].introduction = introduction;
     })
   );
-
   // get next 50 datas
   // const lastFriendVisible =
   //   firstFriendquerySnapshot.docs[firstFriendquerySnapshot.docs.length - 1];

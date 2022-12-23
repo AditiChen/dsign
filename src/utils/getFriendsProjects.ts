@@ -50,6 +50,5 @@ export default async function getFriendsProjects(
       fetchedFriendProjects[index].introduction = introduction;
     })
   );
-
   return fetchedFriendProjects;
 }

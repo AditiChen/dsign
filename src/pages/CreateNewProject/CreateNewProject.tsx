@@ -140,6 +140,7 @@ const CloseIcon = styled.div`
   background-position: center;
   &:hover {
     background-image: url(${closeIconHover});
+    cursor: pointer;
   }
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     width: 30px;
@@ -360,6 +361,17 @@ function CreateNewProject() {
     setPages(newPagesOrder);
   };
 
+  function insertNewTemplate(index: number) {
+    if (index === 9 && hasGoogleMap) return;
+    setPages((prev) => [...prev, { key: uuid(), ...templateData[index] }]);
+    Swal.fire({
+      position: "top",
+      text: "Add template successfully",
+      showConfirmButton: false,
+      timer: 700,
+    });
+  }
+
   function deleteHandler(index: number) {
     const removeSelectedPageData = pages.filter((data, i) => index !== i);
     setPages(removeSelectedPageData);
@@ -536,11 +548,7 @@ function CreateNewProject() {
                       index === 9 && hasGoogleMap ? "not-allowed" : "pointer"
                     }
                     onClick={() => {
-                      if (index === 9 && hasGoogleMap) return;
-                      setPages((prev) => [
-                        ...prev,
-                        { key: uuid(), ...templateData[index] },
-                      ]);
+                      insertNewTemplate(index);
                     }}
                   />
                 ))}

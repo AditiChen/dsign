@@ -52,6 +52,8 @@
   "upLoad_successfully": "téléchargement réussi!",
 
   "please_login": "Veuillez loger",
+  "to_login_page": "Aller à la page de connexion",
+  "login_later": "Plus tard",
   "project_list": "Liste des projets",
   "go_to_create_project": "C'est vide",
   "delete_project_warning": "Êtes-vous sûr de vouloir supprimer ce projet ?",
@@ -86,9 +88,12 @@
   "folder_name_empty": "Le nom du dossier est vide!",
   "folder_name_too_long": "Le nom du dossier est trop long!",
   "delete_folder_warning": "Êtes-vous sûr de vouloir supprimer ce dossier et les photos qu'il contient?",
+  "maximum_ten_files": "Chargez un maximum de 10 fichiers à la fois",
 
   "empty_favorite_list": "Votre liste de favoris est vide, allez-y pour ajouter des projets !",
 
   "introduction": "Introduction",
-  "user_profile": "Profil de l'utilisateur"
+  "user_profile": "Profil de l'utilisateur",
+  "edit_introduction": "éditer",
+  "confirm_introduction": "Mise à jour"
 }

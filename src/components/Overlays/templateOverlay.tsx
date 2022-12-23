@@ -142,6 +142,7 @@ const LoadingBackground = styled.div`
 
 const NewPhotoContainer = styled.div`
   width: 100%;
+  height: 100%;
 `;
 
 const NewPhotoHeaderContainer = styled.div`
@@ -193,21 +194,25 @@ const FolderIcon = styled.div<{ img: string; $width: string; opacity: number }>`
 `;
 
 const CollectionContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+  border: 1px solid #b4b4b4;
+  scrollbar-width: none;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const CollectionInnerContainer = styled.div`
   margin-bottom: 10px;
   padding: 20px;
   width: 100%;
-  min-height: 140px;
-  max-height: 650px;
+  height: fit-content;
   display: grid;
   grid-gap: 10px;
   grid-template-columns: repeat(7, 1fr);
   grid-auto-rows: minmax(4, auto);
-  overflow: scroll;
-  scrollbar-width: none;
-  border: 1px solid #b4b4b4;
-  ::-webkit-scrollbar {
-    display: none;
-  }
   @media screen and (max-width: 1449px) {
     grid-template-columns: repeat(6, 1fr);
     padding: 14px;
@@ -226,12 +231,14 @@ const CollectionImg = styled.div<{ url: string }>`
   background-size: cover;
   background-position: center;
   border-radius: 10px;
+  border: 1px solid #b4b4b4;
   &:hover {
     margin: auto;
     cursor: pointer;
     width: 105px;
     height: 105px;
     box-shadow: 0 0 5px #3c3c3c;
+    border: none;
   }
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     width: 100px;
@@ -570,14 +577,16 @@ function Overlay({
           ))}
         </CollectionFolderContainer>
         <CollectionContainer>
-          {folders[currentFolderIndex].photos.length !== 0 &&
-            folders[currentFolderIndex].photos?.map((url) => (
-              <CollectionImg
-                key={url}
-                url={`url(${url})`}
-                onClick={() => setImgSrc(url)}
-              />
-            ))}
+          <CollectionInnerContainer>
+            {folders[currentFolderIndex].photos.length !== 0 &&
+              folders[currentFolderIndex].photos?.map((url) => (
+                <CollectionImg
+                  key={url}
+                  url={`url(${url})`}
+                  onClick={() => setImgSrc(url)}
+                />
+              ))}
+          </CollectionInnerContainer>
         </CollectionContainer>
         {folders[currentFolderIndex].photos.length === 0 && (
           <Text>{t("empty_folder")}</Text>

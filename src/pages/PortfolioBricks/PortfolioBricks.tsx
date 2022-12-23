@@ -76,13 +76,14 @@ function PortfolioBricks() {
     async function getProjects() {
       setIsLoading(true);
       const friendProjectsData = await getFriendsProjects(userId, friendList);
-      setProjects(friendProjectsData);
       if (friendProjectsData.length < 50) {
         const otherUsersProjectsData = await getOtherUsersProject(
           userId,
           friendList
         );
         setProjects([...friendProjectsData, ...otherUsersProjectsData]);
+      } else {
+        setProjects([...friendProjectsData]);
       }
       setIsLoading(false);
     }
@@ -91,7 +92,6 @@ function PortfolioBricks() {
 
   useEffect(() => {
     if (userId !== "") return;
-    setProjects([]);
     async function getAllProjects() {
       setIsLoading(true);
       const allData = await getAllProject();

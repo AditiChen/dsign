@@ -279,8 +279,8 @@ function SignIn() {
     isLoading,
   } = useContext(AuthContext);
   const [inputName, setInputName] = useState("");
-  const [inputEmail, setInputEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [inputEmail, setInputEmail] = useState("shu@gmail.com");
+  const [password, setPassword] = useState("test12345");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [signIn, setSignIn] = useState(true);
   const [checkLoading, setCheckLoading] = useState(false);
@@ -425,12 +425,14 @@ function SignIn() {
                 placeholder={t("input_email")}
                 key="email"
                 autoFocus
+                value={inputEmail}
                 onChange={(e) => setInputEmail(e.target.value)}
               />
               <Input
                 placeholder={t("input_password")}
                 key="password1"
                 type="password"
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 onKeyPress={(e) => {
                   if (
