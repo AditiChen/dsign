@@ -69,6 +69,9 @@ const Loading = styled(ReactLoading)`
 function PortfolioBricks() {
   const { userId, friendList } = useContext(AuthContext);
   const [projects, setProjects] = useState<FetchedProjectsType[]>([]);
+  const [showedProjects, setShowedProjects] = useState<FetchedProjectsType[]>(
+    []
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -81,9 +84,16 @@ function PortfolioBricks() {
           userId,
           friendList
         );
+        const splicedFirstFifteenProjects = [
+          ...friendProjectsData,
+          ...otherUsersProjectsData,
+        ].splice(0, 15);
         setProjects([...friendProjectsData, ...otherUsersProjectsData]);
+        setShowedProjects(splicedFirstFifteenProjects);
       } else {
         setProjects([...friendProjectsData]);
+        const splicedFirstFifteenProjects = friendProjectsData.splice(0, 15);
+        setShowedProjects(splicedFirstFifteenProjects);
       }
       setIsLoading(false);
     }
@@ -101,17 +111,54 @@ function PortfolioBricks() {
     getAllProjects();
   }, [userId]);
 
+  useEffect(() => {
+    function getNextProjects() {
+      let currentSlicedIndex = showedProjects.length;
+      function sliceNextProjects() {
+        if (projects.length - currentSlicedIndex < 15) {
+          const followingProjects = projects.slice(
+            currentSlicedIndex,
+            projects.length
+          );
+          currentSlicedIndex = projects.length;
+          return followingProjects;
+        }
+        const followingProjects = projects.slice(
+          currentSlicedIndex,
+          currentSlicedIndex + 15
+        );
+        currentSlicedIndex += 15;
+        return followingProjects;
+      }
+      return sliceNextProjects();
+    }
+
+    function checkNextProjects() {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        if (projects.length === showedProjects.length) return;
+        const nextProjectData = getNextProjects();
+        setShowedProjects((prev) => [...prev, ...nextProjectData]);
+      }
+    }
+
+    window.addEventListener("scroll", checkNextProjects);
+
+    return () => {
+      window.removeEventListener("scroll", checkNextProjects);
+    };
+  }, [projects, showedProjects]);
+
   return (
     <Wrapper>
       <CarouselContainer>
         <Carousel />
       </CarouselContainer>
-      {projects.length === 0 && isLoading ? (
+      {showedProjects.length === 0 && isLoading ? (
         <Loading type="cylon" color="#3c3c3c" />
       ) : (
         <BricksContainer>
-          {projects &&
-            projects.map((project) => (
+          {showedProjects &&
+            showedProjects.map((project) => (
               <Brick
                 key={project.projectId}
                 uid={project.uid}
