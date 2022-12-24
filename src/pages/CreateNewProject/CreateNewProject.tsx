@@ -15,6 +15,7 @@ import {
 
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
+import { PagesType } from "../../components/tsTypes";
 import getUserProjects from "../../utils/getUserProjects";
 import templatesImgArr from "../../components/Templates/TemplateImg";
 import templatesArr from "../../components/Templates/TemplatesArr";
@@ -298,15 +299,7 @@ function CreateNewProject() {
   const { t } = useTranslation();
   const { userId, setUserProjects } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
-  const [pages, setPages] = useState<
-    {
-      key: string;
-      type: number;
-      content?: string[];
-      photos?: string[];
-      location?: { lat?: number; lng?: number };
-    }[]
-  >([]);
+  const [pages, setPages] = useState<PagesType[]>([]);
   const [position, setPosition] = useState<{ lat?: number; lng?: number }>({});
   const [title, setTitle] = useState("");
   const [mainImgSrc, setMainImgSrc] = useState("");

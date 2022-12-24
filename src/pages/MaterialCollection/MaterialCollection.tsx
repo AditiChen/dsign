@@ -423,7 +423,6 @@ function MaterialCollection() {
       }
       return;
     }
-
     if (state === "new") {
       const newFolders = produce(folders, (draft) => {
         draft.push({ folderName: ans.value, photos: [] });

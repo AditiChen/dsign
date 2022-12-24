@@ -72,3 +72,11 @@ export interface FetchedProjectsType {
     location?: { lat?: number; lng?: number };
   }[];
 }
+
+export interface PagesType {
+  key: string;
+  type: number;
+  content?: string[];
+  photos?: string[];
+  location?: { lat?: number; lng?: number };
+}
