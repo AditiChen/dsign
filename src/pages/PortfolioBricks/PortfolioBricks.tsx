@@ -134,7 +134,10 @@ function PortfolioBricks() {
     }
 
     function checkNextProjects() {
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+      if (
+        window.innerHeight + window.scrollY + 20 >=
+        document.body.offsetHeight
+      ) {
         if (projects.length === showedProjects.length) return;
         const nextProjectData = getNextProjects();
         setShowedProjects((prev) => [...prev, ...nextProjectData]);

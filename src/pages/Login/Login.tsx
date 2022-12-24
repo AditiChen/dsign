@@ -3,10 +3,12 @@ import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import ReactLoading from "react-loading";
 import { collection, query, where, getDocs } from "firebase/firestore";
+import { sendPasswordResetEmail } from "firebase/auth";
 import Swal from "sweetalert2";
 
-import { db } from "../../context/firebaseSDK";
+import { db, auth } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
+import checkEmailExist from "../../utils/checkEmailExist";
 import {
   googleIcon,
   googleIconHover,
@@ -132,6 +134,16 @@ const Input = styled.input`
 
 const SignContainer = styled.div`
   display: flex;
+`;
+
+const ForgetPasswordText = styled.div`
+  margin-top: 10px;
+  font-size: 16px;
+  color: #4285f4;
+  @media screen and (max-width: 549px) {
+    margin-top: 6px;
+    font-size: 12px;
+  }
 `;
 
 const SignBtn = styled.button<{ checkLoading?: boolean }>`
@@ -284,6 +296,7 @@ function SignIn() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [signIn, setSignIn] = useState(true);
   const [checkLoading, setCheckLoading] = useState(false);
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
 
   function signInHandler() {
     if (!inputEmail || !password) {
@@ -346,10 +359,7 @@ function SignIn() {
       setCheckLoading(false);
       return;
     }
-
-    const qEmail = query(userRef, where("email", "==", inputEmail));
-    const querySnapshotEmail = await getDocs(qEmail);
-    const emailRefReturnedData = querySnapshotEmail.docs[0]?.data();
+    const emailRefReturnedData = await checkEmailExist(inputEmail);
     if (emailRefReturnedData !== undefined) {
       Swal.fire({
         text: t("email_exist"),
@@ -360,7 +370,6 @@ function SignIn() {
       setCheckLoading(false);
       return;
     }
-
     if (password.length < 8) {
       Swal.fire({
         text: t("password_length_check"),
@@ -379,7 +388,6 @@ function SignIn() {
       setCheckLoading(false);
       return;
     }
-
     if (password !== confirmPassword) {
       Swal.fire({
         text: t("password_confirm_failed"),
@@ -393,13 +401,132 @@ function SignIn() {
     signUp(inputEmail, password, inputName);
   }
 
-  if (isLoading) {
+  async function resetPasswordHandler() {
+    const ans = await Swal.fire({
+      text: t("enter_email"),
+      input: "text",
+      inputPlaceholder: t("input_email"),
+      confirmButtonColor: "#6d79aa",
+      confirmButtonText: t("send_check_email"),
+      showCancelButton: true,
+      cancelButtonText: t("cancel_button"),
+    });
+    if (ans.isDismissed === true) return;
+    setIsCheckingEmail(true);
+    const emailRefReturnedData = await checkEmailExist(ans.value);
+    if (emailRefReturnedData !== undefined) {
+      await sendPasswordResetEmail(auth, ans.value);
+      Swal.fire({
+        text: t("sent_email_successfully"),
+        confirmButtonColor: "#6d79aa",
+        confirmButtonText: "ok",
+      });
+      setIsCheckingEmail(false);
+    } else {
+      Swal.fire({
+        text: t("email_not_exist"),
+        confirmButtonColor: "#6d79aa",
+        confirmButtonText: "ok",
+      });
+      setSignIn(false);
+      setIsCheckingEmail(false);
+    }
+  }
+
+  if (isLoading || isCheckingEmail) {
     return (
       <Wrapper>
         <Loading type="cylon" color="#ffffff" margin="50px auto" />
       </Wrapper>
     );
   }
+
+  const renderSignIn = () => (
+    <LoginContainer>
+      <Input
+        placeholder={t("input_email")}
+        key="email1"
+        autoFocus
+        value={inputEmail}
+        onChange={(e) => setInputEmail(e.target.value)}
+      />
+      <Input
+        placeholder={t("input_password")}
+        key="password1"
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        onKeyPress={(e) => {
+          if (inputEmail !== "" && password !== "" && e.key === "Enter") {
+            signInHandler();
+          }
+        }}
+      />
+      <SignContainer>
+        <ForgetPasswordText onClick={() => resetPasswordHandler()}>
+          {t("forget_password")}
+        </ForgetPasswordText>
+        <SignBtn checkLoading={checkLoading} onClick={() => signInHandler()}>
+          {t("login")}
+        </SignBtn>
+      </SignContainer>
+    </LoginContainer>
+  );
+
+  const renderSignUp = () => (
+    <LoginContainer>
+      <Input
+        placeholder={t("input_name")}
+        key="name"
+        autoFocus
+        maxLength={20}
+        onChange={(e) => setInputName(e.target.value)}
+      />
+      <Input
+        placeholder={t("input_email")}
+        key="email"
+        maxLength={30}
+        onChange={(e) => setInputEmail(e.target.value)}
+      />
+      <Input
+        placeholder={t("input_password")}
+        key="password"
+        type="password"
+        maxLength={20}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <Input
+        placeholder={t("check_input_password")}
+        type="password"
+        maxLength={20}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        onKeyPress={(e) => {
+          if (
+            inputName !== "" &&
+            inputEmail !== "" &&
+            password !== "" &&
+            confirmPassword !== "" &&
+            e.key === "Enter"
+          ) {
+            signInHandler();
+          }
+        }}
+      />
+      <SignContainer>
+        <SignBtn checkLoading={checkLoading} onClick={() => signUpHandler()}>
+          {t("sign_up")}
+          {checkLoading && (
+            <Loading
+              type="spokes"
+              height="20px"
+              width="20px"
+              margin="0 0 0 15px"
+            />
+          )}
+        </SignBtn>
+      </SignContainer>
+    </LoginContainer>
+  );
 
   return (
     <Wrapper>
@@ -420,97 +547,7 @@ function SignIn() {
           >
             {t("sign_up")}
           </SignStatus>
-          {signIn ? (
-            <LoginContainer>
-              <Input
-                placeholder={t("input_email")}
-                key="email"
-                autoFocus
-                value={inputEmail}
-                onChange={(e) => setInputEmail(e.target.value)}
-              />
-              <Input
-                placeholder={t("input_password")}
-                key="password1"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onKeyPress={(e) => {
-                  if (
-                    inputEmail !== "" &&
-                    password !== "" &&
-                    e.key === "Enter"
-                  ) {
-                    signInHandler();
-                  }
-                }}
-              />
-              <SignContainer>
-                <SignBtn
-                  checkLoading={checkLoading}
-                  onClick={() => signInHandler()}
-                >
-                  {t("login")}
-                </SignBtn>
-              </SignContainer>
-            </LoginContainer>
-          ) : (
-            <LoginContainer>
-              <Input
-                placeholder={t("input_name")}
-                key="name"
-                autoFocus
-                maxLength={20}
-                onChange={(e) => setInputName(e.target.value)}
-              />
-              <Input
-                placeholder={t("input_email")}
-                key="email"
-                maxLength={30}
-                onChange={(e) => setInputEmail(e.target.value)}
-              />
-              <Input
-                placeholder={t("input_password")}
-                key="password"
-                type="password"
-                maxLength={20}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <Input
-                placeholder={t("check_input_password")}
-                type="password"
-                maxLength={20}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                onKeyPress={(e) => {
-                  if (
-                    inputName !== "" &&
-                    inputEmail !== "" &&
-                    password !== "" &&
-                    confirmPassword !== "" &&
-                    e.key === "Enter"
-                  ) {
-                    signInHandler();
-                  }
-                }}
-              />
-              <SignContainer>
-                <SignBtn
-                  checkLoading={checkLoading}
-                  onClick={() => signUpHandler()}
-                >
-                  {t("sign_up")}
-                  {checkLoading && (
-                    <Loading
-                      type="spokes"
-                      height="20px"
-                      width="20px"
-                      margin="0 0 0 15px"
-                    />
-                  )}
-                </SignBtn>
-              </SignContainer>
-            </LoginContainer>
-          )}
+          {signIn ? renderSignIn() : renderSignUp()}
           <LoginOptionsContainer>
             <LoginOptionsText>or</LoginOptionsText>
             <LoginOptionsLine />

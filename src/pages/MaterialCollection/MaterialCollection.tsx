@@ -401,7 +401,7 @@ function MaterialCollection() {
       confirmButtonColor: "#6d79aa",
       confirmButtonText: t("name_folder"),
       showCancelButton: true,
-      cancelButtonText: t("cancel_name_folder"),
+      cancelButtonText: t("cancel_button"),
     });
     if (ans.isDismissed === true) return;
     if (ans.value.trim() === "") {
