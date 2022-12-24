@@ -431,7 +431,7 @@ function SignIn() {
               />
               <Input
                 placeholder={t("input_password")}
-                key="password"
+                key="password1"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
