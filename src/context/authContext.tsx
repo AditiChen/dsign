@@ -177,12 +177,13 @@ export function AuthContextProvider({ children }: BodyProp) {
           password
         );
         const { uid } = UserCredentialImpl.user;
-        const newName = insertName.replace(/\s/g, "");
+        const searchName = insertName.replace(/\s/g, "").toLowerCase();
         await setDoc(doc(db, "users", uid), {
           uid,
           name: insertName,
+          searchName,
           email: insertEmail,
-          avatar: `https://source.boringavatars.com/marble/180/${newName}`,
+          avatar: `https://source.boringavatars.com/marble/180/${uid}`,
           friendList: [],
           favoriteList: [],
           folders: [{ folderName: "Unsorted", photos: [] }],
@@ -218,9 +219,11 @@ export function AuthContextProvider({ children }: BodyProp) {
       const data = docSnap.data() as UserDataType;
       if (data === undefined) {
         const gmail = result.user.email;
+        const searchName = displayName?.replace(/\s/g, "").toLowerCase();
         await setDoc(doc(db, "users", uid), {
           uid,
           name: displayName,
+          searchName,
           email: gmail,
           avatar: photoURL,
           friendList: [],
@@ -253,11 +256,13 @@ export function AuthContextProvider({ children }: BodyProp) {
       const { uid, photoURL, displayName } = result.user;
       const docSnap = await getDoc(doc(db, "users", uid));
       const data = docSnap.data() as UserDataType;
+      const searchName = displayName?.replace(/\s/g, "").toLowerCase();
       if (data === undefined) {
         const fbMail = result.user.email;
         await setDoc(doc(db, "users", uid), {
           uid,
           name: displayName,
+          searchName,
           email: fbMail,
           avatar: photoURL,
           friendList: [],

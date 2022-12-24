@@ -309,7 +309,8 @@ function SignIn() {
     }
     setCheckLoading(true);
     const userRef = collection(db, "users");
-    const qName = query(userRef, where("name", "==", inputName));
+    const lowerCaseInputName = inputName.replace(/\s/g, "").toLowerCase();
+    const qName = query(userRef, where("searchName", "==", lowerCaseInputName));
     const querySnapshotName = await getDocs(qName);
     const nameRefReturnedData = querySnapshotName.docs[0]?.data();
     if (nameRefReturnedData !== undefined) {
@@ -430,7 +431,7 @@ function SignIn() {
               />
               <Input
                 placeholder={t("input_password")}
-                key="password1"
+                key="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
