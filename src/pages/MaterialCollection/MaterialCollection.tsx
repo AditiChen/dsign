@@ -413,13 +413,17 @@ function MaterialCollection() {
       return;
     }
     if (ans.value.length > 15) {
-      Swal.fire({
+      const confirmUnderstandRule = await Swal.fire({
         text: t("folder_name_too_long"),
         icon: "warning",
         confirmButtonColor: "#646464",
       });
+      if (confirmUnderstandRule) {
+        namingFolderHandler(state);
+      }
       return;
     }
+
     if (state === "new") {
       const newFolders = produce(folders, (draft) => {
         draft.push({ folderName: ans.value, photos: [] });
@@ -455,6 +459,17 @@ function MaterialCollection() {
     if (e.target.files.length > 10) {
       await Swal.fire({
         text: t("maximum_ten_files"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+        confirmButtonText: t("ok"),
+      });
+      return;
+    }
+    const newFolderPhotoLength =
+      folders[currentFolderIndex].photos.length + e.target.files.length;
+    if (newFolderPhotoLength >= 30) {
+      await Swal.fire({
+        text: t("maximum_photo_in_folder"),
         icon: "warning",
         confirmButtonColor: "#646464",
         confirmButtonText: t("ok"),

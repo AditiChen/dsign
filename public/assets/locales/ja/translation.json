@@ -89,6 +89,7 @@
   "folder_name_too_long": "フォルダ名が長すぎる",
   "delete_folder_warning": "このフォルダーを完全に削除しますか？",
   "maximum_ten_files": "一度に最大10ファイルまでアップロード可能",
+  "maximum_photo_in_folder": "1つのフォルダには、最大30枚の写真しか保存",
 
   "empty_favorite_list": "お気に入りリストが空っぽなので、プロジェクトを追加しに行こう",
 

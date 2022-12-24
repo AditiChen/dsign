@@ -89,6 +89,7 @@
   "folder_name_too_long": "Le nom du dossier est trop long!",
   "delete_folder_warning": "Êtes-vous sûr de vouloir supprimer ce dossier et les photos qu'il contient?",
   "maximum_ten_files": "Chargez un maximum de 10 fichiers à la fois",
+  "maximum_photo_in_folder": "Un dossier ne peut contenir que 30 photos au maximum.",
 
   "empty_favorite_list": "Votre liste de favoris est vide, allez-y pour ajouter des projets !",
 

@@ -89,6 +89,7 @@
   "folder_name_too_long": "資料夾名稱過長！",
   "delete_folder_warning": "確定要刪除資料夾及裡面的圖片嗎？",
   "maximum_ten_files": "一次最多只能上傳十張圖片：）",
+  "maximum_photo_in_folder": "一個資料夾最多只能放30張圖片喔！",
 
   "empty_favorite_list": "你的最愛現在是空的喔，快去加些喜歡的專案吧！",
 
