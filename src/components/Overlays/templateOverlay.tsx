@@ -16,7 +16,7 @@ import { doc, updateDoc } from "firebase/firestore";
 
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
-import upLoadImgToCloudStorage from "../../utils/upLoadImgToCloudStorage";
+import upLoadImgToCloudStorage from "../../utils/uploadImgToCloudStorage";
 import getCroppedImg from "../../utils/cropImage";
 import {
   closeIcon,

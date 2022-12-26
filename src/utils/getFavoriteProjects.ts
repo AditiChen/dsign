@@ -72,6 +72,8 @@ export default async function getFavoriteProjects(favoriteList: string[]) {
     }
     checkLength();
   });
-
-  return fetchedProjects;
+  const orderedProjects = fetchedProjects.sort(
+    (a, b) => Number(b.projectId) - Number(a.projectId)
+  );
+  return orderedProjects;
 }
