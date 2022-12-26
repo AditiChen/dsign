@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { Route, Routes, BrowserRouter, Navigate } from "react-router-dom";
 
 import App from "./App";
-import PortfolioBricks from "./pages/PortfolioBricks/PortfolioBricks";
+import Home from "./pages/Home/Home";
 import Profile from "./pages/Profile/Profile";
 import FriendList from "./pages/FriendList/FriendList";
 import OtherUserProfile from "./pages/OtherUserProfile/OtherUserProfile";
@@ -21,7 +21,7 @@ root.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />}>
-        <Route index element={<PortfolioBricks />} />
+        <Route index element={<Home />} />
         <Route path="profile" element={<Profile />} />
         <Route path="singleProject" element={<SingleProject />} />
         <Route path="createNewProject" element={<CreateNewProject />} />

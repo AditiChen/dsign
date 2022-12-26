@@ -66,9 +66,11 @@ const Loading = styled(ReactLoading)`
   margin: 50px auto;
 `;
 
-function PortfolioBricks() {
+function Home() {
   const { userId, friendList } = useContext(AuthContext);
-  const [projects, setProjects] = useState<FetchedProjectsType[]>([]);
+  const [fetchedProjects, setFetchedProjects] = useState<FetchedProjectsType[]>(
+    []
+  );
   const [showedProjects, setShowedProjects] = useState<FetchedProjectsType[]>(
     []
   );
@@ -84,28 +86,35 @@ function PortfolioBricks() {
           userId,
           friendList
         );
-        const splicedFirstFifteenProjects = [
-          ...friendProjectsData,
-          ...otherUsersProjectsData,
-        ].splice(0, 15);
-        setProjects([...friendProjectsData, ...otherUsersProjectsData]);
-        setShowedProjects(splicedFirstFifteenProjects);
+        if (showedProjects.length === 0) {
+          const splicedFirstFifteenProjects = [
+            ...friendProjectsData,
+            ...otherUsersProjectsData,
+          ].splice(0, 15);
+          setShowedProjects(splicedFirstFifteenProjects);
+          setFetchedProjects([
+            ...friendProjectsData,
+            ...otherUsersProjectsData,
+          ]);
+        }
       } else {
-        setProjects([...friendProjectsData]);
+        setFetchedProjects([...friendProjectsData]);
         const splicedFirstFifteenProjects = friendProjectsData.splice(0, 15);
         setShowedProjects(splicedFirstFifteenProjects);
       }
       setIsLoading(false);
     }
     getProjects();
-  }, [friendList, userId]);
+  }, [friendList, userId, showedProjects]);
 
   useEffect(() => {
     if (userId !== "") return;
     async function getAllProjects() {
       setIsLoading(true);
       const allData = await getAllProject();
-      setProjects(allData);
+      setFetchedProjects(allData);
+      const splicedFirstFifteenProjects = [...allData].splice(0, 15);
+      setShowedProjects(splicedFirstFifteenProjects);
       setIsLoading(false);
     }
     getAllProjects();
@@ -115,15 +124,15 @@ function PortfolioBricks() {
     function getNextProjects() {
       let currentSlicedIndex = showedProjects.length;
       function sliceNextProjects() {
-        if (projects.length - currentSlicedIndex < 15) {
-          const followingProjects = projects.slice(
+        if (fetchedProjects.length - currentSlicedIndex < 15) {
+          const followingProjects = fetchedProjects.slice(
             currentSlicedIndex,
-            projects.length
+            fetchedProjects.length
           );
-          currentSlicedIndex = projects.length;
+          currentSlicedIndex = fetchedProjects.length;
           return followingProjects;
         }
-        const followingProjects = projects.slice(
+        const followingProjects = fetchedProjects.slice(
           currentSlicedIndex,
           currentSlicedIndex + 15
         );
@@ -138,7 +147,7 @@ function PortfolioBricks() {
         window.innerHeight + window.scrollY + 20 >=
         document.body.offsetHeight
       ) {
-        if (projects.length === showedProjects.length) return;
+        if (fetchedProjects.length === showedProjects.length) return;
         const nextProjectData = getNextProjects();
         setShowedProjects((prev) => [...prev, ...nextProjectData]);
       }
@@ -149,7 +158,7 @@ function PortfolioBricks() {
     return () => {
       window.removeEventListener("scroll", checkNextProjects);
     };
-  }, [projects, showedProjects]);
+  }, [fetchedProjects, showedProjects]);
 
   return (
     <Wrapper>
@@ -178,4 +187,4 @@ function PortfolioBricks() {
   );
 }
 
-export default PortfolioBricks;
+export default Home;
