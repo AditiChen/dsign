@@ -5,11 +5,6 @@ import { Like } from "./LikeIcons";
 export default {
   title: "Components/IconButtons/LikeIcon",
   component: Like,
-  // parameters: {
-  //   actions: {
-  //     handles: ["click", "click .btn"],
-  //   },
-  // },
 } as ComponentMeta<typeof Like>;
 
 // eslint-disable-next-line react/function-component-definition
