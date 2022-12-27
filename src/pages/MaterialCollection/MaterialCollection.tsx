@@ -17,7 +17,7 @@ import {
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
 import SinglePhotoOverlay from "../../components/Overlays/singlePhotoOverlay";
-import upLoadImgToCloudStorage from "../../utils/uploadImgToCloudStorage";
+import uploadImgToCloudStorage from "../../utils/uploadImgToCloudStorage";
 import {
   addFolderIcon,
   addFolderIconHover,
@@ -483,7 +483,7 @@ function MaterialCollection() {
           maxSizeMB: 1,
         });
         const urlByUuid = `${uuid()}`;
-        const downloadUrl = (await upLoadImgToCloudStorage(
+        const downloadUrl = (await uploadImgToCloudStorage(
           compressedFile,
           userId,
           urlByUuid

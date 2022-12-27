@@ -16,7 +16,7 @@ import { doc, updateDoc } from "firebase/firestore";
 
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
-import upLoadImgToCloudStorage from "../../utils/uploadImgToCloudStorage";
+import uploadImgToCloudStorage from "../../utils/uploadImgToCloudStorage";
 import getCroppedImg from "../../utils/cropImage";
 import {
   closeIcon,
@@ -431,7 +431,7 @@ function Overlay({
       rotation
     )) as { file: File };
     const fileNameByTime = `${+new Date()}`;
-    const downloadUrl = (await upLoadImgToCloudStorage(
+    const downloadUrl = (await uploadImgToCloudStorage(
       file,
       userId,
       fileNameByTime

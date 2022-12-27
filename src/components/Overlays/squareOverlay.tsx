@@ -18,7 +18,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
 import getCroppedImg from "../../utils/cropImage";
-import upLoadImgToCloudStorage from "../../utils/uploadImgToCloudStorage";
+import uploadImgToCloudStorage from "../../utils/uploadImgToCloudStorage";
 import {
   closeIcon,
   closeIconHover,
@@ -432,7 +432,7 @@ function SquareOverlay({
       rotation
     )) as { file: File; url: string };
     const fileNameByTime = `${+new Date()}`;
-    const downloadUrl = (await upLoadImgToCloudStorage(
+    const downloadUrl = (await uploadImgToCloudStorage(
       file,
       userId,
       fileNameByTime
