@@ -320,10 +320,15 @@ function FriendList() {
   const [clickState, setClickState] = useState("list");
 
   async function searchHandler() {
-    const inputCheck = friendDataList.findIndex(
-      (email) => email.email === inputValue
+    const inputCheckEmail = friendDataList.findIndex(
+      (data) => data.email === inputValue
     );
-    if (inputCheck !== -1) {
+    const lowerCaseInputValue = inputValue.toLowerCase();
+    const inputCheckName = friendDataList.findIndex(
+      (data) => data.searchName === lowerCaseInputValue
+    );
+
+    if (inputCheckEmail !== -1 || inputCheckName !== -1) {
       Swal.fire({
         text: t("already_friend"),
         icon: "warning",
@@ -338,7 +343,10 @@ function FriendList() {
     const qEmail = query(userRef, where("email", "==", inputValue));
     const querySnapshotEmail = await getDocs(qEmail);
     const emailRefReturnedData = querySnapshotEmail.docs[0]?.data();
-    const qName = query(userRef, where("name", "==", inputValue));
+    const qName = query(
+      userRef,
+      where("searchName", "==", lowerCaseInputValue)
+    );
     const querySnapshotName = await getDocs(qName);
     const nameRefReturnedData = querySnapshotName.docs[0]?.data();
     if (
@@ -509,7 +517,12 @@ function FriendList() {
         {hasSearchValue && (
           <Separator>
             <FriendListContainer>
-              <Avatar url={`url(${searchData.avatar})`} />
+              <Avatar
+                url={`url(${searchData.avatar})`}
+                onClick={() => {
+                  navigate(`/userProfile?id=${searchData.uid}`);
+                }}
+              />
               <TextContainer>
                 <Text $size="20px" mobileSize="16px">
                   {searchData.name}

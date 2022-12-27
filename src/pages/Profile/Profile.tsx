@@ -133,6 +133,7 @@ const UserEmail = styled.div`
 
 const IntroText = styled.div`
   margin-top: 30px;
+  margin-bottom: 10px;
   padding-bottom: 5px;
   width: 100%;
   font-size: 20px;
@@ -146,7 +147,7 @@ const IntroText = styled.div`
 
 const Introduction = styled.textarea<{ border?: string }>`
   margin-bottom: 10px;
-  padding: 10px 0;
+  padding-bottom: 10px;
   width: 100%;
   height: 100%;
   max-height: calc(100% - 360px);
@@ -155,6 +156,7 @@ const Introduction = styled.textarea<{ border?: string }>`
   resize: none;
   border: ${(props) => props.border};
   outline: none;
+  border-radius: 5px;
   @media screen and (max-width: 1449px) {
     padding: 5px 0;
     font-size: 14px;
@@ -320,6 +322,7 @@ const CoverPhoto = styled.div<{ url?: string }>`
   background-image: ${(props) => props.url};
   background-position: center;
   background-size: cover;
+  border-radius: 5px;
   @media screen and (max-width: 1049px) {
     width: 140px;
     height: 140px;
@@ -508,7 +511,6 @@ function Profile() {
               />
             </ProjectIconContainer>
           </ProjectLeftContainer>
-
           <CoverPhoto
             key={projectData.mainUrl}
             url={`url(${projectData.mainUrl})`}
@@ -551,7 +553,7 @@ function Profile() {
                   onClick={() => updateIntro()}
                   cursor={isBtnLoading ? " not-allowed" : "pointer"}
                 >
-                  Confirm Edit
+                  {t("confirm_introduction")}
                   {isBtnLoading && (
                     <LoadingInBtn
                       type="spokes"
@@ -564,7 +566,7 @@ function Profile() {
               )}
               {!isEdit && (
                 <EditBtn onClick={() => setIsEdit(true)} cursor=" pointer">
-                  Edit
+                  {t("edit_introduction")}
                 </EditBtn>
               )}
             </UserInfoContainer>

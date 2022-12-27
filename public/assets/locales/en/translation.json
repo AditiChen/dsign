@@ -26,6 +26,11 @@
   "login_failed": "Failed to login, please check your information and try again!",
   "sign_up_successfully": "Sign up successfully!",
   "sign_up_failed": "Failed to sign up,please check your information and try again!",
+  "forget_password": "Forget password?",
+  "enter_email": "Please enter your registered email",
+  "send_check_email": "Send",
+  "sent_email_successfully": "Sent checking email successfully. Go to check your mailbox.",
+  "email_not_exist": "This email was not registered yet. Go to sign up a new account.",
   "logout_confirm": "Are you sure that you want to logout?",
   "logout_successfully": "Logout successfully!",
 
@@ -51,7 +56,9 @@
   "upload_failed": "Do you miss updating details? please check every template again.",
   "upload_successfully": "Upload project successfully!",
 
-  "please_login": "please login first",
+  "please_login": "Please login to continue",
+  "to_login_page": "Go to login page",
+  "login_later": "Later",
   "project_list": "Project list",
   "go_to_create_project": "It's empty here, go to create your first project :)",
   "delete_project_warning": "Are you sure that you want to delete this project?",
@@ -79,16 +86,20 @@
   "your_collection": "Your collection",
   "empty_folder": "Your folder is empty, upload some photos!",
   "name_folder": "Confirm",
-  "cancel_name_folder": "Cancel",
+  "cancel_button": "Cancel",
   "delete_photo_warning": "Are you sure that you want to remove this photo?",
   "folder_name": "Enter your folder name",
   "folder_name_length": "Max length 15 letters",
   "folder_name_empty": "Folder name is empty!",
   "folder_name_too_long": "Folder name is too long!",
   "delete_folder_warning": "Are you sure you want to delete this folder including the photos inside?",
+  "maximum_ten_files": "Upload a maximum of 10 files at once",
+  "maximum_photo_in_folder": "One folder can only contain a maximum of 30 photos",
 
   "empty_favorite_list": "Your favorite list is empty, go to add some projects!",
 
   "introduction": "Introduction",
-  "user_profile": "User Profile"
+  "user_profile": "User Profile",
+  "edit_introduction": "Edit",
+  "confirm_introduction": "Update intro"
 }

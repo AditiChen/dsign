@@ -15,6 +15,7 @@ import {
 
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
+import { PagesType } from "../../components/tsTypes";
 import getUserProjects from "../../utils/getUserProjects";
 import templatesImgArr from "../../components/Templates/TemplateImg";
 import templatesArr from "../../components/Templates/TemplatesArr";
@@ -140,6 +141,7 @@ const CloseIcon = styled.div`
   background-position: center;
   &:hover {
     background-image: url(${closeIconHover});
+    cursor: pointer;
   }
   @media screen and (min-width: 950px) and (max-width: 1449px) {
     width: 30px;
@@ -297,15 +299,7 @@ function CreateNewProject() {
   const { t } = useTranslation();
   const { userId, setUserProjects } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
-  const [pages, setPages] = useState<
-    {
-      key: string;
-      type: number;
-      content?: string[];
-      photos?: string[];
-      location?: { lat?: number; lng?: number };
-    }[]
-  >([]);
+  const [pages, setPages] = useState<PagesType[]>([]);
   const [position, setPosition] = useState<{ lat?: number; lng?: number }>({});
   const [title, setTitle] = useState("");
   const [mainImgSrc, setMainImgSrc] = useState("");
@@ -359,6 +353,17 @@ function CreateNewProject() {
     newPagesOrder.splice(destination.index, 0, remove);
     setPages(newPagesOrder);
   };
+
+  function insertNewTemplate(index: number) {
+    if (index === 9 && hasGoogleMap) return;
+    setPages((prev) => [...prev, { key: uuid(), ...templateData[index] }]);
+    Swal.fire({
+      position: "top",
+      text: "Add template successfully",
+      showConfirmButton: false,
+      timer: 700,
+    });
+  }
 
   function deleteHandler(index: number) {
     const removeSelectedPageData = pages.filter((data, i) => index !== i);
@@ -536,11 +541,7 @@ function CreateNewProject() {
                       index === 9 && hasGoogleMap ? "not-allowed" : "pointer"
                     }
                     onClick={() => {
-                      if (index === 9 && hasGoogleMap) return;
-                      setPages((prev) => [
-                        ...prev,
-                        { key: uuid(), ...templateData[index] },
-                      ]);
+                      insertNewTemplate(index);
                     }}
                   />
                 ))}

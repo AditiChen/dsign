@@ -66,9 +66,14 @@ const Loading = styled(ReactLoading)`
   margin: 50px auto;
 `;
 
-function PortfolioBricks() {
+function Home() {
   const { userId, friendList } = useContext(AuthContext);
-  const [projects, setProjects] = useState<FetchedProjectsType[]>([]);
+  const [fetchedProjects, setFetchedProjects] = useState<FetchedProjectsType[]>(
+    []
+  );
+  const [showedProjects, setShowedProjects] = useState<FetchedProjectsType[]>(
+    []
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -76,42 +81,96 @@ function PortfolioBricks() {
     async function getProjects() {
       setIsLoading(true);
       const friendProjectsData = await getFriendsProjects(userId, friendList);
-      setProjects(friendProjectsData);
       if (friendProjectsData.length < 50) {
         const otherUsersProjectsData = await getOtherUsersProject(
           userId,
           friendList
         );
-        setProjects([...friendProjectsData, ...otherUsersProjectsData]);
+        if (showedProjects.length === 0) {
+          const splicedFirstFifteenProjects = [
+            ...friendProjectsData,
+            ...otherUsersProjectsData,
+          ].splice(0, 15);
+          setShowedProjects(splicedFirstFifteenProjects);
+          setFetchedProjects([
+            ...friendProjectsData,
+            ...otherUsersProjectsData,
+          ]);
+        }
+      } else {
+        setFetchedProjects([...friendProjectsData]);
+        const splicedFirstFifteenProjects = friendProjectsData.splice(0, 15);
+        setShowedProjects(splicedFirstFifteenProjects);
       }
       setIsLoading(false);
     }
     getProjects();
-  }, [friendList, userId]);
+  }, [friendList, userId, showedProjects]);
 
   useEffect(() => {
     if (userId !== "") return;
-    setProjects([]);
     async function getAllProjects() {
       setIsLoading(true);
       const allData = await getAllProject();
-      setProjects(allData);
+      setFetchedProjects(allData);
+      const splicedFirstFifteenProjects = [...allData].splice(0, 15);
+      setShowedProjects(splicedFirstFifteenProjects);
       setIsLoading(false);
     }
     getAllProjects();
   }, [userId]);
+
+  useEffect(() => {
+    function getNextProjects() {
+      let currentSlicedIndex = showedProjects.length;
+      function sliceNextProjects() {
+        if (fetchedProjects.length - currentSlicedIndex < 15) {
+          const followingProjects = fetchedProjects.slice(
+            currentSlicedIndex,
+            fetchedProjects.length
+          );
+          currentSlicedIndex = fetchedProjects.length;
+          return followingProjects;
+        }
+        const followingProjects = fetchedProjects.slice(
+          currentSlicedIndex,
+          currentSlicedIndex + 15
+        );
+        currentSlicedIndex += 15;
+        return followingProjects;
+      }
+      return sliceNextProjects();
+    }
+
+    function checkNextProjects() {
+      if (
+        window.innerHeight + window.scrollY + 20 >=
+        document.body.offsetHeight
+      ) {
+        if (fetchedProjects.length === showedProjects.length) return;
+        const nextProjectData = getNextProjects();
+        setShowedProjects((prev) => [...prev, ...nextProjectData]);
+      }
+    }
+
+    window.addEventListener("scroll", checkNextProjects);
+
+    return () => {
+      window.removeEventListener("scroll", checkNextProjects);
+    };
+  }, [fetchedProjects, showedProjects]);
 
   return (
     <Wrapper>
       <CarouselContainer>
         <Carousel />
       </CarouselContainer>
-      {projects.length === 0 && isLoading ? (
+      {showedProjects.length === 0 && isLoading ? (
         <Loading type="cylon" color="#3c3c3c" />
       ) : (
         <BricksContainer>
-          {projects &&
-            projects.map((project) => (
+          {showedProjects &&
+            showedProjects.map((project) => (
               <Brick
                 key={project.projectId}
                 uid={project.uid}
@@ -128,4 +187,4 @@ function PortfolioBricks() {
   );
 }
 
-export default PortfolioBricks;
+export default Home;

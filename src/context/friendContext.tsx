@@ -25,6 +25,7 @@ interface FriendData {
   name: string;
   email: string;
   avatar: string;
+  searchName: string;
 }
 
 interface FriendContextType {

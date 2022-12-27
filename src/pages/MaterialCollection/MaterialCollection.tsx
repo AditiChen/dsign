@@ -17,7 +17,7 @@ import {
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
 import SinglePhotoOverlay from "../../components/Overlays/singlePhotoOverlay";
-import upLoadImgToCloudStorage from "../../utils/upLoadImgToCloudStorage";
+import uploadImgToCloudStorage from "../../utils/uploadImgToCloudStorage";
 import {
   addFolderIcon,
   addFolderIconHover,
@@ -401,7 +401,7 @@ function MaterialCollection() {
       confirmButtonColor: "#6d79aa",
       confirmButtonText: t("name_folder"),
       showCancelButton: true,
-      cancelButtonText: t("cancel_name_folder"),
+      cancelButtonText: t("cancel_button"),
     });
     if (ans.isDismissed === true) return;
     if (ans.value.trim() === "") {
@@ -413,11 +413,14 @@ function MaterialCollection() {
       return;
     }
     if (ans.value.length > 15) {
-      Swal.fire({
+      const confirmUnderstandRule = await Swal.fire({
         text: t("folder_name_too_long"),
         icon: "warning",
         confirmButtonColor: "#646464",
       });
+      if (confirmUnderstandRule) {
+        namingFolderHandler(state);
+      }
       return;
     }
     if (state === "new") {
@@ -440,6 +443,7 @@ function MaterialCollection() {
       confirmButtonColor: "#646464",
       confirmButtonText: t("reject_no_answer"),
       showDenyButton: true,
+      denyButtonColor: "tomato",
       denyButtonText: t("reject_yes_answer"),
     });
     if (ans.isConfirmed === true) return;
@@ -451,6 +455,26 @@ function MaterialCollection() {
 
   const onUploadImgFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files === null) return;
+    if (e.target.files.length > 10) {
+      await Swal.fire({
+        text: t("maximum_ten_files"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+        confirmButtonText: t("ok"),
+      });
+      return;
+    }
+    const newFolderPhotoLength =
+      folders[currentFolderIndex].photos.length + e.target.files.length;
+    if (newFolderPhotoLength >= 30) {
+      await Swal.fire({
+        text: t("maximum_photo_in_folder"),
+        icon: "warning",
+        confirmButtonColor: "#646464",
+        confirmButtonText: t("ok"),
+      });
+      return;
+    }
     const newFiles = Array.from(e.target.files);
     const newPhotos = await Promise.all(
       newFiles.map(async (file: File) => {
@@ -459,7 +483,7 @@ function MaterialCollection() {
           maxSizeMB: 1,
         });
         const urlByUuid = `${uuid()}`;
-        const downloadUrl = (await upLoadImgToCloudStorage(
+        const downloadUrl = (await uploadImgToCloudStorage(
           compressedFile,
           userId,
           urlByUuid
@@ -482,6 +506,7 @@ function MaterialCollection() {
       confirmButtonColor: "#646464",
       confirmButtonText: t("reject_no_answer"),
       showDenyButton: true,
+      denyButtonColor: "tomato",
       denyButtonText: t("reject_yes_answer"),
     });
     if (ans.isConfirmed === true) return;

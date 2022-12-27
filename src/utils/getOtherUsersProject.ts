@@ -52,28 +52,5 @@ export default async function getOtherUsersProject(
       otherUserFetchedProjects[index].introduction = introduction;
     })
   );
-
-  // get next 50 datas
-  // const lastFriendVisible =
-  //   firstFriendquerySnapshot.docs[firstFriendquerySnapshot.docs.length - 1];
-  // const nextFriendQuery = query(
-  //   collection(db, "projects"),
-  //   where("uid", "in", [userId, ...friendList]),
-  //   startAfter(lastFriendVisible),
-  //   limit(50)
-  // );
-  // const nextFriendQuerySnapshot = await getDocs(nextFriendQuery);
-  // const nextFriendFetchedProjects: FetchedProjectsType[] = [];
-  // nextFriendQuerySnapshot.forEach((doc) => {
-  //   nextFriendFetchedProjects.push({
-  //     projectId: doc.id,
-  //     uid: doc.data().uid,
-  //     mainUrl: doc.data().mainUrl,
-  //     title: doc.data().title,
-  //     time: doc.data().time,
-  //     pages: doc.data().pages,
-  //   });
-  // });
-
   return otherUserFetchedProjects;
 }

@@ -34,6 +34,7 @@ const CloseIcon = styled.div`
   background-position: center;
   &:hover {
     background-image: url(${closeIconHover});
+    cursor: pointer;
   }
   @media screen and (max-width: 799px) {
     width: 24px;

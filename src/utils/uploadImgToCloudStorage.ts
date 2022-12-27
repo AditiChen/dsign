@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 
 import { storage } from "../context/firebaseSDK";
 
-export default async function upLoadImgToCloudStorage(
+export default async function uploadImgToCloudStorage(
   file: File,
   userId: string,
   fileId: string

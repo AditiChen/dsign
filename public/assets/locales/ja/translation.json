@@ -26,6 +26,11 @@
   "login_failed": "登録に失敗しました。お客様の情報をご確認の上、再度ログインしてください",
   "sign_up_successfully": "登録成功",
   "sign_up_failed": "登録に失敗しました。お客様の情報をご確認の上、再度ログインしてください",
+  "forget_password": "パスワードを忘れましたか?",
+  "enter_email": "メールアドレスを入力してください",
+  "send_check_email": "おくる",
+  "sent_email_successfully": "メール送信に成功しました。メールボックスを確認してください",
+  "email_not_exist": "このメールアドレスは登録されていません。新規登録してください",
   "logout_confirm": "ログアウトしますか？",
   "logout_successfully": "ログアウト成功！",
 
@@ -52,6 +57,8 @@
   "upLoad_successfully": "アップロード成功!",
 
   "please_login": "ログインしてください",
+  "to_login_page": "ログインページへ",
+  "login_later": "あとで",
   "project_list": "プロジェクト一覧",
   "go_to_create_project": "空っぽ",
   "delete_project_warning": "本当にこのプロジェクトを削除しますか？",
@@ -79,16 +86,20 @@
   "your_collection": "あなたの収集",
   "empty_folder": "フォルダは空です、写真をアップロードしてください！",
   "name_folder": "確認",
-  "cancel_name_folder": "取消",
+  "cancel_button": "取消",
   "delete_photo_warning": "本当にこの写真を削除してもいいのでしょうか？",
   "folder_name": "フォルダー名を入力してください",
   "folder_name_length": "15文字以内",
   "folder_name_empty": "フォルダ名が空です",
   "folder_name_too_long": "フォルダ名が長すぎる",
   "delete_folder_warning": "このフォルダーを完全に削除しますか？",
+  "maximum_ten_files": "一度に最大10ファイルまでアップロード可能",
+  "maximum_photo_in_folder": "1つのフォルダには、最大30枚の写真しか保存",
 
   "empty_favorite_list": "お気に入りリストが空っぽなので、プロジェクトを追加しに行こう",
 
   "introduction": "紹介",
-  "user_profile": "個人情報"
+  "user_profile": "個人情報",
+  "edit_introduction": "編集",
+  "confirm_introduction": "アップデート紹介"
 }

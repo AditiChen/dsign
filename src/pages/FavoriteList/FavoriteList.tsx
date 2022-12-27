@@ -114,13 +114,15 @@ function FavoriteList() {
       <HeaderContainer>
         <Title>{t("favorite_list")}</Title>
       </HeaderContainer>
-      {isLoading && <Loading type="cylon" color="#3c3c3c" />}
-      {!isLoading && favoriteList.length === 0 && (
+      {projects.length === 0 && isLoading && (
+        <Loading type="cylon" color="#3c3c3c" />
+      )}
+      {!isLoading && projects.length === 0 && (
         <ContentContainer>
           <Content>{t("empty_favorite_list")}</Content>
         </ContentContainer>
       )}
-      {!isLoading && favoriteList.length !== 0 && (
+      {(!isLoading || projects.length) !== 0 && (
         <BricksContainer>
           {projects.map((project) => (
             <Brick

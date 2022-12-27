@@ -26,6 +26,11 @@
   "login_failed": "登入失敗，請再檢查一次輸入的帳號密碼：）",
   "sign_up_successfully": "註冊成功！",
   "sign_up_failed": "註冊失敗，請再檢查一次輸入的資訊～）",
+  "forget_password": "忘記密碼？",
+  "enter_email": "請輸入註冊的 Email",
+  "send_check_email": "送出",
+  "sent_email_successfully": "重設密碼的信件已經寄到你的信箱了，快去收信吧！",
+  "email_not_exist": "這個信箱沒有註冊過喔，快去註冊新帳號吧！",
   "logout_confirm": "確定要登出嗎？",
   "logout_successfully": "登出成功！",
 
@@ -52,6 +57,8 @@
   "upLoad_successfully": "專案建立成功!",
 
   "please_login": "請先登入",
+  "to_login_page": "去登入頁面",
+  "login_later": "先不用",
   "project_list": "作品列表",
   "go_to_create_project": "作品列表是空的喔，快去新增作品吧 :)",
   "delete_project_warning": "確定要刪除這個專案嗎?",
@@ -79,16 +86,20 @@
   "your_collection": "你的素材庫",
   "empty_folder": "資料夾現在是空的喔，快去上傳照片吧！",
   "name_folder": "確定",
-  "cancel_name_folder": "取消",
+  "cancel_button": "取消",
   "delete_photo_warning": "確定要刪除這張照片嗎？",
   "folder_name": "請輸入資料夾名稱",
   "folder_name_length": "最多15個字",
   "folder_name_empty": "資料夾名稱不能是空！",
   "folder_name_too_long": "資料夾名稱過長！",
   "delete_folder_warning": "確定要刪除資料夾及裡面的圖片嗎？",
+  "maximum_ten_files": "一次最多只能上傳十張圖片：）",
+  "maximum_photo_in_folder": "一個資料夾最多只能放30張圖片喔！",
 
   "empty_favorite_list": "你的最愛現在是空的喔，快去加些喜歡的專案吧！",
 
   "introduction": "自我介紹",
-  "user_profile": "個人資訊"
+  "user_profile": "個人資訊",
+  "edit_introduction": "編輯自我介紹",
+  "confirm_introduction": "更新自我介紹"
 }

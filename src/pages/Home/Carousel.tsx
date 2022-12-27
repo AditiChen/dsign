@@ -200,15 +200,13 @@ function Carousel() {
             key={wikipedia}
             opacity={index === activeIndex ? 1 : 0}
             zIndex={index === activeIndex ? 1 : 0}
+            onClick={() => window.open(`${wikipedia}`)}
           >
             <QuoteContainer>
               <Quote>{quote}</Quote>
               <Name>{`- ${name}`}</Name>
             </QuoteContainer>
-            <Photo
-              src={`${photo}`}
-              onClick={() => window.open(`${wikipedia}`)}
-            />
+            <Photo src={`${photo}`} />
           </StoryContainer>
         ))}
       </CarouselContainer>

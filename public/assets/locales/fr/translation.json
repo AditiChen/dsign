@@ -26,6 +26,11 @@
   "login_failed": "Échec de la connexion",
   "sign_up_successfully": "S'inscrire avec succès",
   "sign_up_failed": "Ne s'est pas inscrit",
+  "forget_password": "Oublier le mot de passe?",
+  "enter_email": "Veuillez entrer votre adresse e-mail",
+  "send_check_email": "Envoyer",
+  "sent_email_successfully": "Envoi de l'email de vérification avec succès. Allez vérifier votre boîte aux lettres.",
+  "email_not_exist": "Cet email n'a pas encore été enregistré. Allez à l'enregistrement d'un nouveau compte.",
   "logout_confirm": "Êtes-vous sûr de vouloir vous déconnecter ?",
   "logout_successfully": "Déconnexion réussie!",
 
@@ -52,6 +57,8 @@
   "upLoad_successfully": "téléchargement réussi!",
 
   "please_login": "Veuillez loger",
+  "to_login_page": "Aller à la page de connexion",
+  "login_later": "Plus tard",
   "project_list": "Liste des projets",
   "go_to_create_project": "C'est vide",
   "delete_project_warning": "Êtes-vous sûr de vouloir supprimer ce projet ?",
@@ -79,16 +86,20 @@
   "your_collection": "votre collection",
   "empty_folder": "Votre dossier est vide, téléchargez des photos !",
   "name_folder": "Confirmer",
-  "cancel_name_folder": "Annuler",
+  "cancel_button": "Annuler",
   "delete_photo_warning": "Êtes-vous sûr de vouloir supprimer cette photo ?",
   "folder_name": "Entrez le nom de votre dossier",
   "folder_name_length": "Longueur maximale de 15 lettres",
   "folder_name_empty": "Le nom du dossier est vide!",
   "folder_name_too_long": "Le nom du dossier est trop long!",
   "delete_folder_warning": "Êtes-vous sûr de vouloir supprimer ce dossier et les photos qu'il contient?",
+  "maximum_ten_files": "Chargez un maximum de 10 fichiers à la fois",
+  "maximum_photo_in_folder": "Un dossier ne peut contenir que 30 photos au maximum.",
 
   "empty_favorite_list": "Votre liste de favoris est vide, allez-y pour ajouter des projets !",
 
   "introduction": "Introduction",
-  "user_profile": "Profil de l'utilisateur"
+  "user_profile": "Profil de l'utilisateur",
+  "edit_introduction": "éditer",
+  "confirm_introduction": "Mise à jour"
 }

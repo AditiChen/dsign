@@ -17,11 +17,12 @@ import {
   FacebookAuthProvider,
 } from "firebase/auth";
 import { useTranslation } from "react-i18next";
-import { doc, setDoc, getDoc, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import { db, auth } from "./firebaseSDK";
+import setNewUserDoc from "../utils/setNewUserDoc";
 import getUserProjects from "../utils/getUserProjects";
 import { UserDataType, UserProjectsType } from "../components/tsTypes";
 
@@ -177,17 +178,8 @@ export function AuthContextProvider({ children }: BodyProp) {
           password
         );
         const { uid } = UserCredentialImpl.user;
-        const newName = insertName.replace(/\s/g, "");
-        await setDoc(doc(db, "users", uid), {
-          uid,
-          name: insertName,
-          email: insertEmail,
-          avatar: `https://source.boringavatars.com/marble/180/${newName}`,
-          friendList: [],
-          favoriteList: [],
-          folders: [{ folderName: "Unsorted", photos: [] }],
-          introduction: "",
-        });
+        const photoURL = `https://source.boringavatars.com/marble/180/${uid}`;
+        await setNewUserDoc(uid, insertName, insertEmail, photoURL);
         setUserId(uid);
         setIsLogin(true);
         Swal.fire({
@@ -216,18 +208,9 @@ export function AuthContextProvider({ children }: BodyProp) {
       const { uid, photoURL, displayName } = result.user;
       const docSnap = await getDoc(doc(db, "users", uid));
       const data = docSnap.data() as UserDataType;
-      if (data === undefined) {
-        const gmail = result.user.email;
-        await setDoc(doc(db, "users", uid), {
-          uid,
-          name: displayName,
-          email: gmail,
-          avatar: photoURL,
-          friendList: [],
-          favoriteList: [],
-          folders: [{ folderName: "Unsorted", photos: [] }],
-          introduction: "",
-        });
+      if (data === undefined && displayName !== null && photoURL !== null) {
+        const gmail = result.user.email as string;
+        await setNewUserDoc(uid, displayName, gmail, photoURL);
       }
       setUserId(uid);
       setIsLogin(true);
@@ -253,18 +236,9 @@ export function AuthContextProvider({ children }: BodyProp) {
       const { uid, photoURL, displayName } = result.user;
       const docSnap = await getDoc(doc(db, "users", uid));
       const data = docSnap.data() as UserDataType;
-      if (data === undefined) {
-        const fbMail = result.user.email;
-        await setDoc(doc(db, "users", uid), {
-          uid,
-          name: displayName,
-          email: fbMail,
-          avatar: photoURL,
-          friendList: [],
-          favoriteList: [],
-          folders: [{ folderName: "Unsorted", photos: [] }],
-          introduction: "",
-        });
+      if (data === undefined && displayName !== null && photoURL !== null) {
+        const fbMail = result.user.email as string;
+        await setNewUserDoc(uid, displayName, fbMail, photoURL);
       }
       setUserId(uid);
       setIsLogin(true);
