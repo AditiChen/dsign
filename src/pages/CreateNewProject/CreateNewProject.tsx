@@ -1,17 +1,17 @@
 import styled from "styled-components";
 import { useEffect, useState, useContext, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { v4 as uuid } from "uuid";
-import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import ReactLoading from "react-loading";
-import Swal from "sweetalert2";
 import {
   DragDropContext,
   Droppable,
   Draggable,
   DropResult,
 } from "react-beautiful-dnd";
+import { v4 as uuid } from "uuid";
+import { doc, setDoc } from "firebase/firestore";
+import Swal from "sweetalert2";
 
 import { db } from "../../context/firebaseSDK";
 import { AuthContext } from "../../context/authContext";
@@ -325,15 +325,15 @@ function CreateNewProject() {
 
   useEffect(() => {
     if (pages.length === 0) {
-      window.sessionStorage.removeItem("pages");
-      window.sessionStorage.removeItem("title");
-      window.sessionStorage.removeItem("mainImg");
+      sessionStorage.removeItem("pages");
+      sessionStorage.removeItem("title");
+      sessionStorage.removeItem("mainImg");
       return;
     }
     const toJsonFormat = JSON.stringify(pages);
-    window.sessionStorage.setItem("pages", toJsonFormat);
-    window.sessionStorage.setItem("title", title);
-    window.sessionStorage.setItem("mainImg", mainImgSrc);
+    sessionStorage.setItem("pages", toJsonFormat);
+    sessionStorage.setItem("title", title);
+    sessionStorage.setItem("mainImg", mainImgSrc);
   }, [pages, title, mainImgSrc]);
 
   useEffect(() => {
@@ -366,7 +366,7 @@ function CreateNewProject() {
   }
 
   function deleteHandler(index: number) {
-    const removeSelectedPageData = pages.filter((data, i) => index !== i);
+    const removeSelectedPageData = pages.filter((_, i) => index !== i);
     setPages(removeSelectedPageData);
   }
 
@@ -427,9 +427,9 @@ function CreateNewProject() {
     setPages([]);
     setPosition({});
     setMainImgSrc("");
-    window.sessionStorage.removeItem("pages");
-    window.sessionStorage.removeItem("title");
-    window.sessionStorage.removeItem("mainImg");
+    sessionStorage.removeItem("pages");
+    sessionStorage.removeItem("title");
+    sessionStorage.removeItem("mainImg");
     Swal.fire({
       text: t("upload_successfully"),
       icon: "success",

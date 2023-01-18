@@ -393,7 +393,7 @@ function EditExistProject() {
   }
 
   function deleteHandler(index: number) {
-    const removeSelectedPageData = pages.filter((data, i) => index !== i);
+    const removeSelectedPageData = pages.filter((_, i) => index !== i);
     setPages(removeSelectedPageData);
   }
 

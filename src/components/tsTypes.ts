@@ -80,3 +80,8 @@ export interface PagesType {
   photos?: string[];
   location?: { lat?: number; lng?: number };
 }
+
+export interface FolderType {
+  folderName: string;
+  photos: string[];
+}
