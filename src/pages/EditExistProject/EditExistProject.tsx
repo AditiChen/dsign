@@ -38,7 +38,7 @@ import {
   Btn,
   WarningText,
   Loading,
-} from "../../components/StyledComponents/ProjectEditor";
+} from "../../components/StyledComponents/ProjectEditorStyledComponents";
 
 function EditExistProject() {
   const { t } = useTranslation();

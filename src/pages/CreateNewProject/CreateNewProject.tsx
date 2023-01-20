@@ -37,7 +37,7 @@ import {
   CheckMainImgIcon,
   WarningText,
   Loading,
-} from "../../components/StyledComponents/ProjectEditor";
+} from "../../components/StyledComponents/ProjectEditorStyledComponents";
 
 function CreateNewProject() {
   const navigate = useNavigate();

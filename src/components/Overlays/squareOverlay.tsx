@@ -37,7 +37,7 @@ import {
   CollectionInnerContainer,
   CollectionImg,
   OverlayModal,
-} from "../StyledComponents/CropImgOverlay";
+} from "../StyledComponents/CropImgOverlayStyledComponents";
 
 const portalElement = document.getElementById("overlays") as HTMLElement;
 
