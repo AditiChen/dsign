@@ -21,6 +21,10 @@ import { FriendContext } from "../../context/friendContext";
 import { db } from "../../context/firebaseSDK";
 import Message from "../../components/Message/Message";
 import {
+  SearchFriendDataType,
+  MessageFriendDtlType,
+} from "../../components/tsTypes";
+import {
   Wrapper,
   Container,
   Separator,
@@ -54,18 +58,14 @@ function FriendList() {
   } = useContext(FriendContext);
   const [inputValue, setInputValue] = useState("");
   const [hasSearchValue, setHasSearchValue] = useState(false);
-  const [searchData, setSearchData] = useState<{
-    uid?: string;
-    name?: string;
-    email?: string;
-    avatar?: string;
-  }>({});
-  const [messageFriendDtl, setMessageFriendDtl] = useState<{
-    friendUid: string;
-    name: string;
-    avatar: string;
-    chatroomId: string;
-  }>({ friendUid: "", name: "", avatar: "", chatroomId: "" });
+  const [searchData, setSearchData] = useState<SearchFriendDataType>({});
+  const [messageFriendDtl, setMessageFriendDtl] =
+    useState<MessageFriendDtlType>({
+      friendUid: "",
+      name: "",
+      avatar: "",
+      chatroomId: "",
+    });
   const [clickState, setClickState] = useState("list");
 
   async function searchHandler() {
@@ -76,7 +76,6 @@ function FriendList() {
     const inputCheckName = friendDataList.findIndex(
       (data) => data.searchName === lowerCaseInputValue
     );
-
     if (inputCheckEmail !== -1 || inputCheckName !== -1) {
       Swal.fire({
         text: t("already_friend"),
@@ -87,7 +86,6 @@ function FriendList() {
       setInputValue("");
       return;
     }
-
     const userRef = collection(db, "users");
     const qEmail = query(userRef, where("email", "==", inputValue));
     const querySnapshotEmail = await getDocs(qEmail);

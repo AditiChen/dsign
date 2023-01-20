@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
+import { Timestamp } from "firebase/firestore";
 
 export interface UserDataType {
   uid: string;
@@ -26,6 +27,13 @@ export interface UserProjectsType {
   }[];
 }
 
+export interface FriendDataType {
+  uid: string;
+  name: string;
+  email: string;
+  avatar: string;
+  searchName: string;
+}
 export interface SingleProjectTemplateProps {
   photoUrl: string[];
   content: string[];
@@ -101,4 +109,55 @@ export interface SquareOverlayProps {
   setMainImgSrc: Dispatch<SetStateAction<string>>;
   shape?: "rect" | "round" | undefined;
   usage?: string;
+}
+
+export interface SearchFriendDataType {
+  uid?: string;
+  name?: string;
+  email?: string;
+  avatar?: string;
+}
+
+export interface MessageFriendDtlType {
+  friendUid: string;
+  name: string;
+  avatar: string;
+  chatroomId: string;
+}
+
+export interface HistoryMessageDataType {
+  from?: string;
+  message?: string;
+  time?: Timestamp;
+}
+
+export interface BrickPropsType {
+  uid: string;
+  projectId: string;
+  mainUrl: string;
+  avatar: string;
+  name: string;
+  title: string;
+}
+
+export interface LikeIconPropsType {
+  projectId: string;
+  margin: string;
+  width: string;
+  height: string;
+}
+
+export interface CarouselStoryType {
+  name: string;
+  quote: string;
+  photo: string;
+  wikipedia: string;
+}
+
+export interface OtherUserDataType {
+  uid: string;
+  name: string;
+  avatar: string;
+  email: string;
+  introduction: string;
 }

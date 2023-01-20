@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import artists from "./CarouselData.json";
+import { CarouselStoryType } from "../../components/tsTypes";
 
 const bannerAnimation = keyframes`
   0% {
@@ -168,14 +169,7 @@ function getArtistsData() {
 }
 
 function Carousel() {
-  const [stories, setStories] = useState<
-    {
-      name: string;
-      quote: string;
-      photo: string;
-      wikipedia: string;
-    }[]
-  >([]);
+  const [stories, setStories] = useState<CarouselStoryType[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const intervalRef = useRef<number>();
 

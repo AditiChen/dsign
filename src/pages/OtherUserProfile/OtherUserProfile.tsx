@@ -9,7 +9,7 @@ import getUserProjects from "../../utils/getUserProjects";
 import { AuthContext } from "../../context/authContext";
 import Brick from "../../components/Brick/Brick";
 import FriendIcon from "../../components/IconButtons/FriendIcon";
-import { UserProjectsType } from "../../components/tsTypes";
+import { UserProjectsType, OtherUserDataType } from "../../components/tsTypes";
 
 const Wrapper = styled.div`
   padding: 50px 5vw;
@@ -206,13 +206,7 @@ function OtherUserProfile() {
   const [isLoading, setIsLoading] = useState(false);
   const [userProjects, setUserProjects] = useState<UserProjectsType[]>([]);
   const [clickState, setClickState] = useState("profile");
-  const [userData, setUserData] = useState<{
-    uid: string;
-    name: string;
-    avatar: string;
-    email: string;
-    introduction: string;
-  }>();
+  const [userData, setUserData] = useState<OtherUserDataType>();
 
   const urlString = new URL(window.location.href);
   const otherUserId = urlString.searchParams.get("id") as string;
@@ -221,13 +215,7 @@ function OtherUserProfile() {
     setIsLoading(true);
     async function getData() {
       const docSnap = await getDoc(doc(db, "users", otherUserId));
-      const returnedData = docSnap.data() as {
-        uid: string;
-        name: string;
-        avatar: string;
-        email: string;
-        introduction: string;
-      };
+      const returnedData = docSnap.data() as OtherUserDataType;
       setUserData(returnedData);
       const userProjectsData = await getUserProjects(returnedData.uid);
       setUserProjects(userProjectsData);

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../../context/authContext";
 import { db } from "../../context/firebaseSDK";
+import { LikeIconPropsType } from "../tsTypes";
 import { likeIcon, likeIconHover, likedIcon } from "../icons/icons";
 
 export const Liked = styled.div<{
@@ -63,12 +64,7 @@ export function LikeIcon({
   width,
   height,
   margin,
-}: {
-  projectId: string;
-  margin: string;
-  width: string;
-  height: string;
-}) {
+}: LikeIconPropsType) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { userId } = useContext(AuthContext);
