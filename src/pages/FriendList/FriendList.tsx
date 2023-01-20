@@ -466,6 +466,7 @@ function FriendList() {
       confirmButtonText: t("reject_no_answer"),
       showDenyButton: true,
       denyButtonText: t("reject_yes_answer"),
+      denyButtonColor: "tomato",
     });
     if (ans.isConfirmed === true) return;
 

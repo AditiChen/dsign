@@ -85,3 +85,20 @@ export interface FolderType {
   folderName: string;
   photos: string[];
 }
+
+export interface TemplateOverlayProps {
+  setShowOverlay: Dispatch<SetStateAction<boolean>>;
+  setNewPhotoUrl: (returnedUrl: string) => void;
+  currentAaspect: number;
+  currentImgUrl: string;
+  isAddToCollection: boolean;
+  setIsAddToCollection: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface SquareOverlayProps {
+  setShowOverlay: Dispatch<SetStateAction<boolean>>;
+  mainImgSrc: string;
+  setMainImgSrc: Dispatch<SetStateAction<string>>;
+  shape?: "rect" | "round" | undefined;
+  usage?: string;
+}
