@@ -7,6 +7,8 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -16,15 +18,17 @@ import {
   GoogleAuthProvider,
   FacebookAuthProvider,
 } from "firebase/auth";
-import { useTranslation } from "react-i18next";
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import { db, auth } from "./firebaseSDK";
 import setNewUserDoc from "../utils/setNewUserDoc";
 import getUserProjects from "../utils/getUserProjects";
-import { UserDataType, UserProjectsType } from "../components/tsTypes";
+import {
+  UserDataType,
+  UserProjectsType,
+  FolderType,
+} from "../components/tsTypes";
 
 type BodyProp = { children: React.ReactNode };
 
@@ -42,10 +46,8 @@ interface AuthContextType {
   setFavoriteList: Dispatch<SetStateAction<string[]>>;
   userProjects: UserProjectsType[];
   setUserProjects: Dispatch<SetStateAction<UserProjectsType[]>>;
-  folders: { folderName: string; photos: string[] }[];
-  setFolders: Dispatch<
-    SetStateAction<{ folderName: string; photos: string[] }[]>
-  >;
+  folders: FolderType[];
+  setFolders: Dispatch<SetStateAction<FolderType[]>>;
   emailSignInHandler(email: string, password: string): void;
   signUp(email: string, password: string, name: string): void;
   googleLoginHandler(): void;
@@ -88,10 +90,19 @@ export function AuthContextProvider({ children }: BodyProp) {
   const [introduction, setIntroduction] = useState("");
   const [friendList, setFriendList] = useState<string[]>([]);
   const [favoriteList, setFavoriteList] = useState<string[]>([]);
-  const [folders, setFolders] = useState<
-    { folderName: string; photos: string[] }[]
-  >([]);
+  const [folders, setFolders] = useState<FolderType[]>([]);
   const [userProjects, setUserProjects] = useState<UserProjectsType[]>([]);
+
+  function setUserData(data: UserDataType) {
+    setAvatar(data.avatar);
+    setName(data.name);
+    setEmail(data.email);
+    setIntroduction(data.introduction);
+    setFriendList(data.friendList);
+    setFavoriteList(data.favoriteList);
+    setFolders(data.folders);
+    setIsLogin(true);
+  }
 
   useEffect(() => {
     setIsLoading(true);
@@ -101,14 +112,7 @@ export function AuthContextProvider({ children }: BodyProp) {
         const docSnap = await getDoc(doc(db, "users", uid));
         const data = docSnap.data() as UserDataType;
         setUserId(uid);
-        setAvatar(data.avatar);
-        setName(data.name);
-        setEmail(data.email);
-        setIntroduction(data.introduction);
-        setFriendList(data.friendList);
-        setFavoriteList(data.favoriteList);
-        setFolders(data.folders);
-        setIsLogin(true);
+        setUserData(data);
         const userProjectsData = await getUserProjects(uid);
         setUserProjects(userProjectsData);
       } else {
@@ -123,14 +127,7 @@ export function AuthContextProvider({ children }: BodyProp) {
     if (userId === "") return undefined;
     const unsub = onSnapshot(doc(db, "users", userId), async (returnedDoc) => {
       const data = returnedDoc.data() as UserDataType;
-      setAvatar(data.avatar);
-      setName(data.name);
-      setEmail(data.email);
-      setIntroduction(data.introduction);
-      setFriendList(data.friendList);
-      setFavoriteList(data.favoriteList);
-      setFolders(data.folders);
-      setIsLogin(true);
+      setUserData(data);
     });
     return () => {
       unsub();
@@ -141,12 +138,12 @@ export function AuthContextProvider({ children }: BodyProp) {
     async (insertEmail: string, password: string) => {
       setIsLoading(true);
       try {
-        const UserCredentialImpl = await signInWithEmailAndPassword(
+        const userCredentialImpl = await signInWithEmailAndPassword(
           auth,
           insertEmail,
           password
         );
-        const { user } = UserCredentialImpl;
+        const { user } = userCredentialImpl;
         const { uid } = user;
         setUserId(uid);
         const userProjectsData = await getUserProjects(uid);
@@ -172,12 +169,12 @@ export function AuthContextProvider({ children }: BodyProp) {
     async (insertEmail: string, password: string, insertName: string) => {
       setIsLoading(true);
       try {
-        const UserCredentialImpl = await createUserWithEmailAndPassword(
+        const userCredentialImpl = await createUserWithEmailAndPassword(
           auth,
           insertEmail,
           password
         );
-        const { uid } = UserCredentialImpl.user;
+        const { uid } = userCredentialImpl.user;
         const photoURL = `https://source.boringavatars.com/marble/180/${uid}`;
         await setNewUserDoc(uid, insertName, insertEmail, photoURL);
         setUserId(uid);
@@ -266,9 +263,9 @@ export function AuthContextProvider({ children }: BodyProp) {
     setFriendList([]);
     setFavoriteList([]);
     setIsLogin(false);
-    window.sessionStorage.removeItem("pages");
-    window.sessionStorage.removeItem("title");
-    window.sessionStorage.removeItem("mainImg");
+    sessionStorage.removeItem("pages");
+    sessionStorage.removeItem("title");
+    sessionStorage.removeItem("mainImg");
     Swal.fire({
       text: t("logout_successfully"),
       confirmButtonColor: "#646464",

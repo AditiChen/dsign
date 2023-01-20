@@ -22,6 +22,7 @@ import Swal from "sweetalert2";
 import { FriendContext } from "../../context/friendContext";
 import { db } from "../../context/firebaseSDK";
 import useOnClickOutside from "../../utils/useOnClickOutside";
+import { MessageFriendDtlType, HistoryMessageDataType } from "../tsTypes";
 import {
   closeIcon,
   closeIconHover,
@@ -210,12 +211,7 @@ function Message({
   messageFriendDtl,
   userId,
 }: {
-  messageFriendDtl: {
-    friendUid: string;
-    name: string;
-    avatar: string;
-    chatroomId: string;
-  };
+  messageFriendDtl: MessageFriendDtlType;
   userId: string;
 }) {
   const { t } = useTranslation();
@@ -224,11 +220,7 @@ function Message({
   const [chatroomId, setChatroomId] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [historyMessages, setHistoryMessages] = useState<
-    {
-      from?: string;
-      message?: string;
-      time?: Timestamp;
-    }[]
+    HistoryMessageDataType[]
   >([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const messageWindowRef = useRef<HTMLDivElement>(null);

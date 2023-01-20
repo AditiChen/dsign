@@ -3,6 +3,7 @@ import styled, { keyframes } from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../../context/authContext";
+import { BrickPropsType } from "../tsTypes";
 import { LikeIcon, LikedIcon } from "../IconButtons/LikeIcons";
 
 const TitleContainer = styled.div`
@@ -144,14 +145,7 @@ export default function Brick({
   avatar,
   name,
   title,
-}: {
-  uid: string;
-  projectId: string;
-  mainUrl: string;
-  avatar: string;
-  name: string;
-  title: string;
-}) {
+}: BrickPropsType) {
   const navigate = useNavigate();
   const { userId, favoriteList } = useContext(AuthContext);
 

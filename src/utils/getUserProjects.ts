@@ -8,14 +8,15 @@ export default async function getUserProjects(userId: string) {
   const querySnapshot = await getDocs(q);
   const fetchedProjects: FetchedProjectsType[] = [];
   querySnapshot.forEach((doc) => {
+    const { uid, mainUrl, title, time, pages, introduction } = doc.data();
     fetchedProjects.unshift({
       projectId: doc.id,
-      uid: doc.data().uid,
-      mainUrl: doc.data().mainUrl,
-      title: doc.data().title,
-      time: doc.data().time,
-      pages: doc.data().pages,
-      introduction: doc.data().introduction,
+      uid,
+      mainUrl,
+      title,
+      time,
+      pages,
+      introduction,
     });
   });
   return fetchedProjects;

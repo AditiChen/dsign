@@ -17,22 +17,15 @@ import {
 } from "firebase/firestore";
 import { db } from "./firebaseSDK";
 import { AuthContext } from "./authContext";
+import { FriendDataType } from "../components/tsTypes";
 
 type BodyProp = { children: React.ReactNode };
 
-interface FriendData {
-  uid: string;
-  name: string;
-  email: string;
-  avatar: string;
-  searchName: string;
-}
-
 interface FriendContextType {
-  friendDataList: FriendData[];
-  setFriendDataList: Dispatch<SetStateAction<FriendData[]>>;
-  friendRequests: FriendData[];
-  setFriendRequests: Dispatch<SetStateAction<FriendData[]>>;
+  friendDataList: FriendDataType[];
+  setFriendDataList: Dispatch<SetStateAction<FriendDataType[]>>;
+  friendRequests: FriendDataType[];
+  setFriendRequests: Dispatch<SetStateAction<FriendDataType[]>>;
   showMessageFrame: boolean;
   setShowMessageFrame: Dispatch<SetStateAction<boolean>>;
   unreadMessages: { chatroomId: string; friendId: string }[];
@@ -50,8 +43,8 @@ export const FriendContext = createContext<FriendContextType>({
 
 export function FriendContextProvider({ children }: BodyProp) {
   const { userId, friendList } = useContext(AuthContext);
-  const [friendRequests, setFriendRequests] = useState<FriendData[]>([]);
-  const [friendDataList, setFriendDataList] = useState<FriendData[]>([]);
+  const [friendRequests, setFriendRequests] = useState<FriendDataType[]>([]);
+  const [friendDataList, setFriendDataList] = useState<FriendDataType[]>([]);
   const [showMessageFrame, setShowMessageFrame] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState<
     { chatroomId: string; friendId: string }[]
@@ -70,7 +63,7 @@ export function FriendContextProvider({ children }: BodyProp) {
       });
       const result = userIds.map(async (id) => {
         const docSnap = await getDoc(doc(db, "users", id));
-        const data = docSnap.data() as FriendData;
+        const data = docSnap.data() as FriendDataType;
         return data;
       });
       const newResult = await Promise.all(result);
@@ -84,7 +77,7 @@ export function FriendContextProvider({ children }: BodyProp) {
     const unsub = onSnapshot(doc(db, "users", userId), async () => {
       const result = friendList?.map(async (id: string) => {
         const docSnap = await getDoc(doc(db, "users", id));
-        const data = docSnap.data() as FriendData;
+        const data = docSnap.data() as FriendDataType;
         return data;
       });
       const newResult = await Promise.all(result);

@@ -1,8 +1,6 @@
-import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 import styled, { createGlobalStyle } from "styled-components";
 import { Reset } from "styled-reset";
-import ReactLoading from "react-loading";
 
 import { AuthContextProvider } from "./context/authContext";
 import { FriendContextProvider } from "./context/friendContext";
@@ -33,15 +31,9 @@ const BodyWrapper = styled.div`
   }
 `;
 
-const Loading = styled(ReactLoading)`
-  margin: 50px auto;
-`;
-
-const loadingMarkup = <Loading />;
-
 function App() {
   return (
-    <Suspense fallback={loadingMarkup}>
+    <>
       <Reset />
       <GlobalStyle />
       <AuthContextProvider>
@@ -53,7 +45,7 @@ function App() {
           <Footer />
         </FriendContextProvider>
       </AuthContextProvider>
-    </Suspense>
+    </>
   );
 }
 
